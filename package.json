@@ -1,0 +1,19 @@
+{
+  "name": "havoc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js",
+    "node-fetch": "^2.3.0",
+    "pretty-ms": "^4.0.0",
+    "require-dir": "^1.2.0"
+  },
+  "devDependencies": {}
+}
