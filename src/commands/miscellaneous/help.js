@@ -23,16 +23,16 @@ class Help extends Command {
 			"music": "🎶",
 			"image": "🖼",
 		};
-		const fields = {};
 		const categories = this.client.commands.reduce((uniqueCategories, { category }) => uniqueCategories.add(category), new Set());
-		[...categories].forEach((commandCategory, i) => {
-			fields[i] = [
+		const fields = [...categories].reduce((obj, commandCategory, i) => {
+			obj[i] = [
 				`${emojis[commandCategory]} ${commandCategory.replace(/./, (firstLetter) => firstLetter.toUpperCase())}`,
 				this.client.commands
 					.filter(({ category }) => category === commandCategory)
 					.map((command) => `\`${command.name}\``).join(", "),
 			];
-		});
+			return obj;
+		}, {});
 		this.response = await this.sendEmbed({
 			setDescription: `You can view more info about a command by doing \`${this.prefix}help [command name]\`
                 Click **[here](https://discord.gg/3Fewsxq)** to join the support server here
