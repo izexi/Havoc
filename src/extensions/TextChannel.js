@@ -14,8 +14,8 @@ module.exports = Structures.extend("TextChannel", (TextChannel) => {
 					description = await haste(description).catch(() => "The description was too long to be displayed");
 					options.description = description;
 				}
-				return super.send(content, options);
 			}
+			return super.send(content, options);
 		}
 	}
 

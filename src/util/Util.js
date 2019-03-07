@@ -17,6 +17,10 @@ class Util {
 		return /<@!?(\d{17,19})>/g;
 	}
 
+	static get roleMentionRegex() {
+		return /<@&(\d{17,19})>/g;
+	}
+
 	static get userTagRegex() {
 		return /.{2,32}(#)\d{4}/g;
 	}

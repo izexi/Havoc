@@ -55,8 +55,38 @@ class Targetter {
 		);
 	}
 
-	static async getTarget(opts) {
-		const { str, guild, client, guildOnly } = opts;
+	/** @param {import("discord.js").Guild} guild */
+	static _roleMentionOrID(str, guild) {
+		const target = (str.match(Util.roleMentionRegex) || [])[0];
+		if (!target) return null;
+		const id = target.match(/\d+/)[0];
+		const role = guild.roles.get(id);
+		return role ? this._format(
+			(str.slice(target.length).match(/\d/) || [])[0],
+			role
+		) : null;
+	}
+
+
+	/** @param {import("discord.js").Guild} guild */
+	static _roleNameSearch(str, guild) {
+		const { foundRole, restArgs } = str.split(" ").reduce((obj, _, i, arr) => {
+			if (obj.foundRole) return obj;
+			const possibleRoleName = arr.slice(0, i + 1).join(" ");
+			const possibleRole = guild.roles.find(
+				(role) => role.name === possibleRoleName ||
+                    role.name.toLowerCase() === possibleRoleName.toLowerCase()
+			);
+			if (!obj.foundRole && possibleRole) {
+				obj.foundRole = possibleRole;
+				obj.restArgs = arr.slice(i + 1);
+			}
+			return obj;
+		}, { foundRole: null, restArgs: null }) || {};
+		if (foundRole) return this._format(restArgs.find((el) => +el), foundRole);
+	}
+
+	static async getTarget({ str, guild, client, guildOnly }) {
 		if (!str) return null;
 		let found;
 		if (guild) {
@@ -65,6 +95,16 @@ class Targetter {
 				this._looseSearch(str, guild);
 		}
 		if (!found && !guildOnly) found = this._globalUserSearch(str, guild ? guild.client : client);
+		return found;
+	}
+
+	static getRole({ str, guild }) {
+		if (!str) return null;
+		let found;
+		if (guild) {
+			found = this._roleMentionOrID(str, guild) ||
+				this._roleNameSearch(str, guild);
+		}
 		return found;
 	}
 

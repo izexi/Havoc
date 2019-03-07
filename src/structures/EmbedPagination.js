@@ -28,9 +28,9 @@ class EmbedPagination {
 		return Number.isInteger(+str) && str > 0 && str <= this.totalPages;
 	}
 
-	pageEmbed(page) {
+	pageEmbed(page, paginate = true) {
 		return this.msg.constructEmbed({
-			setTitle: `${this.title} - Page ${page} of ${this.totalPages}`,
+			setTitle: `${this.title}${paginate ? ` - Page ${page} of ${this.totalPages}` : ""}`,
 			setDescription : this.descriptionsArr.slice((page * this.maxPerPage) - this.maxPerPage, page * this.maxPerPage).join("\n"),
 		});
 	}
@@ -38,6 +38,7 @@ class EmbedPagination {
 	async setup() {
 		let emojis = ["⏮", "◀", "⬇", "▶", "⏭", "✅"];
 		if (this.hastebin) emojis = [...emojis.slice(0, -1), "📜", emojis[5]];
+		if (this.totalPages === 1) return await this.msg.channel.send(this.pageEmbed(this.page, false));
 		this.embedMsg = await this.msg.channel.send(this.pageEmbed(this.page));
 		for (const emoji of emojis) await this.embedMsg.react(emoji);
 		const collector = this.embedMsg.createReactionCollector(
