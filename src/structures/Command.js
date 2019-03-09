@@ -5,6 +5,7 @@ class Command {
 		this.category = path.pop();
 		this.description = options.description;
 		this.aliases = options.aliases;
+		this.flags = options.flags;
 		this.args = options.args;
 		this.prompt = options.prompt;
 		/*

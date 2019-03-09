@@ -9,6 +9,7 @@ class MemberList extends Command {
 		super(__filename, {
 			description: "View a list of members that have a certain role on this server.",
 			aliases: new Set(["ml", "members", "memberslist"]),
+			flags: new Set(["id", "tag", "username", "nickname"]),
 			args: {
 				usage: "<role mention | role ID | role name> [page]",
 			},
@@ -20,6 +21,12 @@ class MemberList extends Command {
 	}
 
 	async run() {
+		const flagObj = {
+			id: ["id"],
+			tag: ["user", "tag"],
+			username: ["user", "username"],
+			nickname: ["displayName"],
+		};
 		const { target: possiblePage, found: role } = Targetter.getRole({
 			str: this.text,
 			guild: this.guild,
@@ -37,10 +44,11 @@ class MemberList extends Command {
 				setDescription: `${this.author.tag} I encountered an error while trying to get a list of members that have the role \`${djsUtil.cleanContent(this.text, this)}\`.`,
 			});
 		}
+		const flagOption = flagObj[this.flag] || ["displayName"];
 		new EmbedPagination({
 			msg: this,
 			title: `List of ${roleMembers.size} ${plural("member", roleMembers.size)} that have the role \`${role.name}\``,
-			descriptionsArr: roleMembers.map((member) => `• ${member.displayName}`),
+			descriptionsArr: roleMembers.map((member) => `• ${flagOption.reduce((obj, option) => obj[option], member)}`),
 			maxPerPage: 20,
 			page: +possiblePage,
 			hastebin: {
@@ -48,7 +56,6 @@ class MemberList extends Command {
 				text: `a full list of all members that have the role ${role.name}`,
 			},
 		});
-		// TODO: usernames/tags/nicknames/ids flags?
 	}
 }
 

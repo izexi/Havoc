@@ -23,7 +23,7 @@ class Havoc extends Client {
 			})
 			.on("message", (msg) => new MessageHandler(msg))
 			.on("messageDelete", (msg) => {
-				if (msg.command && msg.command.opts & 1 && msg.response) {
+				if (msg.command && (msg.response || msg.command.opts & 1)) {
 					msg.response.delete();
 				}
 			})

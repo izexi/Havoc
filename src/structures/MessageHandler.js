@@ -41,7 +41,7 @@ class MessageHandler {
 			let { user, target } = (await Targetter.getTarget({
 				str: options.join(" "),
 				guild: this.msg.guild,
-				client: this.msg.client,
+				client: this.client,
 				guildOnly: this.msg.command.guildOnly,
 			})) || {};
 			if (user) {
@@ -57,6 +57,16 @@ class MessageHandler {
 			options = options.filter((arg) => arg !== target);
 		}
 		obj.options = options;
+		if (command.flags) {
+			const prefix = this.prefix;
+			const flag = this.args.find((arg) => arg.startsWith(prefix) &&
+				command.flags.has(arg.slice(prefix.length)));
+			if (flag) {
+				this.msg.flag = flag.slice(prefix.length);
+				this.msg.args = this.msg.args.filter((arg) => arg !== flag);
+				this.text = this.msg.args.join(" ");
+			}
+		}
 		return obj;
 	}
 
