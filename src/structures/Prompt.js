@@ -60,7 +60,7 @@ class Prompt extends EventEmitter {
 				clearInterval(this.timeEdits);
 				await this.msg.channel.bulkDelete(this.promptMessages);
 				if (reason === "time") {
-					this.msg.sendEmbed({
+					this.msg.response = await this.msg.sendEmbed({
 						setDescription: `**${this.msg.author.tag}** it have been over ${this.timeLimit / 1000} seconds and you did not enter a valid option, so I will go ahead and cancel this.`,
 					});
 				}
