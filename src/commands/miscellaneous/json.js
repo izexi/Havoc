@@ -8,20 +8,21 @@ class Json extends Command {
 		super(__filename, {
 			description: "View a pretty printed JSON that is parsed from the entered URL.",
 			prompt: {
-				initialMsg: "enter the URL.",
+				initialMsg: ["enter the URL."],
 			},
 			opts: 0b1011,
 		});
 	}
 
 	async run() {
-		if (!isURL(this.text)) {
+		const possibleURL = this.text || this.promptResponse[0];
+		if (!isURL(possibleURL)) {
 			return this.response = await this.sendEmbed({
-				setDescription: `**${this.author.tag}** \`${this.text}\` isn't a valid URL.`,
+				setDescription: `**${this.author.tag}** \`${possibleURL}\` isn't a valid URL.`,
 			});
 		}
 		const msg = this;
-		const description = fetch(this.text)
+		const description = fetch(possibleURL)
 			.then(async (res) => {
 				if (!res.headers.get("content-type").includes("application/json")) {
 					return `**${msg.author.tag}** I couldn't find any JSON to parse on \`${msg.text}\`.`;

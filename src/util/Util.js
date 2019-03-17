@@ -41,6 +41,21 @@ class Util {
 					.then(async (res) => `https://paste.nomsy.net/${(await res.json()).key}.${extension}`);
 			});
 	}
+
+	static emojiNumbers(number) {
+		return {
+			1: "1⃣",
+			2: "2⃣",
+			3: "3⃣",
+			4: "4⃣",
+			5: "5⃣",
+			6: "6⃣",
+			7: "7⃣",
+			8: "8⃣",
+			9: "9⃣",
+			10: "🔟",
+		}[number];
+	}
 }
 
 module.exports = Util;

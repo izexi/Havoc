@@ -10,17 +10,16 @@ class Invite extends Command {
 	}
 
 	async run() {
-		this.sendEmbed({
+		this.response = await this.sendEmbed({
 			setTitle: "🏸 Pinging...",
-		}).then((msg) => {
-			msg.edit(
-				this.constructEmbed({
-					setTitle: "🏓 Pong!",
-					setDescription: `Latency: ${msg.createdTimestamp - this.createdTimestamp}ms
-                        Heartbeat: ${~~(this.client.ws.ping)}ms`,
-				})
-			);
 		});
+		this.response.edit(
+			this.constructEmbed({
+				setTitle: "🏓 Pong!",
+				setDescription: `Latency: ${this.response.createdTimestamp - this.createdTimestamp}ms
+                        Heartbeat: ${~~(this.client.ws.ping)}ms`,
+			})
+		);
 	}
 }
 

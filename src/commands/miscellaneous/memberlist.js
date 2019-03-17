@@ -14,7 +14,7 @@ class MemberList extends Command {
 				usage: "<role mention | role ID | role name> [page]",
 			},
 			prompt: {
-				initialMsg: "mention the role / enter the role's ID or name that you would like to list members from.",
+				initialMsg: ["mention the role / enter the role's ID or name that you would like to list members from."],
 			},
 			opts: 0b1000,
 		});
@@ -27,13 +27,14 @@ class MemberList extends Command {
 			username: ["user", "username"],
 			nickname: ["displayName"],
 		};
+		const possibleRole = this.text || this.promptResponse[0];
 		const { target: possiblePage, found: role } = Targetter.getRole({
-			str: this.text,
+			str: possibleRole,
 			guild: this.guild,
 		}) || {};
 		if (!role) {
 			return this.response = await this.sendEmbed({
-				setDescription: `${this.author.tag} I could not find a role named \`${djsUtil.cleanContent(this.text, this)}\`.`,
+				setDescription: `${this.author.tag} I could not find a role named \`${djsUtil.cleanContent(possibleRole, this)}\`.`,
 			});
 		}
 		const roleMembers = await this.guild.members.fetch({ cache: false })
@@ -41,7 +42,7 @@ class MemberList extends Command {
 			.catch(() => null);
 		if (!roleMembers) {
 			return this.response = await this.sendEmbed({
-				setDescription: `${this.author.tag} I encountered an error while trying to get a list of members that have the role \`${djsUtil.cleanContent(this.text, this)}\`.`,
+				setDescription: `${this.author.tag} I encountered an error while trying to get a list of members that have the role \`${djsUtil.cleanContent(possibleRole, this)}\`.`,
 			});
 		}
 		const flagOption = flagObj[this.flag] || ["displayName"];

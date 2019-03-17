@@ -28,9 +28,8 @@ class MessageHandler {
 				new Prompt({
 					msg: this.msg,
 					initialMsg: this.msg.command.prompt.initialMsg,
-				}).on("promptResponse", (text) => {
-					this.args = text.split(/ +/);
-					this.msg.text = text;
+				}).on("promptResponse", (responses) => {
+					this.msg.promptResponse = responses;
 					res();
 				});
 			});

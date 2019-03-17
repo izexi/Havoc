@@ -9,7 +9,7 @@ class Embed extends Command {
 				usage: "<text>",
 			},
 			prompt: {
-				initialMsg: "enter the text that you would like to embed.",
+				initialMsg: ["enter the text that you would like to embed."],
 			},
 			opts: 0b1011,
 		});
@@ -17,7 +17,7 @@ class Embed extends Command {
 
 	async run() {
 		this.response = await this.sendEmbed({
-			setDescription: this.text,
+			setDescription: this.text || this.promptResponse[0],
 			setFooter: [this.author.tag, this.author.displayAvatarURL()],
 		});
 	}
