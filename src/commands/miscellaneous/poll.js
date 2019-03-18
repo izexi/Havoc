@@ -1,4 +1,5 @@
 const { emojiNumbers } = require("../../util/Util");
+const Time = require("../../structures/Time");
 const Command = require("../../structures/Command");
 
 class Poll extends Command {
@@ -32,18 +33,20 @@ class Poll extends Command {
 				setDescription: `**${this.author.tag}** you have used this command incorrectly, enter \`${this.prefix}help poll\` for more info`,
 			});
 		}
+		const time = Time.parse(this.text);
 		options = options.split(";")
 			.filter((opt) => opt)
 			.map((opt, i) => `${emojiNumbers(i + 1)} ${opt}`);
 		this.sendEmbed({
 			setDescription: `${question}\n\n${options.join("\n")}`,
-			setFooter: `Poll started by ${this.author.tag}`,
+			setFooter: `Poll started by ${this.author.tag}${time ? " - Ending at:" : ""}`,
+			setTimestamp: Date.now() + time,
 		}).then(async (msg) => {
 			for (const [i] of options.entries()) {
 				await msg.react(emojiNumbers(i + 1));
 			}
 		});
-		// TODO: time parser & timed polls
+		// TODO: timed polls
 	}
 }
 
