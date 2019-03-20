@@ -109,6 +109,36 @@ module.exports = Structures.extend("Message", (Message) => {
 			}
 			return embed;
 		}
+
+		async endPoll(options) {
+			const emojiObj = Util.emojiNumbers;
+			const reactionCount = new Map();
+			const totalReactions = await this.reactions.reduce(async (total, reaction) => {
+				if (total instanceof Promise) total = await total;
+				if (Object.keys(emojiObj).find((emoji) => emojiObj[emoji] === reaction.emoji.name) <= options) {
+					const count = reaction.count - (await reaction.users.fetch()).has(this.client.user.id) | 0;
+					reactionCount.set(reaction.emoji.name, count);
+					total += count;
+				}
+				return total;
+			}, 0);
+			await this.reactions.removeAll();
+			const oldDesc = this.embeds[0].description.split("\n");
+			const newDesc = oldDesc.slice(2).reduce((desc, opt) => {
+				console.log(Object.values(emojiObj).find((emoji) => opt.includes(emoji)), reactionCount);
+				const reacationCount = reactionCount.get(Object.values(emojiObj).find((emoji) => opt.includes(emoji)));
+				desc.push(
+					opt + " - **" + ((reacationCount / totalReactions) * 100 || 0).toFixed(2).replace(/\.00/, "") +
+							"% (" + reacationCount + ")**"
+				);
+				return desc;
+			}, oldDesc.slice(0, 2));
+			await this.edit(
+				this.embeds[0]
+					.setFooter("Poll ended")
+					.setDescription(newDesc.join("\n"))
+			);
+		}
 	}
 
 	return HavocMessage;

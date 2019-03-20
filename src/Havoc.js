@@ -1,7 +1,9 @@
 const { Client } = require("discord.js");
 const { token } = require("../config.json");
+const { parse } = require("json-buffer");
 const Logger = require("./util/Logger");
 const Commands = require("./structures/Commands");
+const Database = require("./structures/Database");
 const MessageHandler = require("./structures/MessageHandler");
 
 class Havoc extends Client {
@@ -36,6 +38,20 @@ class Havoc extends Client {
 					}
 				}
 			});
+		this.db = new Database();
+		this.setInterval(() => {
+			this.db.category = "poll";
+			this.db.lessThan(Date.now())
+				.then((res) => {
+					if (!res) return;
+					const { key, value } = res;
+					const { channel, message, options } = parse(value);
+					this.channels.get(channel).messages.fetch(message)
+						.then((msg) => msg.endPoll(options))
+						.catch(() => null);
+					this.db.delete(key.slice(5));
+				});
+		}, 5000);
 		process.on("unhandledRejection", (rej) => Logger.unhandledRejection(rej));
 	}
 }

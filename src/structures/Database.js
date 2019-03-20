@@ -2,13 +2,12 @@
 
 const { dbURI } = require("../../config.json");
 const { Pool } = require("pg");
-const { query } = new Pool({ connectionString: dbURI });
 const { parse, stringify } = require("json-buffer");
+const pool = new Pool({ connectionString: dbURI });
 const sql = require("sql");
 
 class Database {
-	constructor(name) {
-		this.name = name;
+	constructor() {
 		this.sql = sql.define({
 			name: "havoc",
 			columns: [{
@@ -22,7 +21,7 @@ class Database {
 			}],
 		});
 		const queryStr = this._queryBuilder({ type: "CREATE" });
-		this._query(queryStr);
+		this.query(queryStr);
 	}
 
 	_queryBuilder(options) {
@@ -43,13 +42,13 @@ class Database {
 	}
 
 	_dbKey(key) {
-		return `${this.name}:${key}`;
+		return `${this.category}:${key}`;
 	}
 
-	_query(queryStr) {
-		return query(queryStr).then(({ rows }) => {
+	query(queryStr, value = true) {
+		return pool.query(queryStr).then(({ rows }) => {
 			const row = rows[0];
-			return (row ? parse(row.value) : null);
+			return (row ? (value ? parse(row.value) : row) : null);
 		});
 	}
 
@@ -58,7 +57,7 @@ class Database {
 			type: "SELECT",
 			key: this._dbKey(key),
 		});
-		return this._query(queryStr);
+		return this.query(queryStr);
 	}
 
 	set(key, value) {
@@ -67,17 +66,17 @@ class Database {
 			key: this._dbKey(key),
 			value: stringify(value),
 		});
-		return this._query(queryStr).then(() => true);
+		return this.query(queryStr).then(() => true);
 	}
 
 	delete(key) {
 		return this.exists(key).then((exists) => {
-			if (!exists) return new Promise((r) => r(false));
+			if (!exists) return Promise.resolve(false);
 			const queryStr = this._queryBuilder({
 				type: "DELETE",
 				key: this._dbKey(key),
 			});
-			return this._query(queryStr);
+			return this.query(queryStr);
 		});
 	}
 
@@ -86,7 +85,13 @@ class Database {
 			type: "SELECT",
 			key: this._dbKey(key),
 		});
-		return this._query(queryStr).then((row) => Boolean(row));
+		return this.query(queryStr).then((row) => Boolean(row));
+	}
+
+	lessThan(value) {
+		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND CAST(SUBSTRING(key, ${this.category.length + 2}) AS BIGINT) <= ${value}`, false)
+			.then((res) => res)
+			.catch(() => null);
 	}
 }
 

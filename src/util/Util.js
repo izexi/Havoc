@@ -42,7 +42,7 @@ class Util {
 			});
 	}
 
-	static emojiNumbers(number) {
+	static get emojiNumbers() {
 		return {
 			1: "1⃣",
 			2: "2⃣",
@@ -54,7 +54,11 @@ class Util {
 			8: "8⃣",
 			9: "9⃣",
 			10: "🔟",
-		}[number];
+		};
+	}
+
+	static emojiNumber(number) {
+		return this.emojiNumbers[number];
 	}
 }
 

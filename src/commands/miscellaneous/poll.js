@@ -1,6 +1,7 @@
-const { emojiNumbers } = require("../../util/Util");
+const Util = require("../../util/Util");
 const Time = require("../../structures/Time");
 const Command = require("../../structures/Command");
+const ms = require("ms");
 
 class Poll extends Command {
 	constructor() {
@@ -36,17 +37,31 @@ class Poll extends Command {
 		const time = Time.parse(this.text);
 		options = options.split(";")
 			.filter((opt) => opt)
-			.map((opt, i) => `${emojiNumbers(i + 1)} ${opt}`);
-		this.sendEmbed({
+			.map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
+		const embed = {
+			setAuthor: [`Poll started by ${this.author.tag}`, this.author.displayAvatarURL()],
 			setDescription: `${question}\n\n${options.join("\n")}`,
-			setFooter: `Poll started by ${this.author.tag}${time ? " - Ending at:" : ""}`,
-			setTimestamp: Date.now() + time,
-		}).then(async (msg) => {
+			setFooter: time > 60000 ? "Ending at:" : `Ending in ${ms(time, { long: true })}`,
+		};
+		if (time > 60000) embed.setTimestamp = Date.now() + time;
+		this.sendEmbed(embed).then(async (msg) => {
+			if (msg.deleted) return;
 			for (const [i] of options.entries()) {
-				await msg.react(emojiNumbers(i + 1));
+				await msg.react(Util.emojiNumber(i + 1));
+			}
+			if (!time) return;
+			if (time < 100000) {
+				setTimeout(() => msg.endPoll(), time);
+			}
+			else {
+				this.client.db.category = "poll";
+				await this.client.db.set(Date.now() + time, {
+					channel: msg.channel.id,
+					message: msg.id,
+					options: options.length,
+				});
 			}
 		});
-		// TODO: timed polls
 	}
 }
 
