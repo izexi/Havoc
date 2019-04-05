@@ -61,9 +61,9 @@ class EmbedPagination {
 				case "⬇":
 					new Prompt({
 						msg: this.msg,
-						initialMsg: "enter the page you like to jump to.",
+						initialMsg: ["enter the page you like to jump to."],
 						invalidResponseMsg: `You need to enter a number between 1 to ${this.totalPages}, e.g: entering \`2\` will jump to page 2.`,
-						validateFn: (str) => Number.isInteger(+str) && str > 0 && str <= this.totalPages,
+						validateFn: (msg) => Number.isInteger(+msg.content) && msg.content > 0 && msg.content <= this.totalPages,
 					}).on("promptResponse", (page) => this.embedMsg.edit(this.pageEmbed(+page)));
 					break;
 				case "▶":

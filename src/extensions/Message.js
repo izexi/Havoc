@@ -76,12 +76,11 @@ module.exports = Structures.extend("Message", (Message) => {
 				.setTimestamp();
 			Object.keys(methods).forEach((method) => {
 				const val = methods[method];
-				if (Array.isArray(val)) embed[method](...val);
-				else if (typeof val === "object") Object.values(val).map((v) => embed[method](...v));
+				if (Array.isArray(val)) Array.isArray(val[0]) ? val.map((v) => embed[method](...v)) : embed[method](...val);
 				else embed[method](val);
 			});
-			if (!methods.setFooter) {
-				embed.setFooter(`Requested by ${this.author.tag}`, this.author.displayAvatarURL());
+			if (!methods.setFooter && !embed.description.includes(this.author.tag)) {
+				embed.setFooter(`Requested by ${this.author.tag}`, this.author.pfp);
 			}
 			return embed;
 		}
@@ -125,7 +124,6 @@ module.exports = Structures.extend("Message", (Message) => {
 			await this.reactions.removeAll();
 			const oldDesc = this.embeds[0].description.split("\n");
 			const newDesc = oldDesc.slice(2).reduce((desc, opt) => {
-				console.log(Object.values(emojiObj).find((emoji) => opt.includes(emoji)), reactionCount);
 				const reacationCount = reactionCount.get(Object.values(emojiObj).find((emoji) => opt.includes(emoji)));
 				desc.push(
 					opt + " - **" + ((reacationCount / totalReactions) * 100 || 0).toFixed(2).replace(/\.00/, "") +
@@ -135,7 +133,8 @@ module.exports = Structures.extend("Message", (Message) => {
 			}, oldDesc.slice(0, 2));
 			await this.edit(
 				this.embeds[0]
-					.setFooter("Poll ended")
+					.setFooter("Poll ended at:")
+					.setTimestamp(new Date())
 					.setDescription(newDesc.join("\n"))
 			);
 		}

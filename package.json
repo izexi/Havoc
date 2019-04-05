@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "github:izexi/discord.js#YELLOW",
     "json-buffer": "^3.0.1",
+    "moment": "^2.24.0",
     "ms": "^2.1.1",
+    "node-emoji": "^1.10.0",
     "node-fetch": "^2.3.0",
     "pg": "^7.9.0",
     "pretty-ms": "^4.0.0",

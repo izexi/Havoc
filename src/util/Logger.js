@@ -21,8 +21,8 @@ class Logger {
 		this.log(text, `[${chalk.magenta("PING")}]`);
 	}
 
-	static error(err) {
-		this.log(`[${chalk.red("ERROR")}]`);
+	static error(text, err) {
+		this.log(text, `[${chalk.red("ERROR")}]`);
 		console.error(err);
 	}
 

@@ -7,7 +7,7 @@ const EmbedPagination = require("../../structures/EmbedPagination");
 class MemberList extends Command {
 	constructor() {
 		super(__filename, {
-			description: "View a list of members that have a certain role on this server.",
+			description: "View a list of members that have a certain role on the server.",
 			aliases: new Set(["ml", "members", "memberslist"]),
 			flags: new Set(["id", "tag", "username", "nickname"]),
 			args: {

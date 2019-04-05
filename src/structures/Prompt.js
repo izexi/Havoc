@@ -6,7 +6,7 @@ class Prompt extends EventEmitter {
 	/**
 	 * @param {Object} options
 	 * @param {import("discord.js").Message} options.msg
-	 * @param {string} options.initialMsg
+	 * @param {string[]} options.initialMsg
 	 * @param {string} options.invalidResponseMsg
 	 * @param {number} [options.timeLimit = 30000]
 	 * @param {Function} [options.validateFn = () => true]
@@ -14,7 +14,7 @@ class Prompt extends EventEmitter {
 	constructor(options) {
 		super();
 		this.msg = options.msg;
-		this.initialMsg = options.initialMsg;
+		this.initialMsg = options.initialMsg.slice();
 		this.invalidResponseMsg = options.invalidResponseMsg;
 		this.timeLimit = options.timeLimit || 30000;
 		this.validateFn = options.validateFn || (() => true);
@@ -47,7 +47,8 @@ class Prompt extends EventEmitter {
 		collector
 			.on("collect", (msg) => {
 				this.promptMessages.set(msg.id, msg);
-				if (this.validateFn(msg.content)) {
+				if (msg.content.toLowerCase() === "cancel") return collector.stop();
+				if (this.validateFn(msg)) {
 					collector.stop();
 					this.responses.push(msg.content);
 					if (this.initialMsg.length) this.create();
@@ -55,7 +56,7 @@ class Prompt extends EventEmitter {
 				}
 				else {
 					this.msg.sendEmbed({
-						setDescription: `**${this.msg.author.tag}** \`${msg.content}\` is an invalid option\n${this.invalidResponseMsg}`,
+						setDescription: `**${this.msg.author.tag}** \`${msg.content}\` is an invalid option!\n${this.invalidResponseMsg}\nEnter \`cancel\` to exit out of this prompt.`,
 					}).then((m) => this.promptMessages.set(m.id, m));
 				}
 			})

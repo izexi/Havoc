@@ -33,6 +33,10 @@ class Util {
 		return /\d{17,19}/g;
 	}
 
+	static get emojiRegex() {
+		return /<?(a:)?(\w{2,32}):(\d{17,19})>?/;
+	}
+
 	static async haste(body, extension = "txt") {
 		return fetch("https://hasteb.in/documents", { method: "POST", body })
 			.then(async (res) => `https://hasteb.in/${(await res.json()).key}.${extension}`)

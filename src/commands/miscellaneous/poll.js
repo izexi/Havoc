@@ -8,7 +8,7 @@ class Poll extends Command {
 		super(__filename, {
 			description: "Create a poll with options.",
 			args: {
-				usage: "[time = <_d | _y | _m | _s>] q:<question> a:<option1; option2;...>",
+				usage: "[time = <_w | _d | _y | _m | _s>] q:<question> a:<option1; option2;...>",
 			},
 			prompt: {
 				initialMsg: [
@@ -21,25 +21,27 @@ class Poll extends Command {
 	}
 
 	async run() {
-		let question, options;
+		let question, options, invalidResponse;
 		if (this.promptResponse) {
 			[question, options] = this.promptResponse;
 		}
 		else {
-			question = (this.text.match(/q:(.*)a:/i) || []);[1];
-			options = (this.text.match(/^.*a:(.*)$/i) || [])[1];
-		}
-		if (!question || !options) {
-			return this.response = await this.sendEmbed({
-				setDescription: `**${this.author.tag}** you have used this command incorrectly, enter \`${this.prefix}help poll\` for more info`,
-			});
+			question = (this.text.match(/q:(.*)a:/i) || [])[1];
+			options = (this.text.match(/^.*a:(.*)$/i) || [])[1].split(";")
+				.filter((opt) => opt)
+				.map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
 		}
 		const time = Time.parse(this.text);
-		options = options.split(";")
-			.filter((opt) => opt)
-			.map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
+		if (!question || !options) invalidResponse = `you have used this command incorrectly, enter \`${this.prefix}help poll\` for more info`;
+		if (time > 12096e+5) invalidResponse = "the maximum time allowed is 2 weeks";
+		if (options.length > 10) invalidResponse = "the maximum amount of options allowed are 10.";
+		if (invalidResponse) {
+			return this.response = await this.sendEmbed({
+				setDescription: `**${this.author.tag}** ${invalidResponse}.`,
+			});
+		}
 		const embed = {
-			setAuthor: [`Poll started by ${this.author.tag}`, this.author.displayAvatarURL()],
+			setAuthor: [`Poll started by ${this.author.tag}`, this.author.pfp],
 			setDescription: `${question}\n\n${options.join("\n")}`,
 			setFooter: time > 60000 ? "Ending at:" : `Ending in ${ms(time, { long: true })}`,
 		};
@@ -50,8 +52,8 @@ class Poll extends Command {
 				await msg.react(Util.emojiNumber(i + 1));
 			}
 			if (!time) return;
-			if (time < 100000) {
-				setTimeout(() => msg.endPoll(), time);
+			if (time < 100) {
+				setTimeout(() => msg.endPoll(options.length), time);
 			}
 			else {
 				this.client.db.category = "poll";

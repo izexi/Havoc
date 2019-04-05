@@ -18,7 +18,7 @@ class Embed extends Command {
 	async run() {
 		this.response = await this.sendEmbed({
 			setDescription: this.text || this.promptResponse[0],
-			setFooter: [this.author.tag, this.author.displayAvatarURL()],
+			setFooter: [this.author.tag, this.author.pfp],
 		});
 	}
 }

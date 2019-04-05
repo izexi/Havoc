@@ -28,6 +28,8 @@ class MessageHandler {
 				new Prompt({
 					msg: this.msg,
 					initialMsg: this.msg.command.prompt.initialMsg,
+					validateFn: this.msg.command.prompt.validateFn,
+					invalidResponseMsg: this.msg.command.prompt.invalidResponseMsg,
 				}).on("promptResponse", (responses) => {
 					this.msg.promptResponse = responses;
 					res();
@@ -86,7 +88,12 @@ class MessageHandler {
 		try {
 			this.msg.assignCommand(command);
 			this.parseMsg(command).then((parsedMsg) => {
-				command.run.call(this.msg, parsedMsg);
+				let method = "run";
+				const possibleSubCommand = parsedMsg.args[0].toLowerCase();
+				if (command.subCommands && command.subCommands.has(possibleSubCommand)) {
+					method = possibleSubCommand;
+				}
+				command[method].call(this.msg, parsedMsg);
 				this.client.emit("commandExecuted", this.msg);
 			});
 		}

@@ -19,8 +19,7 @@ class Commands extends Collection {
 
 		for (const commandFile of await commandFiles) {
 			try {
-				const Command = require(commandFile);
-				const command = new Command();
+				const command = new (require(commandFile))();
 				this.set(command.name, command);
 			}
 			catch(err) {

@@ -19,24 +19,24 @@ class Info extends Command {
 		};
 		this.response = await this.sendEmbed({
 			setTitle: this.client.user.username,
-			addField: {
-				0: ["❯Links",
+			addField: [
+				["❯Links",
 					`- [Invite me](https://discordapp.com/oauth2/authorize?client_id=${this.client.user.id}&scope=bot&permissions=2146958591)
 					- [Vote for me](${await getVoteLink()})
 					- [Support server](https://discord.gg/3Fewsxq)`, true],
-				1: ["❯Uptime", prettyMs(this.client.uptime), true],
-				2: ["❯Memory usage", (process.memoryUsage().heapUsed / 1048576).toFixed(2) + "MB", true],
-				3: ["❯Totals",
+				["❯Uptime", prettyMs(this.client.uptime), true],
+				["❯Memory usage", (process.memoryUsage().heapUsed / 1048576).toFixed(2) + "MB", true],
+				["❯Totals",
 					`- Servers: ${this.client.guilds.size}
 					- Users: ${"~" + this.client.guilds.reduce((total, guild) => total + guild.memberCount, 0)}
 					- Cached users: ${this.client.users.size}
 					- Channels: ${this.client.channels.size}
 					- Cached messages: ${this.client.channels.filter((channel) => channel.messages).reduce((total, channel) => total + channel.messages.size, 0)}`, true],
-				4: ["❯Github", "[Click here](link)", true],
-				5: ["❯Versions",
+				["❯Github", "[Click here](link)", true],
+				["❯Versions",
 					`- [discord.js](https://github.com/discordjs/discord.js): v${version}
 					- Node.js: ${process.version}`, true],
-			},
+			],
 		});
 	}
 }

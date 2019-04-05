@@ -15,12 +15,14 @@ class Havoc extends Client {
 	}
 
 	_init() {
+		this.db = new Database();
 		this.login(token)
 			.then(() => Logger.status(`Logged in as ${this.user.tag}`))
 			.catch((err) => Logger.error("Error while logging in", err));
 		this
 			.on("ready", () => {
 				this.user.setActivity("you", { type: "WATCHING" });
+				this.user.setStatus("offline");
 				Logger.log(`${this.user.tag} is ready in ${this.guilds.size} guilds.`);
 			})
 			.on("message", (msg) => new MessageHandler(msg))
@@ -38,7 +40,6 @@ class Havoc extends Client {
 					}
 				}
 			});
-		this.db = new Database();
 		this.setInterval(() => {
 			this.db.category = "poll";
 			this.db.lessThan(Date.now())

@@ -1,4 +1,4 @@
-const { Util: djsUtil } = require("discord.js");
+const { Util: { cleanContent } } = require("discord.js");
 const Command = require("../../structures/Command");
 
 class Avatar extends Command {
@@ -17,13 +17,13 @@ class Avatar extends Command {
 	async run(opts) {
 		const { target, possibleTarget } = await opts;
 		const user = target || this.author;
-		const avatar = user.displayAvatarURL();
+		const avatar = user.pfp;
 		this.response = await this.sendEmbed({
 			setDescription: `[URL for ${user.id === this.author.id ? "your" : `${user.tag}'s`} avatar](${avatar})`,
 			setImage: avatar,
 			setThumbnail: avatar,
 		}, possibleTarget && !target ?
-			`I couldn't find \`${djsUtil.cleanContent(possibleTarget, this)}\`... so here's yours?` : "");
+			`I couldn't find \`${cleanContent(possibleTarget, this)}\`... so here's yours?` : "");
 	}
 }
 

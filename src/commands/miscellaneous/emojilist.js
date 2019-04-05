@@ -17,13 +17,14 @@ class EmojiList extends Command {
 	async run() {
 		const emojis = this.guild.emojis;
 		const emojiFormat = (emoji) => `• ${emoji.toString()} - \`:${emoji.name}:\``;
+		const [animated, normal] = emojis.partition((emoji) => emoji.animated);
 		new EmbedPagination({
 			msg: this,
 			title: `List of ${emojis.size} ${plural("emoji", emojis.size)} in ${this.guild.name}`,
 			descriptionsArr: ["__**Emojis**__\n",
-				...emojis.filter((emoji) => !emoji.animated).map(emojiFormat),
+				...normal.map(emojiFormat),
 				"\n__**Animated Emojis**__\n",
-				...emojis.filter((emoji) => emoji.animated).map(emojiFormat)],
+				...animated.map(emojiFormat)],
 			maxPerPage: 20,
 			page: +this.args[1],
 			hastebin: {
