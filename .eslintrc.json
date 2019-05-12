@@ -2,7 +2,9 @@
 	"extends": "marine/node",
 	"rules": {
 		"prefer-await-to-then": "off",
+		"promise/always-return": "off",
 		"promise/prefer-await-to-then": "off",
-		"promise/prefer-await-to-callbacks": "off"
+		"promise/prefer-await-to-callbacks": "off",
+		"@typescript-eslint/explicit-function-return-type": "off"
 	}
 }

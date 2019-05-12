@@ -12,9 +12,7 @@
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
 		"pretty": true,
-		"resolveJsonModule": true,
-		"esModuleInterop": true,
-		"outDir": "./.js"
+		"outDir": "./.js",
 	},
 
 	"include": [
