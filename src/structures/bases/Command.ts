@@ -1,4 +1,5 @@
-import { Message } from 'discord.js';
+import HavocMessage from '../../extensions/Message';
+import HavocClient from '../../Havoc';
 
 export default abstract class implements CommandOptions {
 	public name: string;
@@ -14,7 +15,7 @@ export default abstract class implements CommandOptions {
 		this.aliases = options.aliases;
 	}
 
-	abstract run(msg: Message): void;
+	abstract run(this: HavocClient, msg: HavocMessage): void;
 }
 
 interface CommandOptions {

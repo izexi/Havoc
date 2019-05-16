@@ -6,13 +6,15 @@ const readdir = promisify(require('fs').readdir);
 export default class EventStore extends Map<string, Function> {
 	private _client: Client;
 
+	public handler!: EventHandler;
+
 	public constructor(client: Client) {
 		super();
 		this._client = client;
 		this._loadEvents();
 	}
 
-	private async _loadEvents(): Promise<void> {
+	private async _loadEvents() {
 		(await readdir('src/events'))
 			.forEach((event: string) => {
 				event = event.slice(0, -3);
@@ -22,7 +24,7 @@ export default class EventStore extends Map<string, Function> {
 	}
 
 	private _setListeners() {
-		const handler = new EventHandler(this._client, this);
-		handler.setListeners();
+		this.handler = new EventHandler(this._client, this);
+		this.handler.setListeners();
 	}
 }

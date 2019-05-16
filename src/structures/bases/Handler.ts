@@ -1,9 +1,9 @@
 export default abstract class Handler<K, V> {
-	abstract get(key: K): V | V[];
+	abstract add(key: K, value: V): void;
 
 	abstract remove(key: K): void;
 
-	abstract add(key: K, value: V): void;
+	abstract get(key: K): V | V[] | undefined;
 
 	abstract reload(key: K): void;
 }

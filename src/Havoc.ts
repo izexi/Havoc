@@ -1,16 +1,16 @@
 import { Client, ClientOptions } from 'discord.js';
 import Logger from './util/Logger';
-import Commands from './stores/CommandStore';
-import Events from './stores/EventStore';
+import CommandStore from './stores/CommandStore';
+import EventStore from './stores/EventStore';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { token } = require('../config.json');
 
 export default class HavocClient extends Client {
 	public havoc = '191615925336670208';
 
-	public commands = new Commands();
+	public commands = new CommandStore(this);
 
-	public events = new Events(this);
+	public events = new EventStore(this);
 
 	public constructor(options: ClientOptions = {}) {
 		super(options);

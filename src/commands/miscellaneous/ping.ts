@@ -1,5 +1,6 @@
-import Command from '../../structures/Command';
-import { Message } from 'discord.js';
+import Command from '../../structures/bases/Command';
+import HavocMessage from '../../extensions/Message';
+import HavocClient from '../../Havoc';
 
 export default class Ping extends Command {
 	public constructor() {
@@ -8,7 +9,7 @@ export default class Ping extends Command {
 		});
 	}
 
-	public run(msg: Message) {
+	public run(this: HavocClient, msg: HavocMessage) {
 		msg.channel.send('Pong!');
 	}
 }

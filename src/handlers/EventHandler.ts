@@ -1,8 +1,7 @@
 import EventStore from '../stores/EventStore';
-import Handler from '../structures/Handler';
+import Handler from '../structures/bases/Handler';
 import { Client } from 'discord.js';
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class EventHandler extends Handler<string, Function> {
 	private _client: any;
 
@@ -24,13 +23,15 @@ export default class EventHandler extends Handler<string, Function> {
 		this._client.on(event, fn);
 	}
 
-	public reload(event: string): void {
+	public reload(event: string) {
 		const functions = this.get(event);
-		this.remove(event);
-		functions.forEach(fn => this.add(event, fn));
+		if (functions) {
+			this.remove(event);
+			functions.forEach(fn => this.add(event, fn));
+		}
 	}
 
-	public get(event: string): Function[] {
+	public get(event: string): Function[] | undefined {
 		return this._client.listeners(event);
 	}
 

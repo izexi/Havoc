@@ -1,16 +1,23 @@
-import { Collection } from 'discord.js';
 import { promisify } from 'util';
+import Store from '../structures/bases/Store';
 import Logger from '../util/Logger';
-import Command from '../structures/Command';
+import Command from '../structures/bases/Command';
+import CommandHandler from '../handlers/CommandHandler';
+import { Client } from 'discord.js';
 const readdir = promisify(require('fs').readdir);
 
-export default class CommandStore extends Collection<string, Command> {
-	public constructor() {
+export default class CommandStore extends Store<string, Command> {
+	private _client: Client;
+
+	public handler: CommandHandler;
+
+	public constructor(client: Client) {
 		super();
-		this._loadCommands();
+		this._client = client;
+		this.handler = new CommandHandler(this._client, this);
 	}
 
-	private async _loadCommands(): Promise<void> {
+	protected async _load(): Promise<void> {
 		const commandFiles = (await readdir('src/commands')).reduce(async (files: Set<string>, dirs: string) => {
 			files = await files;
 			(await readdir(`src/commands/${dirs}`))
@@ -21,16 +28,10 @@ export default class CommandStore extends Collection<string, Command> {
 		for (const commandFile of await commandFiles) {
 			try {
 				const command = new (require(commandFile).default)();
-				this.set(command.name, command);
+				this.handler.add(command.name, command);
 			} catch (err) {
 				Logger.error(`Error while importing file - ${commandFile}`, err);
 			}
 		}
-	}
-
-	public get(possibleCommand: string): Command | undefined {
-		possibleCommand = possibleCommand.toLowerCase();
-		return super.get(possibleCommand) ||
-			super.find((c: Command) => c.aliases && c.aliases.has(possibleCommand));
 	}
 }
