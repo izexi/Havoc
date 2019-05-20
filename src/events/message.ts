@@ -2,6 +2,7 @@ import HavocMessage from '../extensions/Message';
 import HavocClient from '../client/Havoc';
 import Targetter, { Target } from '../util/Targetter';
 import Prompt from '../structures/Prompt';
+import Logger from '../util/Logger';
 
 export default async function(this: HavocClient, msg: HavocMessage) {
 	if (msg.author!.bot || msg.webhookID || !msg.prefix || !msg.content.startsWith(msg.prefix)) return;
@@ -9,6 +10,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 	if (!command) return;
 	if (command.category === 'dev' && msg.author.id !== this.havoc) return;
 	try {
+		let method = 'run';
 		const params: CommandParams = { msg };
 		const fillPomptResponses = async (initialMsg: string[], validateFn?: Function, invalidResponseMsg?: string) =>
 			new Promise(resolve => {
@@ -26,7 +28,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 			});
 		};
 		msg.command = command;
-		if (command.flags) {
+		if (command.flags.size) {
 			let flagIndex!: number;
 			const flag = msg.args.find((arg, i) => {
 				// TODO: make flags look nicer
@@ -42,12 +44,13 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 				msg.text = msg.args.join(' ');
 			}
 		}
-		let method = 'run';
-		const possibleSubCommand = msg.args[0].toLowerCase();
-		if (command.subCommands && command.subCommands.has(possibleSubCommand)) {
-			method = possibleSubCommand;
-		}
-		if (command.subCommands) {
+		if (command.subCommands.size) {
+			if (msg.args.length) {
+				const possibleSubCommand = msg.args[0].toLowerCase();
+				if (command.subCommands && command.subCommands.has(possibleSubCommand)) {
+					method = possibleSubCommand;
+				}
+			}
 			let subCommandsIndex!: number;
 			const subCommand = msg.args.find((arg, i) => {
 				if (command.subCommands.has(arg)) {
@@ -82,6 +85,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 		}
 		(command as { [key: string]: any })[method].call(this, params);
 	} catch (err) {
+		Logger.error(`Error while executing command ${command.name}`, err);
 		this.emit('commandError', err, msg);
 	}
 }
