@@ -12,7 +12,7 @@
 		"alwaysStrict": true,
 		"allowSyntheticDefaultImports": true,
 		"pretty": true,
-		"outDir": "./.js",
+		"outDir": "./dist",
 	},
 
 	"include": [

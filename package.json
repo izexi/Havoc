@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc",
-    "node": "node ./.js/index.js",
-    "start": "tsc && node ./.js/index.js",
+    "node": "node ./dist/index.js",
+    "start": "tsnd src/",
     "lint": "eslint src/**"
   },
   "eslintConfig": {
@@ -17,7 +17,10 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^12.0.0",
+    "@types/node-emoji": "^1.8.1",
+    "@types/node-fetch": "^2.3.4",
     "@types/pg": "^7.4.14",
+    "@types/pretty-ms": "^4.0.0",
     "@types/ws": "^6.0.1",
     "discord.js": "github:discordjs/discord.js",
     "eslint-config-marine": "^2.2.0",
@@ -35,6 +38,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.8.0",
     "@typescript-eslint/parser": "^1.8.0",
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "ts-node-dev": "^1.0.0-pre.39"
   }
 }

@@ -18,8 +18,8 @@ export default class CommandHandler extends Handler<string, Command> {
 		this._commands.set(name, command);
 	}
 
-	public reload(name: string) {
-		let command = this.get(name);
+	public reload(name: string | Command) {
+		let command = name instanceof Command ? name : this.get(name);
 		if (command) {
 			const path = `../commands/${command.category}/${command.name}`;
 			delete require.cache[require.resolve(path)];
@@ -29,6 +29,7 @@ export default class CommandHandler extends Handler<string, Command> {
 	}
 
 	public get(name: string): Command | undefined {
+		if (!name) return undefined;
 		name = name.toLowerCase();
 		return this._commands.get(name) ||
 			this._commands.find((c: Command) => c.aliases && c.aliases.has(name));

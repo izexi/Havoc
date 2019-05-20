@@ -5,5 +5,5 @@ export default abstract class Handler<K, V> {
 
 	abstract get(key: K): V | V[] | undefined;
 
-	abstract reload(key: K): void;
+	abstract reload(key: K | V): void;
 }

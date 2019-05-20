@@ -1,10 +1,11 @@
 import { Structures } from 'discord.js';
-import { promisify } from 'util';
-import HavoClient from './Havoc';
-const readdir = promisify(require('fs').readdir);
+import HavoClient from './client/Havoc';
+import Logger from './util/Logger';
 
+/* import { promisify } from 'util';
+const readdir = promisify(require('fs').readdir);
 // eslint-disable-next-line promise/catch-or-return
-/* readdir('src/extensions').then((extensions: string[]) => {
+readdir('src/extensions').then((extensions: string[]) => {
 	extensions.forEach((extension: string) => {
 		console.log(extension);
 		extension = extension.slice(0, -3);
@@ -12,7 +13,17 @@ const readdir = promisify(require('fs').readdir);
 	});
 }); */
 
-['Guild', 'Message'].forEach(extension =>
+process.on('unhandledRejection', rej => Logger.unhandledRejection(rej));
+
+['Guild', 'Message', 'User', 'TextChannel'].forEach(extension =>
 	Structures.extend(extension, (): Function => require(`./extensions/${extension}`).default));
 
-new HavoClient();
+new HavoClient({
+	disabledEvents: [
+		'CHANNEL_PINS_UPDATE',
+		'GUILD_INTEGRATIONS_UPDATE',
+		'PRESENCE_UPDATE',
+		'TYPING_START',
+		'WEBHOOKS_UPDATE'
+	]
+});

@@ -42,7 +42,7 @@ export default class Database {
 		return this.query(queryStr!);
 	}
 
-	public async set(key: string, value: string): Promise<boolean> {
+	public async set(key: any, value: any): Promise<boolean> {
 		const queryStr = this._queryBuilder({
 			type: 'INSERT',
 			key: this._dbKey(key),
@@ -70,7 +70,7 @@ export default class Database {
 		return this.query(queryStr!).then(row => Boolean(row));
 	}
 
-	public async lessThan(value: string): Promise<any> {
+	public async lessThan(value: number): Promise<any> {
 		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND CAST(SUBSTRING(key, ${this.category.length + 2}) AS BIGINT) <= ${value}`, false)
 			.catch(() => null);
 	}
