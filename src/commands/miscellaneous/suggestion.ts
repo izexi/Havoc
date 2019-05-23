@@ -91,7 +91,9 @@ export default class Suggestion extends Command {
 				subCommand: ['approve', 'deny'],
 				target: 'string',
 				prompt: {
-					initialMsg: ["enter the ID of the suggestion which you can find on the footer of the suggestion's embed, followed by the reason of approval (optional)"]
+					initialMsg: ["enter the ID of the suggestion which you can find on the footer of the suggestion's embed, followed by the reason of approval (optional)"],
+					validateFn: (msg: HavocMessage, str: string) => Regex.id.test(str),
+					invalidResponseMsg: 'You have entered an invalid ID.'
 				}
 			},
 			{
@@ -120,9 +122,11 @@ export default class Suggestion extends Command {
 			setColor: 'YELLOW',
 			setFooter: `Suggestion ID: ${SnowflakeUtil.generate(new Date())}`
 		}));
-		await suggestionMessage.edit(suggestionMessage.embeds[0].setFooter(`Suggestion ID: ${suggestionMessage.id}`));
-		await suggestionMessage.react('416985886509498369');
-		await suggestionMessage.react('416985887616925726');
+		await Promise.all([
+			suggestionMessage.edit(suggestionMessage.embeds[0].setFooter(`Suggestion ID: ${suggestionMessage.id}`)),
+			suggestionMessage.react('416985886509498369'),
+			suggestionMessage.react('416985887616925726')
+		]);
 		const embed = msg.constructEmbed({
 			setAuthor: `💡Your suggestion in ${msg.guild.name} has been submitted💡`,
 			addField: [
@@ -154,12 +158,11 @@ export default class Suggestion extends Command {
 
 	public async config(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
 		const { suggestion } = await msg.guild.config;
-		[target] = msg.args;
 		let initialMsg: string[];
 		let invalidResponseMsg: string;
 		let validateFn: Function;
 		let update: Function;
-		if (target === 'channel') {
+		if (target.split(' ')[0] === 'channel') {
 			initialMsg = ['mention the channel, or enter the ID of the channel that would like the suggestions to be created on.'];
 			// eslint-disable-next-line no-shadow
 			validateFn = (msg: HavocMessage, str: string) => msg.mentions.channels.size || msg.guild.channels.has(str);

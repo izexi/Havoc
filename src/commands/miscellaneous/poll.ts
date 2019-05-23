@@ -14,7 +14,7 @@ export default class Poll extends Command {
 			target: 'string',
 			prompt: {
 				initialMsg: [
-					'enter the question that you would like to poll along with the time limit (optional - suffix the time with `w`/`d`/`h`/`m`/`s`, e.g: `3m5s` would be 3 minutes and 5 seconds.)',
+					'enter the question that you would like to poll (optional - you may specify a time limit using the `time` flag suffix the time with `w`/`d`/`h`/`m`/`s`, e.g: `3m5s` would be 3 minutes and 5 seconds.)\nE.g: \`pick one -time=10m\` will create a poll with the question "pick one" thaht will end in 10 minutes.',
 					'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no'
 				]
 			},
@@ -30,13 +30,23 @@ export default class Poll extends Command {
 		if (promptResponses && promptResponses.length) {
 			[question, options] = promptResponses;
 			options = options.split(';').map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
+			const flagRegex = /\s?-(time=[^\s]+)?/;
+			const [, qFlag]: RegExpMatchArray = question.match(flagRegex) || [];
+			if (qFlag) {
+				flag = qFlag;
+				question.replace(flagRegex, '');
+			}
 		} else {
 			question = (msg.text.match(/q:(.*)a:/i) || [])[1];
-			options = (msg.text.match(/^.*a:(.*)$/i) || [])[1].split(';').map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
+			options = (msg.text.match(/^.*a:(.*)$/i) || [])[1];
+			if (!question || !options) {
+				return msg.response = await msg.sendEmbed({
+					setDescription: `**${msg.author.tag}** you have used this command incorrectly, enter \`${msg.prefix}help poll\` for more info.`
+				});
+			}
+			options = options.split(';').map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
 		}
-		if (flag) {
-			time = Time.parse(flag.slice(5));
-		}
+		if (flag) time = Time.parse(flag.slice(5));
 		if (!question || !options) invalidResponses.push(`you have used this command incorrectly, enter \`${msg.prefix}help poll\` for more info`);
 		if (time > 12096e+5) invalidResponses.push('the maximum time allowed is 2 weeks');
 		if (options.length > 10) invalidResponses.push('the maximum amount of options allowed are 10');

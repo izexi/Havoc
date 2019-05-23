@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
 export default {
-	log(text: string, type = '') {
+	log(text: any, type = '') {
 		console.log(`[${chalk(new Date().toLocaleTimeString())}]${type ? ` ${type}` : ''} ${text}`);
 	},
 	status(text: string) {

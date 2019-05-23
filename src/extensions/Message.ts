@@ -1,4 +1,4 @@
-import { Message, TextChannel, MessageEmbed } from 'discord.js';
+import { Message, TextChannel, MessageEmbed, MessageReaction } from 'discord.js';
 import Regex from '../util/Regex';
 import HavocGuild from './Guild';
 import Command from '../structures/bases/Command';
@@ -46,7 +46,7 @@ export default class HavocMessage extends Message {
 				embed[method](val);
 			}
 		});
-		if (!methods.setFooter && (!embed.description || !embed.description.includes(this.author!.tag))) {
+		if (!methods.setFooter && (!embed.footer || !embed.footer.text) && (!embed.description || !embed.description.includes(this.author!.tag)) && this.author.id !== this.client.user!.id) {
 			embed.setFooter(`Requested by ${this.author!.tag}`, this.author!.pfp);
 		}
 		return embed;
@@ -62,7 +62,7 @@ export default class HavocMessage extends Message {
 				? methodsOrEmbed
 				: this.constructEmbed(methodsOrEmbed)
 		) as HavocMessage;
-		if (this.command.opts & 1) {
+		if (this.command && this.command.opts & 1) {
 			await embed.react('🗑');
 			embed.awaitReactions(
 				(reaction, user) => reaction.emoji.name === '🗑' && user.id === this.author.id,
@@ -84,15 +84,14 @@ export default class HavocMessage extends Message {
 	public async endPoll(options: number) {
 		const emojiObj = Util.emojiNumbers;
 		const reactionCount = new Map();
-		const totalReactions = await this.reactions.reduce(async (total, reaction) => {
-			total = await total;
+		const totalReactions = await this.reactions.reduce(async (total: Promise<number>, reaction: MessageReaction) => {
 			if (Number(Object.keys(emojiObj).find(emoji => emojiObj[emoji] === reaction.emoji.name)!) <= options) {
 				const count = reaction.count - ((await reaction.users.fetch()).has(this.client.user!.id) ? 1 : 0);
 				reactionCount.set(reaction.emoji.name, count);
-				total += count;
+				total = Promise.resolve((await total) + count);
 			}
 			return total;
-		}, 0);
+		}, Promise.resolve(0));
 		await this.reactions.removeAll();
 		const oldDesc = this.embeds[0].description.split('\n');
 		const newDesc = oldDesc.slice(2).reduce((desc, opt) => {
@@ -109,6 +108,42 @@ export default class HavocMessage extends Message {
 				.setTimestamp(new Date())
 				.setDescription(newDesc.join('\n'))
 		);
+	}
+
+	public async endGiveaway(winners: number) {
+		if (this.embeds[0].footer!.text!.includes('ended')) return;
+		const reaction = this.reactions.get('🎉');
+		if (!reaction) return;
+		const winner = (await reaction.users.fetch())
+			.filter(user => user.id !== this.client.user!.id)
+			.random(winners)
+			.filter(user => user);
+		if (!winner.length) {
+			return this.edit('🎉 **GIVEAWAY ENDED** 🎉',
+				this.embeds[0]
+					.setDescription(`**Winner:** Could not be determined`)
+					.setFooter(`Giveaway ID: ${this.embeds[0].footer!.text!.match(Regex.id)![0]} | Giveaway ended at:`)
+					.setColor('RED')
+					.setTimestamp(new Date()));
+		}
+		await this.edit('🎉 **GIVEAWAY ENDED** 🎉',
+			this.embeds[0]
+				.setDescription(`**${Util.plural('Winner', winner.length)}:** ${winner.map(u => u.tag).join(', ')}`)
+				.setFooter(`Giveaway ID: ${this.embeds[0].footer!.text!.match(Regex.id)![0]} | Giveaway ended at:`)
+				.setColor('RED')
+				.setTimestamp(new Date()));
+		const embed = this.constructEmbed({
+			setDescription: `🎉 Congratulations **${winner.map(u => u.tag).join(', ')}**! You won the [giveaway](${this.url}) for ${this.embeds[0].title} 🎉`,
+			setColor: 'GOLD'
+		});
+		await this.sendEmbed(embed, winner.map(u => u.toString()).join(', '));
+		Promise.all(winner.map(async u => {
+			const dmEmbed = new MessageEmbed(this.embeds[0])
+				.setDescription(`🎉 Congratulations **${u.tag}**! You won the [giveaway](${this.url}) for **${this.embeds[0].title}** 🎉`);
+			delete dmEmbed.footer;
+			delete dmEmbed.title;
+			return u.send(dmEmbed).catch(() => null);
+		})).catch(() => null);
 	}
 
 	private _init() {

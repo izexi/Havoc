@@ -12,7 +12,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 	try {
 		let method = 'run';
 		const params: CommandParams = { msg };
-		const fillPomptResponses = async (initialMsg: string[], validateFn?: Function, invalidResponseMsg?: string) =>
+		const fillPomptResponses = async (initialMsg: string[], validateFn?: Function | Function[], invalidResponseMsg?: string | string[]) =>
 			new Promise(resolve => {
 				new Prompt({ msg, initialMsg, validateFn, invalidResponseMsg })
 					.on('promptResponse', responses => {
@@ -49,20 +49,9 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 				const possibleSubCommand = msg.args[0].toLowerCase();
 				if (command.subCommands && command.subCommands.has(possibleSubCommand)) {
 					method = possibleSubCommand;
+					msg.args.splice(msg.args.findIndex(arg => command.subCommands.has(arg)), 1);
+					msg.text = msg.args.join(' ');
 				}
-			}
-			let subCommandsIndex!: number;
-			const subCommand = msg.args.find((arg, i) => {
-				if (command.subCommands.has(arg)) {
-					subCommandsIndex = i;
-					return true;
-				}
-				return false;
-			});
-			if (subCommand) {
-				params.flag = subCommand.slice(msg.prefix.length);
-				msg.args.splice(subCommandsIndex, 1);
-				msg.text = msg.args.join(' ');
 			}
 		}
 		if (command.target) await filltargetObj(msg.args.join(' '));
@@ -76,7 +65,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 				}
 				if (command.target) await filltargetObj(params.promptResponses![0]);
 			} else if (command.prompt && command.prompt.validateFn) {
-				if (!(command.prompt.validateFn)(msg, msg.text)) {
+				if (!(command.prompt.validateFn as { [key: number]: Function }[0])(msg, msg.text)) {
 					return msg.response = await msg.sendEmbed({
 						setDescription: `**${msg.author.tag}** \`${msg.text}\` is an invalid option!\n${command.prompt.invalidResponseMsg}.`
 					});

@@ -27,7 +27,7 @@ export default class Info extends Command {
             - [Vote for me](${await getVoteLink()})
             - [Support server](https://discord.gg/3Fewsxq)`, true],
 				['❯Uptime', prettyMs(this.uptime!), true],
-				['❯Memory usage', `${(process.memoryUsage().heapUsed / 1048576).toFixed(2)}MB (${(process.memoryUsage().heapUsed / os.totalmem() * 100).toFixed(2)})%`, true],
+				['❯Memory usage', `${(process.memoryUsage().heapUsed / 1048576).toFixed(2)}MB (${(process.memoryUsage().heapUsed / os.totalmem() * 100).toFixed(2)}%)`, true],
 				['❯Totals',
 					`- Servers: ${this.guilds.size}
             - Users: ${`~${this.guilds.reduce((total: number, guild) => total + guild.memberCount, 0)}`}

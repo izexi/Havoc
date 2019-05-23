@@ -48,6 +48,7 @@ interface CommandOptions {
 		x & 1 << 1: editable
 		x & 1 << 2: target
 		x & 1 << 3: args required
+		x & 1 << 4: subCommand required
 	}
 	*/
 	opts: number;
@@ -56,7 +57,7 @@ interface CommandOptions {
 	prompt?: {
 		initialMsg: string[];
 		invalidResponseMsg?: string;
-		validateFn?: Function;
+		validateFn?: Function | Function[];
 	};
 	flags?: Set<string>;
 	subCommands?: Set<string>;
@@ -65,8 +66,8 @@ interface CommandOptions {
 		target: TargetType;
 		prompt?: {
 			initialMsg: string[];
-			invalidResponseMsg?: string;
-			validateFn?: Function;
+			invalidResponseMsg?: string | string[];
+			validateFn?: Function | Function[];
 		};
 	}[];
 }

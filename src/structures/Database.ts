@@ -10,6 +10,8 @@ export default class Database {
 
 	public category!: string;
 
+	public pool: Pool;
+
 	public constructor() {
 		this.sql = sql.define({
 			name: 'havoc',
@@ -25,6 +27,7 @@ export default class Database {
 		});
 		const queryStr = this._queryBuilder({ type: 'CREATE' });
 		this.query(queryStr!);
+		this.pool = pool;
 	}
 
 	public async query(queryStr: string, value: boolean = true): Promise<any> {
@@ -71,7 +74,7 @@ export default class Database {
 	}
 
 	public async lessThan(value: number): Promise<any> {
-		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND CAST(SUBSTRING(key, ${this.category.length + 2}) AS BIGINT) <= ${value}`, false)
+		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND SUBSTRING(key FROM '\\d+')::bigint <= ${value}`, false)
 			.catch(() => null);
 	}
 

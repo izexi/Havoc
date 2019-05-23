@@ -62,17 +62,20 @@ export default {
 	async getTarget({ str, guild, type }: { str: string; guild: HavocGuild; type: TargetType }) {
 		if (!str) return { target: null };
 		const targetObj: Target = {};
-		if (type === 'string') targetObj.target = str;
-		if (type === 'command') targetObj.target = guild.client.commands.handler.get(str);
-		if (guild && (type === 'member' || type === 'user')) {
+		if (type === 'string') {
+			targetObj.target = str;
+		} else if (type === 'command') {
+			targetObj.target = guild.client.commands.handler.get(str);
+		} else if (guild && (type === 'member' || type === 'user')) {
 			targetObj.target = await this.member.mentionOrIDSearch(str, guild) || await this.member.nameSearch(str, guild);
 			if (!targetObj.target) {
 				targetObj.target = await this.member.looseSearch(str, guild);
 				targetObj.loose = true;
 			}
 			if (targetObj.target && type === 'user') targetObj.target = await guild.client.users.fetch(targetObj.target.id);
+		} else {
+			targetObj.target = (this as { [key: string]: any })[type].get(str, guild);
 		}
-		targetObj.target = (this as { [key: string]: any })[type].get(str, guild);
 		return targetObj;
 	}
 };

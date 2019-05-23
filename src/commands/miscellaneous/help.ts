@@ -53,7 +53,7 @@ export default class Help extends Command {
 		const categories = this.commands.reduce((uniqueCategories, { category }): Set<string> => uniqueCategories.add(category), new Set());
 		const fields = [...categories].reduce((arr: string[][], commandCategory) => {
 			arr.push([
-				`${emojis[commandCategory]} ${commandCategory.replace(/./, firstLetter => firstLetter.toUpperCase())}`,
+				`${emojis[commandCategory]} ${commandCategory.replace(/./, (firstLetter: string) => firstLetter.toUpperCase())}`,
 				this.commands
 					.filter(({ category }) => category === commandCategory)
 					.map(c => `\`${c.name}\``).join(', ')

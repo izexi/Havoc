@@ -9,11 +9,11 @@ export default class Prompt extends EventEmitter {
 
 	private initialMsg: string[];
 
-	private invalidResponseMsg?: string;
+	private invalidResponseMsg?: string[];
 
 	private timeLimit: number;
 
-	private validateFn: Function;
+	private validateFn: Function[];
 
 	private promptMessages: string[] = [];
 
@@ -25,13 +25,16 @@ export default class Prompt extends EventEmitter {
 
 	private hastebin!: { url: string; text: string };
 
+	private index: number
+
 	public constructor(options: PromptOptions) {
 		super();
 		this.msg = options.msg;
-		this.initialMsg = options.initialMsg.slice();
-		this.invalidResponseMsg = options.invalidResponseMsg;
+		this.initialMsg = Array.isArray(options.initialMsg) ? options.initialMsg.slice() : [options.initialMsg];
+		this.invalidResponseMsg = Array.isArray(options.invalidResponseMsg) ? options.invalidResponseMsg.slice() : [options.invalidResponseMsg!];
 		this.timeLimit = options.timeLimit || 30000;
-		this.validateFn = options.validateFn || (() => true);
+		this.validateFn = Array.isArray(options.validateFn) ? options.validateFn.slice() : [options.validateFn || (() => true)];
+		this.index = 0;
 		this.create();
 	}
 
@@ -61,15 +64,16 @@ export default class Prompt extends EventEmitter {
 			.on('collect', (msg: HavocMessage) => {
 				this.promptMessages.push(msg.id);
 				if (msg.content.toLowerCase() === 'cancel') return collector.stop();
-				if (this.validateFn(msg, msg.content)) {
+				if ((this.validateFn[this.index] || (() => true))(msg, msg.content)) {
 					collector.stop();
 					this.responses.push(msg.content);
+					this.index++;
 					if (this.initialMsg.length) this.create();
 					else this.emit('promptResponse', this.responses);
 				} else {
 					// eslint-disable-next-line promise/catch-or-return
 					this.msg.sendEmbed({
-						setDescription: `**${this.msg.author.tag}** \`${msg.content}\` is an invalid option!\n${this.invalidResponseMsg}\nEnter \`cancel\` to exit out of this prompt.`
+						setDescription: `**${this.msg.author.tag}** \`${msg.content}\` is an invalid option!\n${this.invalidResponseMsg![this.index]}\nEnter \`cancel\` to exit out of this prompt.`
 					}).then(m => this.promptMessages.push(m!.id));
 				}
 			})
@@ -92,8 +96,8 @@ export default class Prompt extends EventEmitter {
 
 export interface PromptOptions {
 	msg: HavocMessage;
-	initialMsg: string[];
-	invalidResponseMsg?: string;
-	validateFn?: Function;
+	initialMsg: string | string[];
+	invalidResponseMsg?: string | string[];
+	validateFn?: Function | Function[];
 	timeLimit?: number;
 }
