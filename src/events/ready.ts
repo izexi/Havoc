@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import Logger from '../util/Logger';
 import HavocClient from '../client/Havoc';
 import HavocTextChannel from '../extensions/TextChannel';
 import HavocMessage from '../extensions/Message';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { parse } = require('json-buffer');
-const interval = require('interval-promise');
 
 
 export default function(this: HavocClient) {
@@ -27,8 +26,11 @@ export default function(this: HavocClient) {
 			.catch(error => Logger.error('Database error:', error));
 	}, 5000);
 
-	this.giveawayScheduler = interval(async () => {
-		if (!this.giveawaySchedule) return;
+
+	this.giveawayScheduler = async () => {
 		await Promise.all([...this.giveaways.values()].map(async g => g.update()));
-	}, 1000);
+		setTimeout(this.giveawayScheduler, 1000);
+	};
+
+	this.giveawayScheduler();
 }

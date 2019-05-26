@@ -3,6 +3,7 @@ import HavocClient from '../client/Havoc';
 import Targetter, { Target } from '../util/Targetter';
 import Prompt from '../structures/Prompt';
 import Logger from '../util/Logger';
+import Util from '../util/Util';
 
 export default async function(this: HavocClient, msg: HavocMessage) {
 	if (msg.author!.bot || msg.webhookID || !msg.prefix || !msg.content.startsWith(msg.prefix)) return;
@@ -28,6 +29,16 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 			});
 		};
 		msg.command = command;
+		if (command.userPerms) {
+			let permRole;
+			const { role, flags } = command.userPerms;
+			if (role) permRole = await role(msg);
+			if (!(role && msg.member!.roles.has(permRole)) && !(flags && msg.member!.hasPermission(flags))) {
+				return msg.response = await msg.sendEmbed({
+					setDescription: `**${msg.author.tag}** you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''} you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')}`
+				});
+			}
+		}
 		if (command.flags.size) {
 			let flagIndex!: number;
 			const flag = msg.args.find((arg, i) => {

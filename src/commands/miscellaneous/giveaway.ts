@@ -1,7 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import { GuildChannel, SnowflakeUtil } from 'discord.js';
+import { GuildChannel } from 'discord.js';
 import Prompt from '../../structures/Prompt';
 import HavocTextChannel from '../../extensions/TextChannel';
 import Util from '../../util/Util';
@@ -33,50 +33,6 @@ const getGiveawayChannel = async (msg: HavocMessage) => {
 		return null;
 	}
 	return giveawayChannel;
-};
-
-
-const review = async (_msg: HavocMessage, text: string, approve: boolean) => {
-	const giveawayChannel = await getGiveawayChannel(_msg);
-	const [messageID, ...reason] = text.split(/ +/);
-	const invalidID = async () => _msg.sendEmbed({
-		setDescription: `**${_msg.author.tag}** you have entered an invalid Giveaway ID.`,
-		setImage: 'https://i.imgur.com/IK7JkVw.png'
-	});
-	const reviewReason = reason.join(' ');
-	(giveawayChannel as HavocTextChannel).messages.fetch(messageID).then(async msg => {
-		const [embed] = msg.embeds;
-		if (!embed || !embed.footer || !embed.footer.text || !embed.footer.text.startsWith('Giveaway') || msg.author!.id !== _msg.client.user!.id) return _msg.response = await invalidID();
-		if (embed.fields[1].value !== 'Open') {
-			return _msg.response = await _msg.sendEmbed({
-				setDescription: `**${_msg.author.tag}** _msg giveaway has already been ${Util.captialise(embed.fields[1].value.split(' -')[0])}.`
-			});
-		}
-		embed.fields[1].value = `${approve ? 'Approved' : 'Denied'} by ${_msg.author.tag}${reviewReason ? ` - ${reviewReason}` : ''}`;
-		embed.setColor(approve ? 'GREEN' : 'RED');
-		// eslint-disable-next-line promise/catch-or-return
-		await msg.edit(embed);
-		const [userID]: RegExpMatchArray = embed.author!.name!.match(Regex.id) || [];
-		embed.setAuthor(`💡Your giveaway in ${msg.guild!.name} has been ${approve ? 'accepted' : 'denied'}💡`);
-		embed.setDescription(`\n\nClick [here](${msg.url}) to view it.`);
-		// eslint-disable-next-line promise/no-nesting
-		_msg.client.users.fetch(userID)
-			.then(async user => user.send(embed))
-			.catch(() => null);
-	}).catch(async () => _msg.response = await invalidID());
-};
-
-const validateAccess = async (msg: HavocMessage) => {
-	const { giveaway } = await msg.guild.config;
-	const { role }: { role: string } = giveaway || {};
-	if (!msg.member!.permissions.has('MANAGE_GUILD') && !msg.member!.roles.has(role)) {
-		const accessRole = msg.guild.roles.get(role);
-		msg.response = await msg.sendEmbed({
-			setDescription: `**${msg.author.tag}** you need to have the \`Manage Server\` permission to review giveaways or ${accessRole ? `the \`${accessRole.name}\` role` : `you can configure a role via \`${msg.prefix}giveaway config\``}.`
-		});
-		return false;
-	}
-	return true;
 };
 
 export default class Giveaway extends Command {
@@ -137,7 +93,15 @@ export default class Giveaway extends Command {
 					validateFn: (msg: HavocMessage, str: string) => ['channel', 'role'].includes(str.toLowerCase()),
 					invalidResponseMsg: 'You will need to enter either `channel` or `role`.'
 				}
-			}]
+			}],
+			userPerms: {
+				role: async (msg: HavocMessage) => {
+					const { giveaway } = await msg.guild.config;
+					const { role }: { role: string } = giveaway || {};
+					return role;
+				},
+				flags: ['MANAGE_GUILD']
+			}
 		});
 	}
 
@@ -182,11 +146,12 @@ export default class Giveaway extends Command {
 		const embed = msg.constructEmbed({
 			setTitle: prize,
 			setDescription: `React with 🎉 to enter!\nTime remaining: **${ms(time, { 'long': true })}**`,
+			setFooter: `${winners || 1} ${Util.plural('Winner', Number(winners) || 1)} | Ends at: `,
 			setColor: 'GREEN'
 		});
 		if (time > 60000) embed.setTimestamp(Date.now() + time);
 		// eslint-disable-next-line promise/catch-or-return
-		giveawayChannel.send(embed).then(async m => {
+		giveawayChannel.send('🎉 **GIVEAWAY** 🎉', embed).then(async m => {
 			if (m.deleted) return;
 			await Promise.all([
 				m.react('🎉'),
@@ -195,12 +160,15 @@ export default class Giveaway extends Command {
 			if (time < 100) {
 				setTimeout(async () => m.endGiveaway(Number(winners)), time as number);
 			} else {
-				this.giveaways.add(Date.now() + (time as number), {
+				await this.giveaways.add(Date.now() + (time as number), {
 					channel: m.channel.id,
 					message: m.id,
 					winners: winners.toString()
 				}, true);
 			}
+			msg.response = await msg.sendEmbed({
+				setDescription: `**${msg.author.tag}** I have started the [giveaway](${m.url}).`
+			});
 		});
 	}
 

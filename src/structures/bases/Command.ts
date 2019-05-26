@@ -1,4 +1,4 @@
-import { User, GuildMember, TextChannel } from 'discord.js';
+import { User, GuildMember, TextChannel, BitFieldResolvable, PermissionString } from 'discord.js';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 
@@ -23,6 +23,8 @@ export default abstract class implements CommandOptions {
 
 	public subArgs: CommandOptions['subArgs'];
 
+	public userPerms: CommandOptions['userPerms'];
+
 	public constructor(__path: string, options: CommandOptions) {
 		const path = __path.split('\\');
 		this.name = path.pop()!.slice(0, -3);
@@ -35,6 +37,7 @@ export default abstract class implements CommandOptions {
 		this.flags = options.flags || new Set();
 		this.subCommands = options.subCommands || new Set();
 		this.subArgs = options.subArgs;
+		this.userPerms = options.userPerms;
 	}
 
 	abstract run(this: HavocClient, params: CommandParams): void;
@@ -70,6 +73,10 @@ interface CommandOptions {
 			validateFn?: Function | Function[];
 		};
 	}[];
+	userPerms?: {
+		role?: Function;
+		flags?: BitFieldResolvable<PermissionString>;
+	};
 }
 
 
