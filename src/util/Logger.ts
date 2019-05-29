@@ -8,8 +8,8 @@ export default {
 		this.log(text, `[${chalk.green('STATUS')}]`);
 	},
 
-	file(text: string) {
-		this.log(text, `[${chalk.yellow('FILE')}]`);
+	info(text: string) {
+		this.log(text, `[${chalk.yellow('INFO')}]`);
 	},
 
 	command(text: string) {

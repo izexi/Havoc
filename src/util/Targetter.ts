@@ -23,9 +23,10 @@ export default {
 		},
 
 		async looseSearch(str: string, guild: HavocGuild) {
+			str = str.toLowerCase();
 			return guild.members.find(member =>
-				member.displayName.toLowerCase().includes(str) ||
-					member.user.username.toLowerCase().includes(str)) || null;
+				member.displayName.toLowerCase().startsWith(str) || member.user.username.toLowerCase().startsWith(str) ||
+					member.displayName.toLowerCase().includes(str) || member.user.username.toLowerCase().includes(str)) || null;
 		}
 	},
 

@@ -5,7 +5,6 @@ import HavocMessage from '../extensions/Message';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { parse } = require('json-buffer');
 
-
 export default function(this: HavocClient) {
 	this.user!.setActivity('you', { type: 'WATCHING' });
 	Logger.log(`${this.user!.tag} is ready in ${this.guilds.size} guilds!`);
@@ -26,9 +25,16 @@ export default function(this: HavocClient) {
 			.catch(error => Logger.error('Database error:', error));
 	}, 5000);
 
-
 	this.giveawayScheduler = async () => {
-		await Promise.all([...this.giveaways.values()].map(async g => g.update()));
+		await Promise.all(
+			[...this.giveaways.values()]
+				.map(async g => g.update().catch(async () => {
+					await g.delete();
+					// @ts-ignore
+					this.rest.handlers.get(`/channels/${g.channel}/messages/:id`).run();
+					return null;
+				}))
+		);
 		setTimeout(this.giveawayScheduler, 1000);
 	};
 

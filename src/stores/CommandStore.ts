@@ -33,5 +33,6 @@ export default class CommandStore extends Store<string, Command> {
 				Logger.error(`Error while importing file - ${commandFile}`, err);
 			}
 		}
+		Logger.info(`Loaded ${this.size} commands.`);
 	}
 }

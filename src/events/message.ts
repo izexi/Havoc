@@ -8,8 +8,7 @@ import Util from '../util/Util';
 export default async function(this: HavocClient, msg: HavocMessage) {
 	if (msg.author!.bot || msg.webhookID || !msg.prefix || !msg.content.startsWith(msg.prefix)) return;
 	const command = this.commands.handler.get(msg.args.shift()!);
-	if (!command) return;
-	if (command.category === 'dev' && msg.author.id !== this.havoc) return;
+	if (!command || this.commands.disabled.has(command.name) || (command.category === 'dev' && msg.author.id !== this.havoc)) return;
 	try {
 		let method = 'run';
 		const params: CommandParams = { msg };

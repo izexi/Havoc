@@ -1,0 +1,410 @@
+{
+    "ko": {
+        "aliases": ["ko", "korean"],
+        "flag": "kr"
+    },
+    "ar": {
+        "aliases": ["ar", "arabic"],
+        "flag": "sa"
+    },
+    "af": {
+        "aliases": ["af", "afrikaans"],
+        "flag": "za"
+    },
+    "sq": {
+        "aliases": ["sq", "albanian"],
+        "flag": "al"
+    },
+    "hy": {
+        "aliases": ["hy", "armenian"],
+        "flag": "am"
+    },
+    "eu": {
+        "aliases": ["eu", "basque"],
+        "flag": "fr"
+    },
+    "be": {
+        "aliases": ["be", "belarusian"],
+        "flag": "by"
+    },
+    "bn": {
+        "aliases": ["bn", "bengali"],
+        "flag": "bd"
+    },
+    "bs": {
+        "aliases": ["bs", "bosnian"],
+        "flag": "ba"
+    },
+    "bg": {
+        "aliases": ["bg", "bulgarian"],
+        "flag": "bg"
+    },
+    "ca": {
+        "aliases": ["ca", "catalan"],
+        "flag": "ad"
+    },
+    "ceb": {
+        "aliases": ["ceb", "cebuano"],
+        "flag": "ph"
+    },
+    "ny": {
+        "aliases": ["ny", "chichewa"],
+        "flag": "zw"
+    },
+    "zh-cn": {
+        "aliases": ["zh-cn", "chinese-simplified"],
+        "flag": "cn"
+    },
+    "zh-tw": {
+        "aliases": ["zh-tw", "chinese-traditional"],
+        "flag": "cn"
+    },
+    "co": {
+        "aliases": ["co", "corsican"],
+        "flag": "it"
+    },
+    "hr": {
+        "aliases": ["hr", "croatian"],
+        "flag": "hr"
+    },
+    "cz": {
+        "aliases": ["cz", "czech"],
+        "flag": "cz"
+    },
+    "da": {
+        "aliases": ["da", "danish"],
+        "flag": "dk"
+    },
+    "nl": {
+        "aliases": ["nl", "dutch"],
+        "flag": "nl"
+    },
+    "en": {
+        "aliases": ["en", "english"],
+        "flag": "um"
+    },
+    "eo": {
+        "aliases": ["eo", "esperanto"],
+        "flag": "hu"
+    },
+    "et": {
+        "aliases": ["et", "estonian"],
+        "flag": "ee"
+    },
+    "tl": {
+        "aliases": ["tl", "filipino"],
+        "flag": "ph"
+    },
+    "fi": {
+        "aliases": ["fi", "finnish"],
+        "flag": "fi"
+    },
+    "fr": {
+        "aliases": ["fr", "french"],
+        "flag": "fr"
+    },
+    "fy": {
+        "aliases": ["fy", "frisian"],
+        "flag": "nl"
+    },
+    "gl": {
+        "aliases": ["gl", "galician"],
+        "flag": "ea"
+    },
+    "ka": {
+        "aliases": ["ka", "georgian"],
+        "flag": "ge"
+    },
+    "de": {
+        "aliases": ["de", "german"],
+        "flag": "de"
+    },
+    "el": {
+        "aliases": ["el", "greek"],
+        "flag": "gr"
+    },
+    "gu": {
+        "aliases": ["gu", "gujarati"],
+        "flag": "in"
+    },
+    "ht": {
+        "aliases": ["ht", "haitian"],
+        "flag": "ht"
+    },
+    "ha": {
+        "aliases": ["ha", "hausa"],
+        "flag": "ne"
+    },
+    "haw": {
+        "aliases": ["haw", "hawaiian"],
+        "flag": "um"
+    },
+    "iw": {
+        "aliases": ["iw", "hebrew"],
+        "flag": "il"
+    },
+    "hi": {
+        "aliases": ["hi", "hindi"],
+        "flag": "in"
+    },
+    "hmn": {
+        "aliases": ["hmn", "hmong"],
+        "flag": "cn"
+    },
+    "hu": {
+        "aliases": ["hu", "hungarian"],
+        "flag": "hu"
+    },
+    "is": {
+        "aliases": ["is", "icelandic"],
+        "flag": "is"
+    },
+    "ig": {
+        "aliases": ["ig", "igbo"],
+        "flag": "ng"
+    },
+    "id": {
+        "aliases": ["id", "indonesian"],
+        "flag": "id"
+    },
+    "ga": {
+        "aliases": ["ga", "irish"],
+        "flag": "ie"
+    },
+    "it": {
+        "aliases": ["it", "italian"],
+        "flag": "it"
+    },
+    "ja": {
+        "aliases": ["ja", "jp", "japanese", "日本語"],
+        "flag": "jp"
+    },
+    "jw": {
+        "aliases": ["jw", "javanese"],
+        "flag": "id"
+    },
+    "kn": {
+        "aliases": ["kn", "kannada"],
+        "flag": "in"
+    },
+    "kk": {
+        "aliases": ["kk", "kazakh"],
+        "flag": "kz"
+    },
+    "km": {
+        "aliases": ["km", "khmer"],
+        "flag": "kh"
+    },
+    "ku": {
+        "aliases": ["ku", "kurdish"],
+        "flag": "tr"
+    },
+    "ky": {
+        "aliases": ["ky", "kyrgyz"],
+        "flag": "cn"
+    },
+    "lo": {
+        "aliases": ["lo", "lao"],
+        "flag": "la"
+    },
+    "la": {
+        "aliases": ["la", "latin"],
+        "flag": "va"
+    },
+    "lv": {
+        "aliases": ["lv", "latvian"],
+        "flag": "lv"
+    },
+    "lt": {
+        "aliases": ["lt", "lithuanian"],
+        "flag": "lt"
+    },
+    "lb": {
+        "aliases": ["lb", "luxembourgish"],
+        "flag": "lu"
+    },
+    "mk": {
+        "aliases": ["mk", "macedonian"],
+        "flag": "mk"
+    },
+    "mg": {
+        "aliases": ["mg", "malagasy"],
+        "flag": "mg"
+    },
+    "ms": {
+        "aliases": ["ms", "malay"],
+        "flag": "id"
+    },
+    "ml": {
+        "aliases": ["ml", "malayalam"],
+        "flag": "in"
+    },
+    "mt": {
+        "aliases": ["mt", "maltese"],
+        "flag": "mt"
+    },
+    "mi": {
+        "aliases": ["mi", "maori"],
+        "flag": "nz"
+    },
+    "mr": {
+        "aliases": ["mr", "marathi"],
+        "flag": "in"
+    },
+    "mn": {
+        "aliases": ["mn", "mongolian"],
+        "flag": "mn"
+    },
+    "my": {
+        "aliases": ["my", "myanmar"],
+        "flag": "mm"
+    },
+    "ne": {
+        "aliases": ["ne", "nepali"],
+        "flag": "np"
+    },
+    "no": {
+        "aliases": ["no", "norwegian"],
+        "flag": "no"
+    },
+    "ps": {
+        "aliases": ["ps", "pashto"],
+        "flag": "af"
+    },
+    "fa": {
+        "aliases": ["fa", "persian"],
+        "flag": "ir"
+    },
+    "pl": {
+        "aliases": ["pl", "polish"],
+        "flag": "pl"
+    },
+    "pt": {
+        "aliases": ["pt", "portuguese"],
+        "flag": "br"
+    },
+    "ma": {
+        "aliases": ["ma", "punjabi"],
+        "flag": "pk"
+    },
+    "ro": {
+        "aliases": ["ro", "romanian"],
+        "flag": "ro"
+    },
+    "ru": {
+        "aliases": ["ru", "russian"],
+        "flag": "ru"
+    },
+    "sm": {
+        "aliases": ["sm", "samoan"],
+        "flag": "ws"
+    },
+    "gd": {
+        "aliases": ["gd", "scots-gaelic"],
+        "flag": "gb"
+    },
+    "sr": {
+        "aliases": ["sr", "serbian"],
+        "flag": "rs"
+    },
+    "st": {
+        "aliases": ["st", "sesotho"],
+        "flag": "ls"
+    },
+    "sn": {
+        "aliases": ["sn", "shona"],
+        "flag": "zw"
+    },
+    "sd": {
+        "aliases": ["sd", "sindhi"],
+        "flag": "pk"
+    },
+    "si": {
+        "aliases": ["si", "sinhala"],
+        "flag": "lk"
+    },
+    "sk": {
+        "aliases": ["sk", "slovak"],
+        "flag": "sk"
+    },
+    "sl": {
+        "aliases": ["sl", "slovenian"],
+        "flag": "si"
+    },
+    "so": {
+        "aliases": ["so", "somali"],
+        "flag": "so"
+    },
+    "es": {
+        "aliases": ["es", "spanish"],
+        "flag": "es"
+    },
+    "su": {
+        "aliases": ["su", "sudanese"],
+        "flag": "sd"
+    },
+    "sw": {
+        "aliases": ["sw", "swahili"],
+        "flag": "ke"
+    },
+    "sv": {
+        "aliases": ["sv", "swedish"],
+        "flag": "se"
+    },
+    "tg": {
+        "aliases": ["tg", "tajik"],
+        "flag": "af"
+    },
+    "ta": {
+        "aliases": ["ta", "tamil"],
+        "flag": "in"
+    },
+    "te": {
+        "aliases": ["te", "telugu"],
+        "flag": "in"
+    },
+    "th": {
+        "aliases": ["th", "thai"],
+        "flag": "th"
+    },
+    "tr": {
+        "aliases": ["tr", "turkish"],
+        "flag": "tr"
+    },
+    "uk": {
+        "aliases": ["uk", "ukrainian"],
+        "flag": "ua"
+    },
+    "ur": {
+        "aliases": ["ur", "urdu"],
+        "flag": "pk"
+    },
+    "uz": {
+        "aliases": ["uz", "uzbek"],
+        "flag": "uz"
+    },
+    "vi": {
+        "aliases": ["vi", "vietnamese"],
+        "flag": "vn"
+    },
+    "cy": {
+        "aliases": ["cy", "welsh"],
+        "flag": "gb"
+    },
+    "xh": {
+        "aliases": ["xh", "xhosa"],
+        "flag": "za"
+    },
+    "yi": {
+        "aliases": ["yi", "yiddish"],
+        "flag": "il"
+    },
+    "yo": {
+        "aliases": ["yo", "yoruba"],
+        "flag": "ng"
+    },
+    "zu": {
+        "aliases": ["zu", "zulu"],
+        "flag": "za"
+    }
+}

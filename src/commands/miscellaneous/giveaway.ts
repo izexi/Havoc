@@ -71,7 +71,7 @@ export default class Giveaway extends Command {
 				subCommand: 'end',
 				target: 'string',
 				prompt: {
-					initialMsg: ["enter the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed"],
+					initialMsg: ['enter the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways\'s embed'],
 					validateFn: (msg: HavocMessage, str: string) => Regex.id.test(str),
 					invalidResponseMsg: 'You have entered an invalid ID.'
 				}
@@ -80,9 +80,18 @@ export default class Giveaway extends Command {
 				subCommand: 'reroll',
 				target: 'string',
 				prompt: {
-					initialMsg: ["enter the ID of the giveaway that you would like to reroll which you can find on the footer of the giveaways's embed"],
-					validateFn: (msg: HavocMessage, str: string) => Regex.id.test(str),
-					invalidResponseMsg: 'You have entered an invalid ID.'
+					initialMsg: [
+						'enter the ID of the giveaway that you would like to reroll which you can find on the footer of the giveaways\'s embed',
+						'enter the amount of winners that you would like to reroll.'
+					],
+					validateFn: [
+						(msg: HavocMessage, str: string) => Regex.id.test(str),
+						(msg: HavocMessage, str: string) => !isNaN(Number(str))
+					],
+					invalidResponseMsg: [
+						'You have entered an invalid ID.',
+						'You need to a enter a valid number. `5` would reroll 5 new winners on the giveaway for example'
+					]
 				}
 			},
 			{
@@ -132,7 +141,7 @@ export default class Giveaway extends Command {
 		let prize: string | string[];
 		const giveawayChannel = await getGiveawayChannel(msg) as HavocTextChannel;
 		if (!giveawayChannel) return;
-		const invalidResponse = async (str: string) => msg.sendEmbed({ setDescription: str });
+		const invalidResponse = async (setDescription: string) => msg.sendEmbed({ setDescription });
 		if (promptResponses) {
 			[time, winners, prize] = promptResponses;
 		} else {
@@ -187,10 +196,22 @@ export default class Giveaway extends Command {
 	}
 
 
-	public async reroll(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
+	public async reroll(this: HavocClient, { msg, targetObj, promptResponses }: { msg: HavocMessage; targetObj: { target: string }; promptResponses: string[] }) {
+		let giveawayID: string;
+		let amount: string | number;
+		if (promptResponses) {
+			[giveawayID, amount] = promptResponses;
+		} else {
+			[giveawayID, amount] = targetObj.target.split(/ +/);
+			if (isNaN(Number(amount))) {
+				return msg.response = await msg.sendEmbed({
+					setDescription: `**${msg.author.tag}** \`${amount}\` is an invalid amount of new winners to reroll. ${msg.command.subArgs![2].prompt!.invalidResponseMsg![1]}`
+				});
+			}
+		}
 		const giveawayChannel = await getGiveawayChannel(msg) as HavocTextChannel;
 		if (!giveawayChannel) return;
-		const giveawayMsg = await giveawayChannel.messages.fetch(target).catch(() => null) as HavocMessage;
+		const giveawayMsg = await giveawayChannel.messages.fetch(giveawayID).catch(() => null) as HavocMessage;
 		if (!giveawayMsg) {
 			return msg.response = await msg.sendEmbed({
 				setDescription: `**${msg.author.tag}** you have entered an invalid Giveaway ID.`,
@@ -203,18 +224,27 @@ export default class Giveaway extends Command {
 				setDescription: `**${msg.author.tag}** a new winner could not be determined as there aren't any 🎉 reactions on the [giveaway](${giveawayMsg.url}).`
 			});
 		}
-		const newWinner = (await reaction.users.fetch())
+		const newWinners = (await reaction.users.fetch())
 			.filter(user => user.id !== this.user!.id)
-			.random();
-		if (!newWinner) {
+			.random(Number(amount))
+			.filter(user => user);
+		if (!newWinners.length) {
 			return msg.response = await msg.sendEmbed({
 				setDescription: `**${msg.author.tag}** a new winner could not be determined as there aren't enough 🎉 reactions on the [giveaway](${giveawayMsg.url}).`
 			});
 		}
 		await giveawayMsg.sendEmbed({
-			setDescription: `🎉 Congratulations **${newWinner.tag}**! You are the new winner of the [giveaway](${giveawayMsg.url}) for ${giveawayMsg.embeds[0].title} 🎉`,
+			setDescription: `🎉 Congratulations **${newWinners.map(u => u.tag).join(', ')}**! You are the new winner of the [giveaway](${giveawayMsg.url}) for ${giveawayMsg.embeds[0].title} 🎉`,
 			setColor: 'GOLD'
-		}).then(async m => newWinner.send(m.embeds[0])).catch(() => null);
+		})
+			.then(async () => {
+				// eslint-disable-next-line promise/no-nesting
+				Promise.all(newWinners.map(async u => u.sendEmbed({
+					setDescription: `🎉 Congratulations **${u.tag}**! You are the new winner of the [giveaway](${giveawayMsg.url}) for ${giveawayMsg.embeds[0].title} 🎉`,
+					setColor: 'GOLD'
+				}, newWinners.map(_u => _u.toString()).join(', ')).catch(() => null))).catch(() => null);
+			})
+			.catch(() => null);
 		return msg.response = await msg.sendEmbed({
 			setDescription: `**${msg.author.tag}** a new winner has been rerolled on the [giveaway](${giveawayMsg.url}).`
 		});

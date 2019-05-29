@@ -67,7 +67,7 @@ export default class HavocMessage extends Message {
 			embed.awaitReactions(
 				(reaction, user) => reaction.emoji.name === '🗑' && user.id === this.author.id,
 				{
-					time: 1800,
+					time: 2300,
 					max: 1,
 					errors: ['time']
 				}
@@ -139,6 +139,7 @@ export default class HavocMessage extends Message {
 		await this.sendEmbed(embed, winner.map(u => u.toString()).join(', '));
 		Promise.all(winner.map(async u => {
 			const dmEmbed = new MessageEmbed(this.embeds[0])
+				.setColor('GOLD')
 				.setDescription(`🎉 Congratulations **${u.tag}**! You won the [giveaway](${this.url}) for **${this.embeds[0].title}** 🎉`);
 			delete dmEmbed.footer;
 			delete dmEmbed.title;
