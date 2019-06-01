@@ -71,7 +71,7 @@ export default {
 			targetObj.target = await this.member.mentionOrIDSearch(str, guild) || await this.member.nameSearch(str, guild);
 			if (!targetObj.target) {
 				targetObj.target = await this.member.looseSearch(str, guild);
-				targetObj.loose = true;
+				targetObj.loose = str;
 			}
 			if (targetObj.target && type === 'user') targetObj.target = await guild.client.users.fetch(targetObj.target.id);
 		} else {
@@ -89,5 +89,5 @@ declare module 'discord.js' {
 
 export interface Target {
 	target?: User | GuildMember | TextChannel | GuildEmoji | Emoji | Command | Role | string | null;
-	loose?: boolean;
+	loose?: string;
 }

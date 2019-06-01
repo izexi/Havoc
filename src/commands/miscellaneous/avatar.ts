@@ -14,11 +14,11 @@ export default class Avatar extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target, loose } }: { msg: HavocMessage; targetObj: { target: HavocUser; loose: boolean } }) {
+	public async run(this: HavocClient, { msg, targetObj: { target, loose } }: { msg: HavocMessage; targetObj: { target: HavocUser; loose: string } }) {
 		const user = target || msg.author;
 		const avatar = user.pfp;
 		msg.response = await msg.sendEmbed({
-			setDescription: `[URL for ${user.id === msg.author.id ? 'your' : `${loose ? user.tag.replace(new RegExp(msg.text, 'gi'), '**$&**') : user.tag}'s`} avatar](${avatar})`,
+			setDescription: `[URL for ${user.id === msg.author.id ? 'your' : `${loose ? user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : user.tag}'s`} avatar](${avatar})`,
 			setImage: avatar,
 			setThumbnail: avatar
 		}, msg.text && !target

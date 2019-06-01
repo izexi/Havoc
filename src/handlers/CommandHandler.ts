@@ -15,7 +15,7 @@ export default class CommandHandler extends Handler<string, Command> {
 	}
 
 	public add(name: string, command: Command) {
-		this._commands.set(name, command);
+		this._commands.set(name.replace('_', ''), command);
 	}
 
 	public reload(name: string | Command) {
@@ -26,6 +26,13 @@ export default class CommandHandler extends Handler<string, Command> {
 			command = new (require(path).default)();
 			this.add(command!.name, command!);
 		}
+	}
+
+	public has(name: string) {
+		if (!name) return false;
+		name = name.toLowerCase();
+		return this._commands.has(name) ||
+			this._commands.some((c: Command) => c.aliases && c.aliases.has(name));
 	}
 
 	public get(name: string): Command | undefined {

@@ -10,7 +10,7 @@ export default class Reload extends Command {
 			target: 'command',
 			prompt: {
 				initialMsg: ['enter the command name or an alias of the command.'],
-				validateFn: (msg: HavocMessage, str: string): boolean => msg.client.commands.has(str),
+				validateFn: (msg: HavocMessage, str: string): boolean => msg.client.commands.handler.has(str),
 				invalidResponseMsg: 'Command doesn\'t exist'
 			}
 		});

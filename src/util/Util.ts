@@ -9,7 +9,7 @@ export default {
 				.then(async res => `https://paste.nomsy.net/${(await res.json()).key}.${extension}`));
 	},
 	plural(str: string, int: number) {
-		return str + (int > 1 ? 's' : '');
+		return str + (!int || int > 1 ? 's' : '');
 	},
 	captialise(str: string) {
 		return str.replace(/./, letter => letter.toUpperCase());
@@ -24,6 +24,9 @@ export default {
 			.replace(/_/g, ' ')
 			.replace(/Guild/g, 'Server')
 			.replace(/Use Vad/g, 'Use Voice Acitvity');
+	},
+	randomInt(min: number, max: number) {
+		return ~~(Math.random() * (max - min + 1)) + min;
 	},
 	// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
 	emojiNumbers: {

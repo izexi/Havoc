@@ -6,7 +6,7 @@ const translate = require('google-translate-api');
 const langMap = require('../../assets/langmap.json');
 const langs = require('../../assets/langs.json');
 
-export default class Ping extends Command {
+export default class Translate extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b1000,
@@ -16,7 +16,7 @@ export default class Ping extends Command {
 			prompt: {
 				initialMsg: ['enter the text that you would like to translate with an optional language that you would like to translate to as a flag (defaulted to English).']
 			},
-			flags: new Set(Object.values(langMap as { aliases: string[] }[]).reduce((arr: string[], lang) => [...arr, ...lang.aliases], []))
+			flags: new Set(Object.values(langMap as { aliases: string[] }[]).reduce((arr: string[], lang) => arr.concat(lang.aliases), []))
 		});
 	}
 
@@ -26,9 +26,10 @@ export default class Ping extends Command {
 		translate(target, { to }).then((res: { text: string; from: { language: { iso: string } } }) => {
 			msg.sendEmbed({
 				setDescription: `:flag_${translation.flag}: ${res.text}`,
+				attachFiles: ['src/assets/images/translate.png'],
 				setFooter: [
 					`Translated from ${langs[res.from.language.iso]} to ${langs[translation.aliases[0]]}`,
-					'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Google_Translate_logo.svg/2000px-Google_Translate_logo.svg.png'
+					'attachment://translate.png'
 				]
 			}, msg.author.toString());
 		}).catch(async () => {
