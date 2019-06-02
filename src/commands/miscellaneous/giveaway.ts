@@ -184,14 +184,15 @@ export default class Giveaway extends Command {
 	}
 
 	public async end(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
-		const giveaway = this.giveaways.find(g => g.message === target);
+		const giveaway = this.scheduler.find(g => (g as GiveawaySchedule).message === target) as GiveawaySchedule | undefined;
 		if (!giveaway) {
 			return msg.response = await msg.sendEmbed({
 				setDescription: `**${msg.author.tag}** you have entered an invalid Giveaway ID.`,
 				setImage: 'https://i.imgur.com/jZpv4Fk.png'
 			});
 		}
-		await this.giveaways.remove(giveaway.endTime);
+		await giveaway.end();
+		this.scheduler.delete(giveaway.endTime);
 		msg.response = await msg.sendEmbed({
 			setDescription: `**${msg.author.tag}** I have ended the [giveaway](https://discordapp.com/channels/${msg.guild.id}/${giveaway.channel}/${giveaway.message}).`
 		});
