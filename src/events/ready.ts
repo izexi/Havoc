@@ -2,14 +2,15 @@ import Logger from '../util/Logger';
 import HavocClient from '../client/Havoc';
 import HavocTextChannel from '../extensions/TextChannel';
 import HavocMessage from '../extensions/Message';
+import Giveaway from '../schedules/Giveaway';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { parse } = require('json-buffer');
+const { parse, stringify } = require('json-buffer');
 
 export default function(this: HavocClient) {
 	this.user!.setActivity('you', { type: 'WATCHING' });
 	Logger.log(`${this.user!.tag} is ready in ${this.guilds.size} guilds!`);
 	this.supportServer = this.guilds.get('406873117215031297')!;
-	this.pollScheduler = this.setInterval(() => {
+	/* this.pollScheduler = this.setInterval(() => {
 		this.db.category = 'poll';
 		this.db.lessThan(Date.now())
 			.then(res => {
@@ -23,9 +24,9 @@ export default function(this: HavocClient) {
 				this.db.delete(key.slice(5));
 			})
 			.catch(error => Logger.error('Database error:', error));
-	}, 5000);
+	}, 5000); */
 
-	this.giveawayScheduler = async () => {
+	/* this.giveawayScheduler = async () => {
 		await Promise.all(
 			[...this.giveaways.values()]
 				.map(async g => g.update().catch(async () => {
@@ -36,7 +37,9 @@ export default function(this: HavocClient) {
 				}))
 		);
 		setTimeout(this.giveawayScheduler, 1000);
-	};
 
-	this.giveawayScheduler();
+		this.giveawayScheduler();
+	*/
+
+	this.scheduler.start();
 }

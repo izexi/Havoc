@@ -3,7 +3,7 @@ import Logger from '../util/Logger';
 import CommandStore from '../stores/CommandStore';
 import EventStore from '../stores/EventStore';
 import Database from '../structures/Database';
-import GiveawayStore from '../stores/GiveawayStore';
+import SchedulerStore from '../stores/SchedulerStore';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { token } = require('../../config.json');
 
@@ -18,7 +18,7 @@ export default class HavocClient extends Client {
 
 	public events = new EventStore(this);
 
-	public giveaways = new GiveawayStore(this);
+	public scheduler = new SchedulerStore(this);
 
 	public pollScheduler!: NodeJS.Timer;
 

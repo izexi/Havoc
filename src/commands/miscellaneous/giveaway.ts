@@ -7,6 +7,7 @@ import HavocTextChannel from '../../extensions/TextChannel';
 import Util from '../../util/Util';
 import Regex from '../../util/Regex';
 import Time from '../../util/Time';
+import GiveawaySchedule from '../../schedules/Giveaway';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ms = require('ms');
 
@@ -169,11 +170,12 @@ export default class Giveaway extends Command {
 			if (time < 100) {
 				setTimeout(async () => m.endGiveaway(Number(winners)), time as number);
 			} else {
-				await this.giveaways.add(Date.now() + (time as number), {
-					channel: m.channel.id,
-					message: m.id,
-					winners: winners.toString()
-				}, true);
+				await this.scheduler.add('giveaway',
+					new GiveawaySchedule(this, Date.now() + (time as number), {
+						channel: m.channel.id,
+						message: m.id,
+						winners: winners.toString()
+					}));
 			}
 			msg.response = await msg.sendEmbed({
 				setDescription: `**${msg.author.tag}** I have started the [giveaway](${m.url}).`

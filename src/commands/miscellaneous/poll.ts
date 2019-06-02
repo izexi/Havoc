@@ -3,6 +3,7 @@ import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import Util from '../../util/Util';
 import Time from '../../util/Time';
+import PollSchedule from '../../schedules/Poll';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ms = require('ms');
 
@@ -59,7 +60,7 @@ export default class Poll extends Command {
 			setAuthor: [`Poll started by ${msg.author.tag}`, msg.author.pfp],
 			setDescription: `${question}\n\n${options.join('\n')}`,
 			setFooter: time
-				? time > 60000 ? 'Ending at:' : `Ending in ${ms(time, { 'long': true })}`
+				? (time > 60000 ? 'Ending at:' : `Ending in ${ms(time, { 'long': true })}`)
 				: 'Started at:'
 		});
 		if (time > 60000) embed.setTimestamp(Date.now() + time);
@@ -68,15 +69,15 @@ export default class Poll extends Command {
 			if (m.deleted) return;
 			await Promise.all(Array.from({ length: options.length }, async (_, i) => m.react(Util.emojiNumber(i + 1))));
 			if (!time) return;
-			if (time < 100) {
+			if (time < 10000) {
 				setTimeout(async () => m.endPoll(options.length), time);
 			} else {
-				this.db.category = 'poll';
-				await this.db.set(Date.now() + time, {
-					channel: m.channel.id,
-					message: m.id,
-					options: options.length
-				});
+				await this.scheduler.add('poll',
+					new PollSchedule(this, Date.now() + (time as number), {
+						channel: m.channel.id,
+						message: m.id,
+						options: options.length
+					}));
 			}
 		});
 	}
