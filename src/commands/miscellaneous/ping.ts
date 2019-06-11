@@ -17,7 +17,7 @@ export default class Ping extends Command {
 		msg.response!.edit(
 			msg.constructEmbed({
 				setTitle: '🏓 Pong!',
-				setDescription: `Lateasfasfsancy: ${msg.response!.createdTimestamp - msg.createdTimestamp}ms\nHeartbeat: ${~~(this.ws.ping)}ms`
+				setDescription: `Latency: ${msg.response!.createdTimestamp - msg.createdTimestamp}ms\nHeartbeat: ${~~(this.ws.ping)}ms`
 			})
 		);
 	}

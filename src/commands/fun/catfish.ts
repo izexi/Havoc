@@ -9,16 +9,14 @@ export default class Catfish extends Command {
 			opts: 0b1011,
 			description: 'Returns a Google reverse image search of someone\'s avatar.',
 			aliases: new Set(['cf']),
-			prompt: {
-				initialMsg: ['mention the user / enter the users\'s ID, tag, nickname or username whose avatar you would like to search.'],
-				invalidResponseMsg: 'You need to mention a user or enter the name / enter the users\'s ID, tag, nickname or username.'
-			},
-			target: 'user'
+			args: [{
+				type: 'user',
+				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username whose avatar you would like to search.' }
+			}]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target, loose } }: { msg: HavocMessage; targetObj: { target: HavocUser; loose: string } }) {
-		const user = target;
+	public async run(this: HavocClient, { msg, target: { user, loose } }: { msg: HavocMessage; target: { user: HavocUser; loose: string } }) {
 		msg.response = await msg.sendEmbed({
 			setDescription: `[Image search of ${loose ? user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : user.tag}'s avatar](https://images.google.com/searchbyimage?image_url=${user.pfp})`,
 			attachFiles: ['src/assets/images/catfish.png'],

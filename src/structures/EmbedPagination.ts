@@ -1,6 +1,6 @@
-import Prompt from './Prompt';
 import HavocMessage from '../extensions/Message';
 import Util from '../util/Util';
+import Logger from '../util/Logger';
 
 export default class EmbedPagination {
 	private msg: HavocMessage;
@@ -66,12 +66,18 @@ export default class EmbedPagination {
 					}
 					break;
 				case '⬇':
-					new Prompt({
+					this.msg.createPrompt({
 						msg: this.msg,
-						initialMsg: ['enter the page you like to jump to.'],
+						initialMsg: 'enter the page you like to jump to.',
 						invalidResponseMsg: `You need to enter a number between 1 to ${this.totalPages}, e.g: entering \`2\` will jump to page 2.`,
-						validateFn: (msg: HavocMessage) => Number.isInteger(Number(msg.content)) && Number(msg.content) > 0 && Number(msg.content) <= this.totalPages
-					}).on('promptResponse', async page => this.embedMsg.edit(this.pageEmbed(Number(page))));
+						target: (msg: HavocMessage) => {
+							if (Number.isInteger(Number(msg.content)) && Number(msg.content) > 0 && Number(msg.content) <= this.totalPages) {
+								return Number(msg.content);
+							}
+						}
+					})
+						.then(async ([response]: any) => this.embedMsg.edit(this.pageEmbed((await response).target)))
+						.catch(err => Logger.error('Error from embed pagination prompt', err));
 					break;
 				case '▶':
 					if (this.page! < this.totalPages) {

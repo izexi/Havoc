@@ -4,24 +4,20 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import * as moment from 'moment';
-import Targetter from '../../util/Targetter';
 
 export default class Emoji extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b1000,
 			description: 'View info about an emoji.',
-			target: 'emoji',
-			prompt: {
-				initialMsg: ['enter the emoji that you would like info about.'],
-				validateFn: (msg: HavocMessage, str: string): boolean => Boolean(Targetter.emoji.get(str, msg.guild)),
-				invalidResponseMsg: 'You need to enter a valid emoji in this server'
-			}
+			args: [{
+				type: 'emoji',
+				prompt: { initialMsg: 'enter the emoji that you would like info about.' }
+			}]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: GuildEmoji | nodeEmoji } }) {
-		const emoji = target;
+	public async run(this: HavocClient, { msg, target: { emoji } }: { msg: HavocMessage; target: { emoji: GuildEmoji | nodeEmoji } }) {
 		let embed;
 		if (emoji instanceof GuildEmoji) {
 			embed = {

@@ -28,6 +28,9 @@ export default {
 	randomInt(min: number, max: number) {
 		return ~~(Math.random() * (max - min + 1)) + min;
 	},
+	arrayify(arg: any) {
+		return Array.isArray(arg) ? arg : [arg];
+	},
 	// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
 	emojiNumbers: {
 		1: '1⃣',

@@ -46,7 +46,6 @@ export default class Giveaway extends Schedule {
 		// TODO: a nicer implementation for this
 		if ((timeLeft <= 3000 && (timeLeft % 1000 <= 1000)) || (timeLeft <= 180000 && (timeLeft % 60000 <= 1000)) || Math.abs(timeLeft - 3600000) <= 1000 || timeLeft >= 86400000) {
 			return (this._client.channels.get(this.channel)! as HavocTextChannel).messages.fetch(this.message).then(async msg => {
-				console.log(msg.id);
 				if (msg.embeds[0].footer!.text!.includes('ended')) return this.delete();
 				if (timeLeft >= 86400000 && msg.embeds[0].description.match(/\nTime remaining: (.+)$/)![1] === `**${ms(timeLeft, { 'long': true })}**`) return;
 				const embed = new MessageEmbed(msg.embeds[0])

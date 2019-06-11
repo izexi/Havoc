@@ -7,12 +7,13 @@ export default class Reload extends Command {
 		super(__filename, {
 			opts: 0b1011,
 			description: 'Disables a command.',
-			target: 'command',
-			prompt: {
-				initialMsg: ['enter the command name or an alias of the command.'],
-				validateFn: (msg: HavocMessage, str: string): boolean => msg.client.commands.handler.has(str),
-				invalidResponseMsg: 'Command doesn\'t exist'
-			}
+			args: [{
+				type: 'command',
+				prompt: {
+					initialMsg: 'enter the command name or an alias of the command.',
+					invalidResponseMsg: 'Command doesn\'t exist'
+				}
+			}]
 		});
 	}
 

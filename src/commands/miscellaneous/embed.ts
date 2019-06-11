@@ -8,17 +8,17 @@ export default class Embed extends Command {
 			opts: 0b1011,
 			description: 'Embeds the inputted text.',
 			aliases: new Set(['emb']),
-			prompt: {
-				initialMsg: ['enter the text that you would like to embed.']
-			},
-			target: 'string'
+			args: [{
+				type: 'string',
+				prompt: { initialMsg: 'enter the text that you would like to embed.' }
+			}]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
+	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
 		await msg.delete();
 		msg.sendEmbed({
-			setDescription: target,
+			setDescription: string,
 			setFooter: [msg.author.tag, msg.author.pfp]
 		});
 	}

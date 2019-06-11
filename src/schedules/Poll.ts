@@ -10,11 +10,11 @@ export default class Poll extends Schedule {
 
 	public options: number;
 
-	public constructor(client: HavocClient, endTime: number, { channel, message, options }: { channel: string; message: string; options: string }) {
+	public constructor(client: HavocClient, endTime: number, { channel, message, options }: { channel: string; message: string; options: number }) {
 		super(client, endTime);
 		this.channel = channel;
 		this.message = message;
-		this.options = Number(options);
+		this.options = options;
 	}
 
 	public async onError() {

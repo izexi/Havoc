@@ -1,10 +1,11 @@
-import { Message, TextChannel, MessageEmbed, MessageReaction } from 'discord.js';
+import { Message, TextChannel, MessageEmbed, MessageReaction, EmojiResolvable } from 'discord.js';
 import Regex from '../util/Regex';
 import HavocGuild from './Guild';
 import Command from '../structures/bases/Command';
 import HavocUser from './User';
 import Util from '../util/Util';
 import HavocClient from '../client/Havoc';
+import Prompt, { PromptOptions } from '../structures/Prompt';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { prefix } = require('../../config.json');
 
@@ -21,23 +22,36 @@ export default class HavocMessage extends Message {
 
 	public args!: string[];
 
-	public text!: string;
-
 	public mentionPrefix!: boolean;
 
 	public response?: HavocMessage;
 
 	public prompt!: boolean;
 
+	public intialMsg!: HavocMessage;
+
+	public promptResponses: Set<string> = new Set();
+
 	public _patch(data: object) {
 		super._patch(data);
 		this._init();
+	}
+
+	public async react(emoji: EmojiResolvable): Promise<any> {
+		return this.deleted ? null : super.react(emoji);
 	}
 
 	public constructEmbed(methods: { [key: string]: any }): MessageEmbed {
 		const embed = new MessageEmbed()
 			.setColor(this.guild ? this.member!.displayColor || 'WHITE' : '')
 			.setTimestamp();
+		if (methods.setDescription) {
+			const [image]: RegExpMatchArray = methods.setDescription.match(/\bhttps:\/\/i\.imgur\.com\/[^\s]+/) || [];
+			if (image) {
+				methods.setDescription = methods.setDescription.replace(image, '');
+				methods.setImage = image;
+			}
+		}
 		Object.keys(methods).forEach(method => {
 			const val = methods[method];
 			if (Array.isArray(val)) {
@@ -72,8 +86,7 @@ export default class HavocMessage extends Message {
 					errors: ['time']
 				}
 			).then(async () => {
-				await embed.delete();
-				if (this.guild) this.delete();
+				this.guild ? this.channel.bulkDelete([embed, this]) : embed.delete();
 			}).catch(() => {
 				if (!embed.deleted) embed.reactions.get('🗑')!.users.remove(embed.author);
 			});
@@ -147,11 +160,20 @@ export default class HavocMessage extends Message {
 		})).catch(() => null);
 	}
 
+	public async createPrompt({ msg, initialMsg, invalidResponseMsg, target }: PromptOptions) {
+		return new Promise(resolve =>
+			new Prompt({ msg, initialMsg, invalidResponseMsg, target })
+				.on('promptResponse', responses => resolve(responses)));
+	}
+
+	public get text() {
+		return this.args.join(' ');
+	}
+
 	private _init() {
 		this.prefix = this._prefix;
 		this.mentionPrefix = Regex.mentionPrefix(this.client.user!.id).test(this.prefix);
-		this.args = this.content.substring(this.prefix.length).split(/ +/);
-		this.text = this.args.slice(1).join(' ');
+		this.args = this.content.split(/ +/);
 	}
 
 	private get _prefix() {

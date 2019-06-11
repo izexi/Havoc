@@ -1,4 +1,4 @@
-import { User, GuildMember, TextChannel, BitFieldResolvable, PermissionString } from 'discord.js';
+import { BitFieldResolvable, PermissionString } from 'discord.js';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 
@@ -13,17 +13,11 @@ export default abstract class implements CommandOptions {
 
 	public opts: number;
 
-	public target: CommandOptions['target'];
-
-	public prompt: CommandOptions['prompt'];
-
 	public flags: Set<string>;
 
-	public subCommands: Set<string>;
-
-	public subArgs: CommandOptions['subArgs'];
-
 	public userPerms: CommandOptions['userPerms'];
+
+	public args: CommandOptions['args'];
 
 	public constructor(__path: string, options: CommandOptions) {
 		const path = __path.split('\\');
@@ -32,11 +26,8 @@ export default abstract class implements CommandOptions {
 		this.description = options.description;
 		this.aliases = options.aliases || new Set();
 		this.opts = options.opts;
-		this.target = options.target;
-		this.prompt = options.prompt;
+		this.args = options.args;
 		this.flags = options.flags || new Set();
-		this.subCommands = options.subCommands || new Set();
-		this.subArgs = options.subArgs;
 		this.userPerms = options.userPerms;
 	}
 
@@ -56,23 +47,17 @@ interface CommandOptions {
 	*/
 	opts: number;
 	description: string;
-	target?: TargetType;
-	prompt?: {
-		initialMsg: string[];
-		invalidResponseMsg?: string;
-		validateFn?: Function | Function[];
-	};
-	flags?: Set<string>;
-	subCommands?: Set<string>;
-	subArgs?: {
-		subCommand: string | string[];
-		target: TargetType;
+	args?: {
+		key?: string;
+		type: TargetType;
+		index?: number;
 		prompt?: {
-			initialMsg: string[];
-			invalidResponseMsg?: string | string[];
-			validateFn?: Function | Function[];
+			initialMsg: string | Function;
+			invalidResponseMsg?: string;
+			validateFn?: Function;
 		};
 	}[];
+	flags?: Set<string>;
 	userPerms?: {
 		role?: Function;
 		flags?: BitFieldResolvable<PermissionString>;
@@ -82,7 +67,11 @@ interface CommandOptions {
 
 export interface CommandParams {
 	msg: HavocMessage;
-	target?: User | GuildMember | TextChannel | null;
+	target?: {
+		[key: string]: any;
+	};
+	text?: string;
+	flag?: string;
 }
 
-export type TargetType = 'member' | 'user' | 'channel' | 'emoji' | 'string' | 'command' | 'role';
+export type TargetType = 'member' | 'user' | 'channel' | 'emoji' | 'string' | 'command' | 'role' | 'number' | 'id' | 'time' | Function;

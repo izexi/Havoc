@@ -1,23 +1,31 @@
 import { MessageCollector } from 'discord.js';
 import { EventEmitter } from 'events';
 import HavocMessage from '../extensions/Message';
+import Targetter, { Target } from '../util/Targetter';
+import { TargetType } from './bases/Command';
+import Responses from '../util/Responses';
+import Util from '../util/Util';
+import HavocTextChannel from '../extensions/TextChannel';
 
 export default class Prompt extends EventEmitter {
 	private msg: HavocMessage;
 
 	private promptEmbed?: HavocMessage;
 
-	private initialMsg: string[];
+	private initialMsg: string[] | Function[];
 
-	private invalidResponseMsg?: string[];
+	private invalidResponseMsg?: (undefined | string)[];
 
 	private timeLimit: number;
 
-	private validateFn: Function[];
+	private target?: (Function | TargetType | undefined)[];
 
 	private promptMessages: string[] = [];
 
-	private responses: string[] = [];
+	private responses: Promise<{
+		target: Target;
+		loose: string | null;
+	}>[] = [];
 
 	private timeLeft!: number;
 
@@ -30,23 +38,25 @@ export default class Prompt extends EventEmitter {
 	public constructor(options: PromptOptions) {
 		super();
 		this.msg = options.msg;
-		this.initialMsg = Array.isArray(options.initialMsg) ? options.initialMsg.slice() : [options.initialMsg];
-		this.invalidResponseMsg = Array.isArray(options.invalidResponseMsg) ? options.invalidResponseMsg.slice() : [options.invalidResponseMsg!];
+		this.initialMsg = Util.arrayify(options.initialMsg);
+		this.invalidResponseMsg = Util.arrayify(options.invalidResponseMsg || []);
 		this.timeLimit = options.timeLimit || 30000;
-		this.validateFn = Array.isArray(options.validateFn) ? options.validateFn.slice() : [options.validateFn || (() => true)];
+		this.target = Util.arrayify(options.target || []);
 		this.index = 0;
 		this.create();
 	}
 
 
 	private async create() {
+		(this.msg.channel as HavocTextChannel).prompts.add(this.msg.author.id);
+		const initialMsg = this.initialMsg.shift();
 		this.promptEmbed = await this.msg.sendEmbed({
-			setDescription: `**${this.msg.author.tag}** ${this.initialMsg.shift()}`,
+			setDescription: `**${this.msg.author.tag}** ${typeof initialMsg === 'function' ? initialMsg(this.msg) : initialMsg}`,
 			setFooter: [`You have ${this.timeLimit / 1000} seconds left to enter an option.`]
 		});
 		this.promptMessages.push(this.promptEmbed!.id);
 		this.collect(
-			await this.msg.channel.createMessageCollector(
+			this.msg.channel.createMessageCollector(
 				msg => this.msg.author.id === msg.author.id, { time: this.timeLimit }
 			)
 		);
@@ -61,26 +71,36 @@ export default class Prompt extends EventEmitter {
 
 	private async collect(collector: MessageCollector) {
 		collector
-			.on('collect', (msg: HavocMessage) => {
+			.on('collect', async (msg: HavocMessage) => {
 				this.promptMessages.push(msg.id);
-				if (msg.content.toLowerCase() === 'cancel') return collector.stop();
-				if ((this.validateFn[this.index] || (() => true))(msg, msg.content)) {
+				if (msg.content.toLowerCase() === 'cancel') {
+					this.msg.react('❌');
+					return collector.stop();
+				}
+				this.msg.promptResponses.add(msg.content.toLowerCase());
+				msg.intialMsg = this.msg;
+				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg.content, msg);
+				if ((await targetObj).target) {
 					collector.stop();
-					this.responses.push(msg.content);
+					this.responses.push(targetObj);
 					this.index++;
-					if (this.initialMsg.length) this.create();
-					else this.emit('promptResponse', this.responses);
 				} else {
-					// eslint-disable-next-line promise/catch-or-return
-					this.msg.sendEmbed({
-						setDescription: `**${this.msg.author.tag}** \`${msg.content}\` is an invalid option!\n${this.invalidResponseMsg![this.index]}\nEnter \`cancel\` to exit out of this prompt.`
-					}).then(m => this.promptMessages.push(m!.id));
+					return this.invalidResponse(msg);
+				}
+				if (this.initialMsg.length) {
+					this.create();
+				} else {
+					await this.msg.channel.bulkDelete(this.promptMessages);
+					(this.msg.channel as HavocTextChannel).prompts.delete(this.msg.author.id);
+					this.emit('promptResponse', this.responses);
 				}
 			})
 			.on('end', async (_, reason) => {
 				clearInterval(this.timeEdits);
 				await this.msg.channel.bulkDelete(this.promptMessages);
+				(this.msg.channel as HavocTextChannel).prompts.delete(this.msg.author.id);
 				if (reason === 'time') {
+					this.msg.react('⏱');
 					this.msg.response = await this.msg.sendEmbed({
 						setDescription: `**${this.msg.author.tag}** it have been over ${this.timeLimit / 1000} seconds and you did not enter a valid option, so I will go ahead and cancel this.`
 					});
@@ -92,12 +112,19 @@ export default class Prompt extends EventEmitter {
 				}
 			});
 	}
+
+	private async invalidResponse(msg: HavocMessage) {
+		// eslint-disable-next-line promise/catch-or-return
+		this.msg.sendEmbed({
+			setDescription: `**${this.msg.author.tag}** \`${msg.content}\` is an invalid option!\n${this.invalidResponseMsg![this.index] || Responses[typeof this.target![this.index] === 'function' ? (this.target![this.index] as Function)(msg) : this.target![this.index]](msg)}\nEnter \`cancel\` to exit out of this prompt.`
+		}).then(m => this.promptMessages.push(m!.id));
+	}
 }
 
 export interface PromptOptions {
 	msg: HavocMessage;
-	initialMsg: string | string[];
-	invalidResponseMsg?: string | string[];
-	validateFn?: Function | Function[];
+	initialMsg: string | string[] | Function;
+	invalidResponseMsg?: string | (string | undefined)[];
+	target?: Function | TargetType | (Function | TargetType | undefined)[];
 	timeLimit?: number;
 }

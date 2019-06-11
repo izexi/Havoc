@@ -9,19 +9,13 @@ export default class Help extends Command {
 			opts: 0b0011,
 			description: 'Shows a list of all avaiable commands, or detailed info about a specific command.',
 			aliases: new Set(['h']),
-			target: 'command'
+			args: [{ type: 'command' }]
 		});
 	}
 
 	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: Command } }) {
 		const command = target;
 		if (command && command.category !== 'dev') {
-			const usage: { [key: string]: string } = {
-				user: '@Username#0000 | userID | username#0000 | username | nickname | partial nickname/username',
-				string: 'text',
-				emoji: '<(a):name:id> | id | unicode',
-				command: 'command name'
-			};
 			const embed = msg.constructEmbed({
 				setTitle: `Command info for  **\`${command.name}\`**\n⠀`,
 				addField: [
@@ -33,10 +27,6 @@ export default class Help extends Command {
 			});
 			if (command.aliases) {
 				embed.addField('❯Aliases', [...command.aliases].map(alias => `\`${alias}\``).join(', '));
-			}
-			if (command.target) {
-				const args = command.opts & (1 << 3);
-				embed.addField('❯Usage', `\`${msg.prefix}${command.name} ${args ? '[' : '<'}${usage[command.target]}${args ? ']' : '>'}\``);
 			}
 			return msg.response = await msg.sendEmbed(embed);
 		}
@@ -51,7 +41,7 @@ export default class Help extends Command {
 			image: '🖼'
 		};
 		const commands = this.commands.filter(c => c.category !== 'dev');
-		const categories = commands.reduce((uniqueCategories, { category }): Set<string> => uniqueCategories.add(category), new Set());
+		const categories: Set<string> = commands.reduce((uniqueCategories, { category }) => uniqueCategories.add(category), new Set());
 		const fields = [...categories].reduce((arr: string[][], commandCategory) => {
 			arr.push([
 				`${emojis[commandCategory]} ${Util.captialise(commandCategory)}`,

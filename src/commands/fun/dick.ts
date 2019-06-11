@@ -19,12 +19,11 @@ export default class Dick extends Command {
 			opts: 0b0000,
 			description: 'A 100% accurate dick size calculator.',
 			aliases: new Set(['d', 'penis']),
-			target: 'user'
+			args: [{ type: 'user' }]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: HavocUser } }) {
-		const user = target || msg.author;
+	public async run(this: HavocClient, { msg, target: { user } }: { msg: HavocMessage; target: { user: HavocUser } }) {
 		this.db.category = 'dick';
 		this.db.get(user.id).then(async res => {
 			if (!res) {

@@ -12,12 +12,11 @@ export default class Ping extends Command {
 			opts: 0b0011,
 			description: 'View info about a user.',
 			aliases: new Set(['uinfo', 'user']),
-			target: 'user'
+			args: [{ type: 'user' }]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: HavocUser } }) {
-		const user = target || msg.author;
+	public async run(this: HavocClient, { msg, target: { user } }: { msg: HavocMessage; target: { user: HavocUser } }) {
 		const fields = [
 			['❯Tag', user.tag, true],
 			['❯ID', user.id, true],
@@ -40,7 +39,7 @@ export default class Ping extends Command {
 		msg.response = await msg.sendEmbed({
 			setThumbnail: user.pfp,
 			addField: fields
-		}, msg.text && !target
+		}, msg.text && !user
 			? `I couldn't find \`${djsUtil.cleanContent(msg.text, msg)}\`... so here's yours?`
 			: '');
 	}

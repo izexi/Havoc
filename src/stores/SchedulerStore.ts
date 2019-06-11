@@ -4,7 +4,7 @@ import Schedule from '../structures/bases/Schedule';
 import Util from '../util/Util';
 import { Collection } from 'discord.js';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { parse, stringify } = require('json-buffer');
+const { parse } = require('json-buffer');
 
 export default class SchedulerStore extends Collection<number, Schedule> {
 	private _client: HavocClient;

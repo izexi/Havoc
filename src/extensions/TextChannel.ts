@@ -2,6 +2,8 @@ import { TextChannel, StringResolvable, MessageOptions, MessageAdditions, Messag
 import Util from '../util/Util';
 
 export default class HavocTextChannel extends TextChannel {
+	public prompts = new Set();
+
 	public async send(content?: StringResolvable, options?: MessageOptions | MessageAdditions): Promise<any> {
 		if (this.type === 'text' && !this.permissionsFor(this.guild.me!)!.has(['VIEW_CHANNEL', 'SEND_MESSAGES'])) return;
 		if (options instanceof MessageEmbed) {

@@ -8,15 +8,15 @@ export default class Clap extends Command {
 			opts: 0b1011,
 			description: 'Displays👏text👏like👏this👏',
 			aliases: new Set(['👏']),
-			prompt: {
-				initialMsg: ['enter the text that you would like to embed.']
-			},
-			target: 'string'
+			args: [{
+				type: 'string',
+				prompt: { initialMsg: 'enter the text that you would like to embed.' }
+			}]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
-		msg.response = await msg.channel.send(target.replace(/ /g, '👏'), {
+	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
+		msg.response = await msg.channel.send(string.replace(/ /g, '👏'), {
 			split: { 'char': '👏' },
 			disableEveryone: true
 		}) as HavocMessage;

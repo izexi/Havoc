@@ -3,7 +3,6 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import EmbedPagination from '../../structures/EmbedPagination';
-import Targetter from '../../util/Targetter';
 import Util from '../../util/Util';
 
 export default class MemberList extends Command {
@@ -13,12 +12,10 @@ export default class MemberList extends Command {
 			description: 'View a list of emojis on this server.',
 			aliases: new Set(['ml', 'members', 'memberslist']),
 			flags: new Set(['id', 'tag', 'username', 'nickname']),
-			target: 'role',
-			prompt: {
-				initialMsg: ['mention the role / enter the role\'s ID or name that you would like to list members from.'],
-				validateFn: (msg: HavocMessage, str: string): boolean => Boolean(Targetter.role.get(str, msg.guild)),
-				invalidResponseMsg: 'You need to mention a role or enter the name / ID of the role.'
-			}
+			args: [{
+				type: 'role',
+				prompt: { initialMsg: 'mention the role / enter the role\'s name or ID that you would like to list members from.' }
+			}]
 		});
 	}
 

@@ -8,14 +8,14 @@ export default class Mock extends Command {
 			opts: 0b1011,
 			description: 'DiSpLaYs tExT LiKe tHiS',
 			aliases: new Set(['emb']),
-			prompt: {
-				initialMsg: ['enter the text that you would like to mock.']
-			},
-			target: 'string'
+			args: [{
+				type: 'string',
+				prompt: { initialMsg: 'enter the text that you would like to mock.' }
+			}]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
-		msg.response = await msg.channel.send(target.replace(/./g, (letter, i) => i % 2 ? letter : letter.toUpperCase()), { disableEveryone: true }) as HavocMessage;
+	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
+		msg.response = await msg.channel.send(string.replace(/./g, (letter, i) => i % 2 ? letter : letter.toUpperCase()), { disableEveryone: true }) as HavocMessage;
 	}
 }

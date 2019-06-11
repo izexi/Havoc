@@ -11,10 +11,10 @@ export default class Eval extends Command {
 			description: 'Evals shit.',
 			aliases: new Set(['ev']),
 			flags: new Set(['silent', 'detailed']),
-			target: 'string',
-			prompt: {
-				initialMsg: ['enter the code that you would like to eval.']
-			}
+			args: [{
+				type: 'string',
+				prompt: { initialMsg: 'enter the code that you would like to evaluate.' }
+			}]
 		});
 	}
 

@@ -9,24 +9,26 @@ export default class Json extends Command {
 		super(__filename, {
 			opts: 0b1000,
 			description: 'View a pretty printed JSON that is parsed from the entered URL.',
-			prompt: {
-				initialMsg: ['enter the URL.'],
-				validateFn: (msg: HavocMessage, str: string): boolean => {
+			args: [{
+				key: 'url',
+				type: (msg: HavocMessage) => {
 					try {
-						new URL(str);
-						return true;
+						new URL(msg.args[0]);
+						return msg.args[0];
 					} catch (error) {
 						return false;
 					}
 				},
-				invalidResponseMsg: 'You need to enter a valid absolute URL.'
-			},
-			target: 'string'
+				prompt: {
+					initialMsg: 'enter the URL.',
+					invalidResponseMsg: 'You need to enter a valid absolute URL.'
+				}
+			}]
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: string } }) {
-		const description = fetch(target)
+	public async run(this: HavocClient, { msg, target: { url } }: { msg: HavocMessage; target: { url: string } }) {
+		const description = fetch(url)
 			.then(async res => {
 				if (!res.headers.get('content-type')!.includes('application/json')) {
 					return `**${msg.author.tag}** I couldn't find any JSON to parse on \`${msg.text}\`.`;
