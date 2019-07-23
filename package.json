@@ -21,7 +21,7 @@
     "@types/node-emoji": "^1.8.1",
     "@types/node-fetch": "^2.3.4",
     "@types/pg": "^7.4.14",
-    "@types/pretty-ms": "^4.0.0",
+    "@types/pretty-ms": "^5.0.1",
     "@types/ws": "^6.0.1",
     "discord.js": "github:discordjs/discord.js",
     "eslint-config-marine": "^2.2.0",
