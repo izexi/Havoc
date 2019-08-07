@@ -43,35 +43,37 @@ export default {
 	},
 
 	role: {
-		get(str: string, guild: HavocGuild) {
+		get(str: string, msg: HavocMessage) {
 			if (!str) return null;
-			return this.mentionOrIDSearch(str, guild) || this.nameSearch(str, guild);
+			return this.mentionOrIDSearch(str, msg) || this.nameSearch(str, msg);
 		},
 
-		mentionOrIDSearch(str: string, guild: HavocGuild) {
+		mentionOrIDSearch(str: string, msg: HavocMessage) {
 			if (!str) return null;
 			const target = (str.match(MessageMentions.ROLES_PATTERN) || [])[0];
 			if (!target) return null;
 			const [id]: RegExpMatchArray = target.match(/\d+/)!;
-			return guild.roles.get(id);
+			msg.args.shift();
+			return msg.guild.roles.get(id);
 		},
 
-		nameSearch(str: string, guild: HavocGuild) {
+		nameSearch(str: string, msg: HavocMessage) {
 			if (!str) return null;
 			return str.split(' ').reduce((foundRole: Role | null, _: any, i: number, arr: string[]): Role | null => {
 				if (foundRole) return foundRole;
 				const possibleRoleName = arr.slice(0, i + 1).join(' ');
-				const possibleRole = guild.roles.find(role => role.name === possibleRoleName || role.name.toLowerCase() === possibleRoleName.toLowerCase());
-				if (possibleRole) foundRole = possibleRole;
-				return foundRole;
+				const possibleRole = msg.guild.roles.find(role => role.name === possibleRoleName || role.name.toLowerCase() === possibleRoleName.toLowerCase());
+				if (possibleRole) msg.args.splice(0, i + 1);
+				return possibleRole || foundRole;
 			}, null);
 		}
 	},
 
-	async getTarget(type: TargetType, text: string, msg: HavocMessage) {
+	async getTarget(type: TargetType, msg: HavocMessage, optional: boolean | undefined) {
+		const text = type === 'string' || type === 'role' ? msg.text : msg.arg;
+		const guild = msg.guild;
 		let target = null;
 		let loose = null;
-		const guild = msg.guild;
 		if (typeof type === 'function') {
 			target = await (type as Function)(msg) || null;
 			type = target;
@@ -87,7 +89,7 @@ export default {
 				target = this.emoji.get(text, guild);
 				break;
 			case 'role':
-				target = this.role.get(text, guild);
+				target = this.role.get(text, msg);
 				break;
 			case 'number':
 				target = Number(text);
@@ -101,16 +103,19 @@ export default {
 			case 'channel':
 				target = msg.mentions.channels.first() || guild.channels.find(c => c.name.toLowerCase() === text.toLowerCase()) || guild.channels.get(text) as HavocTextChannel;
 				break;
-			case 'member':
-				target = await this.member.mentionOrIDSearch(text, guild) || await this.member.nameSearch(text, guild);
-				if (!target) {
-					target = await this.member.looseSearch(text, guild);
-					loose = text;
+			default:
+				if (type === 'user' || type === 'member') {
+					target = await this.member.mentionOrIDSearch(text, guild) || await this.member.nameSearch(text, guild);
+					if (!target) {
+						target = await this.member.looseSearch(text, guild);
+						loose = text;
+					}
 				}
-			case 'user':
-				if (target && type === 'user') target = await guild.client.users.fetch(target.id);
+				if (type === 'user') target = await guild.client.users.fetch(target ? target.id : text);
 				break;
 		}
+		if (optional && target === null) target = false;
+		if (target && type !== 'role') msg.args.shift();
 		return { target, loose };
 	},
 
@@ -123,12 +128,12 @@ export default {
 
 	async parseTarget(msg: HavocMessage) {
 		const targetObj: { [key: string]: Target } = {};
-		await Promise.all(msg.command.args!.map(async ({ key, type }, index) => {
-			const text = type === 'string' ? msg.args.slice(index).join(' ') : msg.args[index];
-			await this.getTarget(type, text, msg)
+		for (const arg of msg.command.args!) {
+			const { key, type, optional } = arg;
+			await this.getTarget(type, msg, optional)
 				.then(async ({ target, loose }) => this.assignTarget(msg, type, target, loose, targetObj, key))
 				.catch(() => null);
-		}));
+		}
 		return targetObj;
 	}
 };

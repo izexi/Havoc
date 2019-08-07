@@ -16,7 +16,7 @@ export default class SuggestionApprove extends Command {
 				type: async (msg: HavocMessage) => {
 					const suggestionChannel = await getSuggestionChannel(msg) as HavocTextChannel;
 					if (!suggestionChannel) return null;
-					return suggestionChannel.messages.fetch(msg.args[0])
+					return suggestionChannel.messages.fetch(msg.arg)
 						.then(() => msg.content)
 						.catch(() => null);
 				},
@@ -28,7 +28,7 @@ export default class SuggestionApprove extends Command {
 					const { role }: { role: string } = suggestion || {};
 					return role;
 				},
-				flags: ['MANAGE_GUILD']
+				flags: 'MANAGE_GUILD'
 			}
 		});
 	}

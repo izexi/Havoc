@@ -12,7 +12,7 @@ export default class GiveawayConfig extends Command {
 			aliases: new Set(['g-config']),
 			args: [{
 				key: 'option',
-				type: (msg: HavocMessage) => ['channel', 'role'].includes(msg.args[0].toLowerCase()),
+				type: (msg: HavocMessage) => ['channel', 'role'].includes(msg.arg.toLowerCase()),
 				prompt: {
 					initialMsg: 'what would you like to configure from giveaways?\nEnter `channel` / `role`.',
 					invalidResponseMsg: 'You will need to enter either `channel` or `role`.'
@@ -33,7 +33,7 @@ export default class GiveawayConfig extends Command {
 					const { role }: { role: string } = giveaway || {};
 					return role;
 				},
-				flags: ['MANAGE_GUILD']
+				flags: 'MANAGE_GUILD'
 			}
 		});
 	}

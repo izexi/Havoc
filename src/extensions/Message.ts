@@ -6,6 +6,7 @@ import HavocUser from './User';
 import Util from '../util/Util';
 import HavocClient from '../client/Havoc';
 import Prompt, { PromptOptions } from '../structures/Prompt';
+import HavocTextChannel from './TextChannel';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { prefix } = require('../../config.json');
 
@@ -38,7 +39,8 @@ export default class HavocMessage extends Message {
 	}
 
 	public async react(emoji: EmojiResolvable): Promise<any> {
-		return this.deleted ? null : super.react(emoji);
+		if (this.deleted || (this.channel.type === 'text' && !(this.channel as HavocTextChannel).permissionsFor(this.guild.me!)!.has('ADD_REACTIONS'))) return null;
+		return super.react(emoji);
 	}
 
 	public constructEmbed(methods: { [key: string]: any }): MessageEmbed {
@@ -66,16 +68,17 @@ export default class HavocMessage extends Message {
 		return embed;
 	}
 
-	public async sendEmbed(methodsOrEmbed: { [key: string]: any } | MessageEmbed, content?: string) {
+	public async sendEmbed(methodsOrEmbed: { [key: string]: any } | MessageEmbed, content?: string, files?: { attachment: Buffer; name?: string }[]) {
 		if (this.guild && !(this.channel as TextChannel).permissionsFor(this.guild.me!)!.has('EMBED_LINKS')) {
 			return this.response = await this.channel.send(`**${this.author}** I require the \`Embed Links\` permission to execute this command.`) as HavocMessage;
 		}
-		const embed = await this.channel.send(
+		const embed = await this.channel.send({
 			content,
-			methodsOrEmbed instanceof MessageEmbed
+			files,
+			embed: methodsOrEmbed instanceof MessageEmbed
 				? methodsOrEmbed
 				: this.constructEmbed(methodsOrEmbed)
-		) as HavocMessage;
+		}) as HavocMessage;
 		if (this.command && this.command.opts & 1) {
 			await embed.react('🗑');
 			embed.awaitReactions(
@@ -168,6 +171,10 @@ export default class HavocMessage extends Message {
 
 	public get text() {
 		return this.args.join(' ');
+	}
+
+	public get arg() {
+		return this.args[0];
 	}
 
 	private _init() {

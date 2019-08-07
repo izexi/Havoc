@@ -37,7 +37,7 @@ export default class SchedulerStore extends Collection<number, Schedule> {
 
 	private async _init() {
 		Promise.all(
-			['giveaway', 'poll'].map(async _key => this._client.db.pool.query(`SELECT * FROM havoc WHERE key ~ '^${_key}:'`).then(async ({ rows }) => {
+			['giveaway', 'poll', 'mute'].map(async _key => this._client.db.pool.query(`SELECT * FROM havoc WHERE key ~ '^${_key}:'`).then(async ({ rows }) => {
 				await Promise.all(rows.map(async ({ key, value }) => {
 					const endTime = Number(key.split(':')[1]);
 					this.set(endTime, new (require(`../schedules/${Util.captialise(_key)}`).default)(this._client, endTime, parse(value)));

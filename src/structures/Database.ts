@@ -30,8 +30,9 @@ export default class Database {
 		this.pool = pool;
 	}
 
-	public async query(queryStr: string, value: boolean = true): Promise<any> {
+	public async query(queryStr: string, value: boolean = true, multiple: boolean = false): Promise<any> {
 		return pool.query(queryStr).then(async ({ rows }) => {
+			if (multiple) return rows;
 			const row = rows[0];
 			return (row ? (value ? parse(row.value) : row) : null);
 		});
@@ -56,7 +57,7 @@ export default class Database {
 
 	public async delete(key: string): Promise<any> {
 		return this.exists(key).then(async exists => {
-			if (!exists) return Promise.resolve(false);
+			if (!exists) return false;
 			const queryStr = this._queryBuilder({
 				type: 'DELETE',
 				key: this._dbKey(key)
@@ -71,6 +72,11 @@ export default class Database {
 			key: this._dbKey(key)
 		});
 		return this.query(queryStr!).then(row => Boolean(row));
+	}
+
+	public async fieldQuery(category: string, multiple: boolean, ...args: string[][]) {
+		this.category = category;
+		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND ${args.map(([k, v]) => `value::jsonb->>'${k}' = '${v}'`).join(' AND ')}`, true, multiple);
 	}
 
 	public async lessThan(value: number): Promise<any> {

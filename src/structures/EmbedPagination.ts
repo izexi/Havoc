@@ -9,9 +9,11 @@ export default class EmbedPagination {
 
 	private descriptions: string[];
 
+	private thumbnails?: string[];
+
 	private maxPerPage: number;
 
-	private page?: number;
+	private page: number;
 
 	private hastebin?: boolean;
 
@@ -24,6 +26,7 @@ export default class EmbedPagination {
 		this.maxPerPage = options.maxPerPage;
 		this.page = (this.validatePageInt(options.page!) && options.page) || 1;
 		this.hastebin = options.hastebin;
+		this.thumbnails = options.thumbnails;
 		this.setup();
 	}
 
@@ -36,17 +39,21 @@ export default class EmbedPagination {
 	}
 
 	private pageEmbed(page: string | number, paginate: boolean = true) {
-		return this.msg.constructEmbed({
+		const embed = this.msg.constructEmbed({
 			setTitle: `${this.title}${paginate ? ` - Page ${page} of ${this.totalPages}` : ''}`,
 			setDescription: this.descriptions.slice((page as number * this.maxPerPage) - this.maxPerPage, page as number * this.maxPerPage).join('\n')
 		});
+		if (this.thumbnails && this.thumbnails[this.page - 1]) {
+			embed.setThumbnail(this.thumbnails[this.page - 1]);
+		}
+		return embed;
 	}
 
 	private async setup() {
 		let emojis = ['⏮', '◀', '⬇', '▶', '⏭', '✅'];
 		if (this.hastebin) emojis = [...emojis.slice(0, -1), '📜', emojis[5]];
-		if (this.totalPages === 1) return this.msg.channel.send(this.pageEmbed(this.page!, false));
-		this.embedMsg = await this.msg.channel.send(this.pageEmbed(this.page!)) as HavocMessage;
+		if (this.totalPages === 1) return this.msg.channel.send(this.pageEmbed(this.page, false));
+		this.embedMsg = await this.msg.channel.send(this.pageEmbed(this.page)) as HavocMessage;
 		for (const emoji of emojis) await this.embedMsg.react(emoji);
 		const collector = this.embedMsg.createReactionCollector(
 			(reaction, user) => emojis.includes(reaction.emoji.name) && user.id === this.msg.author.id,
@@ -61,8 +68,8 @@ export default class EmbedPagination {
 					}
 					break;
 				case '◀':
-					if (this.page! > 1) {
-						this.embedMsg.edit(this.pageEmbed(--this.page!));
+					if (this.page > 1) {
+						this.embedMsg.edit(this.pageEmbed(--this.page));
 					}
 					break;
 				case '⬇':
@@ -80,8 +87,8 @@ export default class EmbedPagination {
 						.catch(err => Logger.error('Error from embed pagination prompt', err));
 					break;
 				case '▶':
-					if (this.page! < this.totalPages) {
-						this.embedMsg.edit(this.pageEmbed(++this.page!));
+					if (this.page < this.totalPages) {
+						this.embedMsg.edit(this.pageEmbed(++this.page));
 					}
 					break;
 				case '⏭':
@@ -118,4 +125,5 @@ export interface EmbedPaginationOptions {
 	maxPerPage: number;
 	page?: number;
 	hastebin?: boolean;
+	thumbnails?: string[];
 }

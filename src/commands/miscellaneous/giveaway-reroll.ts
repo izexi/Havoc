@@ -16,7 +16,7 @@ export default class GiveawayReroll extends Command {
 				type: async (msg: HavocMessage) => {
 					const giveawayChannel = await getGiveawayChannel(msg) as HavocTextChannel;
 					if (!giveawayChannel) return null;
-					return giveawayChannel.messages.fetch(msg.args[0]).catch(() => null);
+					return giveawayChannel.messages.fetch(msg.arg).catch(() => null);
 				},
 				prompt: {
 					initialMsg: 'enter the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways\'s embed',
@@ -37,7 +37,7 @@ export default class GiveawayReroll extends Command {
 					const { role }: { role: string } = giveaway || {};
 					return role;
 				},
-				flags: ['MANAGE_GUILD']
+				flags: 'MANAGE_GUILD'
 			}
 		});
 	}

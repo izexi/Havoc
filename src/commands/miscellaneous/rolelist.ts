@@ -22,7 +22,7 @@ export default class RoleList extends Command {
 			title: `List of ${roles.size} ${Util.plural('role', roles.size)} in ${msg.guild.name}`,
 			descriptions: roles.map(role => `• ${role.name}`),
 			maxPerPage: 20,
-			page: Number(msg.args[0])
+			page: Number(msg.arg)
 		});
 	}
 }

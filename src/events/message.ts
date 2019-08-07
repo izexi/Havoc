@@ -15,8 +15,14 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 		const { role, flags } = command.userPerms;
 		if (role) permRole = await role(msg);
 		if (!(role && msg.member!.roles.has(permRole)) && !(flags && msg.member!.hasPermission(flags))) {
+			await msg.react('⛔');
 			return msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''} you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')}`
+				setDescription: `**${msg.author.tag}** you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''} you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)} in order to use this command.`
+			});
+		}
+		if (!(flags && msg.guild.me!.hasPermission(flags))) {
+			return msg.response = await msg.sendEmbed({
+				setDescription: `**${msg.author.tag}** I do not have sufficient permisions to use this command I need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)} in order to use this command.`
 			});
 		}
 	}
@@ -52,9 +58,10 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 		} else {
 			params.target = await Targetter.parseTarget(msg);
 			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
-				target || key === 'loose'
+				target !== null || key === 'loose'
 					? responses
-					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)], []);
+					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]
+			, []);
 			if (invalidResponses.length) {
 				return msg.sendEmbed({
 					setDescription: `**${msg.author.tag}** ${invalidResponses.join('\n')}`

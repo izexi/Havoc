@@ -38,7 +38,6 @@ export default class Poll extends Schedule {
 
 	public async update() {
 		await new Promise(resolve => setTimeout(resolve, 120));
-		const timeLeft = this.endTime - Date.now();
-		if (timeLeft <= 0 && this._client.scheduler.has(this.endTime)) return this.end();
+		if (this.timeLeft <= 0 && this._client.scheduler.has(this.endTime)) return this.end();
 	}
 }

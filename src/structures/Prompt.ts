@@ -35,6 +35,8 @@ export default class Prompt extends EventEmitter {
 
 	private index: number
 
+	private files?: { attachment: Buffer; name: string }[];
+
 	public constructor(options: PromptOptions) {
 		super();
 		this.msg = options.msg;
@@ -43,6 +45,7 @@ export default class Prompt extends EventEmitter {
 		this.timeLimit = options.timeLimit || 30000;
 		this.target = Util.arrayify(options.target || []);
 		this.index = 0;
+		this.files = options.files;
 		this.create();
 	}
 
@@ -53,7 +56,7 @@ export default class Prompt extends EventEmitter {
 		this.promptEmbed = await this.msg.sendEmbed({
 			setDescription: `**${this.msg.author.tag}** ${typeof initialMsg === 'function' ? initialMsg(this.msg) : initialMsg}`,
 			setFooter: [`You have ${this.timeLimit / 1000} seconds left to enter an option.`]
-		});
+		}, '', this.files);
 		this.promptMessages.push(this.promptEmbed!.id);
 		this.collect(
 			this.msg.channel.createMessageCollector(
@@ -79,8 +82,9 @@ export default class Prompt extends EventEmitter {
 				}
 				this.msg.promptResponses.add(msg.content.toLowerCase());
 				msg.intialMsg = this.msg;
-				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg.content, msg);
-				if ((await targetObj).target) {
+				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg, false);
+				const { target } = await targetObj;
+				if (target || target === null) {
 					collector.stop();
 					this.responses.push(targetObj);
 					this.index++;
@@ -127,4 +131,5 @@ export interface PromptOptions {
 	invalidResponseMsg?: string | (string | undefined)[];
 	target?: Function | TargetType | (Function | TargetType | undefined)[];
 	timeLimit?: number;
+	files?: { attachment: Buffer; name: string }[];
 }

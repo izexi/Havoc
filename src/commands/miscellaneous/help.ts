@@ -13,8 +13,7 @@ export default class Help extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: Command } }) {
-		const command = target;
+	public async run(this: HavocClient, { msg, target: { command } }: { msg: HavocMessage; target: { command: Command } }) {
 		if (command && command.category !== 'dev') {
 			const embed = msg.constructEmbed({
 				setTitle: `Command info for  **\`${command.name}\`**\n⠀`,
@@ -25,7 +24,7 @@ export default class Help extends Command {
 				attachFiles: [`src/assets/images/${command.category}.png`],
 				setThumbnail: `attachment://${command.category}.png`
 			});
-			if (command.aliases) {
+			if (command.aliases.size) {
 				embed.addField('❯Aliases', [...command.aliases].map(alias => `\`${alias}\``).join(', '));
 			}
 			return msg.response = await msg.sendEmbed(embed);
@@ -40,14 +39,14 @@ export default class Help extends Command {
 			music: '🎶',
 			image: '🖼'
 		};
-		const commands = this.commands.filter(c => c.category !== 'dev');
+		const commands = this.commands.filter(c => c.category !== 'dev' && !c.name.includes('-'));
 		const categories: Set<string> = commands.reduce((uniqueCategories, { category }) => uniqueCategories.add(category), new Set());
 		const fields = [...categories].reduce((arr: string[][], commandCategory) => {
 			arr.push([
 				`${emojis[commandCategory]} ${Util.captialise(commandCategory)}`,
 				commands
 					.filter(({ category }) => category === commandCategory)
-					.map(c => `\`${c.name}\``).join(', ')
+					.map(c => `\`${c.name.replace('_', '')}\``).join(', ')
 			]);
 			return arr;
 		}, []);

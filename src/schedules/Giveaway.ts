@@ -41,7 +41,7 @@ export default class Giveaway extends Schedule {
 
 	public async update() {
 		await new Promise(resolve => setTimeout(resolve, 120));
-		const timeLeft = this.endTime - Date.now();
+		const timeLeft = this.timeLeft;
 		if (timeLeft <= 0 && this._client.scheduler.has(this.endTime)) return this.end();
 		// TODO: a nicer implementation for this
 		if ((timeLeft <= 3000 && (timeLeft % 1000 <= 1000)) || (timeLeft <= 180000 && (timeLeft % 60000 <= 1000)) || Math.abs(timeLeft - 3600000) <= 1000 || timeLeft >= 86400000) {

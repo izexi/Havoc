@@ -3,12 +3,12 @@ import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import { GuildMember, Role } from 'discord.js';
 
-export default class Addrole extends Command {
+export default class AddRole extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b1000,
 			description: 'Adds the inputted role to a member.',
-			aliases: new Set(['ar', 'setrole', 'sr']),
+			aliases: new Set(['ar']),
 			args: [{
 				type: 'member',
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username who you would like to add a role to.' }
@@ -16,12 +16,12 @@ export default class Addrole extends Command {
 			{
 				type: 'role',
 				prompt: { initialMsg: 'mention the role / enter the role\'s ID or name that you would like to add to the member.' }
-			}]
+			}],
+			userPerms: { flags: 'MANAGE_ROLES' }
 		});
 	}
 
 	public async run(this: HavocClient, { msg, target: { member, role, loose } }: { msg: HavocMessage; target: { member: GuildMember; role: Role; loose?: string } }) {
-		console.log(member);
 		let response;
 		const tag = loose ? member.user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : member.user.tag;
 		if (msg.guild.me!.roles.highest.comparePositionTo(role) < 1) {
@@ -36,7 +36,7 @@ export default class Addrole extends Command {
 		if (response) {
 			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
 		}
-		await member.roles.add(role, `Added by ${msg.author.tag}.`);
+		await member.roles.add(role, `Added by ${msg.author.tag}`);
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have added the role \`${role.name}\` to ${tag}.` });
 	}
 }

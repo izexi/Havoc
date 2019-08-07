@@ -48,6 +48,7 @@ interface CommandOptions {
 	opts: number;
 	description: string;
 	args?: {
+		optional?: boolean;
 		key?: string;
 		type: TargetType;
 		index?: number;

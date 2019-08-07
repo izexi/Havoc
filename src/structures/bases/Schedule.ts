@@ -10,6 +10,10 @@ export default abstract class Schedule {
 		this.endTime = endTime;
 	}
 
+	public get timeLeft() {
+		return this.endTime - Date.now();
+	}
+
 	public abstract update(): Promise<any>;
 
 	public abstract onError(): Promise<null>;

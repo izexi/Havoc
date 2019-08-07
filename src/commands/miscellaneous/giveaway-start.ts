@@ -68,7 +68,7 @@ export default class GiveawayStart extends Command {
 					const { role }: { role: string } = giveaway || {};
 					return role;
 				},
-				flags: ['MANAGE_GUILD']
+				flags: 'MANAGE_GUILD'
 			}
 		});
 	}

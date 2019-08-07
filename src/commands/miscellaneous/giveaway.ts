@@ -12,7 +12,7 @@ export default class Giveaway extends Command {
 			args: [{
 				key: 'subCommand',
 				type: (msg: HavocMessage) => {
-					if (['start', 'end', 'reroll', 'config'].includes(msg.args[0].toLowerCase())) return msg.args[0].toLowerCase();
+					if (['start', 'end', 'reroll', 'config'].includes(msg.arg.toLowerCase())) return msg.arg.toLowerCase();
 				},
 				prompt: {
 					initialMsg: 'would you like to `start`, `end`, `reroll` or `config` a giveaway? (enter the according option)',
@@ -25,7 +25,7 @@ export default class Giveaway extends Command {
 					const { role }: { role: string } = giveaway || {};
 					return role;
 				},
-				flags: ['MANAGE_GUILD']
+				flags: 'MANAGE_GUILD'
 			}
 		});
 	}

@@ -13,8 +13,8 @@ export default class Json extends Command {
 				key: 'url',
 				type: (msg: HavocMessage) => {
 					try {
-						new URL(msg.args[0]);
-						return msg.args[0];
+						new URL(msg.arg);
+						return msg.arg;
 					} catch (error) {
 						return false;
 					}
@@ -28,17 +28,16 @@ export default class Json extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, target: { url } }: { msg: HavocMessage; target: { url: string } }) {
-		const description = fetch(url)
+		const json = await fetch(url)
 			.then(async res => {
 				if (!res.headers.get('content-type')!.includes('application/json')) {
 					return `**${msg.author.tag}** I couldn't find any JSON to parse on \`${msg.text}\`.`;
 				}
-				const json = JSON.stringify((await res.json()), null, 2);
-				return Util[json.length > 2036 ? 'haste' : 'codeblock'](json, 'json');
+				return JSON.stringify((await res.json()), null, 2);
 			})
 			.catch(err => `**${msg.author.tag}** I ran into an error while trying to access \`${msg.text}\` \n\`${err}\``);
 		msg.response = await msg.sendEmbed({
-			setDescription: (await description)
-		});
+			setDescription: Util[json.length > 2036 ? 'haste' : 'codeblock'](json, 'json')
+		}, '', [{ attachment: Buffer.from(json, 'utf8'), name: 'attachment.json' }]);
 	}
 }

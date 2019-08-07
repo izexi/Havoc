@@ -31,6 +31,13 @@ export default {
 	arrayify(arg: any) {
 		return Array.isArray(arg) ? arg : [arg];
 	},
+	ordinal(n: number) {
+		// eslint-disable-next-line
+		return n + ([, 'st', 'nd', 'rd'][n % 100 >> 3 ^ 1 && n % 10]! || 'th');
+	},
+	auditClean(reason: string) {
+		return reason.replace(/`/g, '');
+	},
 	// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
 	emojiNumbers: {
 		1: '1⃣',

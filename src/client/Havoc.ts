@@ -20,12 +20,6 @@ export default class HavocClient extends Client {
 
 	public scheduler = new SchedulerStore(this);
 
-	public pollScheduler!: NodeJS.Timer;
-
-	public giveawayScheduler!: Function;
-
-	public giveawaySchedule = true;
-
 	public constructor(options: ClientOptions = {}) {
 		super(options);
 		this._init();

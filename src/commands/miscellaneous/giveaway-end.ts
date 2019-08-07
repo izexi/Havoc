@@ -11,7 +11,7 @@ export default class GiveawayEnd extends Command {
 			aliases: new Set(['g-end']),
 			args: [{
 				key: 'giveaway',
-				type: (msg: HavocMessage) => msg.client.scheduler.find(g => (g as GiveawaySchedule).message === msg.args[0]),
+				type: (msg: HavocMessage) => msg.client.scheduler.find(g => (g as GiveawaySchedule).message === msg.arg),
 				prompt: {
 					initialMsg: 'enter the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways\'s embed',
 					invalidResponseMsg: 'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png'
@@ -23,7 +23,7 @@ export default class GiveawayEnd extends Command {
 					const { role }: { role: string } = giveaway || {};
 					return role;
 				},
-				flags: ['MANAGE_GUILD']
+				flags: 'MANAGE_GUILD'
 			}
 		});
 	}
