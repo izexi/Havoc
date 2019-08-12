@@ -32,7 +32,7 @@
     "node-emoji": "^1.10.0",
     "node-fetch": "^2.3.0",
     "pg": "^7.9.0",
-    "pretty-ms": "^4.0.0",
+    "pretty-ms": "^5.0.0",
     "sql": "^0.78.0",
     "typescript": "^3.5.3"
   },
