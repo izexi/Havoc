@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import HavocGuild from '../extensions/Guild';
 
 export default {
 	log(text: any, type = '') {
@@ -14,6 +15,14 @@ export default {
 
 	command(text: string) {
 		this.log(text, `[${chalk.cyan('COMMAND')}]`);
+	},
+
+	joined(guild: HavocGuild) {
+		this.log(`Joined ${guild.name} (${guild.id}) with ${guild.memberCount} members`, `[${chalk.bgGreen('JOINED')}]`);
+	},
+
+	left(guild: HavocGuild) {
+		this.log(`Left ${guild.name} (${guild.id})`, `[${chalk.bgRed('LEFT')}]`);
 	},
 
 	ping(text: string) {

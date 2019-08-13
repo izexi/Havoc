@@ -70,17 +70,18 @@ export default {
 	},
 
 	async getTarget(type: TargetType, msg: HavocMessage, optional: boolean | undefined) {
-		const text = type === 'string' || type === 'role' ? msg.text : msg.arg;
+		const text = type === 'string' || type === 'role' || type === 'tagName' ? msg.text : msg.arg;
 		const guild = msg.guild;
 		let target = null;
 		let loose = null;
 		if (typeof type === 'function') {
-			target = await (type as Function)(msg) || null;
+			target = await (type as Function)(msg);
+			if (!target && target !== false) target = null;
 			type = target;
 		}
 		switch (type) {
 			case 'string':
-				target = text;
+				if (text) target = text;
 				break;
 			case 'command':
 				target = guild.client.commands.handler.get(text)!;
@@ -103,6 +104,15 @@ export default {
 			case 'channel':
 				target = msg.mentions.channels.first() || guild.channels.find(c => c.name.toLowerCase() === text.toLowerCase()) || guild.channels.get(text) as HavocTextChannel;
 				break;
+			case 'tagName':
+				if (Regex.tagName.test(text)) {
+					[, target] = text.match(Regex.tagName) as RegExpMatchArray;
+				} else if ((msg.channel as HavocTextChannel).prompts.has(msg.author.id)) {
+					target = text;
+				} else {
+					target = text.split(' ')[0];
+				}
+				msg.args.splice(0, target.split(' ').length);
 			default:
 				if (type === 'user' || type === 'member') {
 					target = await this.member.mentionOrIDSearch(text, guild) || await this.member.nameSearch(text, guild);
@@ -115,7 +125,7 @@ export default {
 				break;
 		}
 		if (optional && target === null) target = false;
-		if (target && type !== 'role') msg.args.shift();
+		if (target && type !== 'role' && type !== 'tagName') msg.args.shift();
 		return { target, loose };
 	},
 

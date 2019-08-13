@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import Util from '../../util/Util';
 import { inspect } from 'util';
+import Discord from 'discord.js';
 
 export default class Eval extends Command {
 	public constructor() {

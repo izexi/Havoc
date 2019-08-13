@@ -58,7 +58,7 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 		} else {
 			params.target = await Targetter.parseTarget(msg);
 			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
-				target !== null || key === 'loose'
+				(target !== null && target !== false) || key === 'loose'
 					? responses
 					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]
 			, []);
@@ -74,6 +74,8 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 
 export default async function(this: HavocClient, msg: HavocMessage) {
 	if (msg.author!.bot || msg.webhookID || !msg.prefix || !msg.content.startsWith(msg.prefix) || (msg.channel.type === 'text' && (msg.channel as HavocTextChannel).prompts.has(msg.author.id))) return;
+	const possibleTag = msg.guild.tags.get(msg.content.substring(msg.prefix.length));
+	if (possibleTag) return msg.channel.send(possibleTag);
 	const command = this.commands.handler.get(msg.args.shift()!.substring(msg.prefix.length));
 	if (!command || this.commands.disabled.has(command.name) || (command.category === 'dev' && msg.author.id !== this.havoc)) return;
 	try {

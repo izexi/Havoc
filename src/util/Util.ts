@@ -15,7 +15,7 @@ export default {
 		return str.replace(/./, letter => letter.toUpperCase());
 	},
 	codeblock(text: string, lang: string = '') {
-		return `\`\`\`${lang}\n${text}\n\`\`\``;
+		return `\`\`\`${lang}\n${text.replace(/```/g, '`\u200b``')}\n\`\`\``;
 	},
 	normalizePermFlag(perm: string) {
 		return perm
@@ -38,6 +38,37 @@ export default {
 	auditClean(reason: string) {
 		return reason.replace(/`/g, '');
 	},
+	smallCaps(str: string) {
+		const obj: { [key: string]: string } = {
+			a: 'ᴀ',
+			b: 'ʙ',
+			c: 'ᴄ',
+			d: 'ᴅ',
+			e: 'ᴇ',
+			f: 'ғ',
+			g: 'ɢ',
+			h: 'ʜ',
+			i: 'ɪ',
+			j: 'ᴊ',
+			k: 'ᴋ',
+			l: 'ʟ',
+			m: 'ᴍ',
+			n: 'ɴ',
+			o: 'ᴏ',
+			p: 'ᴘ',
+			q: 'ǫ',
+			r: 'ʀ',
+			s: 's',
+			t: 'ᴛ',
+			u: 'ᴜ',
+			v: 'ᴠ',
+			w: 'ᴡ',
+			x: 'x',
+			y: 'ʏ',
+			z: 'ᴢ'
+		};
+		return str.replace(new RegExp(Object.keys(obj).join('|'), 'gi'), letter => obj[letter] || letter);
+	},
 	// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
 	emojiNumbers: {
 		1: '1⃣',
@@ -51,6 +82,14 @@ export default {
 		9: '9⃣',
 		10: '🔟'
 	} as { [key: string]: string },
+	secondsToHM(seconds: number) {
+		const h = Math.floor(seconds / 3600);
+		const m = Math.floor(seconds % 3600 / 60);
+
+		const hours = h > 0 ? `${h} hour` : '';
+		const minutes = m > 0 ? `${m} ${this.plural('minute', m)}` : '';
+		return `${hours}${minutes ? ` ${minutes}` : ''}`;
+	},
 	emojiNumber(num: number) {
 		return this.emojiNumbers[num];
 	}

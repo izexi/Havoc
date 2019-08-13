@@ -41,7 +41,7 @@ export default class SuggestionConfig extends Command {
 	public async run(this: HavocClient, { msg, target: { channelOrRole } }: { msg: HavocMessage; target: { channelOrRole: HavocTextChannel | Role } }) {
 		const { suggestion } = await msg.guild.config;
 		const type = channelOrRole instanceof Role ? 'role' : 'channel';
-		await msg.guild.updateConfig({ giveaway: { ...suggestion, [type]: channelOrRole.id } });
+		await msg.guild.addConfig({ giveaway: { ...suggestion, [type]: channelOrRole.id } });
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have updated the suggestions ${type} to ${channelOrRole} for this server.` });
 	}
 }

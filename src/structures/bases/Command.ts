@@ -75,4 +75,4 @@ export interface CommandParams {
 	flag?: string;
 }
 
-export type TargetType = 'member' | 'user' | 'channel' | 'emoji' | 'string' | 'command' | 'role' | 'number' | 'id' | 'time' | Function;
+export type TargetType = 'member' | 'user' | 'channel' | 'emoji' | 'string' | 'command' | 'role' | 'number' | 'id' | 'time' | Function | 'tagName';

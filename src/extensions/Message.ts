@@ -17,8 +17,6 @@ export default class HavocMessage extends Message {
 
 	public guild!: HavocGuild;
 
-	public prefix!: string;
-
 	public command!: Command
 
 	public args!: string[];
@@ -174,18 +172,21 @@ export default class HavocMessage extends Message {
 	}
 
 	public get arg() {
-		return this.args[0];
+		return this.args[0].toLowerCase();
 	}
 
 	private _init() {
-		this.prefix = this._prefix;
 		this.mentionPrefix = Regex.mentionPrefix(this.client.user!.id).test(this.prefix);
 		this.args = this.content.split(/ +/);
 	}
 
-	private get _prefix() {
+	public get defaultPrefix() {
+		return prefix;
+	}
+
+	public get prefix() {
 		if (!this.guild) return prefix;
-		const [matchedPrefix]: RegExpMatchArray = this.content.match(Regex.prefix(this.client.user!.id, this.guild.prefix)) || [prefix];
+		const [matchedPrefix]: RegExpMatchArray = this.content.match(Regex.prefix(this.client.user!.id, this.guild.prefix || this.defaultPrefix)) || [];
 		return matchedPrefix;
 	}
 }

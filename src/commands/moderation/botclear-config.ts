@@ -52,7 +52,7 @@ export default class Botclear extends Command {
 			}
 			bcPrefixes.splice(bcPrefixes.indexOf(prefix), 1);
 		}
-		await msg.guild.updateConfig({ bcPrefixes });
+		await msg.guild.addConfig({ bcPrefixes });
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have ${option}${option === 'add' ? 'e' : ''}d \`${prefix}\` to the list of prefixes that will be botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.` });
 	}
 }

@@ -46,7 +46,8 @@ export default class Unmute extends Command {
 			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
 		}
 		if (!member.roles.has(muteRole.id)) return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${member.user.tag}\` is not muted.` });
-		const { endTime } = await this.db.fieldQuery('mute', false, ['guild', msg.guild.id], ['member', member.id]).catch(() => ({ endTime: null })) || { endTime: null };
+		const { endTime } = await this.db.fieldQuery('mute', false, ['guild', msg.guild.id], ['member', member.id])
+			.catch(() => ({ endTime: null })) || { endTime: null };
 		if (endTime) await this.scheduler.get(endTime)!.end();
 		await member.roles.remove(muteRole, `Unmuted by ${msg.author.tag}${reason ? ` due to the reason: ${reason}` : ''}`);
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have unmuted \`${member.user.tag}\`${reason ? ` due to the reason: \`${reason}\`` : ''}` });

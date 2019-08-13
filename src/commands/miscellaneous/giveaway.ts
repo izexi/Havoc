@@ -12,7 +12,8 @@ export default class Giveaway extends Command {
 			args: [{
 				key: 'subCommand',
 				type: (msg: HavocMessage) => {
-					if (['start', 'end', 'reroll', 'config'].includes(msg.arg.toLowerCase())) return msg.arg.toLowerCase();
+					const option = msg.arg.toLowerCase();
+					if (['start', 'end', 'reroll', 'config'].includes(option)) return option;
 				},
 				prompt: {
 					initialMsg: 'would you like to `start`, `end`, `reroll` or `config` a giveaway? (enter the according option)',

@@ -1,9 +1,10 @@
 import { Client } from 'discord.js';
 import { promisify } from 'util';
 import EventHandler from '../handlers/EventHandler';
+import Store from '../structures/bases/Store';
 const readdir = promisify(require('fs').readdir);
 
-export default class EventStore extends Map<string, Function> {
+export default class EventStore extends Store<string, Function> {
 	private _client: Client;
 
 	public handler!: EventHandler;
@@ -11,10 +12,9 @@ export default class EventStore extends Map<string, Function> {
 	public constructor(client: Client) {
 		super();
 		this._client = client;
-		this._loadEvents();
 	}
 
-	private async _loadEvents() {
+	protected async _load() {
 		(await readdir('src/events'))
 			.forEach((event: string) => {
 				event = event.slice(0, -3);

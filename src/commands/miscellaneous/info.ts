@@ -2,8 +2,8 @@ import { TextChannel, DMChannel, version } from 'discord.js';
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import * as prettyMs from 'pretty-ms';
-import * as os from 'os';
+import os = require('os');
+import prettyMs from 'pretty-ms';
 
 export default class Info extends Command {
 	public constructor() {
