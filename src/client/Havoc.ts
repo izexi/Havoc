@@ -26,6 +26,8 @@ export default class HavocClient extends Client {
 	}
 
 	private _init() {
+		this.commands.load();
+		this.events.load();
 		this.login(token)
 			.then(() => Logger.status(`Logged in as ${this.user!.tag}`))
 			.catch(err => Logger.error('Error while logging in', err));

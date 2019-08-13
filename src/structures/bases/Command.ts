@@ -20,9 +20,10 @@ export default abstract class implements CommandOptions {
 	public args: CommandOptions['args'];
 
 	public constructor(__path: string, options: CommandOptions) {
-		const path = __path.split('\\');
-		this.name = path.pop()!.slice(0, -3);
-		this.category = path.pop()!;
+		// @ts-ignore
+		const { groups: { name, category } } = __path.match(/[\\\/](?<category>[a-z]+)[\\\/](?<name>[_a-z\-\d]+)\.ts/);
+		this.name = name;
+		this.category = category;
 		this.description = options.description;
 		this.aliases = options.aliases || new Set();
 		this.opts = options.opts;

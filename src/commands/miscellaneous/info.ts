@@ -3,7 +3,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import os = require('os');
-import prettyMs from 'pretty-ms';
+import * as prettyMs from 'pretty-ms';
 
 export default class Info extends Command {
 	public constructor() {
