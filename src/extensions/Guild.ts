@@ -5,6 +5,9 @@ import HavocTextChannel from './TextChannel';
 import HavocMessage from './Message';
 import HavocUser from './User';
 import Util from '../util/Util';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ms = require('ms');
+
 
 export default class HavocGuild extends Guild {
 	public client!: HavocClient;
@@ -96,7 +99,7 @@ export default class HavocGuild extends Guild {
 				.setDescription(`
 					**Member:** ${target.tag}
 					**Action:** ${Util.captialise(msg.command.name.replace('clearwarnings', 'Clear Warnings'))}
-					${duration ? `**Duration:** ${duration}` : ''}
+					${duration ? `**Duration:** ${ms(duration, { 'long': true })}` : ''}
 					${reason ? `**Reason:** ${reason}` : ''}
 				`)
 				.setColor(colour[msg.command.name])

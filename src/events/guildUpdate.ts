@@ -43,6 +43,7 @@ export default async function(this: HavocClient, outdated: HavocGuild, updated: 
 		before = executor;
 		after = (await this.users.fetch(updated.ownerID)).tag;
 	}
+	if (!prop && !condition) return;
 	const change = (prop || condition)!
 		.split('.')[0].split(/(?=[A-Z])/)
 		.map(word => Util.captialise(word))
