@@ -40,5 +40,6 @@ export default class WarnClear extends Command {
 		}
 		await this.db.delete(key);
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have cleared ${amount} ${Util.plural('warning', amount)} from \`${member.user.tag}\`.` });
+		msg.guild.modlog(msg, member);
 	}
 }

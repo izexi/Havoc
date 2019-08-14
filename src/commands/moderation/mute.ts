@@ -105,5 +105,6 @@ export default class Mute extends Command {
 			}));
 		await member.roles.add(muteRole, `Muted by ${msg.author.tag}${time ? ` for ${ms(time, { 'long': true })}` : ''}${reason ? ` due to the reason: ${reason}` : ''}`);
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have muted \`${member.user.tag}\`${time ? ` for ${ms(time, { 'long': true })}` : ''}${reason ? ` due to the reason: \`${reason}\`` : ''} 🙊` });
+		msg.guild.modlog(msg, member, reason, time);
 	}
 }

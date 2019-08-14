@@ -65,6 +65,7 @@ export default class Softban extends Command {
 			await msg.guild.members.ban(user, { reason: `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}` });
 			await msg.guild.members.unban(user, `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
 			msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have softbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨` });
+			msg.guild.modlog(msg, user, reason);
 		};
 		if (flag) return unban();
 		await msg.react('464034357955395585');

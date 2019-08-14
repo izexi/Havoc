@@ -13,9 +13,5 @@
 		"allowSyntheticDefaultImports": true,
 		"pretty": true,
 		"outDir": "./dist",
-	},
-
-	"include": [
-		"./src"
-	]
+	}
 }

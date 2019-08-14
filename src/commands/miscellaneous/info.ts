@@ -34,7 +34,7 @@ export default class Info extends Command {
             - Cached users: ${this.users.size}
             - Channels: ${this.channels.size}
             - Cached messages: ${this.channels.filter(channel => 'messages' in channel).reduce((total: number, channel) => total + (channel as TextChannel | DMChannel).messages.size, 0)}`, true],
-				['❯Github', '[Click here](link)', true],
+				['❯Github', '[izexi](https://github.com/izexi/Havoc)', true],
 				['❯Versions',
 					`- [discord.js](https://github.com/discordjs/discord.js): v${version}
             - Node.js: ${process.version}`, true]

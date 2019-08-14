@@ -1,7 +1,10 @@
-import { Guild, Webhook, WebhookClient } from 'discord.js';
+import { Guild, Webhook, WebhookClient, MessageEmbed, GuildMember } from 'discord.js';
 import HavocClient from '../client/Havoc';
 import Logger from '../util/Logger';
 import HavocTextChannel from './TextChannel';
+import HavocMessage from './Message';
+import HavocUser from './User';
+import Util from '../util/Util';
 
 export default class HavocGuild extends Guild {
 	public client!: HavocClient;
@@ -70,6 +73,35 @@ export default class HavocGuild extends Guild {
 			return webhook;
 		}
 		return new WebhookClient(webhook.id, webhook.token);
+	}
+
+	public async modlog(msg: HavocMessage, target: GuildMember | HavocUser, reason?: string | null, duration?: number) {
+		if (!(target instanceof HavocUser)) target = await this.client.users.fetch(target.id) as HavocUser;
+		const { modlogs } = await this.config;
+		if (!modlogs) return;
+		const channel = this.client.channels.get(modlogs) as HavocTextChannel;
+		if (!channel) return this.removeConfig('modlogs');
+		const colour: { [key: string]: string } = {
+			warn: '#ffff00',
+			clearwarnings: '#fefefe',
+			mute: 'GOLD',
+			kick: 'ORANGE',
+			softban: 'DARK_ORANGE',
+			ban: 'RED',
+			unban: 'GREEN'
+		};
+		channel.send(
+			new MessageEmbed()
+				.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
+				.setDescription(`
+					**Member:** ${target.tag}
+					**Action:** ${Util.captialise(msg.command.name.replace('clearwarnings', 'Clear Warnings'))}
+					${duration ? `**Duration:** ${duration}` : ''}
+					${reason ? `**Reason:** ${reason}` : ''}
+				`)
+				.setColor(colour[msg.command.name])
+				.setTimestamp()
+		);
 	}
 
 	public set webhook(webhook: Webhook | WebhookClient) {

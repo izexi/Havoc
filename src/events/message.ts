@@ -6,6 +6,7 @@ import Responses from '../util/Responses';
 import Command, { CommandParams } from '../structures/bases/Command';
 import HavocTextChannel from '../extensions/TextChannel';
 import Util from '../util/Util';
+import { MessageEmbed } from 'discord.js';
 
 export async function handleMessage(client: HavocClient, msg: HavocMessage, command: Command) {
 	const params: CommandParams = { msg, target: {} };
@@ -80,8 +81,39 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 	if (!command || this.commands.disabled.has(command.name) || (command.category === 'dev' && msg.author.id !== this.havoc)) return;
 	try {
 		handleMessage(this, msg, command);
+		Logger.command(`${msg.author.tag} (${msg.author.id}) used command ${msg.prefix}${msg.command.name} in ${msg.guild ? msg.guild.name : 'DM'} ${msg.guild ? `(${msg.guild.id})` : ''} ${msg.channel instanceof HavocTextChannel ? `on #${msg.channel.name} (${msg.guild.id})` : ''}`);
 	} catch (err) {
 		Logger.error(`Error while executing command ${command.name}`, err);
-		this.emit('commandError', err, msg);
+		const id = Math.random()
+			.toString(36)
+			.substr(2, 9)
+			.toUpperCase();
+		msg.react('❗');
+		(this.channels.get('406882982905774080') as HavocTextChannel).send(
+			new MessageEmbed()
+				.setDescription(`
+					**Server:** ${msg.guild ? msg.guild.name : 'DM'} ${msg.guild ? `(${msg.guild.id})` : ''}
+					**Error:** ${err.stack}
+					**User:** ${msg.author.tag} (${msg.author.id})
+					**Command:** ${msg.command.name}
+					**Message Content:**
+					${Util.codeblock(msg.content)}
+					**Error ID:** ${id}
+				`)
+				.setColor('RED')
+				.setAuthor(`❗${err.toString()}❗`, msg.guild ? msg.guild.iconURL() : '')
+				.setTimestamp()
+				.setFooter('', msg.author.pfp)
+		);
+		msg.channel.send(
+			new MessageEmbed()
+				.setColor('RED')
+				.setDescription(`
+					**❗I have encountered an error trying to execute the \`${msg.command.name}\` command❗**
+					Check \`${msg.prefix}help ${msg.command.name}\` to check how to properly use the command
+					However, if you have used the command correctly please join **https://discord.gg/3Fewsxq** and report your issue in the ${this.supportServer.members.has(msg.author.id) ? '<#406873476591517706>' : '#bugs-issues'} channel.
+				`)
+				.setFooter(`Error ID: ${id}`, msg.author.displayAvatarURL())
+		);
 	}
 }

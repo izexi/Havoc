@@ -64,6 +64,7 @@ export default class Ban extends Command {
 		const ban = async () => {
 			await msg.guild.members.ban(user, { reason: `Banned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}` });
 			msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have banned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨` });
+			msg.guild.modlog(msg, user, reason);
 		};
 		if (flag) return ban();
 		await msg.react('464034357955395585');

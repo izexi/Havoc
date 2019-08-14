@@ -19,6 +19,10 @@ export default class EmbedPagination {
 
 	private embedMsg!: HavocMessage;
 
+	private prepend!: string;
+
+	private append!: string;
+
 	public constructor(options: EmbedPaginationOptions) {
 		this.msg = options.msg;
 		this.title = options.title;
@@ -27,6 +31,8 @@ export default class EmbedPagination {
 		this.page = (this.validatePageInt(options.page!) && options.page) || 1;
 		this.hastebin = options.hastebin;
 		this.thumbnails = options.thumbnails;
+		this.prepend = options.prepend || '';
+		this.append = options.append || '';
 		this.setup();
 	}
 
@@ -41,7 +47,7 @@ export default class EmbedPagination {
 	private pageEmbed(page: string | number, paginate: boolean = true) {
 		const embed = this.msg.constructEmbed({
 			setTitle: `${this.title}${paginate ? ` - Page ${page} of ${this.totalPages}` : ''}`,
-			setDescription: this.descriptions.slice((page as number * this.maxPerPage) - this.maxPerPage, page as number * this.maxPerPage).join('\n')
+			setDescription: `${this.prepend}${this.descriptions.slice((page as number * this.maxPerPage) - this.maxPerPage, page as number * this.maxPerPage).join('\n')}${this.append}`
 		});
 		if (this.thumbnails && this.thumbnails[this.page - 1]) {
 			embed.setThumbnail(this.thumbnails[this.page - 1]);
@@ -126,4 +132,6 @@ export interface EmbedPaginationOptions {
 	page?: number;
 	hastebin?: boolean;
 	thumbnails?: string[];
+	prepend?: string;
+	append?: string;
 }

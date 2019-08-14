@@ -47,6 +47,7 @@ export default class Unban extends Command {
 			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${tag} is not banned in this server.` });
 		}
 		await msg.guild.members.unban(user, `Unbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
+		msg.guild.modlog(msg, user, reason);
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have unbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'}` });
 	}
 }
