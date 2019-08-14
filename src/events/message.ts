@@ -59,7 +59,7 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 		} else {
 			params.target = await Targetter.parseTarget(msg);
 			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
-				(target !== null && target !== false) || key === 'loose'
+				(target !== null || target !== false) || key === 'loose'
 					? responses
 					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]
 			, []);

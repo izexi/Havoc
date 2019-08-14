@@ -44,9 +44,10 @@ export default class Help extends Command {
 		const fields = [...categories].reduce((arr: string[][], commandCategory) => {
 			arr.push([
 				`${emojis[commandCategory]} ${Util.captialise(commandCategory)}`,
-				commands
+				`${commands
 					.filter(({ category }) => category === commandCategory)
-					.map(c => `\`${c.name.replace('_', '')}\``).join(', ')
+					.map(c => `\`${c.name.replace('_', '')}\``).join(', ')}
+					⠀`
 			]);
 			return arr;
 		}, []);
