@@ -1,6 +1,6 @@
 import HavocClient from '../client/Havoc';
 import { MessageEmbed, GuildEmoji } from 'discord.js';
-import Log from '../structures/bases/Log';
+import Log from '../structures/Log';
 import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, outdated: GuildEmoji, updated: GuildEmoji) {

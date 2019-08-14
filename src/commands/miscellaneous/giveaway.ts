@@ -12,7 +12,7 @@ export default class Giveaway extends Command {
 			args: [{
 				key: 'subCommand',
 				type: (msg: HavocMessage) => {
-					const option = msg.arg.toLowerCase();
+					const option = msg.arg;
 					if (['start', 'end', 'reroll', 'config'].includes(option)) return option;
 				},
 				prompt: {

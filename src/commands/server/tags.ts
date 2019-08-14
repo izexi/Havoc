@@ -12,7 +12,7 @@ export default class Tags extends Command {
 			args: [{
 				key: 'subCommand',
 				type: (msg: HavocMessage) => {
-					const option = msg.arg.toLowerCase();
+					const option = msg.arg;
 					if (['add', 'delete', 'edit', 'info', 'list'].includes(option)) return option;
 				},
 				prompt: {

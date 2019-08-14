@@ -11,7 +11,7 @@ export default class Botclear extends Command {
 			args: [{
 				key: 'option',
 				type: (msg: HavocMessage) => {
-					const option = msg.arg.toLowerCase();
+					const option = msg.arg;
 					if (['view', 'add', 'remove'].includes(option)) return option;
 				},
 				prompt: {

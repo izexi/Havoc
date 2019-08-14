@@ -12,7 +12,7 @@ export default class GiveawayConfig extends Command {
 			aliases: new Set(['g-config']),
 			args: [{
 				key: 'option',
-				type: (msg: HavocMessage) => ['channel', 'role'].includes(msg.arg.toLowerCase()),
+				type: (msg: HavocMessage) => ['channel', 'role'].includes(msg.arg),
 				prompt: {
 					initialMsg: 'what would you like to configure from giveaways?\nEnter `channel` / `role`.',
 					invalidResponseMsg: 'You will need to enter either `channel` or `role`.'

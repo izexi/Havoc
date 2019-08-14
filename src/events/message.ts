@@ -58,8 +58,8 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 			}).catch(err => Logger.error('Error when assigning targets from prompt', err));
 		} else {
 			params.target = await Targetter.parseTarget(msg);
-			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
-				(target !== null || target !== false) || key === 'loose'
+			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) => 
+				target !== null || key === 'loose' || target === 'optional'
 					? responses
 					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]
 			, []);

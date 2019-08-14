@@ -172,7 +172,7 @@ export default class HavocMessage extends Message {
 	}
 
 	public get arg() {
-		return this.args[0].toLowerCase();
+		return (this.args[0] || '').toLowerCase();
 	}
 
 	private _init() {

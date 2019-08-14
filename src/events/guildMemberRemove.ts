@@ -1,7 +1,7 @@
 import HavocClient from '../client/Havoc';
 import { MessageEmbed, GuildMember } from 'discord.js';
 import HavocGuild from '../extensions/Guild';
-import Log from '../structures/bases/Log';
+import Log from '../structures/Log';
 import Util from '../util/Util';
 import HavocTextChannel from '../extensions/TextChannel';
 

@@ -1,5 +1,5 @@
 import { MessageEmbed, GuildAuditLogsActions, Guild, Invite, GuildAuditLogsEntry } from 'discord.js';
-import HavocGuild from '../../extensions/Guild';
+import HavocGuild from '../extensions/Guild';
 
 export default {
 	ignore(guild: HavocGuild | Guild) {
@@ -23,7 +23,7 @@ export default {
 	async getExecutor({ guild, id }: { guild: Guild; id: string }, type: keyof GuildAuditLogsActions, entry?: GuildAuditLogsEntry | null) {
 		if (this.ignore(guild)) return;
 		if (typeof entry === 'undefined') entry = await this.getEntry(guild, type);
-		if (!entry || !entry.target || entry.createdTimestamp > (Date.now() - 5000) || (!(entry.target instanceof Invite) && entry.target.id !== id)) return null;
+		if (!entry || !entry.target || entry.createdTimestamp > (Date.now() - 10000) || (!(entry.target instanceof Invite) && entry.target.id !== id)) return null;
 		return entry.executor.tag;
 	}
 };

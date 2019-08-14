@@ -11,7 +11,7 @@ export default class Welcomer extends Command {
 			args: [{
 				key: 'subCommand',
 				type: (msg: HavocMessage) => {
-					const option = msg.arg.toLowerCase();
+					const option = msg.arg;
 					if (['enable', 'update', 'disable'].includes(option)) return option;
 				},
 				prompt: {

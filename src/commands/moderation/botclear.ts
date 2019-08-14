@@ -17,7 +17,7 @@ export default class Botclear extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, flag }: { msg: HavocMessage; flag: string }) {
-		if (msg.arg && msg.arg.toLowerCase() === 'config') {
+		if (msg.arg === 'config') {
 			msg.args.shift();
 			return handleMessage(this, msg, this.commands.get('botclear-config')!);
 		}

@@ -1,6 +1,6 @@
 import HavocClient from '../client/Havoc';
 import { MessageEmbed } from 'discord.js';
-import Log from '../structures/bases/Log';
+import Log from '../structures/Log';
 import HavocGuild from '../extensions/Guild';
 import Util from '../util/Util';
 

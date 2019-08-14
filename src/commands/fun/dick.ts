@@ -24,6 +24,7 @@ export default class Dick extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, target: { user } }: { msg: HavocMessage; target: { user: HavocUser } }) {
+		if (!user) user = msg.author;
 		this.db.category = 'dick';
 		this.db.get(user.id).then(async res => {
 			if (!res) {

@@ -19,7 +19,7 @@ export default class Clear extends Command {
 				key: 'userOrNull',
 				optional: true,
 				type: async (msg: HavocMessage) => {
-					if (msg.arg.toLowerCase() === 'none') return null;
+					if (msg.arg === 'none') return null;
 					const { target } = await Targetter.getTarget('user', msg, false);
 					if (target) return target;
 				},

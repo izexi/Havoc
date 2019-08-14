@@ -124,7 +124,7 @@ export default {
 				if (type === 'user') target = await guild.client.users.fetch(target ? target.id : text);
 				break;
 		}
-		if (optional && target === null) target = false;
+		if (optional && target === null) target = 'optional';
 		if (target && type !== 'role' && type !== 'tagName') msg.args.shift();
 		return { target, loose };
 	},
