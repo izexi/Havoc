@@ -6,25 +6,36 @@ import Responses from '../util/Responses';
 import Command, { CommandParams } from '../structures/bases/Command';
 import HavocTextChannel from '../extensions/TextChannel';
 import Util from '../util/Util';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, PermissionString } from 'discord.js';
 
 export async function handleMessage(client: HavocClient, msg: HavocMessage, command: Command) {
 	const params: CommandParams = { msg, target: {} };
 	msg.command = command;
 	if (command.userPerms) {
 		let permRole;
-		const { role, flags } = command.userPerms;
+		let { role, flags } = command.userPerms;
 		if (role) permRole = await role(msg);
 		if (!(role && msg.member!.roles.has(permRole)) && !(flags && msg.member!.hasPermission(flags))) {
+			if (flags) flags = Array.isArray(flags) ? flags : [flags] as PermissionString[];
 			await msg.react('⛔');
 			return msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''} you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)} in order to use this command.`
+				setDescription: `**${msg.author.tag}** you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''}${flags ? ` you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)}` : ''} in order to use this command.`
 			});
 		}
-		if (!(flags && msg.guild.me!.hasPermission(flags))) {
+		if (flags && !msg.guild.me!.hasPermission(flags)) {
+			flags = Array.isArray(flags) ? flags : [flags] as PermissionString[];
 			return msg.response = await msg.sendEmbed({
 				setDescription: `**${msg.author.tag}** I do not have sufficient permisions to use this command I need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)} in order to use this command.`
 			});
+		}
+	}
+	if (command.category === 'donators') {
+		if (command.name === 'emojify') {
+			if (!client.donators.get('10')!.has(msg.author.id)) {
+				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** only donators can use this command, do \`${msg.prefix}donate\` for more info` });
+			}
+		} else if (!client.donators.get('5')!.has(msg.author.id)) {
+			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** only donators can use this command, do \`${msg.prefix}donate\` for more info` });
 		}
 	}
 	if (command.flags.size) {
@@ -58,7 +69,7 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 			}).catch(err => Logger.error('Error when assigning targets from prompt', err));
 		} else {
 			params.target = await Targetter.parseTarget(msg);
-			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) => 
+			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
 				target !== null || key === 'loose' || target === 'optional'
 					? responses
 					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]

@@ -8,6 +8,7 @@ export default {
 	async send(guild: HavocGuild, embed: MessageEmbed) {
 		if (this.ignore(guild)) return;
 		const webhook = await guild.getWebhook();
+		if (!webhook) return;
 		webhook!.send({
 			embeds: [embed],
 			username: ',HavocLogs',

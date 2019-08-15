@@ -15,6 +15,7 @@ export default class Ban extends Command {
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username who you would like to ban.' }
 			},
 			{
+				optional: true,
 				key: 'reason',
 				type: 'string',
 				prompt: {

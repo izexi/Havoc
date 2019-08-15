@@ -52,7 +52,12 @@ export default class Help extends Command {
 			return arr;
 		}, []);
 		msg.response = await msg.sendEmbed({
-			setDescription: `You can view more info about a command by doing \`${msg.prefix}help [command name]\`\nClick **[here](https://discord.gg/3Fewsxq)** to join the support server here\nClick **[here](https://discordapp.com/oauth2/authorize?client_id=${this.user!.id}&scope=bot&permissions=2146958591)** to invite me to your server\n⠀`,
+			setDescription:
+				`You can view more info about a command by doing \`${msg.prefix}help [command name]\`
+				Click **[here](https://discord.gg/3Fewsxq)** to join the support server here
+				Click **[here](https://discordapp.com/oauth2/authorize?client_id=${this.user!.id}&scope=bot&permissions=2146958591)** to invite me to your server
+				Click **[here](https://www.patreon.com/user?u=15028160)** to support me by donating
+				⠀`,
 			addField: fields
 		});
 	}

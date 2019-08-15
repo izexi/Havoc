@@ -10,6 +10,12 @@ const { token } = require('../../config.json');
 export default class HavocClient extends Client {
 	public havoc = '191615925336670208';
 
+	public donators: Map<string, Set<string>> = new Map([
+		['1', new Set()],
+		['5', new Set()],
+		['10', new Set()]
+	]);
+
 	public db = new Database();
 
 	public supportServer!: Guild;

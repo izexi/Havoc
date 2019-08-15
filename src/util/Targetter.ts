@@ -99,7 +99,7 @@ export default {
 				target = Time.parse(text);
 				break;
 			case 'id':
-				if (Regex.id.test(text)) target = text;
+				if (Regex.id.test(text)) target = text.match(Regex.id)![0];
 				break;
 			case 'channel':
 				target = msg.mentions.channels.first() || guild.channels.find(c => c.name.toLowerCase() === text.toLowerCase()) || guild.channels.get(text) as HavocTextChannel;
