@@ -22,9 +22,11 @@ export default async function(this: HavocClient, outdated: HavocMessage, updated
 	let txt = '';
 	if (outdated.content.length >= 900) txt += `BEFORE:\r\n${outdated.content}`;
 	if (updated.content.length >= 900) txt += `\nAFTER:\r\n${updated.content}`;
-	embed.attachFiles([{
-		attachment: Buffer.from(txt, 'utf8'),
-		name: 'edited_content.txt'
-	}]);
+	if (outdated.content.length >= 900 || updated.content.length >= 900) {
+		embed.attachFiles([{
+			attachment: Buffer.from(txt, 'utf8'),
+			name: 'edited_content.txt'
+		}]);
+	}
 	Log.send(updated.guild as HavocGuild, embed);
 }
