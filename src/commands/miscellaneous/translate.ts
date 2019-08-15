@@ -2,7 +2,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-const translate = require('google-translate-api');
+const translate = require('@vitalets/google-translate-api');
 const langMap = require('../../assets/langmap.json');
 const langs = require('../../assets/langs.json');
 
