@@ -5,6 +5,7 @@ import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, outdated: VoiceState, updated: VoiceState) {
 	if (!outdated.channel && !updated.channel) return;
+	if ((outdated.channel && updated.channel) && outdated.channel.id === updated.channel.id) return;
 	Log.send(updated.guild as HavocGuild,
 		new MessageEmbed()
 			/* eslint-disable @typescript-eslint/indent */
