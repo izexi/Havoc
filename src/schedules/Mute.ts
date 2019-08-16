@@ -37,7 +37,7 @@ export default class MuteSchedule extends Schedule {
 		if (!member) return;
 		// @ts-ignore
 		const muteRole = await this._client.commands.handler.get('mute').getMuteRole(guild);
-		if (this.timeLeft <= 0) {
+		if (this.length !== -1 && this.timeLeft <= 0) {
 			member.roles.remove(muteRole, 'Duration for mute has ended');
 		}
 		await this.delete();

@@ -19,6 +19,7 @@ export default class LogsEnable extends Command {
 	public async run(this: HavocClient, { msg, target: { channel } }: { msg: HavocMessage; target: { channel: HavocTextChannel } }) {
 		const { logs } = await msg.guild.config;
 		await msg.guild.addConfig({ logs: channel.id });
+		msg.guild.logsEnabled = true;
 		msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${channel && msg.guild.channels.has(logs) ? `I have updated the logs channel from ${msg.guild.channels.get(logs)} to ${channel}` : `I have enabled logs in ${channel} for this server.`}` });
 		const existing = await msg.guild.getWebhook();
 		if (!existing) {

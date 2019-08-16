@@ -96,7 +96,7 @@ export default class Mute extends Command {
 		}
 		if (member.roles.has(muteRole.id)) return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${member.user.tag}\` is already muted.` });
 		await this.scheduler.add('mute',
-			new MuteSchedule(this, time ? (Date.now() + (time as number)) : 0, {
+			new MuteSchedule(this, time ? (Date.now() + (time as number)) : -1, {
 				guild: msg.guild.id,
 				member: member.id,
 				length: time as number,
