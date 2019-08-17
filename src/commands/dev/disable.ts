@@ -17,8 +17,7 @@ export default class Reload extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: Command } }) {
-		const command = target;
+	public async run(this: HavocClient, { msg, target: { command } }: { msg: HavocMessage; target: { command: Command } }) {
 		this.commands.disabled.add(command.name);
 		msg.response = await msg.sendEmbed({
 			setDescription: `**${msg.author.tag}** the command \`${command.name}\` been disabled.`

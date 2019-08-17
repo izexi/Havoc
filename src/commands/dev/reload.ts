@@ -19,8 +19,7 @@ export default class Reload extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, targetObj: { target } }: { msg: HavocMessage; targetObj: { target: Command } }) {
-		const command = target;
+	public async run(this: HavocClient, { msg, target: { command } }: { msg: HavocMessage; target: { command: Command } }) {
 		try {
 			msg.response = await msg.sendEmbed({
 				setDescription: `Attempting to reload \`${command.name}\`...`
