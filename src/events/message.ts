@@ -70,13 +70,16 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 		} else {
 			params.target = await Targetter.parseTarget(msg);
 			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
-				target !== null || key === 'loose' || target === 'optional'
+				// eslint-disable-next-line no-eq-null
+				target != null || key === 'loose' || target === 'optional'
 					? responses
 					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]
 			, []);
+			const optionalEntry = Object.entries(params.target).find(([, v]) => v === 'optional');
+			if (optionalEntry) params.target[optionalEntry[0]] = false;
 			if (invalidResponses.length) {
 				return msg.sendEmbed({
-					setDescription: `**${msg.author.tag}** ${invalidResponses.join('\n')}`
+					setDescription: `**${msg.author.tag}** you have entered an invalid arguement. ${invalidResponses.join('\n')}`
 				});
 			}
 		}

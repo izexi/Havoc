@@ -32,8 +32,8 @@ export default class Servermutes extends Command {
 				const desc = [];
 				thumbnails.push((await this.users.fetch(member)).displayAvatarURL());
 				desc.push(`**Muted User:** ${(await this.users.fetch(member)).tag}`);
-				if (endTime) desc.push(`**Time Left:**  ${ms(endTime - Date.now(), { 'long': true })}`);
-				desc.push(`**Mute Length:**  ${length === -1 ? '∞ minutes' : ms(length, { 'long': true })}`);
+				if (endTime !== -1) desc.push(`**Time Left:**  ${ms(endTime - Date.now(), { 'long': true })}`);
+				desc.push(`**Mute Length:**  ${endTime === -1 ? '∞ minutes' : ms(length, { 'long': true })}`);
 				desc.push(`**Muted By:** ${(await this.users.fetch(muter)).tag}`);
 				if (reason) desc.push(`**Reason:** ${reason}`);
 				return desc.join('\n');
