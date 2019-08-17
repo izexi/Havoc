@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import { handleMessage } from '../../events/message';
+import Responses from '../../util/Responses';
 
 export default class Giveaway extends Command {
 	public constructor() {
@@ -27,6 +28,20 @@ export default class Giveaway extends Command {
 					return role;
 				},
 				flags: 'MANAGE_GUILD'
+			},
+			usage: [
+				'[start] [time] [number of winners] [prize]',
+				`[config] [channel] [${Responses.usage('channel')}]`,
+				`[config] [role] [${Responses.usage('role')}]`,
+				'[end] [giveaway ID]',
+				'[reroll] [giveaway ID]'
+			],
+			examples: {
+				'start 2d 5 nothing': 'starts a giveaway for 5 possible winners that rewards "nothing" ending in 2 days',
+				'config channel {channel}': 'changes the giveaway channel to the corresponding channel (future giveaways will take place in this channel)',
+				'config role {role}': 'changes the giveaway role to the corresponding role (anyone with this role can start/config/end/reroll giveaways)',
+				'end {id}': 'ends the giveaway with the corresponding ID',
+				'reroll {id}': 'rerolls the giveaway with the corresponding ID'
 			}
 		});
 	}

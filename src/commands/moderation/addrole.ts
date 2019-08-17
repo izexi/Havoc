@@ -16,12 +16,22 @@ export default class AddRole extends Command {
 			{
 				type: 'role',
 				prompt: { initialMsg: 'mention the role / enter the role\'s ID or name that you would like to add to the member.' }
+			},
+			{
+				optional: true,
+				key: 'reason',
+				type: 'string',
+				prompt: { initialMsg: 'enter the reason for adding this role.' }
 			}],
-			userPerms: { flags: 'MANAGE_ROLES' }
+			userPerms: { flags: 'MANAGE_ROLES' },
+			examples: {
+				'{member} {role}': 'adds the corresponding role to the mentioned member',
+				'{user} {role} very important': 'adds the corresponding role to the mentioned member with the reason "very important"'
+			}
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { member, role, loose } }: { msg: HavocMessage; target: { member: GuildMember; role: Role; loose?: string } }) {
+	public async run(this: HavocClient, { msg, target: { member, role, reason, loose } }: { msg: HavocMessage; target: { member: GuildMember; role: Role; reason: string; loose?: string } }) {
 		let response;
 		const tag = loose ? member.user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : member.user.tag;
 		if (msg.guild.me!.roles.highest.comparePositionTo(role) < 1) {
@@ -36,7 +46,7 @@ export default class AddRole extends Command {
 		if (response) {
 			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
 		}
-		await member.roles.add(role, `Added by ${msg.author.tag}`);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have added the role \`${role.name}\` to ${tag}.` });
+		await member.roles.add(role, `Added by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
+		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have added the role \`${role.name}\` to ${tag}${reason ? ` for the reason \`${reason}\`` : ''}.` });
 	}
 }

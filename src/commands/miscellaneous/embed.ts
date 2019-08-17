@@ -11,7 +11,8 @@ export default class Embed extends Command {
 			args: [{
 				type: 'string',
 				prompt: { initialMsg: 'enter the text that you would like to embed.' }
-			}]
+			}],
+			examples: { havoc: 'responds with "havoc" in an embed' }
 		});
 	}
 

@@ -3,6 +3,7 @@ import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import fetch from 'node-fetch';
 import { Util } from 'discord.js';
+import Responses from '../../util/Responses';
 
 export default class UploadEmoji extends Command {
 	public constructor() {
@@ -34,7 +35,12 @@ export default class UploadEmoji extends Command {
 					invalidResponseMsg: 'You need to enter a valid direct image URL or a valid custom emoji.'
 				}
 			}],
-			userPerms: { flags: 'MANAGE_EMOJIS' }
+			userPerms: { flags: 'MANAGE_EMOJIS' },
+			usage: [`[${Responses.usage('emoji')}] <emoji name>`],
+			examples: {
+				'https://cdn.discordapp.com/avatars/393848142585397248/24294285c3b57b10af4501a5413ece85.png havoc': 'uploads the corresponding emoji to the guild named "havoc"',
+				'{emoji}': 'uploads the corresponding emoji to the guild named "emoji" as a default'
+			}
 		});
 	}
 

@@ -70,7 +70,8 @@ export default {
 	},
 
 	async getTarget(type: TargetType, msg: HavocMessage, optional: boolean | undefined) {
-		const text = type === 'string' || type === 'role' || type === 'tagName' ? msg.text : msg.arg;
+		let text = type === 'string' || type === 'role' || type === 'tagName' ? msg.text : msg.arg;
+		if (type === 'question' || type === 'options') text = msg.content.replace(/\s?-time=[^\s]*/, '');
 		const guild = msg.guild;
 		let target = null;
 		let loose = null;
@@ -113,6 +114,16 @@ export default {
 					target = text.split(' ')[0];
 				}
 				msg.args.splice(0, target.split(' ').length);
+			case 'question':
+				if (text.includes('q:')) target = (text.match(/q:(.*)a:/i) || [])[1];
+				else target = text;
+				if (target) msg.args.splice(0, target.split(' ').length);
+				break;
+			case 'options':
+				if (text.includes('a:')) target = (text.match(/^.*a:(.*)$/i) || [])[1];
+				else target = text;
+				if (target) msg.args.splice(0, target.split(' ').length);
+				break;
 			default:
 				if (type === 'user' || type === 'member') {
 					target = await this.member.mentionOrIDSearch(text, guild) || await this.member.nameSearch(text, guild);
@@ -125,7 +136,7 @@ export default {
 				break;
 		}
 		if (optional && target === null) target = 'optional';
-		if (target && type !== 'role' && type !== 'tagName') msg.args.shift();
+		if (target && !['role', 'tagName', 'question', 'options'].includes(type as string)) msg.args.shift();
 		return { target, loose };
 	},
 

@@ -10,7 +10,8 @@ export default class Omegalul extends Command {
 			args: [{
 				type: 'string',
 				prompt: { initialMsg: 'enter the text that you would like to replaces any `o`s with <:omegalul:457981874531467265>.' }
-			}]
+			}],
+			examples: { havoc: 'hav<:omegalul:457981874531467265>c' }
 		});
 	}
 

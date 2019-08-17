@@ -11,7 +11,8 @@ export default class Mock extends Command {
 			args: [{
 				type: 'string',
 				prompt: { initialMsg: 'enter the text that you would like to mock.' }
-			}]
+			}],
+			examples: { havoc: 'HaVoC' }
 		});
 	}
 

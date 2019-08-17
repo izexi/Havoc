@@ -17,7 +17,11 @@ export default class Gay extends Command {
 		super(__filename, {
 			opts: 0b0000,
 			description: 'A 100% accurate gayness calculator.',
-			args: [{ type: 'user' }]
+			args: [{ type: 'user' }],
+			examples: {
+				'': 'responds with your percentage of gayness',
+				'@Havoc': 'responds with Havoc\'s percentage of gayness'
+			}
 		});
 	}
 

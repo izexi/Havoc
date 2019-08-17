@@ -33,7 +33,12 @@ export default class Mute extends Command {
 					initialMsg: 'enter the reason for the mute.',
 					invalidResponseMsg: 'You need to enter a reason for the mute or you can enter `None` if you would not like to provide a reason.'
 				}
-			}]
+			}],
+			examples: {
+				'{member}': 'mutes the corresponding member forever',
+				'20 {user}': 'mutes the corresponding member for 20 minutes',
+				'5d {user} spam': 'mutes the corresponding member for 5 days for the reason "spam"'
+			}
 		});
 	}
 

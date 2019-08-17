@@ -17,7 +17,11 @@ export default class RemoveRole extends Command {
 				type: 'role',
 				prompt: { initialMsg: 'mention the role / enter the role\'s ID or name that you would like to remove from the member.' }
 			}],
-			userPerms: { flags: 'MANAGE_ROLES' }
+			userPerms: { flags: 'MANAGE_ROLES' },
+			examples: {
+				'{member} {role}': 'removes the corresponding role from the mentioned member',
+				'{user} {role} very important': 'revmoes the corresponding role from the mentioned member with the reason "very important"'
+			}
 		});
 	}
 

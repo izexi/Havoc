@@ -4,7 +4,7 @@ import HavocClient from '../../client/Havoc';
 import Prompt from '../../structures/Prompt';
 import { Role } from 'discord.js';
 
-export default class Kick extends Command {
+export default class DeleteRole extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b1000,
@@ -14,8 +14,18 @@ export default class Kick extends Command {
 			args: [{
 				type: 'role',
 				prompt: { initialMsg: 'mention the role / enter the role\'s name or ID that you would like to list members from.' }
+			},
+			{
+				optional: true,
+				key: 'reason',
+				type: 'string',
+				prompt: { initialMsg: 'enter the reason for deleting this role.' }
 			}],
-			userPerms: { flags: 'MANAGE_ROLES' }
+			userPerms: { flags: 'MANAGE_ROLES' },
+			examples: {
+				'{role}': 'deletes the mentioned role',
+				'{role} trash': 'deletes the mentioned role with the reason "trash"'
+			}
 		});
 	}
 

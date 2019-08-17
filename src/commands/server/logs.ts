@@ -19,7 +19,15 @@ export default class Logs extends Command {
 					invalidResponseMsg: 'You will need to enter either `enable`, `update` or `disable`'
 				}
 			}],
-			userPerms: { flags: 'MANAGE_GUILD' }
+			userPerms: { flags: 'MANAGE_GUILD' },
+			usage: [
+				'[enable | updated] [{channel}]',
+				'[disable]'
+			],
+			examples: {
+				'enable {channel}': 'enables logs in the server for the corresponding channel',
+				'disable': 'disables logs in the server'
+			}
 		});
 	}
 

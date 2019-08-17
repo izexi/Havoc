@@ -11,7 +11,8 @@ export default class Clap extends Command {
 			args: [{
 				type: 'string',
 				prompt: { initialMsg: 'enter the text that you would like to embed.' }
-			}]
+			}],
+			examples: { 'h a v o c': 'responds with "h👏a👏v👏o👏c"' }
 		});
 	}
 

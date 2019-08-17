@@ -12,7 +12,8 @@ export default class Catfish extends Command {
 			args: [{
 				type: 'user',
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username whose avatar you would like to search.' }
-			}]
+			}],
+			examples: { '@Havoc': 'responds with a Google image search of Havoc\'s avatar' }
 		});
 	}
 

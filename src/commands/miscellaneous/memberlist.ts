@@ -19,8 +19,7 @@ export default class MemberList extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, flag, targetObj: { target } }: { msg: HavocMessage; flag: string; targetObj: { target: Role } }) {
-		const role = target;
+	public async run(this: HavocClient, { msg, flag, target: { role } }: { msg: HavocMessage; flag: string; target: { role: Role } }) {
 		const flagObj: { [key: string]: string[] } = {
 			id: ['id'],
 			tag: ['user', 'tag'],

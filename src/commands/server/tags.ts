@@ -20,7 +20,23 @@ export default class Tags extends Command {
 					invalidResponseMsg: 'You will need to enter either `add`, `delete`, `edit`, `info` or `list`'
 				}
 			}],
-			userPerms: { flags: 'MANAGE_GUILD' }
+			userPerms: { flags: 'MANAGE_GUILD' },
+			usage: [
+				'[add] [name] [content]',
+				'[delete] [name]',
+				'[edit] [name] [new content]',
+				'[info] [name]',
+				'[list]'
+			],
+			examples: {
+				'add hi hello': 'adds a tag with the name "hi" that will respond with "hello" when `{prefix}hi` is entered',
+				'add "h i" h e l l o': 'adds the tag with the name "h i" that will respond with "h e l l o" when `{prefix}h i` is entered',
+				'delete hi': 'delets the tag with the name "hi"',
+				'edit hi Hello': 'edits the tag with the name "hi" so that it will now respond with "Hello" when `{prefix}hi` is entered',
+				'edit "h i" H e l l o': 'edits the tag with the name "h i" so that it will now respond with "H e l l o" when `{prefix}hi` is entered',
+				'info hi': 'view info about the tag with the name "hi"',
+				'list': 'view a list of all the tags on the server'
+			}
 		});
 	}
 

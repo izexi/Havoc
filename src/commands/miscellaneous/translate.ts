@@ -16,7 +16,12 @@ export default class Translate extends Command {
 				type: 'string',
 				prompt: { initialMsg: 'enter the text that you would like to translate with an optional language that you would like to translate to as a flag (defaulted to English).' }
 			}],
-			flags: new Set(Object.values(langMap as { aliases: string[] }[]).reduce((arr: string[], lang) => arr.concat(lang.aliases), []))
+			flags: new Set(Object.values(langMap as { aliases: string[] }[]).reduce((arr: string[], lang) => arr.concat(lang.aliases), [])),
+			usage: ['[text to translate] <{prefix}language to translate to (English by default)>'],
+			examples: {
+				'sí': 'responds with the translation of "sí" in English "yes"',
+				'yes {prefix}spanish': 'responds with the translation of "yes" in Spanish "sí"'
+			}
 		});
 	}
 

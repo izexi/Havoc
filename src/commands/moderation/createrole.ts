@@ -13,7 +13,9 @@ export default class AddRole extends Command {
 				key: 'name',
 				prompt: { initialMsg: 'enter the name that you would like to name the new role' }
 			}],
-			userPerms: { flags: 'MANAGE_ROLES' }
+			userPerms: { flags: 'MANAGE_ROLES' },
+			usage: ['[name of the role]'],
+			examples: { havoc: 'creates a role named havoc' }
 		});
 	}
 

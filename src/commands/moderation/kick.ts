@@ -23,7 +23,11 @@ export default class Kick extends Command {
 					invalidResponseMsg: 'You need to enter a reason for the kick or you can enter `None` if you would not like to provide a reason.'
 				}
 			}],
-			userPerms: { flags: 'KICK_MEMBERS' }
+			userPerms: { flags: 'KICK_MEMBERS' },
+			examples: {
+				'{member}': 'kicks the mentioned member',
+				'{user} annoying': 'kicks the mentioned member with the reason "annoying"'
+			}
 		});
 	}
 

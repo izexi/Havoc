@@ -17,7 +17,9 @@ export default class Kick extends Command {
 				type: 'string',
 				prompt: { initialMsg: 'enter the nickname.' }
 			}],
-			userPerms: { flags: 'MANAGE_NICKNAMES' }
+			userPerms: { flags: 'MANAGE_NICKNAMES' },
+			usage: ['[{member}] [nickname]'],
+			examples: { '{member} havoc': 'changes the nickname of the corresponding member to "havoc"' }
 		});
 	}
 

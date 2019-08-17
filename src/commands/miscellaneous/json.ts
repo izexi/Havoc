@@ -23,7 +23,9 @@ export default class Json extends Command {
 					initialMsg: 'enter the URL.',
 					invalidResponseMsg: 'You need to enter a valid absolute URL.'
 				}
-			}]
+			}],
+			usage: ['[url]'],
+			examples: { 'https://jsonplaceholder.typicode.com/todos/1': `responds with${Util.codeblock(`{\n  "userId": 1,\n  "id": 1,\n  "title": "delectus aut autem",\n  "completed": false\n}`, 'json')}` }
 		});
 	}
 

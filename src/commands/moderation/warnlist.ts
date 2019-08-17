@@ -14,7 +14,8 @@ export default class WarnList extends Command {
 				type: 'user',
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username whose warnings you would like to view.' }
 			}],
-			userPerms: { flags: 'MANAGE_GUILD' }
+			userPerms: { flags: 'MANAGE_GUILD' },
+			examples: { '{user}': 'view all warnings from the mentioned member' }
 		});
 	}
 

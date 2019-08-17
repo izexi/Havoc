@@ -13,31 +13,31 @@ export default class Poll extends Command {
 			opts: 0b1000,
 			description: 'Create a poll with options.',
 			args: [{
-				key: 'question',
-				type: 'string',
-				prompt: { initialMsg: 'enter the question that you would like to poll (optional - you may specify a time limit using the `time` flag suffix the time with `w`/`d`/`h`/`m`/`s`, e.g: `3m5s` would be 3 minutes and 5 seconds.)\nE.g: \`pick one -time=10m\` will create a poll with the question "pick one" thaht will end in 10 minutes.' }
+				type: 'question',
+				prompt: {
+					initialMsg: 'enter the question that you would like to poll (optional - you may specify a time limit using the `time` flag suffix the time with `w`/`d`/`h`/`m`/`s`, e.g: `3m5s` would be 3 minutes and 5 seconds.)\nE.g: \`pick one -time=10m\` will create a poll with the question "pick one" thaht will end in 10 minutes.',
+					invalidResponseMsg: 'you need to enter the question prefixed with `q:` followed by the options prefixed with `a:` and seperated by `;`'
+				}
 			},
 			{
-				key: 'options',
-				type: 'string',
-				prompt: { initialMsg: 'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no' }
+				type: 'options',
+				prompt: {
+					initialMsg: 'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no',
+					invalidResponseMsg: 'you need to enter the question prefixed with `q:` followed by the options prefixed with `a:` and seperated by `;`'
+				}
 			}],
-			flags: new Set(['time'])
+			flags: new Set(['time']),
+			usage: ['q:[question] a:[option1; option2; etc...] <{prefix}time=time>'],
+			examples: {
+				'q:is havoc the best bot ever a:yes; yes': 'starts a poll with the question "is havoc the best bot ever" with the options "yes" and "yes"',
+				'q:is havoc the best bot ever a:yes; yes {prefix}time=10m': 'starts a poll with the question "is havoc the best bot ever" with the options "yes" and "yes" that will last for 10 minutes'
+			}
 		});
 	}
 
 	public async run(this: HavocClient, { msg, target: { question, options }, flag }: { msg: HavocMessage; target: { question: string; options: string }; flag: string }) {
 		const invalidResponses = [];
 		let time = 0;
-		if (question.includes('q:') && question.includes('a:')) {
-			question = (msg.text.match(/q:(.*)a:/i) || [])[1];
-			options = (msg.text.match(/^.*a:(.*)$/i) || [])[1];
-		}
-		if (!question || !options) {
-			return msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** you have used this command incorrectly, enter \`${msg.prefix}help poll\` for more info.`
-			});
-		}
 		const formattedOptions = options.split(';').map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
 		if (flag) time = Time.parse(flag.slice(5));
 		if (!question || !options) invalidResponses.push(`you have used this command incorrectly, enter \`${msg.prefix}help poll\` for more info`);

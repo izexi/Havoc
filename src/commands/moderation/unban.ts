@@ -13,6 +13,7 @@ export default class Unban extends Command {
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username who you would like to unban.' }
 			},
 			{
+				optional: true,
 				key: 'reason',
 				type: 'string',
 				prompt: {
@@ -20,7 +21,11 @@ export default class Unban extends Command {
 					invalidResponseMsg: 'You need to enter a reason for the unban or you can enter `None` if you would not like to provide a reason.'
 				}
 			}],
-			userPerms: { flags: 'BAN_MEMBERS' }
+			userPerms: { flags: 'BAN_MEMBERS' },
+			examples: {
+				'{member}': 'unbans the mentioned member',
+				'{user} accident': 'unbans the mentioned member with the reason "accident"'
+			}
 		});
 	}
 

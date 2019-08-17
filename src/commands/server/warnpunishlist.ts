@@ -3,11 +3,11 @@ import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import Util from '../../util/Util';
 
-export default class Avatar extends Command {
+export default class WarnpunishList extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b0011,
-			description: 'View the current prefix.',
+			description: 'View the current punishments for warns on the server.',
 			aliases: new Set(['warnplist', 'punishmentlist'])
 		});
 	}

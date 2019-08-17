@@ -15,6 +15,7 @@ export default class Softban extends Command {
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username who you would like to softban.' }
 			},
 			{
+				optional: true,
 				key: 'reason',
 				type: 'string',
 				prompt: {
@@ -22,7 +23,11 @@ export default class Softban extends Command {
 					invalidResponseMsg: 'You need to enter a reason for the softban or you can enter `None` if you would not like to provide a reason.'
 				}
 			}],
-			userPerms: { flags: 'BAN_MEMBERS' }
+			userPerms: { flags: 'BAN_MEMBERS' },
+			examples: {
+				'{member}': 'softbans the mentioned member',
+				'{user} spam': 'softbans the mentioned member with the reason "spam"'
+			}
 		});
 	}
 

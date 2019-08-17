@@ -21,7 +21,11 @@ export default class Unmute extends Command {
 					initialMsg: 'enter the reason for the unmute.',
 					invalidResponseMsg: 'You need to enter a reason for the unmute or you can enter `None` if you would not like to provide a reason.'
 				}
-			}]
+			}],
+			examples: {
+				'{member}': 'unmutes the mentioned member',
+				'{user} accident': 'unmutes the mentioned member with the reason "accident"'
+			}
 		});
 	}
 

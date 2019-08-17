@@ -19,6 +19,10 @@ export default abstract class implements CommandOptions {
 
 	public args: CommandOptions['args'];
 
+	public examples: CommandOptions['examples'];
+
+	public usage: CommandOptions['usage'];
+
 	public constructor(__path: string, options: CommandOptions) {
 		// @ts-ignore
 		const { groups: { name, category } } = __path.match(/[\\\/](?<category>[a-z]+)[\\\/](?<name>[_a-z\-\d]+)\.ts/i);
@@ -29,6 +33,8 @@ export default abstract class implements CommandOptions {
 		this.opts = options.opts;
 		this.args = options.args;
 		this.flags = options.flags || new Set();
+		this.examples = options.examples || {};
+		this.usage = options.usage;
 		this.userPerms = options.userPerms;
 	}
 
@@ -58,7 +64,10 @@ interface CommandOptions {
 			invalidResponseMsg?: string;
 			validateFn?: Function;
 		};
+		usage?: string;
 	}[];
+	examples?: { [key: string]: string };
+	usage?: string[];
 	flags?: Set<string>;
 	userPerms?: {
 		role?: Function;
@@ -76,4 +85,4 @@ export interface CommandParams {
 	flag?: string;
 }
 
-export type TargetType = 'member' | 'user' | 'channel' | 'emoji' | 'string' | 'command' | 'role' | 'number' | 'id' | 'time' | Function | 'tagName';
+export type TargetType = 'member' | 'user' | 'channel' | 'emoji' | 'string' | 'command' | 'role' | 'number' | 'id' | 'time' | Function | 'tagName' | 'question' | 'options';

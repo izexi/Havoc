@@ -25,7 +25,6 @@ export default class TagsEdit extends Command {
 
 	public async run(this: HavocClient, { msg, target: { name, content } }: { msg: HavocMessage; target: { name: string; content: string } }) {
 		const tag = await msg.client.db.fieldQuery('tags', false, ['guild', msg.guild.id], ['name', name]);
-		console.log(content.length);
 		if (!tag) {
 			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** I couldn't find a tag with the name \`${name}\` on this server.` });
 		}

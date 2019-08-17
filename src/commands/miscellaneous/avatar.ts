@@ -10,7 +10,11 @@ export default class Avatar extends Command {
 			opts: 0b0011,
 			description: 'View a user\'s avatar along with the URL.',
 			aliases: new Set(['a', 'av']),
-			args: [{ type: 'user' }]
+			args: [{ type: 'user' }],
+			examples: {
+				'': 'responds with your avatar along with the URL',
+				'@Havoc': 'responds with Havoc\'s avatar along with the URL'
+			}
 		});
 	}
 

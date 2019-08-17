@@ -14,7 +14,8 @@ export default class WarnClear extends Command {
 				type: 'member',
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username whose warnings you would like to clear.' }
 			}],
-			userPerms: { flags: 'ADMINISTRATOR' }
+			userPerms: { flags: 'ADMINISTRATOR' },
+			examples: { '{member}': 'clears all warnings from the mentioned member' }
 		});
 	}
 

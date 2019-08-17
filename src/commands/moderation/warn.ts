@@ -16,6 +16,7 @@ export default class Warn extends Command {
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username who you would like to warn.' }
 			},
 			{
+				optional: true,
 				key: 'reason',
 				type: 'string',
 				prompt: {
@@ -23,7 +24,11 @@ export default class Warn extends Command {
 					invalidResponseMsg: 'You need to enter a reason for the warn or you can enter `None` if you would not like to provide a reason.'
 				}
 			}],
-			userPerms: { flags: ['MANAGE_ROLES', 'KICK_MEMBERS', 'BAN_MEMBERS'] }
+			userPerms: { flags: ['MANAGE_ROLES', 'KICK_MEMBERS', 'BAN_MEMBERS'] },
+			examples: {
+				'{member}': 'warns the mentioned member',
+				'{user} toxic': 'warns the mentioned member with the reason "toxic"'
+			}
 		});
 	}
 

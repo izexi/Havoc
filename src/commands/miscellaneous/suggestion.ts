@@ -5,6 +5,7 @@ import { GuildChannel, SnowflakeUtil } from 'discord.js';
 import HavocTextChannel from '../../extensions/TextChannel';
 import Util from '../../util/Util';
 import { handleMessage } from '../../events/message';
+import Responses from '../../util/Responses';
 
 export async function getSuggestionChannel(msg: HavocMessage) {
 	const existing = msg.guild.channels.find((channel: GuildChannel) => channel.name === 'suggestions');
@@ -41,7 +42,21 @@ export default class Suggestion extends Command {
 				key: 'suggestionOrSubCommand',
 				type: 'string',
 				prompt: { initialMsg: 'enter the suggestion that you would like to create or enter whether you will like to `approve`, `deny` or `config` the suggestion by entering the according option.' }
-			}]
+			}],
+			usage: [
+				'[approve] [suggestion ID] <reason>',
+				'[deny] [suggestion ID] <reason>',
+				`[config] [channel] [${Responses.usage('channel')}]`,
+				`[config] [role] [${Responses.usage('role')}]`
+			],
+			examples: {
+				'approve {id}': 'approves the suggestion with the corresponding ID',
+				'approve {id} yes': 'approves the suggestion with the corresponding ID with the reason "yes"',
+				'deny {id}': 'denies the suggestion with the corresponding ID',
+				'deny {id} no': 'denies the suggestion with the corresponding ID with the reason "yes"',
+				'config channel {channel}': 'changes the suggestion channel to the corresponding channel (future giveaways will take place in this channel)',
+				'config role {role}': 'changes the suggestion role to the corresponding role (anyone with this role can approve/deny/config giveaways)'
+			}
 		});
 	}
 

@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 
-export default class Avatar extends Command {
+export default class Warnpunish extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b1000,
@@ -24,7 +24,17 @@ export default class Avatar extends Command {
 					initialMsg: 'enter the punishment, which can be either `None`, mute [minutes]`, `kick` or `ban`',
 					invalidResponseMsg: 'you need to enter `mute 30` for example or `kick` or `ban` as the punishment'
 				}
-			}]
+			}],
+			usage: [
+				'[number of punishments] [none | kick | ban]',
+				'[number of punishments] [mute] [number of minutes to mute]'
+			],
+			examples: {
+				'3 none': 'removes the punishment for 3 warns',
+				'4 kick': 'sets the punishment for 3 warns to a kick from the server',
+				'6 kick': 'sets the punishment for 6 warns to a ban from the server',
+				'2 mute 10': 'sets the punishment for 2 warns to mute for 10 minutes'
+			}
 		});
 	}
 

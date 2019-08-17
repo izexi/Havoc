@@ -15,7 +15,9 @@ export default class Json extends Command {
 					initialMsg: 'enter the song you would like to play.',
 					invalidResponseMsg: 'You need to enter the song\'s name or a URL.'
 				}
-			}]
+			}],
+			usage: ['[song name or URL]'],
+			examples: { 'https://www.youtube.com/watch?v=dQw4w9WgXcQ': 'plays the corresponding song' }
 		});
 	}
 

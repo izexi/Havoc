@@ -28,7 +28,12 @@ export default class Clear extends Command {
 					invalidResponseMsg: 'You need to enter a valid user or you can enter `None` if you would not like to provide a user.'
 				}
 			}],
-			userPerms: { flags: 'MANAGE_MESSAGES' }
+			userPerms: { flags: 'MANAGE_MESSAGES' },
+			usage: ['[number] <{user}>'],
+			examples: {
+				'10': 'clears the recent 10 messages in the channel',
+				'10 {user}': 'clears the recent 10 messages from the corresponding user in the channel'
+			}
 		});
 	}
 

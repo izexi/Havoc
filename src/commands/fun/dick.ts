@@ -19,7 +19,11 @@ export default class Dick extends Command {
 			opts: 0b0000,
 			description: 'A 100% accurate dick size calculator.',
 			aliases: new Set(['d', 'penis']),
-			args: [{ type: 'user' }]
+			args: [{ type: 'user' }],
+			examples: {
+				'': 'responds with your dick size',
+				'@Havoc': 'responds with Havoc\'s dick size'
+			}
 		});
 	}
 

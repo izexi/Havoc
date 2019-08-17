@@ -13,7 +13,8 @@ export default class Emoji extends Command {
 			args: [{
 				type: 'emoji',
 				prompt: { initialMsg: 'enter the emoji that you would like info about.' }
-			}]
+			}],
+			examples: { weary: 'responds with your info about the 😩 emoji' }
 		});
 	}
 

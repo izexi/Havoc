@@ -2,6 +2,8 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import Util from '../../util/Util';
+import Responses from '../../util/Responses';
+import { Util as djsUtil } from 'discord.js';
 
 export default class Help extends Command {
 	public constructor() {
@@ -9,7 +11,11 @@ export default class Help extends Command {
 			opts: 0b0011,
 			description: 'Shows a list of all avaiable commands, or detailed info about a specific command.',
 			aliases: new Set(['h']),
-			args: [{ type: 'command' }]
+			args: [{ type: 'command' }],
+			examples: {
+				'': 'responds with a list of all avaiable commands',
+				'help': 'responds with detailed info about the "help" command'
+			}
 		});
 	}
 
@@ -26,6 +32,31 @@ export default class Help extends Command {
 			});
 			if (command.aliases.size) {
 				embed.addField('❯Aliases', [...command.aliases].map(alias => `\`${alias}\``).join(', '));
+			}
+			if (command.args || command.flags.size) {
+				const format = (str: string, usage = false) => str
+					.replace(/{prefix}/g, msg.prefix)
+					.replace(/{([^}]+)}/g,
+						(_, o): string => usage
+							? Responses.usage(o)
+							: djsUtil.cleanContent(Responses.random(msg, o).toString(), msg));
+				// eslint-disable-next-line @typescript-eslint/promise-function-async
+				embed.addField('❯Arguments', `${command.usage
+					? command.usage.map(u => `•\`${format(u, true)}\``).join('\n')
+					: `•${command.args!.map(arg => {
+						const optional = arg.optional || !(command.opts & (1 << 3));
+						const [s, e] = optional ? '<>' : '[]';
+						const usage = Responses.usage(arg.type) || Responses.usage(arg.key);
+						return `\`${s}${format(usage)}${e}\``;
+					}).join(' ')}`}
+				(\`[]\` = required, \`<>\` = optional, \`|\` = or)`);
+				// @ts-ignore
+				const examples = Object.entries(command.examples) as [string, string][];
+				if (examples.length) {
+					embed.addField('❯Examples',
+						examples.map(([example, desc]) =>
+							`•\`${msg.prefix}${command.name} ${format(example)}\` => ${desc}`).join('\n'));
+				}
 			}
 			return msg.response = await msg.sendEmbed(embed);
 		}

@@ -19,7 +19,15 @@ export default class Autorole extends Command {
 					invalidResponseMsg: 'You will need to enter either `enable`, `update` or `disable`'
 				}
 			}],
-			userPerms: { flags: 'MANAGE_GUILD' }
+			userPerms: { flags: 'MANAGE_GUILD' },
+			usage: [
+				'[enable | updated] [{role}]',
+				'[disable]'
+			],
+			examples: {
+				'enable {role}': 'enables auto role (role to give members on joins) in the server for the corresponding role',
+				'disable': 'disables auto role (role to give members on joins) in the server'
+			}
 		});
 	}
 

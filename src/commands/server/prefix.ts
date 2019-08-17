@@ -10,7 +10,12 @@ export default class Avatar extends Command {
 			args: [{
 				key: 'prefix',
 				type: 'string'
-			}]
+			}],
+			usage: ['<prefix>'],
+			examples: {
+				'': 'view the current prefix',
+				';': 'change the prefix to `;`'
+			}
 		});
 	}
 

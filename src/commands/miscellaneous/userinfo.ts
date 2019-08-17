@@ -12,7 +12,11 @@ export default class Ping extends Command {
 			opts: 0b0011,
 			description: 'View info about a user.',
 			aliases: new Set(['uinfo', 'user']),
-			args: [{ type: 'user' }]
+			args: [{ type: 'user' }],
+			examples: {
+				'': 'responds with your user info',
+				'@Havoc': 'responds with Havoc\'s user info'
+			}
 		});
 	}
 
