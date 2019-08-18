@@ -7,6 +7,9 @@ import HavocTextChannel from '../extensions/TextChannel';
 
 export default async function(this: HavocClient, member: GuildMember) {
 	const guild = member.guild as HavocGuild;
+	if (guild.id === this.supportServer.id && this.guilds.some(g => g.ownerID === member.id && g.memberCount >= 25)) {
+		member.roles.add('473618117113806868');
+	}
 	const { endTime } = await this.db.fieldQuery('mute', false, ['guild', guild.id], ['member', member.id])
 		.catch(() => ({ endTime: null })) || { endTime: null };
 	if (endTime && endTime > 0) {

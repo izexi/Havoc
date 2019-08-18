@@ -4,7 +4,6 @@ import HavocClient from '../../client/Havoc';
 import { GuildChannel, SnowflakeUtil } from 'discord.js';
 import HavocTextChannel from '../../extensions/TextChannel';
 import Util from '../../util/Util';
-import { handleMessage } from '../../events/message';
 import Responses from '../../util/Responses';
 
 export async function getSuggestionChannel(msg: HavocMessage) {
@@ -64,7 +63,7 @@ export default class Suggestion extends Command {
 		const subCommands = ['approve', 'deny', 'config'];
 		if (subCommands.includes(suggestionOrSubCommand.toLowerCase())) {
 			msg.args = msg.args.filter(arg => !subCommands.includes(arg));
-			return handleMessage(this, msg, this.commands.get(`suggestion-${suggestionOrSubCommand}`)!);
+			return this.commands.handler.handle(msg, this.commands.get(`suggestion-${suggestionOrSubCommand}`)!);
 		}
 		const suggestionChannel = await getSuggestionChannel(msg) as HavocTextChannel;
 		if (!suggestionChannel) return;

@@ -1,7 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import { handleMessage } from '../../events/message';
 import Responses from '../../util/Responses';
 
 export default class Giveaway extends Command {
@@ -48,6 +47,6 @@ export default class Giveaway extends Command {
 
 	public async run(this: HavocClient, { msg, target: { subCommand } }: { msg: HavocMessage; target: { subCommand: string } }) {
 		msg.args = msg.args.filter(arg => !['start', 'end', 'reroll', 'config'].includes(arg));
-		handleMessage(this, msg, this.commands.get(`giveaway-${subCommand}`)!);
+		this.commands.handler.handle(msg, this.commands.get(`giveaway-${subCommand}`)!);
 	}
 }

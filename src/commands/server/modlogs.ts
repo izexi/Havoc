@@ -1,7 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import { handleMessage } from '../../events/message';
 
 export default class Modlogs extends Command {
 	public constructor() {
@@ -33,6 +32,6 @@ export default class Modlogs extends Command {
 
 	public async run(this: HavocClient, { msg, target: { subCommand } }: { msg: HavocMessage; target: { subCommand: string } }) {
 		msg.args = msg.args.filter(arg => !['enable', 'update', 'disable'].includes(arg));
-		handleMessage(this, msg, this.commands.get(`modlogs-${subCommand.replace(/update/i, 'enable')}`)!);
+		this.commands.handler.handle(msg, this.commands.get(`modlogs-${subCommand.replace(/update/i, 'enable')}`)!);
 	}
 }

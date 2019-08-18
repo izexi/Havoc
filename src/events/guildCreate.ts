@@ -6,6 +6,11 @@ import Logger from '../util/Logger';
 
 export default async function(this: HavocClient, guild: HavocGuild) {
 	if (!guild.available) return;
+	if (guild.memberCount >= 25) {
+		await this.supportServer.members.fetch(guild.ownerID)
+			.then(async member => member.roles.add('473618117113806868'))
+			.catch(() => null);
+	}
 	(this.channels.get('417364417374715924') as HavocTextChannel).send(
 		new MessageEmbed()
 			.setDescription(`

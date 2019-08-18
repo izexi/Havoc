@@ -114,6 +114,7 @@ export default {
 					target = text.split(' ')[0];
 				}
 				msg.args.splice(0, target.split(' ').length);
+				break;
 			case 'question':
 				if (text.includes('q:')) target = (text.match(/q:(.*)a:/i) || [])[1];
 				else target = text;

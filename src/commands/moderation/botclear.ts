@@ -1,7 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import { handleMessage } from '../../events/message';
 import { Message } from 'discord.js';
 import Util from '../../util/Util';
 
@@ -33,7 +32,7 @@ export default class Botclear extends Command {
 	public async run(this: HavocClient, { msg, flag }: { msg: HavocMessage; flag: string }) {
 		if (msg.arg === 'config') {
 			msg.args.shift();
-			return handleMessage(this, msg, this.commands.get('botclear-config')!);
+			return this.commands.handler.handle(msg, this.commands.get('botclear-config')!);
 		}
 		const emojis = ['<:botclear1:486606839015014400>', '<:botclear2:486606870618963968>', '<:botclear3:486606906337525765>'];
 		let { bcPrefixes }: { bcPrefixes: string[] } = await msg.guild.config;
