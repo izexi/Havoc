@@ -34,6 +34,11 @@ export default class UploadEmoji extends Command {
 					initialMsg: 'enter the emoji or the URL of an image that you would like to upload as an emoji on this server.',
 					invalidResponseMsg: 'You need to enter a valid direct image URL or a valid custom emoji.'
 				}
+			}, {
+				key: 'emojiName',
+				optional: true,
+				type: 'string',
+				prompt: { initialMsg: 'enter the name that you would like to assign for this emoji.' }
 			}],
 			userPerms: { flags: 'MANAGE_EMOJIS' },
 			usage: [`[${Responses.usage('emoji')}] <emoji name>`],
@@ -44,8 +49,8 @@ export default class UploadEmoji extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { emoji: { url, name } } }: { msg: HavocMessage; target: { emoji: { url: string; name?: string } } }) {
-		const setDescription = await msg.guild.emojis.create(url, name || 'emoji', { reason: `Created by ${msg.author.tag}` })
+	public async run(this: HavocClient, { msg, target: { emoji: { url, name }, emojiName } }: { msg: HavocMessage; target: { emoji: { url: string; name?: string }; emojiName: string } }) {
+		const setDescription = await msg.guild.emojis.create(url, emojiName || name || 'emoji', { reason: `Created by ${msg.author.tag}` })
 			.then(emoji => `**${msg.author.tag}** I have uploaded the emoji ${emoji} to this server.`)
 			.catch(() => `**${msg.author.tag}** I encountered an error while trying to upload this emoji, either the file size of the emoji was too high or this server has reached its maximum emoji limit.`);
 		msg.sendEmbed({ setDescription });
