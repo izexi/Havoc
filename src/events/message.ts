@@ -12,7 +12,7 @@ const rejectionHandler = (client: HavocClient, msg: HavocMessage, rej: Error) =>
 	(client.channels.get('612603429591973928') as HavocTextChannel).send(
 		new MessageEmbed()
 			.setDescription(`
-				**Server:** ${msg.guild ? msg.guild.name : 'DM'} ${msg.guild ? `(${msg.guild.id})` : ''}
+				**Server:** ${msg.guild ? `${msg.guild.name} (${msg.guild.id})` : 'DM'}
 				**Unhandled Rejection:** ${rej.stack || rej}
 				**User:** ${msg.author.tag} (${msg.author.id})
 				**Command:** ${msg.command.name}
@@ -127,7 +127,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 		(this.channels.get('406882982905774080') as HavocTextChannel).send(
 			new MessageEmbed()
 				.setDescription(`
-					**Server:** ${msg.guild ? msg.guild.name : 'DM'} ${msg.guild ? `(${msg.guild.id})` : ''}
+					**Server:** ${msg.guild ? `${msg.guild.name} (${msg.guild.id})` : 'DM'}
 					**Error:** ${err.stack}
 					**User:** ${msg.author.tag} (${msg.author.id})
 					**Command:** ${msg.command.name}

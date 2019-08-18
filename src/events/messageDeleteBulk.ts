@@ -21,6 +21,7 @@ export default async function(this: HavocClient, messages: Collection<HavocMessa
 						.map(msg =>
 							`[${new Date(msg.createdTimestamp).toLocaleString()} (UTC)] ${msg.author.tag} (${msg.author.id}): ${msg.content}
 							${msg.attachments.first() ? msg.attachments.first()!.proxyURL : ''}`)
+						.reverse()
 						.join('\r\n'), 'utf8'
 				),
 				name: 'deleted_contents.txt'
