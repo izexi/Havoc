@@ -38,7 +38,11 @@ export default abstract class implements CommandOptions {
 		this.userPerms = options.userPerms;
 	}
 
-	abstract run(this: HavocClient, params: CommandParams): void;
+	public get argsRequired() {
+		return Boolean(this.opts & (1 << 3));
+	}
+
+	abstract async run(this: HavocClient, params: CommandParams): Promise<any>;
 }
 
 interface CommandOptions {

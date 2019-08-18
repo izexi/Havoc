@@ -20,9 +20,9 @@ export default class GiveawayConfig extends Command {
 			},
 			{
 				key: 'channelOrRole',
-				type: (msg: HavocMessage) => msg.args.includes('channel') || msg.intialMsg.promptResponses.has('channel') ? 'channel' : 'role',
+				type: (msg: HavocMessage) => msg.validArgs.has('channel') ? 'channel' : 'role',
 				prompt: {
-					initialMsg: (msg: HavocMessage) => msg.promptResponses.has('channel')
+					initialMsg: (msg: HavocMessage) => msg.validArgs.has('channel')
 						? 'mention the channel, or enter the ID of the channel that would like the giveaways to be created on.'
 						: 'mention the role, or enter the name of the role that you would like to give access for starting, ending or rerolling giveaways.'
 				}

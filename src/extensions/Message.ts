@@ -31,6 +31,8 @@ export default class HavocMessage extends Message {
 
 	public promptResponses: Set<string> = new Set();
 
+	public validArgs: Set<string> = new Set();
+
 	public _patch(data: object) {
 		super._patch(data);
 		this._init();

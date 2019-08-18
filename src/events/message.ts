@@ -8,6 +8,26 @@ import HavocTextChannel from '../extensions/TextChannel';
 import Util from '../util/Util';
 import { MessageEmbed, PermissionString } from 'discord.js';
 
+const rejectionHandler = (client: HavocClient, msg: HavocMessage, rej: Error) => {
+	(client.channels.get('612603429591973928') as HavocTextChannel).send(
+		new MessageEmbed()
+			.setDescription(`
+				**Server:** ${msg.guild ? msg.guild.name : 'DM'} ${msg.guild ? `(${msg.guild.id})` : ''}
+				**Unhandled Rejection:** ${rej.stack || rej}
+				**User:** ${msg.author.tag} (${msg.author.id})
+				**Command:** ${msg.command.name}
+				**Message Content:**
+				${Util.codeblock(msg.content)}
+				${msg.validArgs.size ? `**Valid Args:**\n${Util.codeblock([...msg.validArgs].join('\n'))}` : ''}
+				${msg.promptResponses.size ? `**Prompt Responses:**\n${Util.codeblock([...msg.promptResponses].join('\n'))}` : ''}
+			`)
+			.setColor('ORANGE')
+			.setAuthor(`⚠${rej}⚠`, msg.guild ? msg.guild.iconURL() : '')
+			.setTimestamp()
+			.setFooter('', msg.author.pfp)
+	);
+};
+
 export async function handleMessage(client: HavocClient, msg: HavocMessage, command: Command) {
 	const params: CommandParams = { msg, target: {} };
 	msg.command = command;
@@ -54,7 +74,7 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 		}
 	}
 	if (command.args) {
-		if (!msg.args.length && command.opts & (1 << 3)) {
+		if (!msg.args.length && command.argsRequired) {
 			await msg.createPrompt({
 				msg,
 				initialMsg: command.args!.map(({ prompt }) => prompt!.initialMsg) as string[],
@@ -69,12 +89,13 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 			}).catch(err => Logger.error('Error when assigning targets from prompt', err));
 		} else {
 			params.target = await Targetter.parseTarget(msg);
-			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) =>
+			const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) => {
+				const arg = command.args!.find(a => a.key === key || a.type === key)!;
 				// eslint-disable-next-line no-eq-null
-				target != null || key === 'loose' || target === 'optional'
-					? responses
-					: [...responses, command.args!.find(arg => arg.key === key || arg.type === key)!.prompt!.invalidResponseMsg! || Responses[key](msg)]
-			, []);
+				return key !== 'loose' && command.argsRequired && target == null && !arg.optional
+					? [...responses, arg.prompt!.invalidResponseMsg! || Responses[key](msg)]
+					: responses;
+			}, []);
 			const optionalEntry = Object.entries(params.target).find(([, v]) => v === 'optional');
 			if (optionalEntry) params.target[optionalEntry[0]] = false;
 			if (invalidResponses.length) {
@@ -84,7 +105,7 @@ export async function handleMessage(client: HavocClient, msg: HavocMessage, comm
 			}
 		}
 	}
-	command.run.call(client, params);
+	command.run.call(client, params).catch(rej => rejectionHandler(client, msg, rej));
 }
 
 export default async function(this: HavocClient, msg: HavocMessage) {
@@ -94,7 +115,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 	const command = this.commands.handler.get(msg.args.shift()!.substring(msg.prefix.length));
 	if (!command || this.commands.disabled.has(command.name) || (command.category === 'dev' && msg.author.id !== this.havoc)) return;
 	try {
-		handleMessage(this, msg, command);
+		handleMessage(this, msg, command).catch(rej => rejectionHandler(this, msg, rej));
 		Logger.command(`${msg.author.tag} (${msg.author.id}) used command ${msg.prefix}${msg.command.name} in ${msg.guild ? msg.guild.name : 'DM'} ${msg.guild ? `(${msg.guild.id})` : ''} ${msg.channel instanceof HavocTextChannel ? `on #${msg.channel.name} (${msg.guild.id})` : ''}`);
 	} catch (err) {
 		Logger.error(`Error while executing command ${command.name}`, err);
@@ -115,7 +136,7 @@ export default async function(this: HavocClient, msg: HavocMessage) {
 					**Error ID:** ${id}
 				`)
 				.setColor('RED')
-				.setAuthor(`❗${err.toString()}❗`, msg.guild ? msg.guild.iconURL() : '')
+				.setAuthor(`❗${err}❗`, msg.guild ? msg.guild.iconURL() : '')
 				.setTimestamp()
 				.setFooter('', msg.author.pfp)
 		);

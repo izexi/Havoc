@@ -82,7 +82,7 @@ export default class Prompt extends EventEmitter {
 				}
 				this.msg.promptResponses.add(msg.content.toLowerCase());
 				msg.intialMsg = this.msg;
-				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg, false);
+				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg);
 				const { target } = await targetObj;
 				if (target || target === null) {
 					collector.stop();

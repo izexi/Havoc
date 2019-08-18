@@ -69,7 +69,7 @@ export default {
 		}
 	},
 
-	async getTarget(type: TargetType, msg: HavocMessage, optional: boolean | undefined) {
+	async getTarget(type: TargetType, msg: HavocMessage) {
 		let text = type === 'string' || type === 'role' || type === 'tagName' ? msg.text : msg.arg;
 		if (type === 'question' || type === 'options') text = msg.content.replace(/\s?-time=[^\s]*/, '');
 		const guild = msg.guild;
@@ -78,7 +78,7 @@ export default {
 		if (typeof type === 'function') {
 			target = await (type as Function)(msg);
 			if (!target && target !== false) target = null;
-			type = target;
+			if (target === 'role' || target === 'channel') type = target;
 		}
 		switch (type) {
 			case 'string':
@@ -135,8 +135,7 @@ export default {
 				if (type === 'user') target = await guild.client.users.fetch(target ? target.id : text);
 				break;
 		}
-		if (optional && target === null) target = 'optional';
-		if (target && !['role', 'tagName', 'question', 'options'].includes(type as string)) msg.args.shift();
+		if (target && !['role', 'tagName', 'question', 'options'].includes(type as string)) msg.validArgs.add(msg.args.shift()!);
 		return { target, loose };
 	},
 
@@ -144,14 +143,14 @@ export default {
 		if (!key) key = typeof type === 'function' ? 'target' : type;
 		targetObj[key] = target;
 		targetObj.loose = loose;
-		if (!targetObj[key] && !(msg.command.opts & (1 << 3))) targetObj.target = msg[type === 'user' ? 'author' : 'member'];
+		if (!targetObj[key] && !msg.command.argsRequired) targetObj.target = msg[type === 'user' ? 'author' : 'member'];
 	},
 
 	async parseTarget(msg: HavocMessage) {
 		const targetObj: { [key: string]: Target } = {};
 		for (const arg of msg.command.args!) {
-			const { key, type, optional } = arg;
-			await this.getTarget(type, msg, optional)
+			const { key, type } = arg;
+			await this.getTarget(type, msg)
 				.then(async ({ target, loose }) => this.assignTarget(msg, type, target, loose, targetObj, key))
 				.catch(() => null);
 		}

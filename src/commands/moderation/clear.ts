@@ -20,7 +20,7 @@ export default class Clear extends Command {
 				optional: true,
 				type: async (msg: HavocMessage) => {
 					if (msg.arg === 'none') return null;
-					const { target } = await Targetter.getTarget('user', msg, false);
+					const { target } = await Targetter.getTarget('user', msg);
 					if (target) return target;
 				},
 				prompt: {

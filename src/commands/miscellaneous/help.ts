@@ -33,6 +33,22 @@ export default class Help extends Command {
 			if (command.aliases.size) {
 				embed.addField('❯Aliases', [...command.aliases].map(alias => `\`${alias}\``).join(', '));
 			}
+			if (command.flags.size) {
+				embed.addField('❯Flags', [...command.flags].map(alias => `\`${alias}\``).join(', '));
+			}
+			if (command.userPerms) {
+				let role;
+				let flags: string[] = [];
+				if (command.userPerms.role) {
+					const id = await command.userPerms.role(msg);
+					role = msg.guild.roles.get(id);
+				}
+				if (command.userPerms.flags) {
+					flags = Util.arrayify(command.userPerms.flags).map(flag => `\`${Util.normalizePermFlag(flag)}\``);
+				}
+				const perm = Util.plural('permission', flags.length);
+				embed.addField(`❯Required ${perm}`, `${role ? `You need to have the \`${role.name}\` role or ` : ''}${flags.length ? `${role ? 'y' : 'Y'}ou need to have the following ${perm}: ${flags.join(', ')}` : ''}`);
+			}
 			if (command.args || command.flags.size) {
 				const format = (str: string, usage = false) => str
 					.replace(/{prefix}/g, msg.prefix)
@@ -44,7 +60,7 @@ export default class Help extends Command {
 				embed.addField('❯Arguments', `${command.usage
 					? command.usage.map(u => `•\`${format(u, true)}\``).join('\n')
 					: `•${command.args!.map(arg => {
-						const optional = arg.optional || !(command.opts & (1 << 3));
+						const optional = arg.optional || !command.argsRequired;
 						const [s, e] = optional ? '<>' : '[]';
 						const usage = Responses.usage(arg.type) || Responses.usage(arg.key);
 						return `\`${s}${format(usage)}${e}\``;
