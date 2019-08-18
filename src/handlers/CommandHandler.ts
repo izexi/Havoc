@@ -26,8 +26,8 @@ export default class CommandHandler extends Handler<string, Command> {
 		if (command.userPerms) {
 			let permRole;
 			let { role, flags } = command.userPerms;
-			if (role) permRole = await role(msg);
-			if (!(role && msg.member!.roles.has(permRole)) && !(flags && msg.member!.hasPermission(flags))) {
+			if (role) permRole = msg.guild.roles.get(await role(msg));
+			if (!(permRole && msg.member!.roles.has(permRole.id)) && !(flags && msg.member!.hasPermission(flags))) {
 				if (flags) flags = Array.isArray(flags) ? flags : [flags] as PermissionString[];
 				await msg.react('⛔');
 				return msg.response = await msg.sendEmbed({
