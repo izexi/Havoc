@@ -84,7 +84,7 @@ export default class HavocMessage extends Message {
 			embed.awaitReactions(
 				(reaction, user) => reaction.emoji.name === '🗑' && user.id === this.author.id,
 				{
-					time: 2300,
+					time: 3000,
 					max: 1,
 					errors: ['time']
 				}
