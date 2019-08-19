@@ -1,13 +1,15 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import ytdl from 'ytdl-core';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ytdl = require('ytdl-core');
 
 export default class Json extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b1000,
 			description: 'This totally works.',
+			aliases: new Set(['p']),
 			args: [{
 				key: 'song',
 				type: 'string',
