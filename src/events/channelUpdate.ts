@@ -5,8 +5,10 @@ import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, outdated: TextChannel, updated: TextChannel) {
 	if (!updated.guild || (outdated.topic === updated.topic && outdated.name === updated.name)) return;
+	const guild = updated.guild as HavocGuild;
+	if (guild.disabledLogs.has(2)) return;
 	const executor = await Log.getExecutor(updated, 'CHANNEL_UPDATE');
-	Log.send(updated.guild as HavocGuild,
+	Log.send(guild,
 		new MessageEmbed()
 			.setDescription(`
 				${executor ? `**🔧Updated By :**  ${executor}` : ''}
@@ -14,7 +16,7 @@ export default async function(this: HavocClient, outdated: TextChannel, updated:
 				${outdated.name === updated.name ? '' : `**📝Old Channel name :**  ${outdated.name}\n✏**New Channel name :**  ${updated.name}`}
 			`)
 			.setColor('ORANGE')
-			.setAuthor(`Channel was updated${updated.parent ? ` in category ${updated.parent.name}` : ''}`, (updated.guild as HavocGuild).iconURL())
+			.setAuthor(`Channel was updated${updated.parent ? ` in category ${updated.parent.name}` : ''}`, guild.iconURL())
 			.setFooter(`Channel ID: ${updated.id}`)
 			.setTimestamp());
 }

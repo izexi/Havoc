@@ -24,7 +24,7 @@ export default async function(this: HavocClient) {
 			this.db.delete('restart');
 		}
 	}
-	const query = await this.db.query(`SELECT * FROM "havoc" WHERE "key" ~ '^(config|tags|donators):'`, false, true);
+	const query = await this.db.query(`SELECT * FROM "havoc" WHERE "key" ~ '^(config|tags|donators|disabledLogs):'`, false, true);
 	await Promise.all(query.map(({ key, value }: { key: string; value: string }) => {
 		let category;
 		[category, key] = key.split(':');
@@ -40,6 +40,8 @@ export default async function(this: HavocClient) {
 		} else if (category === 'donators') {
 			const tier = key.match(/\d+/)![0];
 			(parse(value) as string[]).forEach(v => this.donators.get(tier)!.add(v));
+		} else if (category === 'disabledLogs') {
+			guild.disabledLogs = new Set((parse(value) as number[]));
 		} else {
 			const { name, content } = parse(value);
 			guild.tags.set(name, content);

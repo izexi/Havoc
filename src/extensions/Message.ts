@@ -163,10 +163,9 @@ export default class HavocMessage extends Message {
 		})).catch(() => null);
 	}
 
-	public async createPrompt({ msg, initialMsg, invalidResponseMsg, target }: PromptOptions) {
+	public async createPrompt(options: PromptOptions) {
 		return new Promise(resolve =>
-			new Prompt({ msg, initialMsg, invalidResponseMsg, target })
-				.on('promptResponse', responses => resolve(responses)));
+			new Prompt(options).on('promptResponse', responses => resolve(responses)));
 	}
 
 	public get text() {

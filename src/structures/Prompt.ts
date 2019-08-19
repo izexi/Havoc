@@ -40,7 +40,7 @@ export default class Prompt extends EventEmitter {
 	public constructor(options: PromptOptions) {
 		super();
 		this.msg = options.msg;
-		this.initialMsg = Util.arrayify(options.initialMsg);
+		this.initialMsg = Util.arrayify(options.initialMsg || '');
 		this.invalidResponseMsg = Util.arrayify(options.invalidResponseMsg || []);
 		this.timeLimit = options.timeLimit || 30000;
 		this.target = Util.arrayify(options.target || []);
@@ -127,7 +127,7 @@ export default class Prompt extends EventEmitter {
 
 export interface PromptOptions {
 	msg: HavocMessage;
-	initialMsg: string | string[] | Function;
+	initialMsg?: string | string[] | Function;
 	invalidResponseMsg?: string | (string | undefined)[];
 	target?: Function | TargetType | (Function | TargetType | undefined)[];
 	timeLimit?: number;

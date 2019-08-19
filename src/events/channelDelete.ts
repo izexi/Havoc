@@ -4,8 +4,10 @@ import Log from '../structures/Log';
 import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, channel: TextChannel | VoiceChannel | CategoryChannel | NewsChannel) {
+	const guild = channel.guild as HavocGuild;
+	if (guild.disabledLogs.has(1)) return;
 	const executor = await Log.getExecutor(channel, 'CHANNEL_DELETE');
-	Log.send(channel.guild as HavocGuild,
+	Log.send(guild,
 		new MessageEmbed()
 			.setDescription(`
 				${executor ? `**🗑Deleted By :**  ${executor}` : ''}
@@ -14,7 +16,7 @@ export default async function(this: HavocClient, channel: TextChannel | VoiceCha
 				**📣Channel type :**  ${channel.type}
 			`)
 			.setColor('RED')
-			.setAuthor(`Channel was deleted${channel.parent ? ` in category ${channel.parent.name}` : ''}`, (channel.guild as HavocGuild).iconURL())
+			.setAuthor(`Channel was deleted${channel.parent ? ` in category ${channel.parent.name}` : ''}`, guild.iconURL())
 			.setFooter(`Channel ID: ${channel.id}`)
 			.setTimestamp());
 }

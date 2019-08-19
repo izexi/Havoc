@@ -5,6 +5,7 @@ import HavocGuild from '../extensions/Guild';
 import Util from '../util/Util';
 
 export default async function(this: HavocClient, outdated: HavocGuild, updated: HavocGuild) {
+	if (updated.disabledLogs.has(7)) return;
 	let executor = await Log.getExecutor({ guild: updated, id: updated.id }, 'GUILD_UPDATE');
 	let condition;
 	let prop = '';

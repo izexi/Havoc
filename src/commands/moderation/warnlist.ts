@@ -23,7 +23,7 @@ export default class WarnList extends Command {
 		this.db.category = 'warn';
 		const warned = await this.db.get(user.id + msg.guild.id);
 		if (!warned) {
-			return msg.sendEmbed({ description: `**${msg.author.tag}** \`${user.tag}\` has \`0\` warnings in this server.` });
+			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${user.tag}\` has \`0\` warnings in this server.` });
 		}
 		const descriptions: string[] = await Promise.all(warned
 			.map(async ({ warner, reason }: { warner: string; reason: string }) =>

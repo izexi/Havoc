@@ -23,6 +23,14 @@ export default abstract class implements CommandOptions {
 
 	public usage: CommandOptions['usage'];
 
+	public deleteable!: boolean;
+
+	public editable!: boolean;
+
+	public targetable!: boolean;
+
+	public argsRequired!: boolean;
+
 	public constructor(__path: string, options: CommandOptions) {
 		// @ts-ignore
 		const { groups: { name, category } } = __path.match(/[\\\/](?<category>[a-z]+)[\\\/](?<name>[_a-z\-\d]+)\.ts/i);
@@ -36,10 +44,14 @@ export default abstract class implements CommandOptions {
 		this.examples = options.examples || {};
 		this.usage = options.usage;
 		this.userPerms = options.userPerms;
+		this.assignGetters();
 	}
 
-	public get argsRequired() {
-		return Boolean(this.opts & (1 << 3));
+	public assignGetters() {
+		const opts = ['deleteable', 'editable', 'targetable', 'argsRequired'];
+		// eslint-disable-next-line @typescript-eslint/promise-function-async
+		opts.forEach((o, i) =>
+			Object.defineProperty(this, o, { get: () => this.opts & (1 << i) }));
 	}
 
 	abstract async run(this: HavocClient, params: CommandParams): Promise<any>;

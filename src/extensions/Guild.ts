@@ -16,6 +16,8 @@ export default class HavocGuild extends Guild {
 
 	public logsEnabled = false;
 
+	public disabledLogs: Set<number> = new Set();
+
 	public tags: Map<string, string> = new Map();
 
 	private _config: any = null;

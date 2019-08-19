@@ -5,6 +5,7 @@ import HavocGuild from '../extensions/Guild';
 import HavocUser from '../extensions/User';
 
 export default async function(this: HavocClient, guild: HavocGuild, user: HavocUser) {
+	if (guild.disabledLogs.has(8)) return;
 	const entry = await Log.getEntry(guild, 'MEMBER_BAN_ADD');
 	const executor = await Log.getExecutor({ guild, id: user.id }, 'MEMBER_BAN_ADD', entry);
 	Log.send(guild,
@@ -14,7 +15,7 @@ export default async function(this: HavocClient, guild: HavocGuild, user: HavocU
 				${entry && entry.reason ? `**💬Reason :**  ${entry.reason}` : ''}
 			`)
 			.setColor('RED')
-			.setAuthor(`${user.tag} was banned`, (guild as HavocGuild).iconURL())
+			.setAuthor(`${user.tag} was banned`, guild.iconURL())
 			.setFooter(`User ID: ${user.id}`)
 			.setTimestamp());
 }

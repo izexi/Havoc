@@ -69,6 +69,28 @@ export default {
 		};
 		return str.replace(new RegExp(Object.keys(obj).join('|'), 'gi'), letter => obj[letter] || letter);
 	},
+	logEvents: [
+		'channel creations',
+		'channel deletions',
+		'channel updates',
+		'command usage',
+		'emoji creations',
+		'emoji deletions',
+		'emoji updates',
+		'server updates',
+		'member bans',
+		'member joins',
+		'member leaves',
+		'member unbans',
+		'member updates',
+		'message clears',
+		'message edits',
+		'messages deletions',
+		'role creations',
+		'role deletions',
+		'role updates',
+		'voice channel updates'
+	],
 	// eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
 	emojiNumbers: {
 		1: '1⃣',

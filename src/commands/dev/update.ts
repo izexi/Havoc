@@ -17,8 +17,8 @@ export default class Reload extends Command {
 		const message = await msg.sendEmbed({ setDescription: '<a:Restarting:411680219636826112> Updating...' });
 		const { stdout, stderr } = await exec('git pull');
 		message.edit(message.embeds[0].setDescription(
-			`**Output**:\n${Util.codeblock(stdout)}
-			${stderr ? `**Output**:\n${Util.codeblock(stderr)}` : ''}`
+			`**stdout**:\n${Util.codeblock(stdout)}
+			${stderr ? `**stderr**:\n${Util.codeblock(stderr)}` : ''}`
 		));
 	}
 }

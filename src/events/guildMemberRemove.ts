@@ -7,6 +7,7 @@ import HavocTextChannel from '../extensions/TextChannel';
 
 export default async function(this: HavocClient, member: GuildMember) {
 	const guild = member.guild as HavocGuild;
+	if (guild.disabledLogs.has(10)) return;
 	const entry = await Log.getEntry(guild, 'MEMBER_KICK');
 	const executor = await Log.getExecutor(member, 'MEMBER_KICK', entry);
 	const { welcomer } = await guild.config;
@@ -31,7 +32,7 @@ export default async function(this: HavocClient, member: GuildMember) {
 				${executor ? `**👢Kicked By :**  ${executor}` : ''}
 				${entry && entry.reason ? `**💬Reason :**  ${entry.reason}` : ''}
 				**📆Account created at :**  ${member.user.createdAt.toLocaleString()} (UTC)
-				${member.joinedAt ? `**🗓Joined guild at :**  ${member.joinedAt.toLocaleString()} (UTC)\n` : ''}
+				${member.joinedAt ? `**🗓Joined guild at :**  ${member.joinedAt.toLocaleString()} (UTC)` : ''}
 				**ℹGuild member count :**  ${member.guild.memberCount}
 			`)
 			.setColor('RED')

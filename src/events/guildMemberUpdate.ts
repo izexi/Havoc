@@ -6,6 +6,7 @@ import Util from '../util/Util';
 
 export default async function(this: HavocClient, outdated: GuildMember, updated: GuildMember) {
 	const guild = updated.guild as HavocGuild;
+	if (guild.disabledLogs.has(12)) return;
 	if (outdated.displayName !== updated.displayName) {
 		const entry = await Log.getEntry(guild, 'MEMBER_UPDATE');
 		const executor = await Log.getExecutor(updated, 'MEMBER_UPDATE', entry);
@@ -59,7 +60,7 @@ export default async function(this: HavocClient, outdated: GuildMember, updated:
 					**🔎Member :**  ${updated}
 					${perms}
 				`)
-				.setColor(outdated.roles.size < updated.roles.size ? 'GREEN' : 'REED')
+				.setColor(outdated.roles.size < updated.roles.size ? 'GREEN' : 'RED')
 				.setAuthor(`Role was ${outdated.roles.size < updated.roles.size ? 'added to' : 'removed from'} ${updated.user.tag}`, (updated.guild as HavocGuild).iconURL())
 				.setFooter(`Member ID: ${updated.id}`)
 				.setTimestamp());

@@ -7,6 +7,7 @@ import HavocTextChannel from '../extensions/TextChannel';
 
 export default async function(this: HavocClient, member: GuildMember) {
 	const guild = member.guild as HavocGuild;
+	if (guild.disabledLogs.has(9)) return;
 	if (guild.id === this.supportServer.id && this.guilds.some(g => g.ownerID === member.id && g.memberCount >= 25)) {
 		member.roles.add('473618117113806868');
 	}

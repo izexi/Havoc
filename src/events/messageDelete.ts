@@ -4,9 +4,11 @@ import Log from '../structures/Log';
 import HavocGuild from '../extensions/Guild';
 import HavocMessage from '../extensions/Message';
 import Util from '../util/Util';
+import HavocTextChannel from '../extensions/TextChannel';
 
 export default async function(this: HavocClient, message: HavocMessage) {
-	if (message.author.bot || message.command) return;
+	const guild = message.guild as HavocGuild;
+	if (guild.disabledLogs.has(15) || message.author.bot || message.command || (message.channel as HavocTextChannel).prompts.has(message.author.id)) return;
 	let executor;
 	const entry = await Log.getEntry(message.guild, 'MESSAGE_DELETE');
 	// @ts-ignore
@@ -40,5 +42,5 @@ export default async function(this: HavocClient, message: HavocMessage) {
 			name: 'deleted_content.txt'
 		}]);
 	}
-	Log.send(message.guild as HavocGuild, embed);
+	Log.send(guild, embed);
 }

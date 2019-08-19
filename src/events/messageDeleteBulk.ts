@@ -5,7 +5,9 @@ import HavocGuild from '../extensions/Guild';
 import HavocMessage from '../extensions/Message';
 
 export default async function(this: HavocClient, messages: Collection<HavocMessage['id'], HavocMessage>) {
-	Log.send(messages.first()!.guild as HavocGuild,
+	const guild = messages.first()!.guild as HavocGuild;
+	if (guild.disabledLogs.has(13)) return;
+	Log.send(guild,
 		new MessageEmbed()
 			.setDescription(`
 			**🗑Amount Deleted :**  ${messages.size}

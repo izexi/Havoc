@@ -18,7 +18,7 @@ export default class Servermutes extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const muted = await this.db.fieldQuery('mute', true, ['guild', msg.guild.id]);
 		if (!muted.length) {
-			return msg.sendEmbed({ description: `**${msg.author.tag}** there are no members that are currently muted in this server.` });
+			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** there are no members that are currently muted in this server.` });
 		}
 		const thumbnails: string[] = [];
 		const descriptions: string[] = await Promise.all(muted

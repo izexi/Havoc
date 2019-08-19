@@ -4,8 +4,10 @@ import Log from '../structures/Log';
 import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, emoji: GuildEmoji) {
+	const guild = emoji.guild as HavocGuild;
+	if (guild.disabledLogs.has(4)) return;
 	const executor = await Log.getExecutor(emoji, 'EMOJI_CREATE');
-	Log.send(emoji.guild as HavocGuild,
+	Log.send(guild,
 		new MessageEmbed()
 			.setDescription(`
 				${executor ? `**✏Created By :**  ${executor}` : ''}
@@ -14,7 +16,7 @@ export default async function(this: HavocClient, emoji: GuildEmoji) {
 				**🔎Emoji URL:**  ${emoji.url}
 			`)
 			.setColor('GREEN')
-			.setAuthor('Emoji was created', (emoji.guild as HavocGuild).iconURL())
+			.setAuthor('Emoji was created', guild.iconURL())
 			.setFooter(`Emoji ID: ${emoji.id}`)
 			.setTimestamp());
 }
