@@ -17,7 +17,7 @@ export default class TagsList extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const tags = await this.db.fieldQuery('tags', true, ['guild', msg.guild.id]);
 		if (!tags.length) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** there are no tags in this server.` });
+			return msg.respond(`there are no tags in this server.`);
 		}
 		const descriptions: string[] = await Promise.all(tags
 			.map(async ({ value }: { value: string }) => {

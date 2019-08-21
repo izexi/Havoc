@@ -43,16 +43,16 @@ export default class Unban extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		// @ts-ignore
 		// eslint-disable-next-line newline-per-chained-call
 		const existing = await this.api.guilds(msg.guild.id).bans(user.id).get().catch(() => null);
 		if (!existing) {
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${tag} is not banned in this server.` });
+			return msg.respond(`${tag} is not banned in this server.`);
 		}
 		await msg.guild.members.unban(user, `Unbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
 		msg.guild.modlog(msg, user, reason);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have unbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'}` });
+		msg.respond(`I have unbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'}`);
 	}
 }

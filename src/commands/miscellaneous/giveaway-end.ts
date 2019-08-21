@@ -31,8 +31,6 @@ export default class GiveawayEnd extends Command {
 	public async run(this: HavocClient, { msg, target: { giveaway } }: { msg: HavocMessage; target: { giveaway: GiveawaySchedule } }) {
 		await giveaway.end();
 		this.scheduler.delete(giveaway.endTime);
-		msg.response = await msg.sendEmbed({
-			setDescription: `**${msg.author.tag}** I have ended the [giveaway](https://discordapp.com/channels/${msg.guild.id}/${giveaway.channel}/${giveaway.message}).`
-		});
+		msg.respond(`I have ended the [giveaway](https://discordapp.com/channels/${msg.guild.id}/${giveaway.channel}/${giveaway.message}).`);
 	}
 }

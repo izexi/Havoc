@@ -11,9 +11,11 @@ export default class Reload extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		await msg.sendEmbed({ setDescription: '<a:Restarting:411680219636826112> Restarting...' });
-		this.db.category = 'restart';
-		await this.db.set('restart', msg.channel.id);
-		process.exit();
+		// eslint-disable-next-line promise/catch-or-return
+		msg.respond('<a:Restarting:411680219636826112> Restarting...', false).then(async () => {
+			this.db.category = 'restart';
+			await this.db.set('restart', msg.channel.id);
+			process.exit();
+		});
 	}
 }

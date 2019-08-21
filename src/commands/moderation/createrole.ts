@@ -24,6 +24,6 @@ export default class AddRole extends Command {
 		msg.guild.roles.create({
 			data: { name },
 			reason: `Created By ${msg.author.tag}`
-		}).then(async () => msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have created a new role named \`${name}\`.` }));
+		}).then(async () => msg.respond(`I have created a new role named \`${name}\`.`));
 	}
 }

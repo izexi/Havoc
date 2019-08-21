@@ -19,6 +19,6 @@ export default class AutoroleEnable extends Command {
 	public async run(this: HavocClient, { msg, target: { channel } }: { msg: HavocMessage; target: { channel: HavocTextChannel } }) {
 		const { welcomer } = await msg.guild.config;
 		await msg.guild.addConfig({ welcomer: channel.id });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${channel && msg.guild.channels.has(welcomer) ? `I have updated the welcomer channel from ${msg.guild.roles.get(welcomer)} to ${channel}` : `I have enabled welcomer in ${channel} for this server.`}` });
+		msg.respond(`${channel && msg.guild.channels.has(welcomer) ? `I have updated the welcomer channel from ${msg.guild.roles.get(welcomer)} to ${channel}` : `I have enabled welcomer in ${channel} for this server.`}`);
 	}
 }

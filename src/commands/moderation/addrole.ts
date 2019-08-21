@@ -44,9 +44,9 @@ export default class AddRole extends Command {
 			response = `${tag} already has the \`${role.name}\` role.`;
 		}
 		if (response) {
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		await member.roles.add(role, `Added by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have added the role \`${role.name}\` to ${tag}${reason ? ` for the reason \`${reason}\`` : ''}.` });
+		msg.respond(`I have added the role \`${role.name}\` to ${tag}${reason ? ` for the reason \`${reason}\`` : ''}.`);
 	}
 }

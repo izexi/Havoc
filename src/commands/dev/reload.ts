@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import Util from '../../util/Util';
+import Logger from '../../util/Logger';
 
 export default class Reload extends Command {
 	public constructor() {
@@ -21,15 +22,12 @@ export default class Reload extends Command {
 
 	public async run(this: HavocClient, { msg, target: { command } }: { msg: HavocMessage; target: { command: Command } }) {
 		try {
-			msg.response = await msg.sendEmbed({
-				setDescription: `Attempting to reload \`${command.name}\`...`
-			});
-			msg.client.commands.handler.reload(command);
-			msg.response.edit(msg.response.embeds[0].setDescription(`**${msg.author.tag}**, \`${command.name}\` has been reloaded.`));
+			msg.respond(`attempting to reload \`${command.name}\`...`, false).then(m => {
+				msg.client.commands.handler.reload(command);
+				m.edit(m.embeds[0].setDescription(`**${msg.author.tag}**, \`${command.name}\` has been reloaded.`));
+			}).catch(err => Logger.error(`Error while reloading ${command.name}`, err));
 		} catch (error) {
-			msg.sendEmbed({
-				setDescription: `**${msg.author.tag}**, there was an error while attempting to reload \`${command.name}\`.\n${Util.codeblock(error.stack)}`
-			});
+			msg.respond(`there was an error while attempting to reload \`${command.name}\`.\n${Util.codeblock(error.stack)}`);
 		}
 	}
 }

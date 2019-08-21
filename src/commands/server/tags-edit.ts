@@ -26,7 +26,7 @@ export default class TagsEdit extends Command {
 	public async run(this: HavocClient, { msg, target: { name, content } }: { msg: HavocMessage; target: { name: string; content: string } }) {
 		const tag = await msg.client.db.fieldQuery('tags', false, ['guild', msg.guild.id], ['name', name]);
 		if (!tag) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** I couldn't find a tag with the name \`${name}\` on this server.` });
+			return msg.respond(`I couldn't find a tag with the name \`${name}\` on this server.`);
 		}
 		this.db.category = 'tags';
 		await this.db.set(tag.createdAt, {
@@ -39,6 +39,6 @@ export default class TagsEdit extends Command {
 			lastModifiedBy: msg.author.id
 		});
 		msg.guild.tags.set(name, content);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have edited the tag \`${name}\` which you can trigger by entering \`${msg.prefix}${name}\`` });
+		msg.respond(`I have edited the tag \`${name}\` which you can trigger by entering \`${msg.prefix}${name}\``);
 	}
 }

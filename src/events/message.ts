@@ -6,6 +6,16 @@ import Util from '../util/Util';
 import { MessageEmbed } from 'discord.js';
 
 export function rejectionHandler(client: HavocClient, msg: HavocMessage, rej: Error) {
+	Logger.unhandledRejection(rej);
+	msg.channel.send(
+		new MessageEmbed()
+			.setColor('ORAGNE')
+			.setDescription(`
+				**Something may have gone wrong?**
+				Check \`${msg.prefix}help ${msg.command.name}\` to check how to properly use the command
+				However, if you have used the command correctly please join **https://discord.gg/3Fewsxq** and report your issue in the ${client.supportServer.members.has(msg.author.id) ? '<#406873476591517706>' : '#bugs-issues'} channel.
+			`)
+	);
 	(client.channels.get('612603429591973928') as HavocTextChannel).send(
 		new MessageEmbed()
 			.setDescription(`

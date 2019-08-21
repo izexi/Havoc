@@ -19,7 +19,7 @@ export default class Info extends Command {
 			.then(() => 'https://discordapp.com/channels/406873117215031297/406873578458447873/535928285402628106')
 			.catch(() => 'http://www.bridgeurl.com/vote-for-havoc/all');
 
-		msg.response = await msg.sendEmbed({
+		msg.respond({
 			setTitle: this.user!.username,
 			addField: [
 				['❯Links',

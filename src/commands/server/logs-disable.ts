@@ -15,10 +15,10 @@ export default class LogsDisable extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const { logs } = await msg.guild.config;
 		if (!logs) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** logs has not been enabled on this server.` });
+			return msg.respond(`logs has not been enabled on this server.`);
 		}
 		await msg.guild.removeConfig('logs');
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have disabled logs for this server.` });
+		msg.respond(`I have disabled logs for this server.`);
 		msg.guild.logsEnabled = false;
 		const existing = await msg.guild.getWebhook();
 		if (existing instanceof Webhook) await existing.delete(`Disabled by ${msg.author.tag}`);

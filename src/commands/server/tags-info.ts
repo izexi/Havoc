@@ -31,6 +31,6 @@ export default class TagsDelete extends Command {
 			addField.push(['❯Last modified by', (await msg.client.users.fetch(lastModifiedBy)).tag]);
 			addField.push(['❯Last modified at', `${new Date(lastModifiedAt).toLocaleString()} (UTC)`]);
 		}
-		msg.sendEmbed({ addField });
+		msg.respond({ addField });
 	}
 }

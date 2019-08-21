@@ -26,6 +26,6 @@ export default class Emojify extends Command {
 			// @ts-ignore
 		}).setTimestamp(null);
 		// @ts-ignore
-		msg.sendEmbed(embed.setFooter(msg.text ? Util.cleanContent(msg.text, msg) : '', null));
+		msg.respond(embed.setFooter(msg.text ? Util.cleanContent(msg.text, msg) : '', null));
 	}
 }

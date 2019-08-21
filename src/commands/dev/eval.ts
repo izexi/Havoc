@@ -21,6 +21,7 @@ export default class Eval extends Command {
 		});
 	}
 
+	// @ts-ignore
 	public async run(this: HavocClient, { msg, flag, target: { code } }: { msg: HavocMessage; flag: string; target: { code: string } }) {
 		const start = process.hrtime.bigint();
 		try {
@@ -34,7 +35,7 @@ export default class Eval extends Command {
 				maxArrayLength: flag === 'detailed' ? Infinity : 100
 			}).replace(new RegExp(this.token!, 'g'), 'no');
 			if (flag !== 'silent') {
-				msg.response = await msg.sendEmbed({
+				msg.respond({
 					setDescription: `**📥 Input**\n${Util.codeblock(code, 'js')}\n**📤 Output**\n${Util.codeblock(output, 'js')}\n${flag === 'detailed' ? `🔎 **Detailed output** ${await Util.haste(inspect(evaled, { depth: Infinity }), 'js')}\n\n` : ''}**❔ Type:** \`${type}\``,
 					setFooter: [`executed in ${Number(end - start) / 1000000} milliseconds`, msg.author.pfp]
 				});
@@ -46,7 +47,7 @@ export default class Eval extends Command {
 				maxArrayLength: 0
 			});
 			if (flag !== 'silent') {
-				msg.response = await msg.sendEmbed({
+				msg.respond({
 					setDescription: `**📥 Input**\n${Util.codeblock(code, 'js')}\n**❗ Error:**\n${Util.codeblock(error)}`,
 					setFooter: [`executed in ${Number(end - start) / 1000000} milliseconds`, msg.author.pfp]
 				});

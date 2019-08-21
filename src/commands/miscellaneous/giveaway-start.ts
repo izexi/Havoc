@@ -100,9 +100,7 @@ export default class GiveawayStart extends Command {
 						winners: winners.toString()
 					}));
 			}
-			msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** I have started the [giveaway](${m.url}).`
-			});
+			msg.respond(`I have started the [giveaway](${m.url}).`);
 		});
 	}
 }

@@ -97,9 +97,9 @@ export default class Mute extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
-		if (member.roles.has(muteRole.id)) return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${member.user.tag}\` is already muted.` });
+		if (member.roles.has(muteRole.id)) return msg.respond(`\`${member.user.tag}\` is already muted.`);
 		await this.scheduler.add('mute',
 			new MuteSchedule(this, time ? (Date.now() + (time as number)) : -1, {
 				guild: msg.guild.id,
@@ -109,7 +109,7 @@ export default class Mute extends Command {
 				reason
 			}));
 		await member.roles.add(muteRole, `Muted by ${msg.author.tag}${time ? ` for ${ms(time, { 'long': true })}` : ''}${reason ? ` due to the reason: ${reason}` : ''}`);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have muted \`${member.user.tag}\`${time ? ` for ${ms(time, { 'long': true })}` : ''}${reason ? ` due to the reason: \`${reason}\`` : ''} 🙊` });
+		msg.respond(`I have muted \`${member.user.tag}\`${time ? ` for ${ms(time, { 'long': true })}` : ''}${reason ? ` due to the reason: \`${reason}\`` : ''} 🙊`);
 		msg.guild.modlog(msg, member, reason, time);
 	}
 }

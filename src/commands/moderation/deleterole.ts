@@ -42,13 +42,13 @@ export default class DeleteRole extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		await msg.react('464034357955395585');
 		const members = (await msg.guild.members.fetch()).filter(m => m.roles.has(role.id));
 		const deleteRole = async () => {
 			await role.delete(`Deleted by ${msg.author.tag}`);
-			msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have deleted the role \`${role.name}\`. 🗑` });
+			msg.respond(`I have deleted the role \`${role.name}\`. 🗑`);
 		};
 		if (flag) return deleteRole();
 		new Prompt({
@@ -61,7 +61,7 @@ export default class DeleteRole extends Command {
 			if ((await responses).target[0][0] === 'y') {
 				deleteRole();
 			} else {
-				msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** the \`deleterole\` command has been cancelled.` });
+				msg.respond(`the \`deleterole\` command has been cancelled.`);
 			}
 		});
 	}

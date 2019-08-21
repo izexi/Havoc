@@ -31,16 +31,16 @@ export default class WarnClear extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		this.db.category = 'warn';
 		const key = member.id + msg.guild.id;
 		const amount = (await this.db.get(key) || []).length;
 		if (!amount) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${member.user.tag}\` doesn't have any warnings in this server.` });
+			return msg.respond(`\`${member.user.tag}\` doesn't have any warnings in this server.`);
 		}
 		await this.db.delete(key);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have cleared ${amount} ${Util.plural('warning', amount)} from \`${member.user.tag}\`.` });
+		msg.respond(`I have cleared ${amount} ${Util.plural('warning', amount)} from \`${member.user.tag}\`.`);
 		msg.guild.modlog(msg, member);
 	}
 }

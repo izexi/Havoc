@@ -55,13 +55,13 @@ export default class Ban extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		// @ts-ignore
 		// eslint-disable-next-line newline-per-chained-call
 		const existing = await this.api.guilds(msg.guild.id).bans(user.id).get().catch(() => null);
 		if (existing) {
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${tag} is already banned in this server.` });
+			return msg.respond(`${tag} is already banned in this server.`);
 		}
 		const ban = async () => {
 			await msg.guild.members.ban(user, { reason: `Banned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}` });
@@ -79,7 +79,7 @@ export default class Ban extends Command {
 			if ((await responses).target[0][0] === 'y') {
 				ban();
 			} else {
-				msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** the \`ban\` command has been cancelled.` });
+				msg.respond(`the \`ban\` command has been cancelled.`);
 			}
 		});
 	}

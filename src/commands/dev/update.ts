@@ -14,7 +14,7 @@ export default class Reload extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		const message = await msg.sendEmbed({ setDescription: '<a:Restarting:411680219636826112> Updating...' });
+		const message = await msg.respond('<a:Restarting:411680219636826112> Updating...', false);
 		const { stdout, stderr } = await exec('git pull');
 		message.edit(message.embeds[0].setDescription(
 			`**stdout**:\n${Util.codeblock(stdout)}

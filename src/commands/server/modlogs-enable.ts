@@ -19,6 +19,6 @@ export default class AutoroleEnable extends Command {
 	public async run(this: HavocClient, { msg, target: { channel } }: { msg: HavocMessage; target: { channel: HavocTextChannel } }) {
 		const { modlogs } = await msg.guild.config;
 		await msg.guild.addConfig({ modlogs: channel.id });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${channel && msg.guild.channels.has(modlogs) ? `I have updated the mod logs channel from ${msg.guild.channels.get(modlogs)} to ${channel}` : `I have enabled mod logs in ${channel} for this server.`}` });
+		msg.respond(`${channel && msg.guild.channels.has(modlogs) ? `I have updated the mod logs channel from ${msg.guild.channels.get(modlogs)} to ${channel}` : `I have enabled mod logs in ${channel} for this server.`}`);
 	}
 }

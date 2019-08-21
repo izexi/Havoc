@@ -38,8 +38,8 @@ export default class Json extends Command {
 				return JSON.stringify((await res.json()), null, 2);
 			})
 			.catch(err => `**${msg.author.tag}** I ran into an error while trying to access \`${msg.text}\` \n\`${err}\``);
-		msg.response = await msg.sendEmbed({
+		msg.respond(await msg.sendEmbed({
 			setDescription: Util[json.length > 2036 ? 'haste' : 'codeblock'](json, 'json')
-		}, '', [{ attachment: Buffer.from(json, 'utf8'), name: 'attachment.json' }]);
+		}, '', [{ attachment: Buffer.from(json, 'utf8'), name: 'attachment.json' }]));
 	}
 }

@@ -45,18 +45,14 @@ export default class GiveawayReroll extends Command {
 	public async run(this: HavocClient, { msg, target: { giveawayMsg, winners } }: { msg: HavocMessage; target: { giveawayMsg: HavocMessage; winners: number } }) {
 		const reaction = giveawayMsg.reactions.get('🎉');
 		if (!reaction) {
-			return msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** a new winner could not be determined as there aren't any 🎉 reactions on the [giveaway](${giveawayMsg.url}).`
-			});
+			return msg.respond(`a new winner could not be determined as there aren't any 🎉 reactions on the [giveaway](${giveawayMsg.url}).`);
 		}
 		const newWinners = (await reaction.users.fetch())
 			.filter(user => user.id !== this.user!.id)
 			.random(Number(winners))
 			.filter(user => user);
 		if (!newWinners.length) {
-			return msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** a new winner could not be determined as there aren't enough 🎉 reactions on the [giveaway](${giveawayMsg.url}).`
-			});
+			return msg.respond(`a new winner could not be determined as there aren't enough 🎉 reactions on the [giveaway](${giveawayMsg.url}).`);
 		}
 		await giveawayMsg.sendEmbed({
 			setDescription: `🎉 Congratulations **${newWinners.map(u => u.tag).join(', ')}**! You are the new winner of the [giveaway](${giveawayMsg.url}) for ${giveawayMsg.embeds[0].title} 🎉`,

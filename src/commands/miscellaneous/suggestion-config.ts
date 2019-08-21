@@ -42,6 +42,6 @@ export default class SuggestionConfig extends Command {
 		const { suggestion } = await msg.guild.config;
 		const type = channelOrRole instanceof Role ? 'role' : 'channel';
 		await msg.guild.addConfig({ giveaway: { ...suggestion, [type]: channelOrRole.id } });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have updated the suggestions ${type} to ${channelOrRole} for this server.` });
+		msg.respond(`I have updated the suggestions ${type} to ${channelOrRole} for this server.`);
 	}
 }

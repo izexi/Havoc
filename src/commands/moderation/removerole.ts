@@ -38,9 +38,9 @@ export default class RemoveRole extends Command {
 			response = `${tag} doesn't even have the \`${role.name}\` role.`;
 		}
 		if (response) {
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		await member.roles.remove(role, `Removed by ${msg.author.tag}`);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have removed the role \`${role.name}\` from ${tag}.` });
+		msg.respond(`I have removed the role \`${role.name}\` from ${tag}.`);
 	}
 }

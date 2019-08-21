@@ -45,7 +45,7 @@ export default class Botclear extends Command {
 		}
 		const messages = await msg.channel.messages.fetch({ limit: 100 });
 		const cleared = await msg.channel.bulkDelete(messages.filter(filter), true);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** bot cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}` })
+		msg.respond(`bot cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}`)
 			.then(async message => message.delete({ timeout: 1300 }))
 			.catch(() => null);
 	}

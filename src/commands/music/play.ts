@@ -25,7 +25,7 @@ export default class Json extends Command {
 
 	public async run(this: HavocClient, { msg, target: { song } }: { msg: HavocMessage; target: { song: string } }) {
 		if (!msg.member!.voice.channel) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** you need to be in a voice channel to use this command.` });
+			return msg.respond(`you need to be in a voice channel to use this command.`);
 		}
 		/* eslint-disable no-irregular-whitespace */
 		await msg.channel.send(`

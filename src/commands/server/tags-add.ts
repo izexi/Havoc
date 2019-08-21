@@ -22,10 +22,10 @@ export default class TagsAdd extends Command {
 
 	public async run(this: HavocClient, { msg, target: { name, content } }: { msg: HavocMessage; target: { name: string; content: string } }) {
 		if (msg.guild.tags.has(name)) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** A tag with the name \`${name}\` already exists.` });
+			return msg.respond(`A tag with the name \`${name}\` already exists.`);
 		}
 		if (this.commands.handler.has(name)) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${name}\` is already a command, so you can't use this as a tag name.` });
+			return msg.respond(`\`${name}\` is already a command, so you can't use this as a tag name.`);
 		}
 		const createdAt = Date.now();
 		this.db.category = 'tags';
@@ -37,6 +37,6 @@ export default class TagsAdd extends Command {
 			guild: msg.guild.id
 		});
 		msg.guild.tags.set(name, content);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have created the tag \`${name}\` which you can trigger by entering \`${msg.prefix}${name}\`` });
+		msg.respond(`I have created the tag \`${name}\` which you can trigger by entering \`${msg.prefix}${name}\``);
 	}
 }

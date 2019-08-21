@@ -35,7 +35,7 @@ export default class Dick extends Command {
 				res = size();
 				await this.db.set(user.id, res);
 			}
-			msg.sendEmbed({
+			msg.respond({
 				setDescription: `**${msg.author.tag}** ${user.id === msg.author.id ? 'after taking a measurement I can confirm that: You sir, have' : `according to my calculations, **${user.tag}** has`} a **${res} incher**.`,
 				setFooter: `8${'='.repeat(res * 2)}D`
 			});

@@ -94,9 +94,8 @@ export default class Suggestion extends Command {
 			setColor: 'YELLOW'
 		});
 		msg.author.send(embed).catch(() => {
-			msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** your suggestion has been submitted, click [here](${suggestionMessage.url}) to view it.\nI was unable to DM you so you will need to enable them if you will be notified about the status of approval/denial.`
-			});
+			msg.respond(`your suggestion has been submitted, click [here](${suggestionMessage.url}) to view it.
+			I was unable to DM you so you will need to enable them if you will be notified about the status of approval/denial.`);
 		});
 	}
 }

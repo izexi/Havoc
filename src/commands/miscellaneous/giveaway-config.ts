@@ -42,6 +42,6 @@ export default class GiveawayConfig extends Command {
 		const { giveaway } = await msg.guild.config;
 		const type = channelOrRole instanceof Role ? 'role' : 'channel';
 		await msg.guild.addConfig({ giveaway: { ...giveaway, [type]: channelOrRole.id } });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have updated the giveaways ${type} to ${channelOrRole} for this server.` });
+		msg.respond(`I have updated the giveaways ${type} to ${channelOrRole} for this server.`);
 	}
 }

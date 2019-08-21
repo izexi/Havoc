@@ -14,7 +14,7 @@ export default class ServerInfo extends Command {
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const guild = msg.guild;
-		msg.response = await msg.sendEmbed({
+		msg.respond({
 			setThumbnail: guild.iconURL() ||
                 `https://placeholdit.imgix.net/~text?txtsize=50&txtfont=Whitney&w=128&h=128&bg=2f3136&txtclr=fff&txt=${guild.name.split(' ').map(name => name[0]).join('')}`,
 			addField: [

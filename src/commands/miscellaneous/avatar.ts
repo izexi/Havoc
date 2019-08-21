@@ -21,10 +21,10 @@ export default class Avatar extends Command {
 	public async run(this: HavocClient, { msg, target: { user, loose } }: { msg: HavocMessage; target: { user: HavocUser; loose: string } }) {
 		if (!user) user = msg.author;
 		const avatar = user.pfp;
-		msg.response = await msg.sendEmbed({
+		msg.respond(await msg.sendEmbed({
 			setDescription: `[URL for ${user.id === msg.author.id ? 'your' : `${loose ? user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : user.tag}'s`} avatar](${avatar})`,
 			setImage: avatar,
 			setThumbnail: avatar
-		}, msg.args.length ? `I couldn't find \`${Util.cleanContent(msg.text, msg)}\`... so here's yours?` : '');
+		}, msg.args.length ? `I couldn't find \`${Util.cleanContent(msg.text, msg)}\`... so here's yours?` : ''));
 	}
 }

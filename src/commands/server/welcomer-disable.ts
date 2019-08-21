@@ -14,9 +14,9 @@ export default class WelcomerDisable extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const { welcomer } = await msg.guild.config;
 		if (!welcomer) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** welcomer has not been enabled on this server.` });
+			return msg.respond(`welcomer has not been enabled on this server.`);
 		}
 		await msg.guild.removeConfig('welcomer');
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have disabled welcomer for this server.` });
+		msg.respond(`I have disabled welcomer for this server.`);
 	}
 }

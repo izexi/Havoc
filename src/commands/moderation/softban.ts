@@ -58,18 +58,18 @@ export default class Softban extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		// @ts-ignore
 		// eslint-disable-next-line newline-per-chained-call
 		const existing = await this.api.guilds(msg.guild.id).bans(user.id).get().catch(() => null);
 		if (existing) {
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${tag} is already banned in this server.` });
+			return msg.respond(`${tag} is already banned in this server.`);
 		}
 		const unban = async () => {
 			await msg.guild.members.ban(user, { reason: `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}` });
 			await msg.guild.members.unban(user, `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
-			msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have softbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨` });
+			msg.respond(`I have softbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨`);
 			msg.guild.modlog(msg, user, reason);
 		};
 		if (flag) return unban();
@@ -83,7 +83,7 @@ export default class Softban extends Command {
 			if ((await responses).target[0][0] === 'y') {
 				unban();
 			} else {
-				msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** the \`softban\` command has been cancelled.` });
+				msg.respond(`the \`softban\` command has been cancelled.`);
 			}
 		});
 	}

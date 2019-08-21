@@ -12,6 +12,6 @@ export default class Lenny extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		msg.response = await msg.channel.send('( ͡° ͜ʖ ͡°)') as HavocMessage;
+		msg.respond('( ͡° ͜ʖ ͡°)', false, true);
 	}
 }

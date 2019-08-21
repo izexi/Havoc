@@ -37,11 +37,11 @@ export default class Kick extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		const oldNick = member.displayName;
 		const newNick = nick.slice(0, 32);
 		await member.setNickname(newNick);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have changed \`${member.user.tag}\`'s nickname from \`${oldNick}\` to \`${newNick}\`` });
+		msg.respond(`I have changed \`${member.user.tag}\`'s nickname from \`${oldNick}\` to \`${newNick}\``);
 	}
 }

@@ -40,11 +40,11 @@ export default class Ping extends Command {
 			}
 		}
 		if (user.presence.activity) fields.push(['❯Activity', user.presence.activity.name, true]);
-		msg.response = await msg.sendEmbed({
+		msg.respond(await msg.sendEmbed({
 			setThumbnail: user.pfp,
 			addField: fields
 		}, msg.text && !user
 			? `I couldn't find \`${djsUtil.cleanContent(msg.text, msg)}\`... so here's yours?`
-			: '');
+			: ''));
 	}
 }

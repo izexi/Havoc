@@ -21,10 +21,10 @@ export default class Avatar extends Command {
 
 	public async run(this: HavocClient, { msg, target: { prefix } }: { msg: HavocMessage; target: { prefix: string } }) {
 		if (!prefix) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** my current prefix for this server is \`${msg.prefix}\`.` });
+			return msg.respond(`my current prefix for this server is \`${msg.prefix}\`.`);
 		}
 		if (prefix === msg.prefix) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** my current prefix for this server is already \`${msg.prefix}\`.` });
+			return msg.respond(`my current prefix for this server is already \`${msg.prefix}\`.`);
 		}
 		if (prefix === msg.defaultPrefix) {
 			await msg.guild.removeConfig('prefix');
@@ -32,6 +32,6 @@ export default class Avatar extends Command {
 			await msg.guild.addConfig({ prefix });
 		}
 		msg.guild.prefix = prefix;
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have updated this server's prefix to \`${prefix}\`.` });
+		msg.respond(`I have updated this server's prefix to \`${prefix}\`.`);
 	}
 }

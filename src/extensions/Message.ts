@@ -43,6 +43,20 @@ export default class HavocMessage extends Message {
 		return super.react(emoji);
 	}
 
+	public async respond(toSend: string | { [key: string]: any } | HavocMessage, author = true, contentOnly = false) {
+		let message;
+		if (toSend instanceof HavocMessage) {
+			message = Promise.resolve(toSend);
+		} else if (contentOnly) {
+			message = this.channel.send(toSend) as Promise<HavocMessage>;
+		} else {
+			message = typeof toSend === 'string'
+				? this.sendEmbed({ setDescription: `${author ? `**${this.author.tag}** ` : ''}${toSend}` })
+				: this.sendEmbed(toSend);
+		}
+		return message.then(msg => msg.response = msg);
+	}
+
 	public constructEmbed(methods: { [key: string]: any }): MessageEmbed {
 		const embed = new MessageEmbed()
 			.setColor(this.guild ? this.member!.displayColor || 'WHITE' : '')

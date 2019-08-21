@@ -18,7 +18,7 @@ export default class Embed extends Command {
 
 	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
 		await msg.delete();
-		msg.sendEmbed({
+		msg.respond({
 			setDescription: string,
 			setFooter: [msg.author.tag, msg.author.pfp]
 		});

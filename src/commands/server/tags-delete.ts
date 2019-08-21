@@ -24,9 +24,7 @@ export default class TagsDelete extends Command {
 		msg.guild.tags.delete(name);
 		this.db.category = 'tags';
 		await this.db.delete(createdAt);
-		msg.sendEmbed({
-			setDescription: `**${msg.author.tag}** I have deleted the \`${name}\` tag which was created by ${(await this.users.fetch(createdBy)).tag} on ${new Date(createdAt).toLocaleString()} (UTC) that had the content ${lastModifiedAt ? `(last modified by ${(await this.users.fetch(lastModifiedBy)).tag} on ${new Date(lastModifiedAt).toLocaleString()})` : ''}:
-				${Util.codeblock(content)}`
-		});
+		msg.respond(`I have deleted the \`${name}\` tag which was created by ${(await this.users.fetch(createdBy)).tag} on ${new Date(createdAt).toLocaleString()} (UTC) that had the content ${lastModifiedAt ? `(last modified by ${(await this.users.fetch(lastModifiedBy)).tag} on ${new Date(lastModifiedAt).toLocaleString()})` : ''}:
+				${Util.codeblock(content)}`);
 	}
 }

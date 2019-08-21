@@ -68,6 +68,13 @@ interface CommandOptions {
 		x & 1 << 4: subCommand required
 	}
 	*/
+	/**
+	**	x & 1: deleteable
+	**	x & 1 << 1: editable
+	**	x & 1 << 2: target
+	**	x & 1 << 3: args required
+	**	x & 1 << 4: subCommand required
+	*/
 	opts: number;
 	description: string;
 	args?: {

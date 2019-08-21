@@ -17,6 +17,6 @@ export default class Mock extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
-		msg.response = await msg.channel.send(string.replace(/./g, (letter, i) => i % 2 ? letter : letter.toUpperCase()), { disableEveryone: true }) as HavocMessage;
+		msg.respond(await msg.channel.send(string.replace(/./g, (letter, i) => i % 2 ? letter : letter.toUpperCase()), { disableEveryone: true }));
 	}
 }

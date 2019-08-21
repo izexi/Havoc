@@ -55,6 +55,6 @@ export default class Warnpunish extends Command {
 			punishments[number] = punishment;
 		}
 		await msg.guild.addConfig({ punishments });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have updated this server's warn punishments to, you can view them by doing \`${msg.prefix}warnpunishlist\`.` });
+		msg.respond(`I have updated this server's warn punishments to, you can view them by doing \`${msg.prefix}warnpunishlist\`.`);
 	}
 }

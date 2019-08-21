@@ -43,16 +43,16 @@ export default class Botclear extends Command {
 		}
 		if (option === 'add') {
 			if (bcPrefixes.includes(prefix)) {
-				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${prefix}\` is already prefix that is being botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.` });
+				return msg.respond(`\`${prefix}\` is already prefix that is being botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.`);
 			}
 			bcPrefixes.push(prefix);
 		} else {
 			if (!bcPrefixes.includes(prefix)) {
-				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** \`${prefix}\` isn't a prefix that is being botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.` });
+				return msg.respond(`\`${prefix}\` isn't a prefix that is being botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.`);
 			}
 			bcPrefixes.splice(bcPrefixes.indexOf(prefix), 1);
 		}
 		await msg.guild.addConfig({ bcPrefixes });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have ${option}${option === 'add' ? 'e' : ''}d \`${prefix}\` to the list of prefixes that will be botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.` });
+		msg.respond(`I have ${option}${option === 'add' ? 'e' : ''}d \`${prefix}\` to the list of prefixes that will be botcleared, you can view all the prefixes by entering \`${msg.prefix}bc config view\`.`);
 	}
 }

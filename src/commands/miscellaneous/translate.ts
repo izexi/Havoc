@@ -37,10 +37,6 @@ export default class Translate extends Command {
 					'attachment://translate.png'
 				]
 			}, msg.author.toString());
-		}).catch(async () => {
-			msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** there was an error while attempting to translate your text.`
-			});
-		});
+		}).catch(async () => msg.respond(`there was an error while attempting to translate your text.`));
 	}
 }

@@ -55,11 +55,11 @@ export default class Kick extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		const kick = async () => {
 			await member.kick(`Kicked by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
-			msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have kicked \`${member.user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨` });
+			msg.respond(`I have kicked \`${member.user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨`);
 			msg.guild.modlog(msg, member, reason);
 		};
 		if (flag) return kick();

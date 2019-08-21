@@ -11,7 +11,7 @@ export default class Info extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		msg.sendEmbed({
+		msg.respond({
 			setDescription:
 				`Donate to me by clicking **[here](https://www.patreon.com/user?u=15028160)** (join [this server](https://discord.gg/3Fewsxq) to receive your rewards) 
 				  • $1      Donator role in the support server

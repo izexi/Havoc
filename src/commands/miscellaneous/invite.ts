@@ -12,8 +12,6 @@ export default class Invite extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		msg.response = await msg.sendEmbed({
-			setDescription: `[Click here to invite **${this.user!.username}** to your server.](https://discordapp.com/oauth2/authorize?client_id=${this.user!.id}&scope=bot&permissions=2146958591)`
-		});
+		msg.respond(`[Click here to invite **${this.user!.username}** to your server.](https://discordapp.com/oauth2/authorize?client_id=${this.user!.id}&scope=bot&permissions=2146958591)`);
 	}
 }

@@ -19,6 +19,6 @@ export default class AutoroleEnable extends Command {
 	public async run(this: HavocClient, { msg, target: { role } }: { msg: HavocMessage; target: { role: Role } }) {
 		const { autorole } = await msg.guild.config;
 		await msg.guild.addConfig({ autorole: role.id });
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${autorole && msg.guild.roles.has(autorole) ? `I have updated the autorole from ${msg.guild.roles.get(autorole)} to ${role}` : `I have enabled autorole for ${role} for this server.`}` });
+		msg.respond(`${autorole && msg.guild.roles.has(autorole) ? `I have updated the autorole from ${msg.guild.roles.get(autorole)} to ${role}` : `I have enabled autorole for ${role} for this server.`}`);
 	}
 }

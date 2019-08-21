@@ -56,7 +56,7 @@ export default class Warn extends Command {
 		}
 		if (response) {
 			await msg.react('⛔');
-			return msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** ${response}` });
+			return msg.respond(response);
 		}
 		let { punishments } = await msg.guild.config;
 		if (!punishments) {
@@ -92,15 +92,15 @@ export default class Warn extends Command {
 						reason
 					}));
 				await member.roles.add(muteRole as Role, Util.auditClean(reason));
-				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''} and muted them for ${time} minutes as punishment for reaching ${amount} warns.` });
+				return msg.respond(`**${msg.author.tag}** I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''} and muted them for ${time} minutes as punishment for reaching ${amount} warns.`);
 			case 'kick':
 				await member.kick(Util.auditClean(reason));
-				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''} and kicked them as punishment for reaching ${amount} warns.` });
+				return msg.respond(`I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''} and kicked them as punishment for reaching ${amount} warns.`);
 			case 'ban':
 				await member.ban({ reason: Util.auditClean(reason) });
-				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''} and banned them as punishment for reaching ${amount} warns.` });
+				return msg.respond(`I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''} and banned them as punishment for reaching ${amount} warns.`);
 			default:
-				msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''}, this is their ${Util.ordinal(amount)} warning.` });
+				msg.respond(`I have warned \`${member.user.tag}\`${warnReason ? ` for the reason \`${warnReason}\`` : ''}, this is their ${Util.ordinal(amount)} warning.`);
 		}
 	}
 }

@@ -16,6 +16,6 @@ export default class Omegalul extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
-		msg.response = await msg.channel.send(string.replace(/o/g, '<:omegalul:457981874531467265>'), { disableEveryone: true }) as HavocMessage;
+		msg.respond(await msg.channel.send(string.replace(/o/g, '<:omegalul:457981874531467265>'), { disableEveryone: true }));
 	}
 }

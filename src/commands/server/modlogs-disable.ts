@@ -14,9 +14,9 @@ export default class ModlogsDisable extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const { modlogs } = await msg.guild.config;
 		if (!modlogs) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** mod logs has not been enabled on this server.` });
+			return msg.respond(`mod logs has not been enabled on this server.`);
 		}
 		await msg.guild.removeConfig('modlogs');
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have disabled mod logs for this server.` });
+		msg.respond(`I have disabled mod logs for this server.`);
 	}
 }

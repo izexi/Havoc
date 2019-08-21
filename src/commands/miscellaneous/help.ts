@@ -74,7 +74,7 @@ export default class Help extends Command {
 							`•\`${msg.prefix}${command.name} ${format(example)}\` => ${desc}`).join('\n'));
 				}
 			}
-			return msg.response = await msg.sendEmbed(embed);
+			return msg.respond(embed);
 		}
 		const emojis: { [key: string]: string } = {
 			emojis: '<:emojis:466978216339570701>',
@@ -98,7 +98,7 @@ export default class Help extends Command {
 			]);
 			return arr;
 		}, []);
-		msg.response = await msg.sendEmbed({
+		msg.respond({
 			setDescription:
 				`You can view more info about a command by doing \`${msg.prefix}help [command name]\`
 				Click **[here](https://discord.gg/3Fewsxq)** to join the support server here

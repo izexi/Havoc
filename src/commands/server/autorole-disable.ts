@@ -14,9 +14,9 @@ export default class AutoroleDisable extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const { autorole } = await msg.guild.config;
 		if (!autorole) {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** autorole has not been enabled on this server.` });
+			return msg.respond(`autorole has not been enabled on this server.`);
 		}
 		await msg.guild.removeConfig('autorole');
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have disabled autorole for this server.` });
+		msg.respond(`I have disabled autorole for this server.`);
 	}
 }

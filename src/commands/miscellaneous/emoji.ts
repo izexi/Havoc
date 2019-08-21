@@ -40,6 +40,6 @@ export default class Emoji extends Command {
 				]
 			};
 		}
-		msg.response = await msg.sendEmbed(embed);
+		msg.respond(embed);
 	}
 }

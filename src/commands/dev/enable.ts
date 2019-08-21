@@ -19,8 +19,6 @@ export default class Reload extends Command {
 
 	public async run(this: HavocClient, { msg, target: { command } }: { msg: HavocMessage; target: { command: Command } }) {
 		this.commands.disabled.delete(command.name);
-		msg.response = await msg.sendEmbed({
-			setDescription: `**${msg.author.tag}** the command \`${command.name}\` been enabled.`
-		});
+		msg.respond(`the command \`${command.name}\` been enabled.`);
 	}
 }

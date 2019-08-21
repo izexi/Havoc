@@ -45,7 +45,7 @@ export default class Clear extends Command {
 			messages = messages.filter(message => message.author!.id === userOrNull.id);
 		}
 		const cleared = await msg.channel.bulkDelete(isNaN(number) ? messages : messages.first(Math.min(number, 100)), true);
-		msg.sendEmbed({ setDescription: `**${msg.author.tag}** cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}` })
+		msg.respond(`cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}`)
 			.then(async message => message.delete({ timeout: 1300 }))
 			.catch(() => null);
 	}

@@ -7,7 +7,7 @@ import Util from '../util/Util';
 
 export default async function(this: HavocClient, outdated: HavocMessage, updated: HavocMessage) {
 	const guild = updated.guild as HavocGuild;
-	if (guild.disabledLogs.has(14) || updated.content === outdated.content) return;
+	if (guild.disabledLogs.has(14) || updated.content === outdated.content || outdated.author.bot) return;
 	const embed = new MessageEmbed()
 		.setDescription(`
 			${outdated.content.length < 900 ? `**📝Before  :** ${Util.codeblock(outdated.content)}` : ''}
@@ -29,5 +29,5 @@ export default async function(this: HavocClient, outdated: HavocMessage, updated
 			name: 'edited_content.txt'
 		}]);
 	}
-	Log.send(updated.guild as HavocGuild, embed);
+	Log.send(guild, embed);
 }

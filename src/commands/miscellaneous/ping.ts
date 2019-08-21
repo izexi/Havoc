@@ -11,10 +11,10 @@ export default class Ping extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		msg.response = await msg.sendEmbed({
+		const message = await msg.respond(await msg.sendEmbed({
 			setTitle: '🏸 Pinging...'
-		});
-		msg.response!.edit(
+		}));
+		message.edit(
 			msg.constructEmbed({
 				setTitle: '🏓 Pong!',
 				setDescription: `Latency: ${msg.response!.createdTimestamp - msg.createdTimestamp}ms\nHeartbeat: ${~~(this.ws.ping)}ms`

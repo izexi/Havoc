@@ -49,7 +49,7 @@ export default class LogsEnable extends Command {
 				if (!disabledLogs.delete(index)) disabledLogs.add(index);
 				await this.db.set(msg.guild.id, [...disabledLogs]);
 				await prompt.edit(constructEmbed());
-				await msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have ${state} logs for \`${Util.captialise(event)}\`` }).then(async m => m.delete({ timeout: 3000 }));
+				await msg.respond(`I have ${state} logs for \`${Util.captialise(event)}\``).then(async m => m.delete({ timeout: 3000 }));
 			} else if (_option === 'cancel' || _option === 'done') {
 				collector.stop(_option);
 			} else {
@@ -64,7 +64,7 @@ export default class LogsEnable extends Command {
 			clearInterval(interval);
 			await prompt.reactions.removeAll();
 			if (reason === 'time') {
-				await msg.sendEmbed({ setDescription: `**${msg.author.tag}** 60 seconds is over.` }).then(async m => m.delete({ timeout: 3000 }));
+				await msg.respond(`60 seconds is over.`).then(async m => m.delete({ timeout: 3000 }));
 				footer = 'Command timed out.';
 				emoji = '⏲';
 			} else if (reason === 'cancel') {

@@ -21,7 +21,7 @@ export default class WarnpunishList extends Command {
 				10: 'ban'
 			};
 		}
-		msg.sendEmbed({
+		msg.respond({
 			setDescription: Util.codeblock(
 				Object.entries(punishments)
 					.map(([amount, punishment]) => `${amount} => ${punishment[0] === 'm' ? `Mute for ${punishment.match(/\d+/)![0]} minutes` : Util.captialise(punishment)}\n`)
