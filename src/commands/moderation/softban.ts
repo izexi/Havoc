@@ -67,7 +67,10 @@ export default class Softban extends Command {
 			return msg.respond(`${tag} is already banned in this server.`);
 		}
 		const unban = async () => {
-			await msg.guild.members.ban(user, { reason: `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}` });
+			await msg.guild.members.ban(user, {
+				reason: `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`,
+				days: 7
+			});
 			await msg.guild.members.unban(user, `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`);
 			msg.respond(`I have softbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨`);
 			msg.guild.modlog(msg, user, reason);

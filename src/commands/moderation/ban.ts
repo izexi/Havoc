@@ -64,7 +64,10 @@ export default class Ban extends Command {
 			return msg.respond(`${tag} is already banned in this server.`);
 		}
 		const ban = async () => {
-			await msg.guild.members.ban(user, { reason: `Banned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}` });
+			await msg.guild.members.ban(user, {
+				reason: `Banned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`,
+				days: 7
+			});
 			msg.sendEmbed({ setDescription: `**${msg.author.tag}** I have banned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨` });
 			msg.guild.modlog(msg, user, reason);
 		};
