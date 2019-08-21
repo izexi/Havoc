@@ -32,34 +32,28 @@ const getSuggestionChannel = async (msg: HavocMessage) => {
 };
 
 
-export async function review(_msg: HavocMessage, text: string, approve: boolean) {
-	const suggestionChannel = await getSuggestionChannel(_msg);
-	const [messageID, ...reason] = text.split(/ +/);
-	const invalidID = async () => _msg.sendEmbed({
-		setDescription: `**${_msg.author.tag}** you have entered an invalid Suggestion ID.`,
-		setImage: 'https://i.imgur.com/IK7JkVw.png'
-	});
-	const reviewReason = reason.join(' ');
-	(suggestionChannel as HavocTextChannel).messages.fetch(messageID).then(async msg => {
-		const [embed] = msg.embeds;
-		if (!embed || !embed.footer || !embed.footer.text || !embed.footer.text.startsWith('Suggestion') || msg.author!.id !== _msg.client.user!.id) return _msg.response = await invalidID();
-		if (embed.fields[1].value !== 'Open') {
-			return _msg.response = await _msg.sendEmbed({
-				setDescription: `**${_msg.author.tag}** _msg suggestion has already been ${Util.captialise(embed.fields[1].value.split(' -')[0])}.`
-			});
-		}
-		embed.fields[1].value = `${approve ? 'Approved' : 'Denied'} by ${_msg.author.tag}${reviewReason ? ` - ${reviewReason}` : ''}`;
-		embed.setColor(approve ? 'GREEN' : 'RED');
-		// eslint-disable-next-line promise/catch-or-return
-		await msg.edit(embed);
-		const [userID]: RegExpMatchArray = embed.author!.name!.match(Regex.id) || [];
-		embed.setAuthor(`💡Your suggestion in ${msg.guild!.name} has been ${approve ? 'accepted' : 'denied'}💡`);
-		embed.setDescription(`\n\nClick [here](${msg.url}) to view it.`);
-		// eslint-disable-next-line promise/no-nesting
-		_msg.client.users.fetch(userID)
-			.then(async user => user.send(embed))
-			.catch(() => null);
-	}).catch(async () => _msg.response = await invalidID());
+export async function review(msg: HavocMessage, reason: string, approve: boolean) {
+	const [embed] = msg.embeds;
+	if (!embed || !embed.footer || !embed.footer.text || !embed.footer.text.startsWith('Suggestion') || msg.author!.id !== msg.client.user!.id) {
+		return msg.respond({
+			setDescription: `**${msg.author.tag}** you have entered an invalid Suggestion ID.`,
+			setImage: 'https://i.imgur.com/IK7JkVw.png'
+		});
+	}
+	if (embed.fields[1].value !== 'Open') {
+		return msg.respond(`this suggestion has already been ${Util.captialise(embed.fields[1].value.split(' -')[0])}.`);
+	}
+	embed.fields[1].value = `${approve ? 'Approved' : 'Denied'} by ${msg.author.tag}${reason ? ` - ${reason}` : ''}`;
+	embed.setColor(approve ? 'GREEN' : 'RED');
+	// eslint-disable-next-line promise/catch-or-return
+	await msg.edit(embed);
+	const [userID]: RegExpMatchArray = embed.author!.name!.match(Regex.id) || [];
+	embed.setAuthor(`💡Your suggestion in ${msg.guild!.name} has been ${approve ? 'accepted' : 'denied'}💡`);
+	embed.setDescription(`\n\nClick [here](${msg.url}) to view it.`);
+	// eslint-disable-next-line promise/no-nesting
+	msg.client.users.fetch(userID)
+		.then(async user => user.send(embed))
+		.catch(() => null);
 }
 
 export default class SuggestionApprove extends Command {
@@ -73,11 +67,18 @@ export default class SuggestionApprove extends Command {
 				type: async (msg: HavocMessage) => {
 					const suggestionChannel = await getSuggestionChannel(msg) as HavocTextChannel;
 					if (!suggestionChannel) return null;
-					return suggestionChannel.messages.fetch(msg.arg)
-						.then(() => msg.content)
-						.catch(() => null);
+					return suggestionChannel.messages.fetch(msg.arg).catch(() => null);
 				},
-				prompt: { initialMsg: 'enter the ID of the suggestion which you can find on the footer of the suggestion\'s embed, followed by the reason of approval (optional)' }
+				prompt: {
+					initialMsg: 'enter the ID of the suggestion which you can find on the footer of the suggestion\'s embed, followed by the reason of approval (optional)',
+					invalidResponseMsg: 'I couldn\'t find any suggestions that corresponds the ID that you entered https://i.imgur.com/IK7JkVw.png'
+				}
+			},
+			{
+				key: 'reason',
+				optional: true,
+				type: 'string',
+				prompt: { initialMsg: 'enter the reason for approval' }
 			}],
 			userPerms: {
 				role: async (msg: HavocMessage) => {
@@ -90,8 +91,8 @@ export default class SuggestionApprove extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { suggestion } }: { msg: HavocMessage; target: { suggestion: string } }) {
+	public async run(this: HavocClient, { msg, target: { suggestionMsg, reason } }: { msg: HavocMessage; target: { suggestionMsg: HavocMessage; reason: string } }) {
 		// eslint-disable-next-line promise/catch-or-return
-		msg.delete().then(async () => review(msg, suggestion, true));
+		msg.delete().then(async () => review(suggestionMsg, reason, true));
 	}
 }

@@ -6,7 +6,7 @@ import Util from '../util/Util';
 
 export default async function(this: HavocClient, outdated: GuildMember, updated: GuildMember) {
 	const guild = updated.guild as HavocGuild;
-	if (guild.disabledLogs.has(12)) return;
+	if (!guild || guild.disabledLogs.has(12)) return;
 	if (outdated.displayName !== updated.displayName) {
 		const entry = await Log.getEntry(guild, 'MEMBER_UPDATE');
 		const executor = await Log.getExecutor(updated, 'MEMBER_UPDATE', entry);

@@ -6,7 +6,7 @@ import HavocMessage from '../extensions/Message';
 
 export default async function(this: HavocClient, messages: Collection<HavocMessage['id'], HavocMessage>) {
 	const guild = messages.first()!.guild as HavocGuild;
-	if (guild.disabledLogs.has(13)) return;
+	if (!guild || guild.disabledLogs.has(13)) return;
 	Log.send(guild,
 		new MessageEmbed()
 			.setDescription(`

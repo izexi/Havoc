@@ -6,7 +6,7 @@ import Util from '../util/Util';
 
 export default async function(this: HavocClient, outdated: Role, updated: Role) {
 	const guild = updated.guild as HavocGuild;
-	if (guild.disabledLogs.has(18)) return;
+	if (!guild || guild.disabledLogs.has(18)) return;
 	const entry = await Log.getEntry(updated.guild, 'ROLE_UPDATE');
 	const executor = await Log.getExecutor(updated, 'ROLE_UPDATE', entry);
 	let embed;

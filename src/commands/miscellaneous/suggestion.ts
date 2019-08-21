@@ -61,7 +61,8 @@ export default class Suggestion extends Command {
 
 	public async run(this: HavocClient, { msg, target: { suggestionOrSubCommand } }: { msg: HavocMessage; target: { suggestionOrSubCommand: string } }) {
 		const subCommands = ['approve', 'deny', 'config'];
-		if (subCommands.includes(suggestionOrSubCommand.toLowerCase())) {
+		suggestionOrSubCommand = suggestionOrSubCommand.split(' ')[0].toLowerCase();
+		if (subCommands.includes(suggestionOrSubCommand)) {
 			msg.args = msg.args.filter(arg => !subCommands.includes(arg));
 			return this.commands.handler.handle(msg, this.commands.get(`suggestion-${suggestionOrSubCommand}`)!);
 		}

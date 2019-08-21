@@ -5,7 +5,7 @@ import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, channel: TextChannel | VoiceChannel | CategoryChannel | NewsChannel) {
 	const guild = channel.guild as HavocGuild;
-	if (guild.disabledLogs.has(0)) return;
+	if (!guild || guild.disabledLogs.has(0)) return;
 	const executor = await Log.getExecutor(channel, 'CHANNEL_CREATE');
 	Log.send(guild,
 		new MessageEmbed()

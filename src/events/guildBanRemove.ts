@@ -5,7 +5,7 @@ import HavocGuild from '../extensions/Guild';
 import HavocUser from '../extensions/User';
 
 export default async function(this: HavocClient, guild: HavocGuild, user: HavocUser) {
-	if (guild.disabledLogs.has(11)) return;
+	if (!guild || guild.disabledLogs.has(11)) return;
 	const entry = await Log.getEntry(guild, 'MEMBER_BAN_REMOVE');
 	const executor = await Log.getExecutor({ guild, id: user.id }, 'MEMBER_BAN_REMOVE', entry);
 	Log.send(guild,

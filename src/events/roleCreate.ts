@@ -5,7 +5,7 @@ import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, role: Role) {
 	const guild = role.guild as HavocGuild;
-	if (guild.disabledLogs.has(16)) return;
+	if (!guild || guild.disabledLogs.has(16)) return;
 	const executor = await Log.getExecutor(role, 'ROLE_CREATE');
 	Log.send(guild,
 		new MessageEmbed()

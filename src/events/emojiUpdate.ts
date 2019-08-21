@@ -6,7 +6,7 @@ import HavocGuild from '../extensions/Guild';
 export default async function(this: HavocClient, outdated: GuildEmoji, updated: GuildEmoji) {
 	if (outdated.name === updated.name) return;
 	const guild = updated.guild as HavocGuild;
-	if (guild.disabledLogs.has(6)) return;
+	if (!guild || guild.disabledLogs.has(6)) return;
 	const executor = await Log.getExecutor(updated, 'EMOJI_UPDATE');
 	Log.send(guild,
 		new MessageEmbed()

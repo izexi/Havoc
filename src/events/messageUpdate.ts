@@ -7,7 +7,7 @@ import Util from '../util/Util';
 
 export default async function(this: HavocClient, outdated: HavocMessage, updated: HavocMessage) {
 	const guild = updated.guild as HavocGuild;
-	if (guild.disabledLogs.has(14) || updated.content === outdated.content || outdated.author.bot) return;
+	if (!guild || guild.disabledLogs.has(14) || updated.content === outdated.content || outdated.author.bot) return;
 	const embed = new MessageEmbed()
 		.setDescription(`
 			${outdated.content.length < 900 ? `**📝Before  :** ${Util.codeblock(outdated.content)}` : ''}

@@ -16,9 +16,15 @@ export default class Reload extends Command {
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const message = await msg.respond('<a:Restarting:411680219636826112> Updating...', false);
 		const { stdout, stderr } = await exec('git pull');
-		message.edit(message.embeds[0].setDescription(
-			`**stdout**:\n${Util.codeblock(stdout)}
-			${stderr ? `**stderr**:\n${Util.codeblock(stderr)}` : ''}`
-		));
+		const description = `**stdout**:\n${Util.codeblock(stdout)}
+		${stderr ? `**stderr**:\n${Util.codeblock(stderr)}` : ''}`;
+		if (description.length >= 2048) {
+			await message.delete();
+			return message.channel.send({
+				attachment: Buffer.from(description, 'utf8'),
+				name: 'update.txt'
+			});
+		}
+		message.edit(message.embeds[0].setDescription(description));
 	}
 }

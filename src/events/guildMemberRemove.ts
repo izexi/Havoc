@@ -7,7 +7,7 @@ import HavocTextChannel from '../extensions/TextChannel';
 
 export default async function(this: HavocClient, member: GuildMember) {
 	const guild = member.guild as HavocGuild;
-	if (guild.disabledLogs.has(10)) return;
+	if (!guild || guild.disabledLogs.has(10)) return;
 	const entry = await Log.getEntry(guild, 'MEMBER_KICK');
 	const executor = await Log.getExecutor(member, 'MEMBER_KICK', entry);
 	const { welcomer } = await guild.config;

@@ -5,7 +5,7 @@ import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, emoji: GuildEmoji) {
 	const guild = emoji.guild as HavocGuild;
-	if (guild.disabledLogs.has(4)) return;
+	if (!guild || guild.disabledLogs.has(4)) return;
 	const executor = await Log.getExecutor(emoji, 'EMOJI_CREATE');
 	Log.send(guild,
 		new MessageEmbed()

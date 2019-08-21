@@ -6,7 +6,7 @@ import HavocGuild from '../extensions/Guild';
 export default async function(this: HavocClient, outdated: TextChannel, updated: TextChannel) {
 	if (!updated.guild || (outdated.topic === updated.topic && outdated.name === updated.name)) return;
 	const guild = updated.guild as HavocGuild;
-	if (guild.disabledLogs.has(2)) return;
+	if (!guild || guild.disabledLogs.has(2)) return;
 	const executor = await Log.getExecutor(updated, 'CHANNEL_UPDATE');
 	Log.send(guild,
 		new MessageEmbed()
