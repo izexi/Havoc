@@ -20,6 +20,7 @@ export default class Poll extends Command {
 				}
 			},
 			{
+				optional: true,
 				type: 'options',
 				prompt: {
 					initialMsg: 'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no',
@@ -38,15 +39,12 @@ export default class Poll extends Command {
 	public async run(this: HavocClient, { msg, target: { question, options }, flag }: { msg: HavocMessage; target: { question: string; options: string }; flag: string }) {
 		const invalidResponses = [];
 		let time = 0;
-		const formattedOptions = options.split(';').map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
+		const formattedOptions = (options || 'Yes;No').split(';').map((opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`);
 		if (flag) time = Time.parse(flag.slice(5));
-		if (!question || !options) invalidResponses.push(`you have used this command incorrectly, enter \`${msg.prefix}help poll\` for more info`);
 		if (time > 12096e+5) invalidResponses.push('the maximum time allowed is 2 weeks');
 		if (formattedOptions.length > 10) invalidResponses.push('the maximum amount of options allowed are 10');
 		if (invalidResponses.length) {
-			return msg.response = await msg.sendEmbed({
-				setDescription: `**${msg.author.tag}** ${invalidResponses.join(' ,')}`
-			});
+			return msg.respond(invalidResponses.join(' ,'));
 		}
 		const embed = msg.constructEmbed({
 			setAuthor: [`Poll started by ${msg.author.tag}`, msg.author.pfp],

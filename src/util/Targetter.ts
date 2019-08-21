@@ -71,7 +71,7 @@ export default {
 
 	async getTarget(type: TargetType, msg: HavocMessage) {
 		let text = type === 'string' || type === 'role' || type === 'tagName' ? msg.text : msg.arg;
-		if (type === 'question' || type === 'options') text = msg.content.replace(/\s?-time=[^\s]*/, '');
+		if (type === 'question' || type === 'options') text = msg.text.replace(/\s?-time=[^\s]*/, '');
 		const guild = msg.guild;
 		let target = null;
 		let loose = null;
