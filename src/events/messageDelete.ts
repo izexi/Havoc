@@ -9,7 +9,7 @@ import HavocTextChannel from '../extensions/TextChannel';
 export default async function(this: HavocClient, message: HavocMessage) {
 	const guild = message.guild as HavocGuild;
 	if (guild.disabledLogs.has(15) || message.author.bot || (message.channel as HavocTextChannel).prompts.has(message.author.id)) return;
-	if (message.command && message.command.deleteable && message.response) message.response.delete();
+	if (message.command && message.command.deleteable && message.response) return message.response.delete();
 	let executor;
 	const entry = await Log.getEntry(message.guild, 'MESSAGE_DELETE');
 	// @ts-ignore
