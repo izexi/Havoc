@@ -50,7 +50,7 @@ export default class Mute extends Command {
 				.map(async textchannel => {
 					const currentMutePerms = textchannel.permissionOverwrites.get(muteRole!.id);
 					if (!currentMutePerms || currentMutePerms.deny.bitfield !== 2112) {
-						await textchannel.updateOverwrite(muteRole!.id, {
+						await textchannel.updateOverwrite(muteRole!, {
 							SEND_MESSAGES: false,
 							ADD_REACTIONS: false
 						}).catch(() => null);
@@ -69,7 +69,7 @@ export default class Mute extends Command {
 			const promises = guild.channels
 				.filter(channel => channel.type === 'text')
 				.map(textchannel => {
-					textchannel.updateOverwrite(muteRole!.id, {
+					textchannel.updateOverwrite(muteRole!, {
 						SEND_MESSAGES: false,
 						ADD_REACTIONS: false
 					}).catch(() => null);
