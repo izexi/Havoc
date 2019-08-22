@@ -84,13 +84,11 @@ export default class Prompt extends EventEmitter {
 				msg.intialMsg = this.msg;
 				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg);
 				const { target } = await targetObj;
-				if (target || target === null) {
-					collector.stop();
-					this.responses.push(targetObj);
-					this.index++;
-				} else {
-					return this.invalidResponse(msg);
-				}
+				// eslint-disable-next-line no-eq-null
+				if (target == null) return this.invalidResponse(msg);
+				collector.stop();
+				this.responses.push(targetObj);
+				this.index++;
 				if (this.initialMsg.length) {
 					this.create();
 				} else {
