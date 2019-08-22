@@ -4,14 +4,18 @@ import Log from '../structures/Log';
 import HavocGuild from '../extensions/Guild';
 import HavocMessage from '../extensions/Message';
 import Util from '../util/Util';
+import { rejectionHandler } from './message';
 
 export default async function(this: HavocClient, outdated: HavocMessage, updated: HavocMessage) {
 	const guild = updated.guild as HavocGuild;
 	if (!guild || guild.disabledLogs.has(14) || updated.content === outdated.content || outdated.author.bot) return;
 	updated.args = updated.content.split(/ +/);
-	const command = this.commands.handler.get(updated.args.shift()!.substring(updated.prefix.length));
-	if (command) {
-		return this.commands.handler.handle(updated, command).catch(console.error);
+	const prefix = updated.prefix;
+	if (prefix) {
+		const command = this.commands.handler.get(updated.args.shift()!.substring(prefix.length));
+		if (command) {
+			return this.commands.handler.handle(updated, command).catch(rej => rejectionHandler(this, updated, rej));
+		}
 	}
 	const embed = new MessageEmbed()
 		.setDescription(`
