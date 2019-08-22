@@ -7,7 +7,7 @@ import Util from '../../util/Util';
 export default class WarnClear extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Clears all warnings from the inputted member.',
 			aliases: new Set(['warnc', 'clearwarnings', 'cwarns', 'cwarnings']),
 			args: [{

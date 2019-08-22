@@ -8,7 +8,7 @@ import EmbedPagination from '../../structures/EmbedPagination';
 export default class EmojiList extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b0000,
+			opts: 0b0010,
 			description: 'View a list of emojis on this server.',
 			aliases: new Set(['el', 'emojis', 'emojislist'])
 		});

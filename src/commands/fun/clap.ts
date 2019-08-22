@@ -17,9 +17,9 @@ export default class Clap extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, target: { string } }: { msg: HavocMessage; target: { string: string } }) {
-		msg.respond(await msg.channel.send(string.replace(/ /g, '👏'), {
+		msg.send(string.replace(/ /g, '👏'), {
 			split: { 'char': '👏' },
 			disableEveryone: true
-		}));
+		});
 	}
 }

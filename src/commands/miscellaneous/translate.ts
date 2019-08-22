@@ -9,7 +9,7 @@ const langs = require('../../assets/langs.json');
 export default class Translate extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Translates the inputted text to English (by default) / optional flag language via Google Translate.',
 			aliases: new Set(['t']),
 			args: [{

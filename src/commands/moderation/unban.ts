@@ -6,7 +6,7 @@ import HavocUser from '../../extensions/User';
 export default class Unban extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Unbans the inputted user from the server.',
 			args: [{
 				type: 'user',

@@ -8,7 +8,7 @@ import * as moment from 'moment';
 export default class Emoji extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1011,
 			description: 'View info about an emoji.',
 			args: [{
 				type: 'emoji',

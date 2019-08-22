@@ -8,6 +8,11 @@ import Util from '../util/Util';
 export default async function(this: HavocClient, outdated: HavocMessage, updated: HavocMessage) {
 	const guild = updated.guild as HavocGuild;
 	if (!guild || guild.disabledLogs.has(14) || updated.content === outdated.content || outdated.author.bot) return;
+	updated.args = updated.content.split(/ +/);
+	const command = this.commands.handler.get(updated.args.shift()!.substring(updated.prefix.length));
+	if (command) {
+		return this.commands.handler.handle(updated, command).catch(console.error);
+	}
 	const embed = new MessageEmbed()
 		.setDescription(`
 			${outdated.content.length < 900 ? `**📝Before  :** ${Util.codeblock(outdated.content)}` : ''}

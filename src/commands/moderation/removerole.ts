@@ -6,7 +6,7 @@ import { GuildMember, Role } from 'discord.js';
 export default class RemoveRole extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Removes the inputted role to a member.',
 			aliases: new Set(['rr']),
 			args: [{

@@ -8,7 +8,7 @@ import Util from '../../util/Util';
 export default class MemberList extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'View a list of emojis on this server.',
 			aliases: new Set(['ml', 'members', 'memberslist']),
 			flags: new Set(['id', 'tag', 'username', 'nickname']),

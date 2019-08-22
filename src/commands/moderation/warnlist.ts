@@ -7,7 +7,7 @@ import EmbedPagination from '../../structures/EmbedPagination';
 export default class WarnList extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'View the your / inputted member\'s warning(s) in the guild.',
 			aliases: new Set(['warns', 'wl', 'warnl']),
 			args: [{

@@ -6,7 +6,7 @@ import { GuildMember } from 'discord.js';
 export default class Kick extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Changes the nickname of inputted member to the inputted new nickname.',
 			args: [{
 				type: 'member',

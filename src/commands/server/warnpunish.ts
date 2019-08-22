@@ -5,8 +5,8 @@ import HavocClient from '../../client/Havoc';
 export default class Warnpunish extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
-			description: 'View the current prefix.',
+			opts: 0b1010,
+			description: 'Set the warn punishments for the server.',
 			aliases: new Set(['warnp', 'punishments']),
 			args: [{
 				type: 'number',

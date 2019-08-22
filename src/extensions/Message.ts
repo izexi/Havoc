@@ -1,4 +1,4 @@
-import { Message, TextChannel, MessageEmbed, MessageReaction, EmojiResolvable } from 'discord.js';
+import { Message, TextChannel, MessageEmbed, MessageReaction, EmojiResolvable, MessageOptions, MessageAttachment } from 'discord.js';
 import Regex from '../util/Regex';
 import HavocGuild from './Guild';
 import Command from '../structures/bases/Command';
@@ -38,23 +38,29 @@ export default class HavocMessage extends Message {
 		this._init();
 	}
 
+	public async send(content: string | MessageOptions, options?: MessageOptions | MessageEmbed | MessageAttachment | (MessageEmbed | MessageAttachment)[]) {
+		if (this.edits.length > 1) {
+			const response = (this.edits.pop() as HavocMessage).response;
+			if (response && this.command.editable) {
+				return options instanceof MessageEmbed ? response.edit(content, options) : response.edit(content);
+			}
+		}
+		// eslint-disable-next-line promise/catch-or-return
+		return (this.channel.send(content, options) as Promise<HavocMessage>).then((msg): HavocMessage => this.response = Array.isArray(msg) ? msg[0] : msg);
+	}
+
 	public async react(emoji: EmojiResolvable): Promise<any> {
 		if (this.deleted || (this.channel.type === 'text' && !(this.channel as HavocTextChannel).permissionsFor(this.guild.me!)!.has('ADD_REACTIONS'))) return null;
 		return super.react(emoji);
 	}
 
 	public async respond(toSend: string | { [key: string]: any } | HavocMessage, author = true, contentOnly = false) {
-		let message;
-		if (toSend instanceof HavocMessage) {
-			message = Promise.resolve(toSend);
-		} else if (contentOnly) {
-			message = this.channel.send(toSend) as Promise<HavocMessage>;
-		} else {
-			message = typeof toSend === 'string'
-				? this.sendEmbed({ setDescription: `${author ? `**${this.author.tag}** ` : ''}${toSend}` })
-				: this.sendEmbed(toSend);
-		}
-		return message.then(msg => msg.response = msg);
+		if (contentOnly && typeof toSend === 'string') return this.send(toSend);
+		return this.sendEmbed(
+			typeof toSend === 'string'
+				? { setDescription: `${author ? `**${this.author.tag}** ` : ''}${toSend}` }
+				: toSend
+		);
 	}
 
 	public constructEmbed(methods: { [key: string]: any }): MessageEmbed {
@@ -84,9 +90,9 @@ export default class HavocMessage extends Message {
 
 	public async sendEmbed(methodsOrEmbed: { [key: string]: any } | MessageEmbed, content?: string, files?: { attachment: Buffer; name?: string }[]) {
 		if (this.guild && !(this.channel as TextChannel).permissionsFor(this.guild.me!)!.has('EMBED_LINKS')) {
-			return this.response = await this.channel.send(`**${this.author}** I require the \`Embed Links\` permission to execute this command.`) as HavocMessage;
+			return this.response = await this.send(`**${this.author}** I require the \`Embed Links\` permission to execute this command.`) as HavocMessage;
 		}
-		const embed = await this.channel.send({
+		const embed = await this.send({
 			content,
 			files,
 			embed: methodsOrEmbed instanceof MessageEmbed

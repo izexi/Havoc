@@ -6,7 +6,7 @@ import HavocClient from '../../client/Havoc';
 export default class Unmute extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Unmutes (no longer restricts from sending and reacting to messages) the inputted member from the server.',
 			aliases: new Set(['um']),
 			args: [{

@@ -8,7 +8,7 @@ import Util from '../../util/Util';
 export default class Warn extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Warns the inputted members and takes action according to the set punishments.',
 			aliases: new Set(['w']),
 			args: [{

@@ -7,7 +7,7 @@ import { Role } from 'discord.js';
 export default class DeleteRole extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'Deletes the inputted role.',
 			aliases: new Set(['dr']),
 			flags: new Set(['force', 'f']),

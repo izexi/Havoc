@@ -5,8 +5,8 @@ import HavocGuild from '../extensions/Guild';
 
 export default async function(this: HavocClient, channel: TextChannel | VoiceChannel | CategoryChannel | NewsChannel) {
 	const guild = channel.guild as HavocGuild;
-	const muteRole = guild.roles.find(role => role.name === 'HavocMute');
 	if (!guild || guild.disabledLogs.has(0)) return;
+	const muteRole = guild.roles.find(role => role.name === 'HavocMute');
 	if (channel.type === 'text' && muteRole) {
 		await channel.updateOverwrite(muteRole, {
 			SEND_MESSAGES: false,

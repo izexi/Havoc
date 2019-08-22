@@ -7,7 +7,7 @@ import Util from '../../util/Util';
 export default class Json extends Command {
 	public constructor() {
 		super(__filename, {
-			opts: 0b1000,
+			opts: 0b1010,
 			description: 'View a pretty printed JSON that is parsed from the entered URL.',
 			args: [{
 				key: 'url',
