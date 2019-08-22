@@ -2,10 +2,18 @@ import Logger from '../util/Logger';
 import HavocClient from '../client/Havoc';
 import HavocGuild from '../extensions/Guild';
 import HavocTextChannel from '../extensions/TextChannel';
+import { MessageEmbed } from 'discord.js';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { parse } = require('json-buffer');
 
 export default async function(this: HavocClient) {
+	(this.channels.get('614043112662368277') as HavocTextChannel).send(
+		new MessageEmbed()
+			// @ts-ignore
+			.setTitle(`Client is ready (${this.ws.sessionStartLimit.remaining} identifies remaining)`)
+			.setColor('GREEN')
+			.setTimestamp()
+	);
 	this.user!.setActivity('you', { type: 'WATCHING' });
 	Logger.log(`${this.user!.tag} is ready in ${this.guilds.size} guilds!`);
 	this.supportServer = this.guilds.get('406873117215031297')!;

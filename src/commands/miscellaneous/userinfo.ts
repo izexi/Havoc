@@ -21,6 +21,7 @@ export default class Ping extends Command {
 	}
 
 	public async run(this: HavocClient, { msg, target: { user } }: { msg: HavocMessage; target: { user: HavocUser } }) {
+		if (!user) user = msg.author;
 		const fields = [
 			['❯Tag', user.tag, true],
 			['❯ID', user.id, true],

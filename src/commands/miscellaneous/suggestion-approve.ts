@@ -32,18 +32,18 @@ const getSuggestionChannel = async (msg: HavocMessage) => {
 };
 
 
-export async function review(msg: HavocMessage, reason: string, approve: boolean) {
+export async function review(msg: HavocMessage, reason: string, approve: boolean, approvedBy: string) {
 	const [embed] = msg.embeds;
 	if (!embed || !embed.footer || !embed.footer.text || !embed.footer.text.startsWith('Suggestion') || msg.author!.id !== msg.client.user!.id) {
 		return msg.respond({
-			setDescription: `**${msg.author.tag}** you have entered an invalid Suggestion ID.`,
+			setDescription: `**${approvedBy}** you have entered an invalid Suggestion ID.`,
 			setImage: 'https://i.imgur.com/IK7JkVw.png'
 		});
 	}
 	if (embed.fields[1].value !== 'Open') {
 		return msg.respond(`this suggestion has already been ${Util.captialise(embed.fields[1].value.split(' -')[0])}.`);
 	}
-	embed.fields[1].value = `${approve ? 'Approved' : 'Denied'} by ${msg.author.tag}${reason ? ` - ${reason}` : ''}`;
+	embed.fields[1].value = `${approve ? 'Approved' : 'Denied'} by ${approvedBy}${reason ? ` - ${reason}` : ''}`;
 	embed.setColor(approve ? 'GREEN' : 'RED');
 	// eslint-disable-next-line promise/catch-or-return
 	await msg.edit(embed);
@@ -93,6 +93,6 @@ export default class SuggestionApprove extends Command {
 
 	public async run(this: HavocClient, { msg, target: { suggestionMsg, reason } }: { msg: HavocMessage; target: { suggestionMsg: HavocMessage; reason: string } }) {
 		// eslint-disable-next-line promise/catch-or-return
-		msg.delete().then(async () => review(suggestionMsg, reason, true));
+		msg.delete().then(async () => review(suggestionMsg, reason, true, msg.author.tag));
 	}
 }

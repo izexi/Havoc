@@ -42,6 +42,6 @@ export default class SuggestionDeny extends Command {
 
 	public async run(this: HavocClient, { msg, target: { suggestionMsg, reason } }: { msg: HavocMessage; target: { suggestionMsg: HavocMessage; reason: string } }) {
 		// eslint-disable-next-line promise/catch-or-return
-		msg.delete().then(async () => review(suggestionMsg, reason, false));
+		msg.delete().then(async () => review(suggestionMsg, reason, false, msg.author.tag));
 	}
 }
