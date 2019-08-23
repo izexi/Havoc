@@ -42,6 +42,9 @@ export default class HavocMessage extends Message {
 		if (this.edits.length > 1) {
 			const response = (this.edits.pop() as HavocMessage).response;
 			if (response && this.command.editable) {
+				if (!(content instanceof MessageEmbed) && !(options instanceof MessageEmbed) && response.embeds.length) {
+					return response.edit(content, { embed: null });
+				}
 				return options instanceof MessageEmbed ? response.edit(content, options) : response.edit(content);
 			}
 		}

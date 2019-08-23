@@ -5,17 +5,17 @@ import { promisify } from 'util';
 import Util from '../../util/Util';
 const exec = promisify(require('child_process').exec);
 
-export default class Update extends Command {
+export default class Pm2 extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b0010,
-			description: 'Update me.'
+			description: 'View the PM2 logs.'
 		});
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const message = await msg.respond('<a:Restarting:411680219636826112> Updating...', false);
-		const { stdout, stderr } = await exec('git pull');
+		const { stdout, stderr } = await exec('pm2 logs npm');
 		const description = `**stdout**:\n${Util.codeblock(stdout)}
 		${stderr ? `**stderr**:\n${Util.codeblock(stderr)}` : ''}`;
 		if (description.length >= 2048) {

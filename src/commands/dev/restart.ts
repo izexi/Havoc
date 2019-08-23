@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 
-export default class Reload extends Command {
+export default class Restart extends Command {
 	public constructor() {
 		super(__filename, {
 			opts: 0b0011,
