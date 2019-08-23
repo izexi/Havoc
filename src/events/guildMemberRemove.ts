@@ -30,7 +30,7 @@ export default async function(this: HavocClient, member: GuildMember) {
 		new MessageEmbed()
 			.setDescription(`
 				${executor ? `**👢Kicked By :**  ${executor}` : ''}
-				${entry && entry.reason ? `**💬Reason :**  ${entry.reason}` : ''}
+				${executor && entry && entry.reason ? `**💬Reason :**  ${entry.reason}` : ''}
 				**📆Account created at :**  ${member.user.createdAt.toLocaleString()} (UTC)
 				${member.joinedAt ? `**🗓Joined guild at :**  ${member.joinedAt.toLocaleString()} (UTC)` : ''}
 				**ℹGuild member count :**  ${member.guild.memberCount}
