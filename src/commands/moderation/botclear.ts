@@ -43,8 +43,10 @@ export default class Botclear extends Command {
 				? message.author!.bot
 				: bcPrefixes.some(prefix => message.content.startsWith(prefix));
 		}
-		const messages = await msg.channel.messages.fetch({ limit: 100 });
-		const cleared = await msg.channel.bulkDelete(messages.filter(filter), true);
+		const messages = await msg.channel.messages.fetch({ limit: 100 }).catch(() => null);
+		if (!messages) return msg.respond('I encountered an error when attempting to fetch recent messages to botclear, maybe try again later?');
+		const cleared = await msg.channel.bulkDelete(messages.filter(filter), true).catch(() => null);
+		if (!cleared) return msg.respond('I encountered an error when attempting to botclear the messages, maybe try again later?');
 		msg.respond(`bot cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}`)
 			.then(async message => message.delete({ timeout: 1300 }))
 			.catch(() => null);

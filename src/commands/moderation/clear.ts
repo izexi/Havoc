@@ -40,11 +40,17 @@ export default class Clear extends Command {
 	public async run(this: HavocClient, { msg, target: { number, userOrNull } }: { msg: HavocMessage; target: { number: number; userOrNull?: HavocUser | null } }) {
 		const emojis = ['<:botclear1:486606839015014400>', '<:botclear2:486606870618963968>', '<:botclear3:486606906337525765>'];
 		await msg.delete();
-		let messages = await msg.channel.messages.fetch({ limit: 100 });
+		let messages = await msg.channel.messages.fetch({ limit: 100 }).catch(() => null);
+		if (!messages) {
+			return msg.respond('I encountered an error when attempting to fetch recent messages to clear, maybe try again later?');
+		}
 		if (userOrNull) {
 			messages = messages.filter(message => message.author!.id === userOrNull.id);
 		}
-		const cleared = await msg.channel.bulkDelete(isNaN(number) ? messages : messages.first(Math.min(number, 100)), true);
+		const cleared = await msg.channel.bulkDelete(isNaN(number) ? messages : messages.first(Math.min(number, 100)), true).catch(() => null);
+		if (!cleared) {
+			return msg.respond('I encountered an error when attempting to clear the messages, maybe try again later?');
+		}
 		msg.respond(`cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}`)
 			.then(async message => message.delete({ timeout: 1300 }))
 			.catch(() => null);

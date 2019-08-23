@@ -15,8 +15,8 @@ export default class Update extends Command {
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
 		const message = await msg.respond('<a:Restarting:411680219636826112> Updating...', false);
-		const { stdout, stderr } = await exec('git pull');
-		const description = `**stdout**:\n${Util.codeblock(stdout)}
+		const { stdout, stderr } = await exec('git pull').catch((err: Error) => ({ stderr: err }));
+		const description = `${stdout ? `**stdout**:\n${Util.codeblock(stdout)}` : ''}
 		${stderr ? `**stderr**:\n${Util.codeblock(stderr)}` : ''}`;
 		if (description.length >= 2048) {
 			await message.delete();
