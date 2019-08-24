@@ -11,9 +11,7 @@ export default class Ping extends Command {
 	}
 
 	public async run(this: HavocClient, { msg }: { msg: HavocMessage }) {
-		const message = await msg.respond(await msg.sendEmbed({
-			setTitle: '🏸 Pinging...'
-		}));
+		const message = await msg.respond({ setTitle: '🏸 Pinging...' });
 		message.edit(
 			msg.constructEmbed({
 				setTitle: '🏓 Pong!',
