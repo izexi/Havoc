@@ -26,7 +26,7 @@ export default class Botclear extends Command {
 		let { bcPrefixes }: { bcPrefixes: string[] } = await msg.guild.config;
 		if (!bcPrefixes) bcPrefixes = [msg.prefix, '!', '.'];
 		if (option === 'view') {
-			return msg.sendEmbed({ setDescription: `**${msg.author.tag}** current messages that are prefixed with ${bcPrefixes.map(prefix => `\`${prefix}\``).join(', ')} will be cleared when the botclear command is used.` });
+			return msg.respond(`current messages that are prefixed with ${bcPrefixes.map(prefix => `\`${prefix}\``).join(', ')} will be cleared when the botclear command is used.`);
 		}
 		let [prefix] = msg.args;
 		if (!prefix) {
