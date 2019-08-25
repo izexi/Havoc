@@ -125,7 +125,7 @@ export default {
 				if (target) msg.args.splice(0, target.split(' ').length);
 				break;
 			default:
-				if (type === 'user' || type === 'member') {
+				if (text && (type === 'user' || type === 'member')) {
 					target = await msg.guild.members.fetch({
 						query: text,
 						limit: 1
