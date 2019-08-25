@@ -1,7 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import Prompt from '../../structures/Prompt';
 import { Role } from 'discord.js';
 
 export default class DeleteRole extends Command {
@@ -51,18 +50,10 @@ export default class DeleteRole extends Command {
 			msg.respond(`I have deleted the role \`${role.name}\`. 🗑`);
 		};
 		if (flag) return deleteRole();
-		new Prompt({
-			msg,
-			initialMsg: `**${msg.author.tag}** are you sure you want to delete the role \`${role.name}\` which will also remove the role from \`${members.size} member(s)\`?  Enter __y__es or __n__o`,
-			invalidResponseMsg: 'Enter __y__es or __n__o',
-			files: [{ attachment: Buffer.from(members.map(member => `${member.user.tag} | ${member.id}`).join('\r\n'), 'utf8'), name: `${members.size} members.txt` }],
-			target: (_msg: HavocMessage) => _msg.arg.match(/^(yes|y|n|no)$/i)
-		}).on('promptResponse', async ([responses]) => {
-			if ((await responses).target[0][0] === 'y') {
-				deleteRole();
-			} else {
-				msg.respond(`the \`deleterole\` command has been cancelled.`);
-			}
-		});
+		const confirm = await msg.confirmation(
+			`delete the role \`${role.name}\` which will also remove the role from \`${members.size} member(s)\``,
+			[{ attachment: Buffer.from(members.map(member => `${member.user.tag} | ${member.id}`).join('\r\n'), 'utf8'), name: `${members.size} members.txt` }]
+		);
+		if (confirm) deleteRole();
 	}
 }

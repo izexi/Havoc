@@ -2,7 +2,6 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import HavocUser from '../../extensions/User';
-import Prompt from '../../structures/Prompt';
 
 export default class Softban extends Command {
 	public constructor() {
@@ -31,10 +30,10 @@ export default class Softban extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { user, loose, reason }, flag }: { msg: HavocMessage; target: { user: HavocUser; loose?: string; reason: string | null }; flag: string }) {
+	public async run(this: HavocClient, { msg, target: { user, reason }, flag }: { msg: HavocMessage; target: { user: HavocUser; reason: string | null }; flag: string }) {
 		reason = reason && reason.toLowerCase() === 'none' ? null : reason;
 		let response;
-		const tag = loose ? user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : user.tag;
+		const tag = user.tag;
 		if (user.id === msg.author.id) {
 			await msg.react('463993771961483264');
 			return msg.channel.send('<:WaitWhat:463993771961483264>');
@@ -66,7 +65,7 @@ export default class Softban extends Command {
 		if (existing) {
 			return msg.respond(`${tag} is already banned in this server.`);
 		}
-		const unban = async () => {
+		const softban = async () => {
 			await msg.guild.members.ban(user, {
 				reason: `Softbanned by ${msg.author.tag}${reason ? ` for the reason ${reason}` : ''}`,
 				days: 7
@@ -75,19 +74,8 @@ export default class Softban extends Command {
 			msg.respond(`I have softbanned \`${user.tag}\` from \`${msg.guild.name}\`${reason ? ` for the reason ${reason}` : '.'} 🔨`);
 			msg.guild.modlog(msg, user, reason);
 		};
-		if (flag) return unban();
-		await msg.react('464034357955395585');
-		new Prompt({
-			msg,
-			initialMsg: `**${msg.author.tag}** are you sure you want to softban \`${user.tag}\` from \`${msg.guild.name}\`?  Enter __y__es or __n__o`,
-			invalidResponseMsg: 'Enter __y__es or __n__o',
-			target: (_msg: HavocMessage) => _msg.arg.match(/^(yes|y|n|no)$/i)
-		}).on('promptResponse', async ([responses]) => {
-			if ((await responses).target[0][0] === 'y') {
-				unban();
-			} else {
-				msg.respond(`the \`softban\` command has been cancelled.`);
-			}
-		});
+		if (flag) return softban();
+		const confirm = await msg.confirmation(`softban \`${user.tag}\` from \`${msg.guild.name}\``);
+		if (confirm) softban();
 	}
 }

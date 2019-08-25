@@ -189,7 +189,27 @@ export default class HavocMessage extends Message {
 		})).catch(() => null);
 	}
 
-	public async createPrompt(options: PromptOptions) {
+	public async confirmation(action: string, files?: { attachment: Buffer; name: string }[]) {
+		await this.react('464034357955395585');
+		const [response] = await this.createPrompt({
+			files,
+			msg: this,
+			initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
+			invalidResponseMsg: 'Enter __y__es or __n__o',
+			target: (msg: HavocMessage) => msg.arg.match(/^(yes|y|n|no)$/i)
+		}) as RegExpMatchArray;
+		if (response.charAt(0).toLowerCase() === 'y') {
+			if (!this.deleted) await this.reactions.removeAll();
+			await this.react('464033586748719104');
+			return true;
+		}
+		if (!this.deleted) await this.reactions.removeAll();
+		await this.react('464034188652183562');
+		await this.respond(`the \`${this.command.name}\` command has been cancelled.`);
+		return false;
+	}
+
+	public async createPrompt(options: PromptOptions): Promise<any> {
 		return new Promise(resolve =>
 			new Prompt(options).on('promptResponse', responses => resolve(responses)));
 	}

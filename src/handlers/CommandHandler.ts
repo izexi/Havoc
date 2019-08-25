@@ -3,7 +3,7 @@ import CommandStore from '../stores/CommandStore';
 import { Client, PermissionString } from 'discord.js';
 import Command, { CommandParams } from '../structures/bases/Command';
 import HavocMessage from '../extensions/Message';
-import Targetter from '../util/Targetter';
+import Targetter, { Target } from '../util/Targetter';
 import Logger from '../util/Logger';
 import Responses from '../util/Responses';
 import { rejectionHandler } from '../events/message';
@@ -30,24 +30,20 @@ export default class CommandHandler extends Handler<string, Command> {
 			if (!(permRole && msg.member!.roles.has(permRole.id)) && !(flags && msg.member!.hasPermission(flags))) {
 				if (flags) flags = Array.isArray(flags) ? flags : [flags] as PermissionString[];
 				await msg.react('⛔');
-				return msg.response = await msg.sendEmbed({
-					setDescription: `**${msg.author.tag}** you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''}${flags ? ` you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)}` : ''} in order to use this command.`
-				});
+				return msg.respond(`you do not have sufficient permisions to use this command${permRole ? ` you need to have the \`${permRole.name}\` role or ` : ''}${flags ? ` you need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)}` : ''} in order to use this command.`);
 			}
 			if (flags && !msg.guild.me!.hasPermission(flags)) {
 				flags = Array.isArray(flags) ? flags : [flags] as PermissionString[];
-				return msg.response = await msg.sendEmbed({
-					setDescription: `**${msg.author.tag}** I do not have sufficient permisions to use this command I need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)} in order to use this command.`
-				});
+				return msg.respond(`I do not have sufficient permisions to use this command I need to have the ${(flags as string[]).map(flag => `\`${Util.normalizePermFlag(flag)}\``).join(', ')} ${Util.plural('permission', (flags as string[]).length)} in order to use this command.`);
 			}
 		}
 		if (command.category === 'donators') {
 			if (command.name === 'emojify') {
 				if (!this._client.donators.get('10')!.has(msg.author.id)) {
-					return msg.sendEmbed({ setDescription: `**${msg.author.tag}** only donators can use this command, do \`${msg.prefix}donate\` for more info` });
+					return msg.respond(`only donators can use this command, do \`${msg.prefix}donate\` for more info`);
 				}
 			} else if (!this._client.donators.get('5')!.has(msg.author.id)) {
-				return msg.sendEmbed({ setDescription: `**${msg.author.tag}** only donators can use this command, do \`${msg.prefix}donate\` for more info` });
+				return msg.respond(`only donators can use this command, do \`${msg.prefix}donate\` for more info`);
 			}
 		}
 		if (command.flags.size) {
@@ -72,11 +68,12 @@ export default class CommandHandler extends Handler<string, Command> {
 					initialMsg: command.args!.map(({ prompt }) => prompt!.initialMsg) as string[],
 					invalidResponseMsg: command.args!.map(({ prompt }) => prompt!.invalidResponseMsg),
 					target: command.args!.map(({ type }) => type)
-				}).then(async responses => {
-					const responseArr = await Promise.all(responses as Promise<{ target: string; loose: string | null }>[]);
-					if (responseArr) {
-						responseArr.forEach(({ target, loose }, i) =>
-							Targetter.assignTarget(msg, command.args![i].type, target, loose, params.target!, command.args![i].key));
+				}).then(async (responses: Target | Target[]) => {
+					responses = Util.arrayify(responses);
+					if (responses.some(r => r instanceof Promise)) responses = await Promise.all(responses);
+					if (responses) {
+						responses.forEach((target, i) =>
+							Targetter.assignTarget(msg, command.args![i].type, target, params.target!, command.args![i].key));
 					}
 				}).catch(err => Logger.error('Error when assigning targets from prompt', err));
 			} else {
@@ -84,16 +81,14 @@ export default class CommandHandler extends Handler<string, Command> {
 				const invalidResponses = Object.entries(params.target).reduce((responses: string[], [key, target]) => {
 					const arg = command.args!.find(a => a.key === key || a.type === key)!;
 					// eslint-disable-next-line no-eq-null
-					return key !== 'loose' && command.argsRequired && target == null && !arg.optional
+					return command.argsRequired && target == null && !arg.optional
 						? [...responses, arg.prompt!.invalidResponseMsg! || Responses[key](msg)]
 						: responses;
 				}, []);
 				const optionalEntry = Object.entries(params.target).find(([, v]) => v === 'optional');
 				if (optionalEntry) params.target[optionalEntry[0]] = false;
 				if (invalidResponses.length) {
-					return msg.sendEmbed({
-						setDescription: `**${msg.author.tag}** you have entered an invalid arguement. ${invalidResponses.join('\n')}`
-					});
+					return msg.respond(`you have entered an invalid arguement. ${invalidResponses.join('\n')}`);
 				}
 			}
 		}

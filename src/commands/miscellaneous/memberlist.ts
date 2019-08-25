@@ -30,7 +30,7 @@ export default class MemberList extends Command {
 			.then(members => members.filter(member => member.roles.has(role.id)))
 			.catch(() => null);
 		if (!roleMembers) {
-			return msg.response = await msg.sendEmbed({
+			return msg.respond({
 				setDescription: `${msg.author.tag} I encountered an error while trying to get a list of members that have the role \`${djsUtil.cleanContent(role.name, msg)}\`.`
 			});
 		}

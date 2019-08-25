@@ -74,7 +74,6 @@ export default {
 		if (type === 'question' || type === 'options') text = msg.text.replace(/\s?-time=[^\s]*/, '');
 		const guild = msg.guild;
 		let target = null;
-		let loose = null;
 		if (typeof type === 'function') {
 			target = await (type as Function)(msg);
 			if (!target && target !== false) target = null;
@@ -127,23 +126,21 @@ export default {
 				break;
 			default:
 				if (type === 'user' || type === 'member') {
-					target = await this.member.mentionOrIDSearch(text, guild) || await this.member.nameSearch(text, guild);
-					if (!target) {
-						target = await this.member.looseSearch(text, guild);
-						loose = text;
-					}
+					target = await msg.guild.members.fetch({
+						query: text,
+						limit: 1
+					}).then(col => col.first()).catch(() => null);
 				}
-				if (type === 'user') target = await guild.client.users.fetch(target ? target.id : text);
+				if (type === 'user') target = await guild.client.users.fetch(target ? target.id : text).catch(() => null);
 				break;
 		}
 		if (target && !['role', 'tagName', 'question', 'options'].includes(type as string)) msg.validArgs.add(msg.args.shift()!);
-		return { target, loose };
+		return target;
 	},
 
-	assignTarget(msg: HavocMessage, type: TargetType, target: Target, loose: string | null, targetObj: { [key: string]: Target }, key?: string) {
+	assignTarget(msg: HavocMessage, type: TargetType, target: Target, targetObj: { [key: string]: Target }, key?: string) {
 		if (!key) key = typeof type === 'function' ? 'target' : type;
 		targetObj[key] = target;
-		targetObj.loose = loose;
 		if (!targetObj[key] && !msg.command.argsRequired) targetObj.target = msg[type === 'user' ? 'author' : 'member'];
 	},
 
@@ -152,7 +149,7 @@ export default {
 		for (const arg of msg.command.args!) {
 			const { key, type } = arg;
 			await this.getTarget(type, msg)
-				.then(async ({ target, loose }) => this.assignTarget(msg, type, target, loose, targetObj, key))
+				.then(async target => this.assignTarget(msg, type, target, targetObj, key))
 				.catch(() => null);
 		}
 		return targetObj;

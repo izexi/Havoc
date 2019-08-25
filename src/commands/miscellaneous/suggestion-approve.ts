@@ -11,7 +11,7 @@ const getSuggestionChannel = async (msg: HavocMessage) => {
 	const { suggestion } = await msg.guild.config;
 	if (!suggestion) {
 		if (!existing) {
-			msg.response = await msg.sendEmbed({
+			msg.respond({
 				setDescription: `**${msg.author.tag}** I couldn't find a \`#suggestions\` and a suggestion channel hasn't been configured.
 				${msg.member!.permissions.has('MANAGE_GUILD') ? 'U' : 'You will need to ask someone with the `Manage Guild` permission to u'}se \`${msg.prefix}suggestion config\` to set one up.`
 			});
@@ -22,7 +22,7 @@ const getSuggestionChannel = async (msg: HavocMessage) => {
 	const { channel } = suggestion;
 	const suggestionChannel = msg.guild.channels.get(channel);
 	if (!suggestionChannel) {
-		msg.response = await msg.sendEmbed({
+		msg.respond({
 			setDescription: `**${msg.author.tag}** the suggestion channel that was in the configuration doesn't exist.
 			${msg.member!.permissions.has('MANAGE_GUILD') ? 'U' : 'You will need to ask someone with the `Manage Guild` permission to u'}se \`${msg.prefix}suggestion config\` to set one up.`
 		});

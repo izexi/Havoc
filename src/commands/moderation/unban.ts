@@ -29,10 +29,10 @@ export default class Unban extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { user, loose, reason } }: { msg: HavocMessage; target: { user: HavocUser; loose?: string; reason: string | null } }) {
+	public async run(this: HavocClient, { msg, target: { user, reason } }: { msg: HavocMessage; target: { user: HavocUser; reason: string | null } }) {
 		reason = reason && reason.toLowerCase() === 'none' ? null : reason;
 		let response;
-		const tag = loose ? user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : user.tag;
+		const tag = user.tag;
 		if (user.id === msg.author.id) {
 			await msg.react('463993771961483264');
 			return msg.channel.send('<:WaitWhat:463993771961483264>');

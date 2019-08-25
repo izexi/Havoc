@@ -84,12 +84,11 @@ export default class EmbedPagination {
 						initialMsg: 'enter the page you like to jump to.',
 						invalidResponseMsg: `You need to enter a number between 1 to ${this.totalPages}, e.g: entering \`2\` will jump to page 2.`,
 						target: (msg: HavocMessage) => {
-							if (Number.isInteger(Number(msg.content)) && Number(msg.content) > 0 && Number(msg.content) <= this.totalPages) {
-								return Number(msg.content);
-							}
+							const number = Number(msg.content);
+							if (number && number > 0 && number <= this.totalPages) return number;
 						}
 					})
-						.then(async ([response]: any) => this.embedMsg.edit(this.pageEmbed((await response).target)))
+						.then(async (response: number) => this.embedMsg.edit(this.pageEmbed(response)))
 						.catch(err => Logger.error('Error from embed pagination prompt', err));
 					break;
 				case '▶':

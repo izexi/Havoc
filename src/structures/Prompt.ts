@@ -22,10 +22,7 @@ export default class Prompt extends EventEmitter {
 
 	private promptMessages: string[] = [];
 
-	private responses: Promise<{
-		target: Target;
-		loose: string | null;
-	}>[] = [];
+	private responses: Promise<{ target: Target }>[] = [];
 
 	private timeLeft!: number;
 
@@ -82,19 +79,18 @@ export default class Prompt extends EventEmitter {
 				}
 				this.msg.promptResponses.add(msg.content.toLowerCase());
 				msg.intialMsg = this.msg;
-				const targetObj = Targetter.getTarget(this.target![this.index]! as TargetType, msg);
-				const { target } = await targetObj;
+				const target = await Targetter.getTarget(this.target![this.index]! as TargetType, msg);
 				// eslint-disable-next-line no-eq-null
 				if (target == null) return this.invalidResponse(msg);
 				collector.stop();
-				this.responses.push(targetObj);
+				this.responses.push(target);
 				this.index++;
 				if (this.initialMsg.length) {
 					this.create();
 				} else {
-					await this.msg.channel.bulkDelete(this.promptMessages);
+					collector.stop();
 					(this.msg.channel as HavocTextChannel).prompts.delete(this.msg.author.id);
-					this.emit('promptResponse', this.responses);
+					this.emit('promptResponse', this.responses.length === 1 ? this.responses[0] : this.responses);
 				}
 			})
 			.on('end', async (_, reason) => {
@@ -102,10 +98,9 @@ export default class Prompt extends EventEmitter {
 				await this.msg.channel.bulkDelete(this.promptMessages);
 				(this.msg.channel as HavocTextChannel).prompts.delete(this.msg.author.id);
 				if (reason === 'time') {
+					if (!this.msg.deleted) await this.msg.reactions.removeAll();
 					this.msg.react('⏱');
-					this.msg.response = await this.msg.sendEmbed({
-						setDescription: `**${this.msg.author.tag}** it have been over ${this.timeLimit / 1000} seconds and you did not enter a valid option, so I will go ahead and cancel this.`
-					});
+					this.msg.respond(`it have been over ${this.timeLimit / 1000} seconds and you did not enter a valid option, so I will go ahead and cancel this.`);
 				}
 				if (this.hastebin) {
 					await this.promptEmbed!.edit(

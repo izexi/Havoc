@@ -19,9 +19,9 @@ export default class WarnClear extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { member, loose } }: { msg: HavocMessage; target: { member: GuildMember; loose?: string } }) {
+	public async run(this: HavocClient, { msg, target: { member } }: { msg: HavocMessage; target: { member: GuildMember } }) {
 		let response;
-		const tag = loose ? member.user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : member.user.tag;
+		const tag = member.user.tag;
 		const role = member.roles.highest;
 		if (msg.guild.me!.roles.highest.comparePositionTo(role) < 1) {
 			response = `${tag} has the role \`${role.name}\` which has a higher / equivalent position compared to my highest role \`${msg.guild.me!.roles.highest.name}\`, therefore I do not have permission to clear warnings from this member.`;

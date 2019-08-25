@@ -67,8 +67,6 @@ export default class GiveawayReroll extends Command {
 				).catch(() => null))).catch(() => null);
 			})
 			.catch(() => null);
-		return msg.response = await msg.sendEmbed({
-			setDescription: `**${msg.author.tag}** a new winner has been rerolled on the [giveaway](${giveawayMsg.url}).`
-		});
+		return msg.respond(`a new winner has been rerolled on the [giveaway](${giveawayMsg.url}).`);
 	}
 }

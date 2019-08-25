@@ -1,7 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import Prompt from '../../structures/Prompt';
 
 export default class Botclear extends Command {
 	public constructor() {
@@ -30,16 +29,11 @@ export default class Botclear extends Command {
 		}
 		let [prefix] = msg.args;
 		if (!prefix) {
-			await new Promise(resolve => {
-				new Prompt({
-					msg,
-					initialMsg: `**${msg.author.tag}** enter the prefix that you would ${option} to the botclears.`,
-					target: 'string'
-				}).on('promptResponse', async ([responses]) => {
-					prefix = (await responses).target;
-					resolve();
-				});
-			});
+			prefix = await msg.createPrompt({
+				msg,
+				initialMsg: `**${msg.author.tag}** enter the prefix that you would ${option} to the botclears.`,
+				target: 'string'
+			}) as string;
 		}
 		if (option === 'add') {
 			if (bcPrefixes.includes(prefix)) {

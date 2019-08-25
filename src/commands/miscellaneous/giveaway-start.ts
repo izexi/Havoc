@@ -13,7 +13,7 @@ export async function getGiveawayChannel(msg: HavocMessage) {
 	const { giveaway } = await msg.guild.config;
 	if (!giveaway) {
 		if (!existing) {
-			msg.response = await msg.sendEmbed({
+			msg.respond({
 				setDescription: `**${msg.author.tag}** I couldn't find a \`#giveaways\` and a giveaway channel hasn't been configured.
 				${msg.member!.permissions.has('MANAGE_GUILD') ? 'U' : 'You will need to ask someone with the `Manage Guild` permission to u'}se \`${msg.prefix}giveaway config\` to set one up.`
 			});
@@ -24,7 +24,7 @@ export async function getGiveawayChannel(msg: HavocMessage) {
 	const { channel } = giveaway;
 	const giveawayChannel = msg.guild.channels.get(channel);
 	if (!giveawayChannel) {
-		msg.response = await msg.sendEmbed({
+		msg.respond({
 			setDescription: `**${msg.author.tag}** the giveaway channel that was in the configuration doesn't exist.
 			${msg.member!.permissions.has('MANAGE_GUILD') ? 'U' : 'You will need to ask someone with the `Manage Guild` permission to u'}se \`${msg.prefix}giveaway config\` to set one up.`
 		});

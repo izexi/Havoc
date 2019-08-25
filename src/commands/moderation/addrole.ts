@@ -31,9 +31,9 @@ export default class AddRole extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { member, role, reason, loose } }: { msg: HavocMessage; target: { member: GuildMember; role: Role; reason: string; loose?: string } }) {
+	public async run(this: HavocClient, { msg, target: { member, role, reason } }: { msg: HavocMessage; target: { member: GuildMember; role: Role; reason: string } }) {
 		let response;
-		const tag = loose ? member.user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : member.user.tag;
+		const tag = member.user.tag;
 		if (msg.guild.me!.roles.highest.comparePositionTo(role) < 1) {
 			response = `the role \`${role.name}\` has a higher / equivalent position compared to my highest role \`${msg.guild.me!.roles.highest.name}\`, therefore I do not have permission to add this role to ${tag}.`;
 		}

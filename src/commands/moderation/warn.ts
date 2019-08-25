@@ -32,10 +32,10 @@ export default class Warn extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { member, loose, reason } }: { msg: HavocMessage; target: { member: GuildMember; loose?: string; reason: string | null } }) {
+	public async run(this: HavocClient, { msg, target: { member, reason } }: { msg: HavocMessage; target: { member: GuildMember; reason: string | null } }) {
 		reason = reason && reason.toLowerCase() === 'none' ? null : reason;
 		let response;
-		const tag = loose ? member.user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : member.user.tag;
+		const tag = member.user.tag;
 		if (member.id === msg.author.id) {
 			await msg.react('463993771961483264');
 			return msg.channel.send('<:WaitWhat:463993771961483264>');

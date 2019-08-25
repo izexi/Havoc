@@ -1,7 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
-import Prompt from '../../structures/Prompt';
 import { GuildMember } from 'discord.js';
 
 export default class Kick extends Command {
@@ -31,10 +30,10 @@ export default class Kick extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { member, loose, reason }, flag }: { msg: HavocMessage; target: { member: GuildMember; loose?: string; reason: string | null }; flag: string }) {
+	public async run(this: HavocClient, { msg, target: { member, reason }, flag }: { msg: HavocMessage; target: { member: GuildMember; reason: string | null }; flag: string }) {
 		reason = reason && reason.toLowerCase() === 'none' ? null : reason;
 		let response;
-		const tag = loose ? member.user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : member.user.tag;
+		const tag = member.user.tag;
 		if (member.id === msg.author.id) {
 			await msg.react('463993771961483264');
 			return msg.channel.send('<:WaitWhat:463993771961483264>');
@@ -63,18 +62,7 @@ export default class Kick extends Command {
 			msg.guild.modlog(msg, member, reason);
 		};
 		if (flag) return kick();
-		await msg.react('464034357955395585');
-		new Prompt({
-			msg,
-			initialMsg: `**${msg.author.tag}** are you sure you want to kick \`${member.user.tag}\` from \`${msg.guild.name}\`?  Enter __y__es or __n__o`,
-			invalidResponseMsg: 'Enter __y__es or __n__o',
-			target: (_msg: HavocMessage) => _msg.arg.match(/^(yes|y|n|no)$/i)
-		}).on('promptResponse', async ([responses]) => {
-			if ((await responses).target[0][0] === 'y') {
-				kick();
-			} else {
-				msg.response = await msg.sendEmbed({ setDescription: `**${msg.author.tag}** the \`kick\` command has been cancelled.` });
-			}
-		});
+		const confirm = await msg.confirmation(`kick \`${member.user.tag}\` from \`${msg.guild.name}\``);
+		if (confirm) kick();
 	}
 }

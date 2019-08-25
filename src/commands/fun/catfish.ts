@@ -17,9 +17,9 @@ export default class Catfish extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { user, loose } }: { msg: HavocMessage; target: { user: HavocUser; loose: string } }) {
-		msg.response = await msg.sendEmbed({
-			setDescription: `[Image search of ${loose ? user.tag.replace(new RegExp(loose, 'gi'), '**$&**') : user.tag}'s avatar](https://images.google.com/searchbyimage?image_url=${user.pfp})`,
+	public async run(this: HavocClient, { msg, target: { user } }: { msg: HavocMessage; target: { user: HavocUser } }) {
+		msg.respond({
+			setDescription: `[Image search of ${user.tag}'s avatar](https://images.google.com/searchbyimage?image_url=${user.pfp})`,
 			attachFiles: ['src/assets/images/catfish.png'],
 			setThumbnail: 'attachment://catfish.png',
 			setURL: `https://images.google.com/searchbyimage?image_url=${user.pfp}`
