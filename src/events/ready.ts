@@ -17,7 +17,6 @@ export default async function(this: HavocClient) {
 	this.user!.setActivity('you', { type: 'WATCHING' });
 	Logger.log(`${this.user!.tag} is ready in ${this.guilds.size} guilds!`);
 	this.supportServer = this.guilds.get('406873117215031297')!;
-	this.scheduler.start();
 	this.db.category = 'restart';
 	const channel = this.channels.get(await this.db.get('restart')) as HavocTextChannel;
 	if (channel) {
@@ -32,6 +31,10 @@ export default async function(this: HavocClient) {
 			this.db.delete('restart');
 		}
 	}
+}
+
+export async function onceReady(this: HavocClient) {
+	this.scheduler.start();
 	const query = await this.db.query(`SELECT * FROM "havoc" WHERE "key" ~ '^(config|tags|donators|disabledLogs):'`, false, true);
 	await Promise.all(query.map(({ key, value }: { key: string; value: string }) => {
 		let category;

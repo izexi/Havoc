@@ -4,6 +4,7 @@ import CommandStore from '../stores/CommandStore';
 import EventStore from '../stores/EventStore';
 import Database from '../structures/Database';
 import SchedulerStore from '../stores/SchedulerStore';
+import { onceReady } from '../events/ready';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { token } = require('../../config.json');
 
@@ -34,6 +35,7 @@ export default class HavocClient extends Client {
 	private _init() {
 		this.commands.load();
 		this.events.load();
+		this.once('ready', onceReady.bind(this));
 		this.login(token)
 			.then(() => Logger.status(`Logged in as ${this.user!.tag}`))
 			.catch(err => Logger.error('Error while logging in', err));
