@@ -126,10 +126,17 @@ export default {
 				break;
 			default:
 				if (text && (type === 'user' || type === 'member')) {
-					target = await msg.guild.members.fetch({
-						query: text,
-						limit: 1
-					}).then(col => col.first()).catch(() => null);
+					if (Regex.id.test(text)) target = text.match(Regex.id)![0];
+					if (msg.mentions.users.size) {
+						target = msg.mentions.users.first();
+						if (type === 'member') target = await msg.guild.members.fetch(target!.id);
+					}
+					if (!target) {
+						target = await msg.guild.members.fetch({
+							query: text,
+							limit: 1
+						}).then(col => col.first()).catch(() => null);
+					}
 				}
 				if (type === 'user') target = await guild.client.users.fetch(target ? target.id : text).catch(() => null);
 				break;
