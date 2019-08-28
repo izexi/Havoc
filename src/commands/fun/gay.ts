@@ -33,7 +33,7 @@ export default class Gay extends Command {
 				res = Util.randomInt(0, 100);
 				await this.db.set(user.id, res);
 			}
-			msg.respond(`I can tell you for sure that, ${user.id === msg.author.id ? 'you' : `**${user.tag}** is`} **${res}% gay** ${emoji(res)}.`);
+			msg.respond(`I can tell you for sure that, ${user.id === msg.author.id ? 'you are' : `**${user.tag}** is`} **${res}% gay** ${emoji(res)}.`);
 		}).catch(err => Logger.error('Database error for dick', err));
 	}
 }
