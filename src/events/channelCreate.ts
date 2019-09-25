@@ -8,7 +8,7 @@ export default async function(this: HavocClient, channel: TextChannel | VoiceCha
 	if (!guild || guild.disabledLogs.has(0)) return;
 	const muteRole = guild.roles.find(role => role.name === 'HavocMute');
 	if (channel.type === 'text' && muteRole) {
-		await channel.updateOverwrite(muteRole, {
+		await (channel as TextChannel).updateOverwrite(muteRole, {
 			SEND_MESSAGES: false,
 			ADD_REACTIONS: false
 		}).catch(() => null);
