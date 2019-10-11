@@ -8,7 +8,7 @@ export default class AddRole extends Command {
 		super(__filename, {
 			opts: 0b1010,
 			description: 'Adds the inputted role to a member.',
-			aliases: new Set(['ar']),
+			aliases: new Set(['ar', 'sr']),
 			args: [{
 				type: 'member',
 				prompt: { initialMsg: 'mention the user / enter the users\'s ID, tag, nickname or username who you would like to add a role to.' }
