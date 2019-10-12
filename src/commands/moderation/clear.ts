@@ -38,7 +38,7 @@ export default class Clear extends Command {
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { number, userOrNull }, flags }: { msg: HavocMessage; target: { number: number; userOrNull?: HavocUser | null }; flags: string }) {
+	public async run(this: HavocClient, { msg, target: { number, userOrNull }, flag }: { msg: HavocMessage; target: { number: number; userOrNull?: HavocUser | null }; flag: string }) {
 		const emojis = ['<:botclear1:486606839015014400>', '<:botclear2:486606870618963968>', '<:botclear3:486606906337525765>'];
 		await msg.delete();
 		let messages = await msg.channel.messages.fetch({ limit: 100 }).catch(() => null);
