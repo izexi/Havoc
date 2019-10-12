@@ -48,7 +48,7 @@ export default class Clear extends Command {
 		if (userOrNull) {
 			messages = messages.filter(message => message.author!.id === userOrNull.id);
 		}
-		if(flags === 'nopin') {
+		if (flag === 'nopin') {
 			messages = messages.filter(message => !message.pinned);
 		}
 		const cleared = await msg.channel.bulkDelete(isNaN(number) ? messages : messages.first(Math.min(number, 100)), true).catch(() => null);
