@@ -29,15 +29,16 @@ export default class Clear extends Command {
 				}
 			}],
 			userPerms: { flags: 'MANAGE_MESSAGES' },
-			usage: ['[number] <{user}>'],
+			usage: ['[number] <{user}> <{prefix}nopin>'],
 			examples: {
 				'10': 'clears the recent 10 messages in the channel',
-				'10 {user}': 'clears the recent 10 messages from the corresponding user in the channel'
+				'10 {user}': 'clears the recent 10 messages from the corresponding user in the channel',
+				'10 {prefix}nopin': 'clears the recent 10 messages in the channel except pinned'
 			}
 		});
 	}
 
-	public async run(this: HavocClient, { msg, target: { number, userOrNull } }: { msg: HavocMessage; target: { number: number; userOrNull?: HavocUser | null } }) {
+	public async run(this: HavocClient, { msg, target: { number, userOrNull }, flags }: { msg: HavocMessage; target: { number: number; userOrNull?: HavocUser | null }; flags: string }) {
 		const emojis = ['<:botclear1:486606839015014400>', '<:botclear2:486606870618963968>', '<:botclear3:486606906337525765>'];
 		await msg.delete();
 		let messages = await msg.channel.messages.fetch({ limit: 100 }).catch(() => null);
@@ -46,6 +47,9 @@ export default class Clear extends Command {
 		}
 		if (userOrNull) {
 			messages = messages.filter(message => message.author!.id === userOrNull.id);
+		}
+		if(flags === 'nopin') {
+			messages = messages.filter(message => !message.pinned);
 		}
 		const cleared = await msg.channel.bulkDelete(isNaN(number) ? messages : messages.first(Math.min(number, 100)), true).catch(() => null);
 		if (!cleared) {
