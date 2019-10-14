@@ -11,6 +11,7 @@ export default class Clear extends Command {
 			opts: 0b1000,
 			description: 'Deletes a chosen amount of messages from a channel / from a user in a channel.',
 			aliases: new Set(['c', 'prune', 'purge']),
+			flags: new Set(['nopin']),
 			args: [{
 				type: 'number',
 				prompt: { initialMsg: 'Enter the amount of messages that you would like to clear.' }
@@ -46,7 +47,7 @@ export default class Clear extends Command {
 			return msg.respond('I encountered an error when attempting to fetch recent messages to clear, maybe try again later?');
 		}
 		if (userOrNull) {
-			messages = messages.filter(message => message.author!.id === userOrNull.id);
+			messages = messages.filter(message => message.author.id === userOrNull.id);
 		}
 		if (flag === 'nopin') {
 			messages = messages.filter(message => !message.pinned);
