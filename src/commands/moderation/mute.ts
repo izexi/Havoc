@@ -44,35 +44,25 @@ export default class Mute extends Command {
 
 	public async getMuteRole(guild: HavocGuild) {
 		let muteRole = guild.roles.find(r => r.name === 'HavocMute');
-		if (muteRole) {
-			const promises = guild.channels
-				.filter(channel => channel.type === 'text')
-				.map(async textchannel => {
-					const currentMutePerms = textchannel.permissionOverwrites.get(muteRole!.id);
-					if (!currentMutePerms || currentMutePerms.deny.bitfield !== 2112) {
-						await textchannel.updateOverwrite(muteRole!, {
-							SEND_MESSAGES: false,
-							ADD_REACTIONS: false
-						}).catch(() => null);
-					}
-				});
-			await Promise.all(promises);
-		}
 		if (!muteRole) {
 			muteRole = await guild.roles.create({
 				data: {
 					name: 'HavocMute',
 					position: guild.me!.roles.highest.position - 1
 				}
-			});
-
+			}).catch(() => undefined);
+		}
+		if (muteRole) {
 			const promises = guild.channels
-				.filter(channel => channel.type === 'text')
-				.map(textchannel => {
-					textchannel.updateOverwrite(muteRole!, {
-						SEND_MESSAGES: false,
-						ADD_REACTIONS: false
-					}).catch(() => null);
+				.filter(channel => channel.type === 'text' || channel.type === 'category')
+				.map(channel => {
+					const currentMutePerms = channel.permissionOverwrites.get(muteRole!.id);
+					if (!currentMutePerms || currentMutePerms.deny.bitfield !== 2112) {
+						return channel.updateOverwrite(muteRole!, {
+							SEND_MESSAGES: false,
+							ADD_REACTIONS: false
+						}).catch(() => null);
+					}
 				});
 			await Promise.all(promises);
 		}
