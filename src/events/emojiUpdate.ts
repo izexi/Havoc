@@ -13,7 +13,7 @@ export default async function(this: HavocClient, outdated: GuildEmoji, updated: 
 			.setDescription(`
 				${executor ? `**🗑Deleted By :**  ${executor}` : ''}
 				**📝Old Emoji name :**  ${outdated.name}\n✏**New Emoji name :**  ${updated.name}
-				**📅Timestamp of creation :**  ${updated.createdAt.toLocaleString()} (UTC)
+				**📅Timestamp of creation :**  ${updated.createdAt!.toLocaleString()} (UTC)
 				**🔎Emoji URL:**  ${updated.url}
 			`)
 			.setColor('ORANGE')

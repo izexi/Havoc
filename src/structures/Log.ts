@@ -21,8 +21,8 @@ export default {
 			.then(audit => audit.entries.first())
 			.catch(() => null);
 	},
-	async getExecutor({ guild, id }: { guild: Guild; id: string }, type: keyof GuildAuditLogsActions, entry?: GuildAuditLogsEntry | null) {
-		if (this.ignore(guild)) return;
+	async getExecutor({ guild, id }: { guild: Guild | null; id: string | null }, type: keyof GuildAuditLogsActions, entry?: GuildAuditLogsEntry | null) {
+		if (!guild || this.ignore(guild)) return;
 		if (typeof entry === 'undefined') entry = await this.getEntry(guild, type);
 		if (!entry || !entry.target || Math.abs(Date.now() - entry.createdTimestamp) > 5000 || (!(entry.target instanceof Invite) && entry.target.id !== id)) return null;
 		return entry.executor.tag;

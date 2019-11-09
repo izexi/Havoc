@@ -28,7 +28,7 @@ export default class Emoji extends Command {
 					['❯Name', `\`:${emoji.name}:\``, true],
 					['❯ID', emoji.id, true],
 					['❯Created by', (await emoji.fetchAuthor()).tag, true],
-					['❯Created at', moment(emoji.createdAt).format('LLLL'), true],
+					['❯Created at', moment(emoji.createdAt!).format('LLLL'), true],
 					['❯URL', emoji.url, true]
 				]
 			};

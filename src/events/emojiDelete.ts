@@ -11,7 +11,7 @@ export default async function(this: HavocClient, emoji: GuildEmoji) {
 		new MessageEmbed()
 			.setDescription(`
 				${executor ? `**🗑Deleted By :**  ${executor}` : ''}
-				**📅Timestamp of creation :**  ${emoji.createdAt.toLocaleString()} (UTC)
+				**📅Timestamp of creation :**  ${emoji.createdAt!.toLocaleString()} (UTC)
 				**📂Emoji name:**  ${emoji.name}
 				**🔎Emoji URL:**  ${emoji.url}
 			`)
