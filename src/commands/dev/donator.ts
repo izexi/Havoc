@@ -27,7 +27,6 @@ export default class Donator extends Command {
 		this.db.category = 'donators';
 		const donators = await this.db.get(`donators${tier}`) || [];
 		await this.db.set(`donators${tier}`, [...donators, id]);
-		this.donators.get(tier.toString())!.add(id);
 		await this.supportServer.members.fetch(id)
 			.then(async member => member.roles.add('471422129825382444'))
 			.catch(() => null);

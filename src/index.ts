@@ -1,6 +1,8 @@
 import { Structures } from 'discord.js';
 import HavoClient from './client/Havoc';
 import Logger from './util/Logger';
+import { init } from '@sentry/node';
+const { dsn } = require('.././config.json');
 
 /* import { promisify } from 'util';
 const readdir = promisify(require('fs').readdir);
@@ -17,6 +19,8 @@ process.on('unhandledRejection', rej => Logger.unhandledRejection(rej));
 
 ['Guild', 'Message', 'User', 'TextChannel'].forEach(extension =>
 	Structures.extend(extension, (): Function => require(`./extensions/${extension}`).default));
+
+init({ dsn });
 
 new HavoClient({
 	disabledEvents: [

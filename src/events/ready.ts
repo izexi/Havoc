@@ -48,9 +48,6 @@ export async function onceReady(this: HavocClient) {
 			const { logs, prefix } = parse(value);
 			if (prefix) guild.prefix = prefix;
 			if (logs) guild.logsEnabled = true;
-		} else if (category === 'donators') {
-			const tier = key.match(/\d+/)![0];
-			(parse(value) as string[]).forEach(v => this.donators.get(tier)!.add(v));
 		} else if (category === 'disabledLogs') {
 			guild.disabledLogs = new Set((parse(value) as number[]));
 		} else {
