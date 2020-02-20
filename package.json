@@ -19,7 +19,7 @@
     "@sentry/node": "^5.7.1",
     "@types/common-tags": "^1.8.0",
     "@types/google-translate-api": "^2.3.0",
-    "@types/node": "^12.6.2",
+    "@types/node": "^13.7.4",
     "@types/node-emoji": "^1.8.1",
     "@types/node-fetch": "^2.3.4",
     "@types/pg": "^7.4.14",
