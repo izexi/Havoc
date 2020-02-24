@@ -40,7 +40,7 @@
     "pretty-ms": "^5.0.0",
     "sql": "^0.78.0",
     "typescript": "^3.5.3",
-    "ytdl-core": "^1.0.0"
+    "ytdl-core": "^2.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.12.0",
