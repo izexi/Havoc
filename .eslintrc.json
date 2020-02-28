@@ -1,10 +1,20 @@
 {
-	"extends": "marine/node",
+	"extends": [
+	  "eslint:recommended",
+	  "plugin:@typescript-eslint/recommended",
+	  "prettier/@typescript-eslint",
+	  "plugin:prettier/recommended"
+	],
+	"plugins": ["@typescript-eslint", "prettier"],
+	"env": {
+		"es6": true,
+	  "node": true
+	},
 	"rules": {
-		"prefer-await-to-then": "off",
-		"promise/always-return": "off",
-		"promise/prefer-await-to-then": "off",
-		"promise/prefer-await-to-callbacks": "off",
-		"@typescript-eslint/explicit-function-return-type": "off"
-	}
-}
+	  "prettier/prettier": ["error", { "singleQuote": true }],
+	  "@typescript-eslint/explicit-function-return-type": "off",
+	  "@typescript-eslint/no-non-null-assertion": "off",
+	  "@typescript-eslint/no-use-before-define": "off"
+	},
+	"parser": "@typescript-eslint/parser"
+  }
