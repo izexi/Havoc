@@ -1,107 +1,48 @@
-import { Pool } from 'pg';
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { dbURI } = require('../../config.json');
-const { parse, stringify } = require('json-buffer');
-const sql = require('sql');
-const pool = new Pool({ connectionString: dbURI });
+import { MikroORM, AnyEntity } from 'mikro-orm';
+import GuildConfig from './entities/GuildConfig';
+import BaseEntity from './entities/BaseEntity';
 
 export default class Database {
-	public sql: any;
+  orm!: MikroORM;
 
-	public category!: string;
+  async init() {
+    this.orm = await MikroORM.init({
+      type: 'postgresql',
+      entities: [BaseEntity, GuildConfig],
+      dbName: 'havoc',
+      clientUrl: process.env.URI,
+      baseDir: __dirname
+    });
+    return this.setup();
+  }
 
-	public pool: Pool;
+  async setup() {
+    const { to_regclass: tableExists } = await this.orm.em
+      .getConnection()
+      .execute(`SELECT to_regclass('public.guild_config')`)
+      .then(([regclass]) => regclass);
+    if (!tableExists) {
+      await this.orm
+        .getSchemaGenerator()
+        .getCreateSchemaSQL()
+        .then(sql => this.orm.em.getConnection().execute(sql));
+    }
+  }
 
-	public constructor() {
-		this.sql = sql.define({
-			name: 'havoc',
-			columns: [{
-				name: 'key',
-				primaryKey: true,
-				dataType: 'VARCHAR(255)'
-			},
-			{
-				name: 'value',
-				dataType: 'TEXT'
-			}]
-		});
-		const queryStr = this._queryBuilder({ type: 'CREATE' });
-		this.query(queryStr!);
-		this.pool = pool;
-	}
+  flush() {
+    return this.orm.em.flush();
+  }
 
-	public async query(queryStr: string, value: boolean = true, multiple: boolean = false): Promise<any> {
-		return pool.query(queryStr).then(async ({ rows }) => {
-			if (multiple) return rows;
-			const row = rows[0];
-			return (row ? (value ? parse(row.value) : row) : null);
-		});
-	}
-
-	public async get(key: string): Promise<any> {
-		const queryStr = this._queryBuilder({
-			type: 'SELECT',
-			key: this._dbKey(key)
-		});
-		return this.query(queryStr!);
-	}
-
-	public async set(key: any, value: any): Promise<boolean> {
-		const queryStr = this._queryBuilder({
-			type: 'INSERT',
-			key: this._dbKey(key),
-			value: stringify(value)
-		});
-		return this.query(queryStr!).then(() => true);
-	}
-
-	public async delete(key: string): Promise<any> {
-		return this.exists(key).then(async exists => {
-			if (!exists) return false;
-			const queryStr = this._queryBuilder({
-				type: 'DELETE',
-				key: this._dbKey(key)
-			});
-			return this.query(queryStr!);
-		});
-	}
-
-	public async exists(key: string): Promise<boolean> {
-		const queryStr = this._queryBuilder({
-			type: 'SELECT',
-			key: this._dbKey(key)
-		});
-		return this.query(queryStr!).then(row => Boolean(row));
-	}
-
-	public async fieldQuery(category: string, multiple: boolean, ...args: string[][]) {
-		this.category = category;
-		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND ${args.map(([k, v]) => `value::jsonb->>'${k}' = '${v}'`).join(' AND ')}`, true, multiple);
-	}
-
-	public async lessThan(value: number): Promise<any> {
-		return this.query(`SELECT * FROM "havoc" WHERE "key" ~ '^${this.category}:' AND SUBSTRING(key FROM '\\d+')::bigint <= ${value}`, false)
-			.catch(() => null);
-	}
-
-	private _queryBuilder(options: { type?: string; key?: string; value?: string }): string | undefined {
-		const { type, key, value } = options;
-		switch (type) {
-			case 'CREATE':
-				return this.sql.create().ifNotExists().toString();
-			case 'SELECT':
-				return this.sql.select().where({ key }).toString();
-			case 'INSERT':
-				return this.sql.insert({ key, value }).onConflict({
-					columns: ['key'],
-					update: ['value']
-				}).toString();
-			case 'DELETE':
-				return this.sql.delete().where({ key }).toString();
-		}
-	}
-
-	private _dbKey(key: string): string {
-		return `${this.category}:${key}`;
-	}
+  async findOrInsert<T extends AnyEntity>(
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    entitiyName: new (...args: any[]) => T,
+    id: string,
+    ...args: any[]
+  ): /* eslint-enable @typescript-eslint/no-explicit-any */
+  Promise<T> {
+    const entitiy = new entitiyName(id, ...args);
+    const found = await this.orm.em.findOne(entitiyName, id);
+    if (!found) await this.orm.em.persistAndFlush(entitiy);
+    return entitiy;
+  }
 }
