@@ -37,7 +37,7 @@
     "node-fetch": "^2.3.0",
     "node-opus": "^0.3.2",
     "pg": "^7.9.0",
-    "pretty-ms": "^5.0.0",
+    "pretty-ms": "^6.0.1",
     "sql": "^0.78.0",
     "typescript": "^3.5.3",
     "ytdl-core": "^1.0.0"
