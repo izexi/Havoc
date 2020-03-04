@@ -1,10 +1,12 @@
 import { Client } from 'discord.js';
 import Database from '../structures/Database';
-import GuildConfig from '../structures/entities/GuildConfig';
 import Logger from '../util/Logger';
+import CommandHandler from '../handlers/CommandHandler';
 
 export default class Havoc extends Client {
   db = new Database();
+
+  commandHandler = new CommandHandler();
 
   constructor(options = {}) {
     super(options);
