@@ -9,8 +9,8 @@ export default class Database {
     this.orm = await MikroORM.init({
       type: 'postgresql',
       entities: [BaseEntity, GuildConfig],
-      dbName: 'havoc',
-      clientUrl: process.env.URI,
+      dbName: process.env.POSTGRES_DB!,
+      clientUrl: process.env.DATABASE_URL,
       baseDir: __dirname
     });
     return this.setup();
