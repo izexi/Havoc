@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "docker": "docker build -t havoc . && cls && docker-compose up",
     "compile": "rimraf dist && tsc",
-    "node": "node -r dotenv/config dist/index.js",
+    "node": "node dist/index.js",
     "start": "npm run compile && npm run node",
     "prod": "tsnd src/",
     "lint": "eslint src --ext .ts"
