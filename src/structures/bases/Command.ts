@@ -1,9 +1,17 @@
 import Havoc from '../../client/Havoc';
-import { Message } from 'discord.js';
+import { Target } from '../../util/Targetter';
+import HavocMessage from '../extensions/HavocMessage';
+import HavocUser from '../extensions/HavocUser';
 
 interface CommandOptions {
   aliases?: Set<string> | string[];
   description: string;
+  args?: { type: Target }[];
+}
+
+export interface CommandParams {
+  message: HavocMessage;
+  [Target.USER]?: HavocUser | null;
 }
 
 export default abstract class implements CommandOptions {
@@ -13,7 +21,9 @@ export default abstract class implements CommandOptions {
 
   aliases: Set<string>;
 
-  description: string;
+  description: CommandOptions['description'];
+
+  args: CommandOptions['args'];
 
   constructor(__path: string, options: CommandOptions) {
     // @ts-ignore
@@ -23,7 +33,8 @@ export default abstract class implements CommandOptions {
     Object.assign(this, groups);
     this.aliases = new Set(options.aliases);
     this.description = options.description;
+    this.args = options.args;
   }
 
-  abstract async run(this: Havoc, params: { message: Message }): Promise<void>;
+  abstract async run(this: Havoc, params: CommandParams): Promise<void>;
 }
