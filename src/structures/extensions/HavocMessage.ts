@@ -1,8 +1,17 @@
 import Regex from '../../util/Regex';
-import { Message, MessageEmbed } from 'discord.js';
+import {
+  Message,
+  MessageEmbed,
+  TextChannel,
+  MessageOptions,
+  MessageAttachment,
+  StringResolvable,
+  MessageEditOptions
+} from 'discord.js';
 import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
-import Util from '../../util/Util';
+import Command from '../bases/Command';
+import HavocUser from './HavocUser';
 
 interface EmbedMethods {
   addField: [string, string];
@@ -19,11 +28,24 @@ interface EmbedMethods {
 }
 
 export default class extends Message {
+  author!: HavocUser;
+
   client!: Havoc;
 
   guild!: HavocGuild | null;
 
+  edits!: this[];
+
+  edit!: (
+    content?: StringResolvable,
+    options?: MessageEditOptions | MessageEmbed
+  ) => Promise<this>;
+
+  command?: Command;
+
   args = this.content.split(/ +/);
+
+  response?: this;
 
   public _patch(data: object) {
     // @ts-ignore
@@ -39,33 +61,113 @@ export default class extends Message {
     return matchedPrefix;
   }
 
-  public constructEmbed(methods: EmbedMethods) {
+  public async send(
+    content: string | MessageOptions,
+    options?:
+      | MessageOptions
+      | MessageEmbed
+      | MessageAttachment
+      | (MessageEmbed | MessageAttachment)[]
+  ) {
+    if (this.edits.length > 1) {
+      const { response } = this.edits[this.edits.length - 1] ?? {};
+      if (response) {
+        if (
+          typeof content === 'string' &&
+          !(options instanceof MessageEmbed) &&
+          response.embeds.length
+        ) {
+          return response.edit(content, { embed: null });
+        }
+        return options instanceof MessageEmbed
+          ? response.edit(content, options)
+          : response.edit(content);
+      }
+    }
+    return this.channel
+      .send(content, options)
+      .then(msg => (this.response = msg as this));
+  }
+
+  public constructEmbed(methods: Partial<EmbedMethods>) {
     const embed = new MessageEmbed()
       .setColor(this.guild ? this.member!.displayColor || 'WHITE' : '')
       .setTimestamp();
-    if (methods.setDescription) {
-      const [image] =
-        methods.setDescription.match(/\bhttps:\/\/i\.imgur\.com\/[^\s]+/) ?? [];
-      if (image) {
-        methods.setDescription = methods.setDescription.replace(image, '');
-        methods.setImage = image;
-      }
-    }
     Object.entries(methods).forEach(([method, values]) =>
       // @ts-ignore
-      Util.arrayify(values).map(value => embed[method](...value))
+      embed[method](values)
     );
     if (
       !methods.setFooter &&
-      (!embed.footer || !embed.footer.text) &&
-      (!embed.description || !embed.description.includes(this.author!.tag)) &&
+      !embed.footer?.text &&
+      !embed.description?.includes(this.author.tag) &&
       this.author.id !== this.client.user?.id
     ) {
-      embed.setFooter(
-        `Requested by ${this.author?.tag}`,
-        this.author?.displayAvatarURL()
-      );
+      embed.setFooter(`Requested by ${this.author.tag}`, this.author.pfp);
     }
     return embed;
+  }
+
+  async sendEmbed(
+    methodsOrEmbed: Partial<EmbedMethods> | MessageEmbed,
+    content?: string,
+    files?: { attachment: Buffer; name?: string }[]
+  ) {
+    if (
+      this.guild &&
+      !(this.channel as TextChannel)
+        .permissionsFor(this.guild.me!)!
+        .has('EMBED_LINKS')
+    ) {
+      return (this.response = await this.send(
+        `**${this.author}** I require the \`Embed Links\` permission to execute this command.`
+      ));
+    }
+    const embed = await this.send({
+      content,
+      files,
+      embed:
+        methodsOrEmbed instanceof MessageEmbed
+          ? methodsOrEmbed
+          : this.constructEmbed(methodsOrEmbed)
+    });
+    if (this.command) {
+      await embed.react('🗑');
+      embed
+        .awaitReactions(
+          (reaction, user) =>
+            reaction.emoji.name === '🗑' && user.id === this.author.id,
+          {
+            time: 3000,
+            max: 1,
+            errors: ['time']
+          }
+        )
+        .then(async () =>
+          this.guild ? this.channel.bulkDelete([embed, this]) : embed.delete()
+        )
+        .catch(() => {
+          if (!embed.deleted)
+            embed.reactions.cache.get('🗑')?.users.remove(embed.author);
+        });
+    }
+    return embed;
+  }
+
+  public async respond(
+    toSend: string | Partial<EmbedMethods>,
+    author = true,
+    contentOnly = false
+  ) {
+    if (contentOnly && typeof toSend === 'string') return this.send(toSend);
+    return this.sendEmbed(
+      typeof toSend === 'string'
+        ? {
+            setDescription: `${
+              author ? `**${this.author.tag}** ` : ''
+            }${toSend}`
+          }
+        : toSend
+    );
   }
 }
