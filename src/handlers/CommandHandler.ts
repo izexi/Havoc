@@ -2,6 +2,7 @@ import Logger from '../util/Logger';
 import Command from '../structures/bases/Command';
 import Util from '../util/Util';
 import HavocMessage from '../structures/extensions/HavocMessage';
+import { Targetter } from '../util/Targetter';
 
 export default class {
   commands: Map<Command['name'], Command> = new Map();
@@ -27,7 +28,7 @@ export default class {
     );
   };
 
-  handle(message: HavocMessage) {
+  handle = async (message: HavocMessage) => {
     if (
       message.author?.bot ||
       message.webhookID ||
@@ -35,13 +36,24 @@ export default class {
       !message.content.startsWith(message.prefix)
     )
       return;
-    const command = this.commands.get(
-      message.args
-        .shift()
-        ?.substring(message.prefix.length)
-        ?.toLowerCase() ?? ''
-    );
+    const possibleCmd = message.args
+      .shift()
+      ?.substring(message.prefix.length)
+      ?.toLowerCase();
+    if (!possibleCmd) return;
+    const command =
+      this.commands.get(possibleCmd) ||
+      [...this.commands.values()].find(command =>
+        command.aliases.has(possibleCmd)
+      );
     if (!command) return;
-    command.run.call(message.client, { message });
-  }
+    const params = { message };
+    message.command = command;
+    if (command.args) {
+      await Targetter.parse(message)
+        .then(parsed => Object.assign(params, parsed))
+        .catch(error => Logger.error('Targetter#parse()', error));
+    }
+    command.run.call(message.client, params);
+  };
 }
