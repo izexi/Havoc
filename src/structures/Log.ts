@@ -9,7 +9,7 @@ export default {
 		if (this.ignore(guild)) return;
 		const webhook = await guild.getWebhook();
 		if (!webhook) return;
-		webhook!.send({
+		webhook.send({
 			embeds: [embed],
 			username: ',HavocLogs',
 			avatarURL: Math.round(Math.random()) ? 'https://cdn.discordapp.com/emojis/444944971653709825.png?v=1' : 'https://i.imgur.com/l3H2S2d.png'
@@ -17,8 +17,8 @@ export default {
 	},
 	async getEntry(guild: Guild, type: keyof GuildAuditLogsActions) {
 		if (this.ignore(guild)) return;
-		return guild.fetchAuditLogs({ type: type as string, limit: 1 })
-			.then(audit => audit.entries.first())
+		return guild.fetchAuditLogs({ type: type as any, limit: 1 })
+			.then((audit: any) => audit.entries.first())
 			.catch(() => null);
 	},
 	async getExecutor({ guild, id }: { guild: Guild | null; id: string | null }, type: keyof GuildAuditLogsActions, entry?: GuildAuditLogsEntry | null) {

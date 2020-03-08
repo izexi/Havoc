@@ -3,8 +3,8 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 const translate = require('@vitalets/google-translate-api');
-const langMap = require('../../assets/langmap.json');
-const langs = require('../../assets/langs.json');
+const langMap = require('../../../src/assets/langmap.json');
+const langs = require('../../../src/assets/langs.json');
 
 export default class Translate extends Command {
 	public constructor() {

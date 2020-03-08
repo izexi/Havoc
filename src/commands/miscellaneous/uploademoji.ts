@@ -4,6 +4,7 @@ import HavocClient from '../../client/Havoc';
 import fetch from 'node-fetch';
 import { Util } from 'discord.js';
 import Responses from '../../util/Responses';
+import { URL } from 'url';
 
 export default class UploadEmoji extends Command {
 	public constructor() {

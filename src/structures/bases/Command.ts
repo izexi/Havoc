@@ -32,8 +32,10 @@ export default abstract class implements CommandOptions {
 	public argsRequired!: boolean;
 
 	public constructor(__path: string, options: CommandOptions) {
+		const match = __path.match(/[\\\/](?<category>[a-z]+)[\\\/](?<name>[_a-z\-\d]+)\.[tj]s/i);
+		if (!match) console.log(__path, 'matched: ', __path.match(/[\\\/](?<category>[a-z]+)[\\\/](?<name>[_a-z\-\d]+)\.[tj]s/i));
 		// @ts-ignore
-		const { groups: { name, category } } = __path.match(/[\\\/](?<category>[a-z]+)[\\\/](?<name>[_a-z\-\d]+)\.ts/i);
+		const { groups: { name, category } } = match;
 		this.name = name;
 		this.category = category;
 		this.description = options.description;

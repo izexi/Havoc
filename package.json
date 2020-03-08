@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
     "node": "node ./dist/index.js",
-    "start": "tsnd src/",
+    "start": "rimraf dist && tsc && node dist/index.js",
     "lint": "eslint src --ext .ts"
   },
   "eslintConfig": {
@@ -27,7 +26,7 @@
     "@types/ws": "^6.0.1",
     "@vitalets/google-translate-api": "^3.0.0",
     "common-tags": "^1.8.0",
-    "discord.js": "github:discordjs/discord.js",
+    "discord.js": "github:discordjs/discord.js#1b1289b35e2f8cd21341351549e6ac52fd08cb34",
     "eslint-config-marine": "^5.0.0",
     "json-buffer": "^3.0.1",
     "moment": "^2.24.0",

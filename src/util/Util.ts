@@ -1,6 +1,21 @@
 import fetch from 'node-fetch';
+import { promises as fs } from 'fs';
+import { join } from 'path';
 
 export default {
+	async flattenPaths(folder: string) {
+		const parents = await fs.readdir(join(__dirname, '..', folder));
+		const childrenPaths = parents.reduce((files, parent) => {
+			const parentDir = join(__dirname, '..', folder, parent);
+			files.add(
+				fs
+					.readdir(parentDir)
+					.then(children => children.map(child => join(parentDir, child)))
+			);
+			return files;
+		}, new Set());
+		return Promise.all(childrenPaths).then(paths => paths.flat());
+	},
 	async haste(body: string, extension: string = 'txt') {
 		return fetch('https://hasteb.in/documents', { method: 'POST', body })
 			.then(async res => `https://hasteb.in/${(await res.json()).key}.${extension}`)

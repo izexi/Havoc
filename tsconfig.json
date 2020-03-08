@@ -3,9 +3,7 @@
 		"strict": true,
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"target": "es6",
-		"declaration": true,
-		"sourceMap": true,
+		"target": "es2019",
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
@@ -13,5 +11,7 @@
 		"allowSyntheticDefaultImports": true,
 		"pretty": true,
 		"outDir": "./dist",
+		"lib": ["es2019"],
+		"skipLibCheck": true
 	}
 }

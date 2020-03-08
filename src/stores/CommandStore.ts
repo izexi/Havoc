@@ -3,9 +3,11 @@ import Store from '../structures/bases/Store';
 import Logger from '../util/Logger';
 import Command from '../structures/bases/Command';
 import CommandHandler from '../handlers/CommandHandler';
-import { Client, Util } from 'discord.js';
+import { Client, Util as djsUtil } from 'discord.js';
 import HavocMessage from '../extensions/Message';
 import HavocClient from '../client/Havoc';
+import { join } from 'path';
+import Util from '../util/Util';
 const readdir = promisify(require('fs').readdir);
 
 export default class CommandStore extends Store<string, Command> {
@@ -20,21 +22,14 @@ export default class CommandStore extends Store<string, Command> {
 	}
 
 	protected async _load(): Promise<void> {
-		const commandFiles = (await readdir('src/commands')).reduce(async (files: Set<string>, dirs: string) => {
-			files = await files;
-			(await readdir(`src/commands/${dirs}`))
-				.map((fileName: string): Set<string> => files.add(`../commands/${dirs}/${fileName.slice(0, -3)}`));
-			return files;
-		}, Promise.resolve(new Set()));
-
-		for (const commandFile of await commandFiles) {
-			try {
-				const command = new (require(commandFile).default)();
-				this.handler.add(command.name, command);
-			} catch (err) {
-				Logger.error(`Error while importing file - ${commandFile}`, err);
-			}
-		}
+    const commandPaths = await Util.flattenPaths('commands');
+    await Promise.all(commandPaths)
+      .then(commandPaths => {
+				commandPaths.forEach(cmdPath => {
+					const command: Command = new (require(cmdPath).default)();
+					this.handler.add(command.name, command);
+				})
+			}).catch(error => Logger.error('CommandHandler#load()', error));
 		await this.addEmojiCommands();
 		Logger.info(`Loaded ${this.size} commands.`);
 	}
@@ -89,7 +84,7 @@ export default class CommandStore extends Store<string, Command> {
 						// @ts-ignore
 					}).setTimestamp(null);
 					// @ts-ignore
-					msg.respond(embed.setFooter(msg.text ? Util.cleanContent(msg.text, msg) : '', null));
+					msg.respond(embed.setFooter(msg.text ? djsUtil.cleanContent(msg.text, msg) : '', null));
 				}
 			}
 			const command = new Emoji();

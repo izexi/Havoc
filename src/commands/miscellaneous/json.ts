@@ -3,6 +3,7 @@ import HavocMessage from '../../extensions/Message';
 import HavocClient from '../../client/Havoc';
 import fetch from 'node-fetch';
 import Util from '../../util/Util';
+import { URL } from 'url';
 
 export default class Json extends Command {
 	public constructor() {
