@@ -2,7 +2,7 @@ import Logger from '../util/Logger';
 import Command from '../structures/bases/Command';
 import Util from '../util/Util';
 import HavocMessage from '../structures/extensions/HavocMessage';
-import { Targetter } from '../util/Targetter';
+import { resolveTarget } from '../util/Targetter';
 
 export default class {
   commands: Map<Command['name'], Command> = new Map();
@@ -47,10 +47,10 @@ export default class {
         command.aliases.has(possibleCmd)
       );
     if (!command) return;
-    const params = { message };
     message.command = command;
+    const params = { message };
     if (command.args) {
-      await Targetter.parse(message)
+      await resolveTarget(message)
         .then(parsed => Object.assign(params, parsed))
         .catch(error => Logger.error('Targetter#parse()', error));
     }
