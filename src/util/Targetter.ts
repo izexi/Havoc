@@ -8,29 +8,34 @@ export enum Target {
   USER = 'user',
   MEMBER = 'member',
   ROLE = 'role',
-  EMOJI = 'emoji'
+  EMOJI = 'emoji',
+  TEXT = 'text'
 }
 
-interface Targets {
+export interface Targets {
   user: User;
   member: GuildMember;
   role: Role;
   emoji: Emoji;
+  text: string;
 }
 
 type NotFound = null | undefined;
 
 const Targetter: {
-  [key in Target]?: {
-    mentionOrIDSearch(
+  [target in Target]?: {
+    mentionOrIDSearch?(
       query: string,
       client: Havoc
-    ): Promise<Targets[key] | NotFound>;
-    nameSearch(
+    ): Promise<Targets[target] | NotFound>;
+    nameSearch?(
       query: string,
       guild: HavocGuild | null
-    ): Promise<Targets[key] | NotFound>;
-    get(arg: string, message: HavocMessage): Promise<Targets[key] | NotFound>;
+    ): Promise<Targets[target] | NotFound>;
+    get(
+      arg: string,
+      message: HavocMessage
+    ): Promise<Targets[target] | NotFound>;
   };
 } = {
   [Target.USER]: {
@@ -64,9 +69,14 @@ const Targetter: {
     },
     async get(query: string, message: HavocMessage) {
       return (
-        (await this.mentionOrIDSearch(query, message.client)) ||
-        (await this.nameSearch(query, message.guild))
+        (await this.mentionOrIDSearch!(query, message.client)) ||
+        (await this.nameSearch!(query, message.guild))
       );
+    }
+  },
+  [Target.TEXT]: {
+    async get(_: string, message: HavocMessage) {
+      return message.args.join(' ');
     }
   }
 };
