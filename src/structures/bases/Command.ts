@@ -1,18 +1,24 @@
 import Havoc from '../../client/Havoc';
-import { Target } from '../../util/Targetter';
+import { Target, Targets } from '../../util/Targetter';
 import HavocMessage from '../extensions/HavocMessage';
-import HavocUser from '../extensions/HavocUser';
+
+interface Arg {
+  type: Target;
+  required?: boolean;
+  prompt?: string;
+}
 
 interface CommandOptions {
   aliases?: Set<string> | string[];
   description: string;
-  args?: { type: Target }[];
+  args?: Arg | Arg[];
 }
 
-export interface CommandParams {
+export type CommandParams = {
+  [target in Target]?: Targets[target] | null;
+} & {
   message: HavocMessage;
-  [Target.USER]?: HavocUser | null;
-}
+};
 
 export default abstract class implements CommandOptions {
   name!: string;
@@ -23,7 +29,7 @@ export default abstract class implements CommandOptions {
 
   description: CommandOptions['description'];
 
-  args: CommandOptions['args'];
+  args?: Arg[];
 
   constructor(__path: string, options: CommandOptions) {
     // @ts-ignore
@@ -33,7 +39,7 @@ export default abstract class implements CommandOptions {
     Object.assign(this, groups);
     this.aliases = new Set(options.aliases);
     this.description = options.description;
-    this.args = options.args;
+    this.args = [options.args].flat();
   }
 
   abstract async run(this: Havoc, params: CommandParams): Promise<void>;
