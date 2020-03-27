@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
+export type MaybeArray<T> = T | T[];
+
 export default {
   /**
    * ```
@@ -24,7 +26,7 @@ export default {
     return Promise.all(childrenPaths).then(paths => paths.flat());
   },
 
-  arrayify<T>(arg: T): T[] {
-    return Array.isArray(arg) ? arg : [arg];
+  arrayify<T>(arg: T) {
+    return [arg].flat();
   }
 };
