@@ -12,6 +12,9 @@ import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
 import Command from '../bases/Command';
 import HavocUser from './HavocUser';
+import { MaybeArray } from '../../util/Util';
+import { Target } from '../../util/Targetter';
+import Prompt from '../Prompt';
 
 interface EmbedMethods {
   addField: [string, string];
@@ -19,7 +22,7 @@ interface EmbedMethods {
   setAuthor: [string, string];
   setColor: string;
   setDescription: string;
-  setFooter: [string, string];
+  setFooter: string;
   setImage: string;
   setThumbnail: string;
   setTitle: string;
@@ -41,7 +44,7 @@ export default class extends Message {
     options?: MessageEditOptions | MessageEmbed
   ) => Promise<this>;
 
-  command?: Command;
+  command!: Command;
 
   args = this.content.split(/ +/);
 
@@ -59,6 +62,15 @@ export default class extends Message {
         Regex.prefix(this.client.user!.id, this.guild.prefix)
       ) ?? [];
     return matchedPrefix;
+  }
+
+  public async createPrompt(options: {
+    initialMsg: MaybeArray<string>;
+    invalidMsg?: MaybeArray<string>;
+    target: MaybeArray<Target>;
+    time?: number;
+  }) {
+    return new Prompt({ message: this, ...options }).create();
   }
 
   public async send(
