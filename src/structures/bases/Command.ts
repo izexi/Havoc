@@ -1,11 +1,16 @@
 import Havoc from '../../client/Havoc';
 import { Target, Targets } from '../../util/Targetter';
 import HavocMessage from '../extensions/HavocMessage';
+import Util from '../../util/Util';
 
 interface Arg {
   type: Target;
   required?: boolean;
   prompt?: string;
+  promptOpts?: {
+    initial: string;
+    invalid: string;
+  };
 }
 
 interface CommandOptions {
@@ -39,7 +44,7 @@ export default abstract class implements CommandOptions {
     Object.assign(this, groups);
     this.aliases = new Set(options.aliases);
     this.description = options.description;
-    this.args = [options.args].flat();
+    this.args = Util.arrayify(options.args);
   }
 
   abstract async run(this: Havoc, params: CommandParams): Promise<void>;
