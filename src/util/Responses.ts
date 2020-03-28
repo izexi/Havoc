@@ -29,7 +29,7 @@ export const Responses: {
 
   [Target.ROLE]: (message: HavocMessage) => {
     const role = message.member?.roles.cache.random()!;
-    return `You need to mention the role (e.g: ${role}) or enter the role's name (e.g: \`${role.name}\`).`;
+    return `You need to mention the role (e.g: ${role}) or enter the role's name (e.g: \`${role.name}\`) or the role's ID (e.g: \`${role.id}\`).`;
   },
 
   [Target.CHANNEL]: (message: HavocMessage) =>
