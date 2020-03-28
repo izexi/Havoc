@@ -32,5 +32,9 @@ export default {
 
   plural(str: string, n: number) {
     return str + (!n || n > 1 ? 's' : '');
+  },
+
+  captialise(str: string) {
+    return str.replace(/./, letter => letter.toUpperCase());
   }
 };
