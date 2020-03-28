@@ -27,6 +27,10 @@ export default {
   },
 
   arrayify<T>(arg: T) {
-    return [arg].flat();
+    return arg ? [arg].flat() : [];
+  },
+
+  plural(str: string, n: number) {
+    return str + (!n || n > 1 ? 's' : '');
   }
 };
