@@ -8,7 +8,6 @@ import {
 import HavocMessage from '../structures/extensions/HavocMessage';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import Regex from './Regex';
-import Havoc from '../client/Havoc';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { Emoji, find } from 'node-emoji';
 
@@ -45,7 +44,7 @@ export const Targetter: {
   [target in Target]?: {
     mentionOrIDSearch?(
       query: string,
-      client: Havoc
+      message: HavocMessage
     ): Promise<Targets[target] | NotFound>;
     nameSearch?(
       query: string,
@@ -59,14 +58,16 @@ export const Targetter: {
   };
 } = {
   [Target.USER]: {
-    async mentionOrIDSearch(query, client) {
+    async mentionOrIDSearch(query, message) {
       if (!query) return null;
       const [target] =
         query.match(
           `(${MessageMentions.USERS_PATTERN})|(${Regex.id.source})`
         ) ?? [];
       if (!target) return null;
-      return client.users.fetch(target.match(/\d+/)![0]).catch(() => null);
+      return message.client.users
+        .fetch(target.match(/\d+/)![0])
+        .catch(() => null);
     },
     async nameSearch(query: string, guild: HavocGuild | null) {
       if (!guild || !query) return null;
@@ -89,17 +90,43 @@ export const Targetter: {
     },
     async get(message, query) {
       return (
-        (await this.mentionOrIDSearch!(
-          query || message.content,
-          message.client
-        )) || (await this.nameSearch!(query || message.content, message.guild))
+        (await this.mentionOrIDSearch!(query || message.text, message)) ||
+        (await this.nameSearch!(query || message.text, message.guild))
+      );
+    }
+  },
+
+  [Target.ROLE]: {
+    async mentionOrIDSearch(query, message) {
+      if (!query) return null;
+      const [target] =
+        query.match(
+          `(${MessageMentions.ROLES_PATTERN})|(${Regex.id.source})`
+        ) ?? [];
+      if (!target) return null;
+      return message.guild?.roles.cache.get(target.match(/\d+/)![0]);
+    },
+    async nameSearch(query: string, guild: HavocGuild | null) {
+      if (!guild || !query) return null;
+      return (
+        guild.roles.cache.find(
+          role =>
+            role.name === query ||
+            role.name.toLowerCase() === query.toLowerCase()
+        ) || null
+      );
+    },
+    async get(message, query) {
+      return (
+        (await this.mentionOrIDSearch!(query || message.content, message)) ||
+        (await this.nameSearch!(query || message.content, message.guild))
       );
     }
   },
 
   [Target.TEXT]: {
     async get(message: HavocMessage) {
-      return message.args.join(' ');
+      return message.text;
     }
   },
 
