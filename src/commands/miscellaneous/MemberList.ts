@@ -29,7 +29,8 @@ export default class extends Command {
       )} that have the role \`${role.name}\``,
       descriptions: members.map(
         member =>
-          `• **${member.displayName}**\n  (${member.user.tag} - ${member.user.id})`
+          `• **${member.displayName}**
+             (${member.user.tag} - ${member.user.id})`
       ),
       maxPerPage: 20,
       page: Number(message.arg)
