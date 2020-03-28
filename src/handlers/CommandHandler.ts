@@ -2,7 +2,7 @@ import Logger from '../util/Logger';
 import Command from '../structures/bases/Command';
 import Util from '../util/Util';
 import HavocMessage from '../structures/extensions/HavocMessage';
-import { Targets, resolveTarget, Target } from '../util/Targetter';
+import { Targets, resolveTarget } from '../util/Targetter';
 
 export default class {
   commands: Map<Command['name'], Command> = new Map();
@@ -54,7 +54,9 @@ export default class {
     } = { message };
     if (command.args.length) {
       for (const { type, required, prompt, promptOpts } of command.args) {
-        let found = await resolveTarget(params, type, message, message.arg);
+        let found;
+        if (message.arg)
+          found = await resolveTarget(params, type, message, message.arg);
         if (!found && required) {
           found = await message
             .createPrompt({
@@ -62,10 +64,7 @@ export default class {
               invalidMsg: promptOpts?.invalid || '',
               target: type
             })
-            .then(
-              responses =>
-                responses[typeof type === 'function' ? Target.FUNCTION : type]
-            );
+            .then(responses => Object.assign(params, responses));
           if (!found) return;
         }
       }
