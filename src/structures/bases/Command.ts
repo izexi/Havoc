@@ -1,10 +1,10 @@
 import Havoc from '../../client/Havoc';
-import { Target, Targets } from '../../util/Targetter';
+import { Target, Targets, TargetType, TargetFn } from '../../util/Targetter';
 import HavocMessage from '../extensions/HavocMessage';
 import Util from '../../util/Util';
 
 interface Arg {
-  type: Target;
+  type: TargetType;
   required?: boolean;
   prompt?: string;
   promptOpts?: {
@@ -22,6 +22,7 @@ interface CommandOptions {
 export type CommandParams = {
   [target in Target]?: Targets[target] | null;
 } & {
+  target?: TargetFn;
   message: HavocMessage;
 };
 
@@ -34,7 +35,7 @@ export default abstract class implements CommandOptions {
 
   description: CommandOptions['description'];
 
-  args?: Arg[];
+  args: Arg[];
 
   constructor(__path: string, options: CommandOptions) {
     // @ts-ignore

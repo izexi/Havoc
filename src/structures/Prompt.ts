@@ -1,5 +1,5 @@
 import Util, { MaybeArray } from '../util/Util';
-import { Target, Targetter, Targets } from '../util/Targetter';
+import { Targets, TargetType, resolveTarget } from '../util/Targetter';
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
 import { Responses } from '../util/Responses';
@@ -8,7 +8,7 @@ interface PromptOptions {
   message: HavocMessage;
   initialMsg: MaybeArray<string>;
   invalidMsg?: MaybeArray<string>;
-  target: MaybeArray<Target>;
+  target: MaybeArray<TargetType>;
   time?: number;
 }
 
@@ -19,7 +19,7 @@ export default class {
 
   invalidMsgs: string[];
 
-  targets: Target[];
+  targets: TargetType[];
 
   time: number;
 
@@ -36,7 +36,7 @@ export default class {
     this.initialMsgs = Util.arrayify(options.initialMsg);
     this.invalidMsgs = Util.arrayify(options.invalidMsg);
     this.targets = Util.arrayify(options.target);
-    this.time = options.time ?? 6000;
+    this.time = options.time ?? 10000;
   }
 
   async create() {
@@ -76,21 +76,22 @@ export default class {
         collector.stop();
       } else {
         const target = this.targets[this.curr];
-        const found = await Targetter[target]?.get(message);
+        const found = await resolveTarget(this.responses, target, message);
         if (found == null) {
           message
             .sendEmbed({
               setDescription: `**${message.author.tag}** \`${
                 message.content
               }\` is an invalid option!\n${this.invalidMsgs[this.curr] ??
-                Responses[target]!(
-                  message
-                )}\nEnter \`cancel\` to exit out of this prompt.`
+                (typeof target === 'function'
+                  ? ''
+                  : Responses[target]!(
+                      message
+                    ))}\nEnter \`cancel\` to exit out of this prompt.`
             })
             .then(msg => this.promptMsgs.push(msg.id));
         } else {
           collector.stop();
-          this.responses[target] = found;
           if (this.initialMsgs[++this.curr]) return this.create();
         }
       }
