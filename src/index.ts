@@ -18,5 +18,7 @@ fs.readdir(extensionsDir).then(structures => {
   const Havoc = new HavoClient();
   Havoc.login(process.env.TOKEN);
   Havoc.on('ready', () => Logger.log('ready2'));
+  // TODO: Create an event handler
+  // @ts-ignore
   Havoc.on('message', Havoc.commandHandler.handle);
 });
