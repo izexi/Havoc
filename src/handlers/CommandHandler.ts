@@ -3,6 +3,7 @@ import Command from '../structures/bases/Command';
 import Util from '../util/Util';
 import HavocMessage from '../structures/extensions/HavocMessage';
 import { Targets, resolveTarget } from '../util/Targetter';
+import { Responses } from '../util/Responses';
 
 export default class {
   commands: Map<Command['name'], Command> = new Map();
@@ -36,6 +37,7 @@ export default class {
       !message.content.startsWith(message.prefix)
     )
       return;
+
     const possibleCmd = message.arg
       .substring(message.prefix.length)
       .toLowerCase();
@@ -46,21 +48,34 @@ export default class {
         command.aliases.has(possibleCmd)
       );
     if (!command) return;
+
     message.command = command;
     message.args.shift();
     const params: {
       message: HavocMessage;
       [key: string]: HavocMessage | Targets[keyof Targets];
     } = { message };
+
     if (command.args.length) {
       for (const { type, required, prompt, promptOpts } of command.args) {
         let found;
-        if (message.arg)
-          found = await resolveTarget(params, type, message, message.arg);
+
+        if (message.args.length)
+          found = await resolveTarget(params, type, message, message.text);
+
         if (!found && required) {
+          let initialMsg = promptOpts?.initial || prompt!;
+
+          if (message.args.length && typeof type !== 'function')
+            initialMsg = `\`${
+              message.text
+            }\` is an invalid option!${promptOpts?.invalid ||
+              Responses[type]!(message)}
+              Enter \`cancel\` to exit out of this prompt.`;
+
           found = await message
             .createPrompt({
-              initialMsg: promptOpts?.initial || prompt!,
+              initialMsg,
               invalidMsg: promptOpts?.invalid || '',
               target: type
             })
