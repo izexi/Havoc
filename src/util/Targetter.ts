@@ -20,7 +20,7 @@ export enum Target {
   EMOJI = 'emoji',
   TEXT = 'text',
   NUMBER = 'number',
-  FUNCTION = 'function'
+  FUNCTION = 'fn'
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +36,7 @@ export interface Targets {
   number: number;
   text: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function: any;
+  fn: any;
 }
 
 type NotFound = null | undefined;
