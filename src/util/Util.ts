@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
+import fetch from 'node-fetch';
 
 export type MaybeArray<T> = T | T[];
 
@@ -36,5 +37,25 @@ export default {
 
   captialise(str: string) {
     return str.replace(/./, letter => letter.toUpperCase());
+  },
+
+  async haste(body: string, extension: string = 'txt') {
+    return fetch('https://hasteb.in/documents', { method: 'POST', body })
+      .then(
+        async res => `https://hasteb.in/${(await res.json()).key}.${extension}`
+      )
+      .catch(async () =>
+        fetch('https://paste.nomsy.net/documents', {
+          method: 'POST',
+          body
+        }).then(
+          async res =>
+            `https://paste.nomsy.net/${(await res.json()).key}.${extension}`
+        )
+      );
+  },
+
+  codeblock(text: string, lang = '') {
+    return `\`\`\`${lang}\n${text.replace(/```/g, '`\u200b``')}\n\`\`\``;
   }
 };
