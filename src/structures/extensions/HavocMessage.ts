@@ -13,11 +13,13 @@ import Havoc from '../../client/Havoc';
 import Command from '../bases/Command';
 import HavocUser from './HavocUser';
 import { MaybeArray } from '../../util/Util';
-import { Target } from '../../util/Targetter';
+import { TargetType } from '../../util/Targetter';
 import Prompt from '../Prompt';
+import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
 
-interface EmbedMethods {
+export interface EmbedMethods {
   addField: [string, string];
+  addFields: { name: string; value: string; inline?: boolean }[];
   attachFiles: string;
   setAuthor: [string, string];
   setColor: string;
@@ -27,7 +29,7 @@ interface EmbedMethods {
   setThumbnail: string;
   setTitle: string;
   setURL: string;
-  [key: string]: string | [string, string];
+  [key: string]: EmbedMethods[keyof EmbedMethods];
 }
 
 export default class extends Message {
@@ -55,6 +57,14 @@ export default class extends Message {
     super._patch(data);
   }
 
+  get text() {
+    return this.args.join(' ');
+  }
+
+  get arg() {
+    return this.args[0];
+  }
+
   get prefix() {
     if (!this.guild) return process.env.PREFIX;
     const [matchedPrefix] =
@@ -64,16 +74,20 @@ export default class extends Message {
     return matchedPrefix;
   }
 
-  public async createPrompt(options: {
+  async createPrompt(options: {
     initialMsg: MaybeArray<string>;
     invalidMsg?: MaybeArray<string>;
-    target: MaybeArray<Target>;
+    target: MaybeArray<TargetType>;
     time?: number;
   }) {
     return new Prompt({ message: this, ...options }).create();
   }
 
-  public async send(
+  async paginate(options: Omit<EmbedPaginationOptions, 'message'>) {
+    new EmbedPagination({ message: this, ...options });
+  }
+
+  async send(
     content: string | MessageOptions,
     options?:
       | MessageOptions
@@ -101,7 +115,7 @@ export default class extends Message {
       .then(msg => (this.response = msg as this));
   }
 
-  public constructEmbed(methods: Partial<EmbedMethods>) {
+  constructEmbed(methods: Partial<EmbedMethods>) {
     const embed = new MessageEmbed()
       .setColor(this.guild ? this.member!.displayColor || 'WHITE' : '')
       .setTimestamp();
@@ -166,7 +180,7 @@ export default class extends Message {
     return embed;
   }
 
-  public async respond(
+  async respond(
     toSend: string | Partial<EmbedMethods>,
     author = true,
     contentOnly = false
