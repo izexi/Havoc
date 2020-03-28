@@ -38,11 +38,12 @@ export default abstract class implements CommandOptions {
   args: Arg[];
 
   constructor(__path: string, options: CommandOptions) {
-    // @ts-ignore
-    const { groups } = __path.match(
-      /[\\/](?<category>[a-z]+)[\\/](?<name>[a-z]+)\.js/i
-    );
-    Object.assign(this, groups);
+    const {
+      // @ts-ignore
+      groups: { category, name }
+    } = __path.match(/[\\/](?<category>[a-z]+)[\\/](?<name>[a-z]+)\.js/i);
+    this.name = name.toLowerCase();
+    this.category = category;
     this.aliases = new Set(options.aliases);
     this.description = options.description;
     this.args = Util.arrayify(options.args);
