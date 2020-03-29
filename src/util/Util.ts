@@ -57,5 +57,9 @@ export default {
 
   codeblock(text: string, lang = '') {
     return `\`\`\`${lang}\n${text.replace(/```/g, '`\u200b``')}\n\`\`\``;
+  },
+
+  emojiNumber(n: number) {
+    return ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'][n - 1];
   }
 };
