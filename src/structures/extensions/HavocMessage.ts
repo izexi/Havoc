@@ -12,7 +12,7 @@ import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
 import Command from '../bases/Command';
 import HavocUser from './HavocUser';
-import { MaybeArray } from '../../util/Util';
+import Util, { MaybeArray } from '../../util/Util';
 import { TargetType } from '../../util/Targetter';
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
@@ -121,7 +121,7 @@ export default class extends Message {
       .setTimestamp();
     Object.entries(methods).forEach(([method, values]) =>
       // @ts-ignore
-      embed[method](values)
+      embed[method](...Util.arrayify(values))
     );
     if (
       !methods.setFooter &&
