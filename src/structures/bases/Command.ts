@@ -16,6 +16,7 @@ interface Arg {
 interface CommandOptions {
   aliases?: Set<string> | string[];
   description: string;
+  promptOnly?: boolean;
   args?: Arg | Arg[];
 }
 
@@ -35,6 +36,8 @@ export default abstract class implements CommandOptions {
 
   description: CommandOptions['description'];
 
+  promptOnly: boolean;
+
   args: Arg[];
 
   constructor(__path: string, options: CommandOptions) {
@@ -46,6 +49,7 @@ export default abstract class implements CommandOptions {
     this.category = category;
     this.aliases = new Set(options.aliases);
     this.description = options.description;
+    this.promptOnly = options.promptOnly ?? false;
     this.args = Util.arrayify(options.args);
   }
 
