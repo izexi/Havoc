@@ -60,13 +60,17 @@ export default class {
       for (const { type, required, prompt, promptOpts } of command.args) {
         let found;
 
-        if (message.args.length)
+        if (message.args.length && !command.promptOnly)
           found = await resolveTarget(params, type, message, message.text);
 
-        if (!found && required) {
+        if (!found && (command.promptOnly || required)) {
           let initialMsg = promptOpts?.initial || prompt!;
 
-          if (message.args.length && typeof type !== 'function')
+          if (
+            message.args.length &&
+            !command.promptOnly &&
+            typeof type !== 'function'
+          )
             initialMsg = `\`${
               message.text
             }\` is an invalid option!${promptOpts?.invalid ||
