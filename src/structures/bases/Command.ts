@@ -2,6 +2,7 @@ import Havoc from '../../client/Havoc';
 import { Target, Targets, TargetType, TargetFn } from '../../util/Targetter';
 import HavocMessage from '../extensions/HavocMessage';
 import Util from '../../util/Util';
+import { parse, sep } from 'path';
 
 interface Arg {
   type: TargetType;
@@ -41,12 +42,9 @@ export default abstract class implements CommandOptions {
   args: Arg[];
 
   constructor(__path: string, options: CommandOptions) {
-    const {
-      // @ts-ignore
-      groups: { category, name }
-    } = __path.match(/[\\/](?<category>[a-z]+)[\\/](?<name>[a-z]+)\.js/i);
+    const { name, dir } = parse(__path);
     this.name = name.toLowerCase();
-    this.category = category;
+    this.category = dir.split(sep).pop()!;
     this.aliases = new Set(options.aliases);
     this.description = options.description;
     this.promptOnly = options.promptOnly ?? false;
