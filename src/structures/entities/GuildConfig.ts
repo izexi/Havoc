@@ -17,9 +17,16 @@ export default class GuildConfig extends BaseEntity implements AnyEntity {
   @Property()
   logs?: Logs;
 
-  constructor(id: string, { logs }: { logs?: Logs } = {}) {
+  @Property()
+  suggestion?: string;
+
+  constructor(
+    id: string,
+    { logs, suggestion }: { logs?: Logs; suggestion?: string } = {}
+  ) {
     super();
     this.id = id;
     this.logs = logs;
+    this.suggestion = suggestion;
   }
 }
