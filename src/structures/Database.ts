@@ -1,4 +1,5 @@
-import { MikroORM, AnyEntity } from 'mikro-orm';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { MikroORM, AnyEntity, wrap } from 'mikro-orm';
 import GuildConfig from './entities/GuildConfig';
 import BaseEntity from './entities/BaseEntity';
 
@@ -29,19 +30,45 @@ export default class Database {
     }
   }
 
+  drop() {
+    return this.orm
+      .getSchemaGenerator()
+      .getDropSchemaSQL()
+      .then(sql => this.orm.em.getConnection().execute(sql));
+  }
+
   flush() {
     return this.orm.em.flush();
   }
 
+  async upsert<T extends AnyEntity>(
+    Entity: new (...args: any[]) => T,
+    id: string,
+    opts: { [prop in keyof T]?: T[prop] }
+  ) {
+    const res = await this.orm.em.findOne(Entity, id);
+    if (res) {
+      wrap(res).assign(opts);
+      await this.orm.em.flush();
+    } else {
+      await this.orm.em.persistAndFlush(new Entity(id, opts));
+    }
+  }
+
+  async find<T extends AnyEntity>(
+    entitiyName: new (...args: any[]) => T,
+    id: string
+  ): Promise<T> {
+    return this.orm.em.findOne(entitiyName, id).then(res => res || null);
+  }
+
   async findOrInsert<T extends AnyEntity>(
-    /* eslint-disable @typescript-eslint/no-explicit-any */
     entitiyName: new (...args: any[]) => T,
     id: string,
     ...args: any[]
-  ): /* eslint-enable @typescript-eslint/no-explicit-any */
-  Promise<T> {
+  ): Promise<T> {
     const entitiy = new entitiyName(id, ...args);
-    const found = await this.orm.em.findOne(entitiyName, id);
+    const found = await this.find(entitiyName, id);
     if (!found) await this.orm.em.persistAndFlush(entitiy);
     return entitiy;
   }
