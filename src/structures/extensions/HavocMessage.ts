@@ -21,7 +21,7 @@ export interface EmbedMethods {
   addField: [string, string];
   addFields: { name: string; value: string; inline?: boolean }[];
   attachFiles: string;
-  setAuthor: [string, string];
+  setAuthor: string | [string, string];
   setColor: string;
   setDescription: string;
   setFooter: string;
@@ -61,7 +61,7 @@ export default class extends Message {
     return this.args.join(' ');
   }
 
-  get arg() {
+  get arg(): string | undefined {
     return this.args[0];
   }
 
@@ -130,6 +130,14 @@ export default class extends Message {
       this.author.id !== this.client.user?.id
     ) {
       embed.setFooter(`Requested by ${this.author.tag}`, this.author.pfp);
+    }
+    if (embed.description) {
+      const [image] =
+        embed.description.match(/\bhttps:\/\/i\.imgur\.com\/[^\s]+/) || [];
+      if (image) {
+        embed.setDescription(embed.description.replace(image, ''));
+        embed.setImage(image);
+      }
     }
     return embed;
   }
