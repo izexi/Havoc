@@ -10,10 +10,12 @@ export default class extends Command {
       description:
         'View a pretty printed JSON that is parsed from the entered URL.',
       args: {
-        type: (message: HavocMessage) => {
+        type: ({ arg }) => {
+          const possibleUrl = arg;
+          if (!possibleUrl) return;
           try {
-            new URL(message.arg);
-            return message.arg;
+            new URL(possibleUrl);
+            return possibleUrl;
           } catch {
             return null;
           }

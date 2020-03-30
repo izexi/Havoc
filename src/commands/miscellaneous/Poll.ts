@@ -14,7 +14,7 @@ export default class extends Command {
           prompt: 'enter the question that you would like to poll.'
         },
         {
-          type: (message: HavocMessage) => message.text.split(';'),
+          type: message => message.text.split(';'),
           prompt:
             'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no'
         }

@@ -9,8 +9,9 @@ export default class extends Command {
         'Shows a list of all avaiable commands, or detailed info about a specific command.',
       aliases: ['h'],
       args: {
-        type: (message: HavocMessage) => {
+        type: message => {
           const possibleCmd = message.arg?.toLowerCase();
+          if (!possibleCmd) return;
           const commands = message.client.commandHandler.commands;
           return (
             commands.get(possibleCmd) ||
@@ -77,7 +78,7 @@ export default class extends Command {
 				Click **[here](https://www.patreon.com/user?u=15028160)** to support me by donating
 				⠀`,
         addFields: [...message.client.commandHandler.commands.values()]
-          .filter(command => command.category !== 'dev')
+          .filter(command => command.category !== 'dev' && !command.sub)
           .reduce(
             (
               fields: { name: string; value: string }[],
