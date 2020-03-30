@@ -39,7 +39,7 @@ export default {
     return str.replace(/./, letter => letter.toUpperCase());
   },
 
-  async haste(body: string, extension: string = 'txt') {
+  async haste(body: string, extension = 'txt') {
     return fetch('https://hasteb.in/documents', { method: 'POST', body })
       .then(
         async res => `https://hasteb.in/${(await res.json()).key}.${extension}`
