@@ -13,9 +13,10 @@ import Havoc from '../../client/Havoc';
 import Command from '../bases/Command';
 import HavocUser from './HavocUser';
 import Util, { MaybeArray } from '../../util/Util';
-import { TargetType } from '../../util/Targetter';
+import { TargetType, Targets, resolveTarget } from '../../util/Targetter';
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
+import { Responses } from '../../util/Responses';
 
 export interface EmbedMethods {
   addField: [string, string];
@@ -203,5 +204,46 @@ export default class extends Message {
           }
         : toSend
     );
+  }
+
+  async runCommand() {
+    const params: {
+      [key: string]: Targets[keyof Targets];
+    } = {};
+    const { command } = this;
+
+    this.args.shift();
+
+    if (command.args.length) {
+      for (const { type, required, prompt, promptOpts } of command.args) {
+        let found;
+
+        if (this.args.length && !this.command.promptOnly)
+          found = await resolveTarget(params, type, this, this.text);
+
+        if (found == null && (command.promptOnly || required)) {
+          let initialMsg =
+            promptOpts?.initial ||
+            (typeof prompt === 'function'
+              ? prompt.call(this.client, this)
+              : prompt!);
+
+          if (this.args.length && !command.promptOnly)
+            initialMsg = `\`${
+              this.text
+            }\` is an invalid option! ${promptOpts?.invalid ||
+              (typeof type === 'function' ? '' : Responses[type]!(this))}
+              Enter \`cancel\` to exit out of this prompt.`;
+
+          found = await this.createPrompt({
+            initialMsg,
+            invalidMsg: promptOpts?.invalid || '',
+            target: type
+          }).then(responses => Object.assign(params, responses));
+          if (Object.values(found).every(f => f == null)) return;
+        }
+      }
+    }
+    command.run.call(this.client, { message: this, ...params });
   }
 }
