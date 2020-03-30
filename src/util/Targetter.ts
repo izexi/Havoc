@@ -3,7 +3,8 @@ import {
   GuildMember,
   User,
   Role,
-  GuildEmoji
+  GuildEmoji,
+  GuildChannel
 } from 'discord.js';
 import HavocMessage from '../structures/extensions/HavocMessage';
 import HavocGuild from '../structures/extensions/HavocGuild';
@@ -29,7 +30,7 @@ export type TargetType = Target | TargetFn;
 export interface Targets {
   user: User;
   member: GuildMember;
-  channel: HavocTextChannel;
+  channel: GuildChannel | HavocTextChannel;
   role: Role;
   emoji: GuildEmoji | Emoji;
   number: number;
@@ -110,6 +111,35 @@ export const Targetter: {
       if (!guild || !query) return null;
       return (
         guild.roles.cache.find(
+          role =>
+            role.name === query ||
+            role.name.toLowerCase() === query.toLowerCase()
+        ) || null
+      );
+    },
+    async get(message, query) {
+      return (
+        (await this.mentionOrIDSearch!(query || message.content, message)) ||
+        (await this.nameSearch!(query || message.content, message.guild))
+      );
+    }
+  },
+
+  // TODO: Create a utility function for this
+  [Target.CHANNEL]: {
+    async mentionOrIDSearch(query, message) {
+      if (!query) return null;
+      const [target] =
+        query.match(
+          `(${MessageMentions.CHANNELS_PATTERN})|(${Regex.id.source})`
+        ) ?? [];
+      if (!target) return null;
+      return message.guild?.channels.cache.get(target.match(/\d+/)![0]);
+    },
+    async nameSearch(query: string, guild: HavocGuild | null) {
+      if (!guild || !query) return null;
+      return (
+        guild.channels.cache.find(
           role =>
             role.name === query ||
             role.name.toLowerCase() === query.toLowerCase()
