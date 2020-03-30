@@ -7,7 +7,7 @@ import { parse, sep } from 'path';
 interface Arg {
   type: TargetType;
   required?: boolean;
-  prompt?: string;
+  prompt?: string | ((message: HavocMessage) => string);
   promptOpts?: {
     initial: string;
     invalid: string;
@@ -18,6 +18,7 @@ interface CommandOptions {
   aliases?: Set<string> | string[];
   description: string;
   promptOnly?: boolean;
+  sub?: boolean;
   args?: Arg | Arg[];
 }
 
@@ -27,6 +28,12 @@ export type CommandParams = {
   target?: TargetFn;
   message: HavocMessage;
 };
+
+export enum Status {
+  SUBCOMMAND,
+  RAN,
+  ERROR
+}
 
 export default abstract class implements CommandOptions {
   name!: string;
@@ -41,6 +48,8 @@ export default abstract class implements CommandOptions {
 
   args: Arg[];
 
+  sub: boolean;
+
   constructor(__path: string, options: CommandOptions) {
     const { name, dir } = parse(__path);
     this.name = name.toLowerCase();
@@ -49,6 +58,7 @@ export default abstract class implements CommandOptions {
     this.description = options.description;
     this.promptOnly = options.promptOnly ?? false;
     this.args = Util.arrayify(options.args);
+    this.sub = options.sub ?? false;
   }
 
   abstract async run(this: Havoc, params: CommandParams): Promise<void>;
