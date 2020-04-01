@@ -20,6 +20,7 @@ interface CommandOptions {
   promptOnly?: boolean;
   sub?: boolean;
   args?: Arg | Arg[];
+  flags?: string[];
 }
 
 export type CommandParams = {
@@ -42,6 +43,8 @@ export default abstract class implements CommandOptions {
 
   aliases: Set<string>;
 
+  flags: string[];
+
   description: CommandOptions['description'];
 
   promptOnly: boolean;
@@ -55,6 +58,7 @@ export default abstract class implements CommandOptions {
     this.name = name.toLowerCase();
     this.category = dir.split(sep).pop()!;
     this.aliases = new Set(options.aliases);
+    this.flags = options.flags ?? [];
     this.description = options.description;
     this.promptOnly = options.promptOnly ?? false;
     this.args = Util.arrayify(options.args);
