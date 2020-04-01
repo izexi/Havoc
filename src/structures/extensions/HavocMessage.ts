@@ -25,7 +25,7 @@ export interface EmbedMethods {
   setAuthor: string | [string, string];
   setColor: string;
   setDescription: string;
-  setFooter: string;
+  setFooter: string | [string, string];
   setImage: string;
   setThumbnail: string;
   setTitle: string;
@@ -73,6 +73,11 @@ export default class extends Message {
         Regex.prefix(this.client.user!.id, this.guild.prefix)
       ) ?? [];
     return matchedPrefix;
+  }
+
+  shiftArg<T>(arg: T) {
+    if (arg) this.args.shift();
+    return arg;
   }
 
   async createPrompt(options: {
@@ -214,6 +219,24 @@ export default class extends Message {
 
     this.args.shift();
 
+    if (command.flags.length) {
+      params.flags = command.flags.reduce(
+        (flags: { [flag: string]: string }, possibleFlag) => {
+          const flagIndex = this.args.findIndex(arg =>
+            new RegExp(`${this.prefix}${possibleFlag}(=.+)?$`).test(arg)
+          );
+          if (flagIndex === -1) return flags;
+          const [flag, value] = this.args[flagIndex]
+            .substring(this.prefix!.length)
+            .split('=');
+          this.args.splice(flagIndex, 1);
+          flags[flag] = value;
+          return flags;
+        },
+        {}
+      );
+    }
+
     if (command.args.length) {
       for (const { type, required, prompt, promptOpts } of command.args) {
         let found;
@@ -244,6 +267,7 @@ export default class extends Message {
         }
       }
     }
+
     command.run.call(this.client, { message: this, ...params });
   }
 }
