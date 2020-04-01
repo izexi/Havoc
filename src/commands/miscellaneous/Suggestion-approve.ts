@@ -59,8 +59,7 @@ export async function getSuggestionMsg(message: HavocMessage) {
   const suggestionMsg = await suggestionChannel.messages
     .fetch(message.arg)
     .catch(() => null);
-  if (suggestionMsg) message.args.shift();
-  return suggestionMsg;
+  return message.shiftArg(suggestionMsg);
 }
 
 export default class extends Command {
