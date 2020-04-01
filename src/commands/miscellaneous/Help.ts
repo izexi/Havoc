@@ -52,10 +52,18 @@ export default class extends Command {
           inline: true
         });
       }
+      // TODO: Add examples
       if (command.args) {
         embed.addFields.push({
           name: '❯Arguments',
           value: command.args.map(arg => arg.type).join(', '),
+          inline: true
+        });
+      }
+      if (command.flags.length) {
+        embed.addFields.push({
+          name: '❯Aliases',
+          value: command.flags.map(flag => `\`${flag}\``).join(', '),
           inline: true
         });
       }
