@@ -45,7 +45,11 @@ export default class {
       [...this.commands.values()].find(command =>
         command.aliases.has(possibleCmd)
       );
-    if (!command) return;
+    if (
+      !command ||
+      (command.category === 'dev' && message.author.id !== '191615925336670208')
+    )
+      return;
 
     message.command = command;
     message.runCommand();
