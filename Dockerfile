@@ -8,7 +8,7 @@ WORKDIR /usr/src/havoc
 COPY package.json /usr/src/havoc/
 
 RUN apk add --update \
-  && apk add --no-cache git g++ make python \
+  && apk add --no-cache git g++ make python ffmpeg \
   && npm i
 
 COPY . /usr/src/havoc
