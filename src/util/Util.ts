@@ -61,5 +61,9 @@ export default {
 
   emojiNumber(n: number) {
     return ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'][n - 1];
+  },
+
+  randomInt(min: number, max: number) {
+    return ~~(Math.random() * (max - min + 1)) + min;
   }
 };
