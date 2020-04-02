@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MikroORM, AnyEntity, wrap } from 'mikro-orm';
 import GuildConfig from './entities/GuildConfig';
 import BaseEntity from './entities/BaseEntity';
+import User from './entities/User';
 
 export default class Database {
   orm!: MikroORM;
@@ -9,7 +9,7 @@ export default class Database {
   async init() {
     this.orm = await MikroORM.init({
       type: 'postgresql',
-      entities: [BaseEntity, GuildConfig],
+      entities: [BaseEntity, GuildConfig, User],
       dbName: process.env.POSTGRES_DB!,
       clientUrl: process.env.DATABASE_URL,
       baseDir: __dirname
@@ -42,7 +42,7 @@ export default class Database {
   }
 
   async upsert<T extends AnyEntity>(
-    Entity: new (...args: any[]) => T,
+    Entity: new (id: string, opts: { [prop in keyof T]?: T[prop] }) => T,
     id: string,
     opts: { [prop in keyof T]?: T[prop] }
   ) {
@@ -56,20 +56,22 @@ export default class Database {
   }
 
   async find<T extends AnyEntity>(
-    entitiyName: new (...args: any[]) => T,
+    Entity: new (id: string, opts: { [prop in keyof T]?: T[prop] }) => T,
     id: string
   ): Promise<T> {
-    return this.orm.em.findOne(entitiyName, id).then(res => res || null);
+    return this.orm.em.findOne(Entity, id).then(res => res || null);
   }
 
   async findOrInsert<T extends AnyEntity>(
-    entitiyName: new (...args: any[]) => T,
+    Entity: new (id: string, opts: { [prop in keyof T]?: T[prop] }) => T,
     id: string,
-    ...args: any[]
+    opts: { [prop in keyof T]?: T[prop] }
   ): Promise<T> {
-    const entitiy = new entitiyName(id, ...args);
-    const found = await this.find(entitiyName, id);
-    if (!found) await this.orm.em.persistAndFlush(entitiy);
+    let entitiy = await this.find(Entity, id);
+    if (!entitiy) {
+      entitiy = new Entity(id, opts);
+      await this.orm.em.persistAndFlush(entitiy);
+    }
     return entitiy;
   }
 }
