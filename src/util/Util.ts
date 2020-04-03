@@ -65,5 +65,18 @@ export default {
 
   randomInt(min: number, max: number) {
     return ~~(Math.random() * (max - min + 1)) + min;
+  },
+
+  normalizePermFlag(perm: string) {
+    return perm
+      .toLowerCase()
+      .replace(/(^|"|_)(\S)/g, s => s.toUpperCase())
+      .replace(/_/g, ' ')
+      .replace(/Guild/g, 'Server')
+      .replace(/Use Vad/g, 'Use Voice Acitvity');
+  },
+
+  inObj(flags: { [key: string]: undefined }, ...flag: string[]) {
+    return flag.some(f => f in flags);
   }
 };
