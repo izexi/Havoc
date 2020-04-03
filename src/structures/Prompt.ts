@@ -1,5 +1,5 @@
 import Util, { MaybeArray } from '../util/Util';
-import { Targets, TargetType, resolveTarget } from '../util/Targetter';
+import { Targets, TargetType, resolveTarget, Target } from '../util/Targetter';
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
 import { Responses } from '../util/Responses';
@@ -27,7 +27,7 @@ export default class {
 
   promptMsgs: HavocMessage['id'][] = [];
 
-  responses: { [key: string]: Targets[keyof Targets] } = {};
+  responses: { [target in Target]?: Targets[target] } = {};
 
   editInterval!: NodeJS.Timeout;
 
