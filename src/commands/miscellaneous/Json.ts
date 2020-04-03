@@ -40,20 +40,18 @@ export default class extends Command {
         err =>
           `**${message.author.tag}** I ran into an error while trying to access \`${url}\` \n\`${err}\``
       );
-    if (typeof json === 'string') {
-      message.respond(json);
-    } else {
-      const formattedJSON = JSON.stringify(json, null, 2);
-      message.send({
-        embed: message.constructEmbed({
-          setDescription: (Util as { [key: string]: Function })[
-            json.length > 2036 ? 'haste' : 'codeblock'
-          ](formattedJSON, 'json')
-        }),
-        files: [
-          { attachment: Buffer.from(formattedJSON, 'utf8'), name: 'jason.json' }
-        ]
-      });
-    }
+    if (typeof json === 'string') return message.respond(json);
+
+    const formattedJSON = JSON.stringify(json, null, 2);
+    message.send({
+      embed: message.constructEmbed({
+        setDescription: (Util as { [key: string]: Function })[
+          json.length > 2036 ? 'haste' : 'codeblock'
+        ](formattedJSON, 'json')
+      }),
+      files: [
+        { attachment: Buffer.from(formattedJSON, 'utf8'), name: 'jason.json' }
+      ]
+    });
   }
 }

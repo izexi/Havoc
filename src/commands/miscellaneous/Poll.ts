@@ -34,17 +34,13 @@ export default class extends Command {
     const formattedOptions = options.map(
       (opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`
     );
-    if (formattedOptions.length > 10) {
-      message.respond('the maximum amount of options allowed are 10');
-    } else {
-      message.sendEmbed({
-        setAuthor: [
-          `Poll started by ${message.author.tag}`,
-          message.author.pfp
-        ],
-        setDescription: `${question}\n\n${formattedOptions.join('\n')}`,
-        setFooter: 'Started at:'
-      });
-    }
+    if (formattedOptions.length > 10)
+      return message.respond('the maximum amount of options allowed are 10');
+
+    message.sendEmbed({
+      setAuthor: [`Poll started by ${message.author.tag}`, message.author.pfp],
+      setDescription: `${question}\n\n${formattedOptions.join('\n')}`,
+      setFooter: 'Started at:'
+    });
   }
 }

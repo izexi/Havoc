@@ -19,25 +19,26 @@ export default class extends Command {
   }
 
   async run({ message, text: url }: { message: HavocMessage; text: string }) {
-    if (!message.member!.voice.channel) {
-      message.respond(`you need to be in a voice channel to use this command.`);
-    } else {
-      await message.channel.send(`
+    if (!message.member!.voice.channel)
+      return message.respond(
+        `you need to be in a voice channel to use this command.`
+      );
+
+    await message.channel.send(`
 			${message.author}\nɴᴏᴡ ᴘʟᴀʏɪɴɢ: \`${url.substring(0, 32)}${
-        url.length > 32 ? '...' : ''
-        /* eslint-disable no-irregular-whitespace */
-      }\`
+      url.length > 32 ? '...' : ''
+      /* eslint-disable no-irregular-whitespace */
+    }\`
 			:white_circle:───────────────────────────────────────────
 			◄◄⠀▐▐ ⠀►►⠀⠀　　⠀ 0:00 / 1:37　　⠀ ───○ :loud_sound:⠀　　　ᴴᴰ :gear: ❐ ⊏⊐
 		`);
-      const connection = await message.member!.voice.channel.join();
-      connection
-        .play(
-          ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ', {
-            filter: 'audioonly'
-          })
-        )
-        .on('finish', () => message.guild!.voice?.channel?.leave());
-    }
+    const connection = await message.member!.voice.channel.join();
+    connection
+      .play(
+        ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ', {
+          filter: 'audioonly'
+        })
+      )
+      .on('finish', () => message.guild!.voice?.channel?.leave());
   }
 }

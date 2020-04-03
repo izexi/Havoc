@@ -67,46 +67,45 @@ export default class extends Command {
           inline: true
         });
       }
-      message.respond(embed);
-    } else {
-      const emojis: { [key: string]: string } = {
-        emojis: '<:emojis:466978216339570701>',
-        fun: '<:fun:407988457772810241>',
-        miscellaneous: '<:miscellaneous:404688801903017984>',
-        moderation: '<:moderation:407990341157912587>',
-        server: '🛠',
-        donators: '💸',
-        music: '🎶',
-        image: '🖼'
-      };
-      message.respond({
-        setDescription: `You can view more info about a command by doing \`${message.prefix}help [command name]\`
+      return message.respond(embed);
+    }
+
+    const emojis: { [key: string]: string } = {
+      emojis: '<:emojis:466978216339570701>',
+      fun: '<:fun:407988457772810241>',
+      miscellaneous: '<:miscellaneous:404688801903017984>',
+      moderation: '<:moderation:407990341157912587>',
+      server: '🛠',
+      donators: '💸',
+      music: '🎶',
+      image: '🖼'
+    };
+    message.respond({
+      setDescription: `You can view more info about a command by doing \`${message.prefix}help [command name]\`
 				Click **[here](https://discord.gg/3Fewsxq)** to join the support server here
 				Click **[here](https://discordapp.com/oauth2/authorize?client_id=${message.client.user?.id}&scope=bot&permissions=2146958591)** to invite me to your server
 				Click **[here](https://www.patreon.com/user?u=15028160)** to support me by donating
 				⠀`,
-        addFields: [...message.client.commandHandler.commands.values()]
-          .filter(command => command.category !== 'dev' && !command.sub)
-          .reduce(
-            (
-              fields: { name: string; value: string }[],
-              { category, name: cmdName }
-            ) => {
-              const formattedCatgory = `${emojis[category]} ${Util.captialise(
-                category
-              )}`;
-              const formattedName = `\`${cmdName}\``;
-              const existing = fields.find(
-                ({ name }) => name === formattedCatgory
-              );
-              if (existing) existing.value += `, ${formattedName}`;
-              else
-                fields.push({ name: formattedCatgory, value: formattedName });
-              return fields;
-            },
-            []
-          )
-      });
-    }
+      addFields: [...message.client.commandHandler.commands.values()]
+        .filter(command => command.category !== 'dev' && !command.sub)
+        .reduce(
+          (
+            fields: { name: string; value: string }[],
+            { category, name: cmdName }
+          ) => {
+            const formattedCatgory = `${emojis[category]} ${Util.captialise(
+              category
+            )}`;
+            const formattedName = `\`${cmdName}\``;
+            const existing = fields.find(
+              ({ name }) => name === formattedCatgory
+            );
+            if (existing) existing.value += `, ${formattedName}`;
+            else fields.push({ name: formattedCatgory, value: formattedName });
+            return fields;
+          },
+          []
+        )
+    });
   }
 }
