@@ -3,6 +3,7 @@ import { Target, Targets, TargetType, TargetFn } from '../../util/Targetter';
 import HavocMessage from '../extensions/HavocMessage';
 import Util from '../../util/Util';
 import { parse, sep } from 'path';
+import { BitFieldResolvable, PermissionString, Message } from 'discord.js';
 
 interface Arg {
   type: TargetType;
@@ -21,6 +22,7 @@ interface CommandOptions {
   sub?: boolean;
   args?: Arg | Arg[];
   flags?: string[];
+  requiredPerms?: BitFieldResolvable<PermissionString>;
 }
 
 export type CommandParams = {
@@ -47,6 +49,8 @@ export default abstract class implements CommandOptions {
 
   description: CommandOptions['description'];
 
+  requiredPerms?: CommandOptions['requiredPerms'];
+
   promptOnly: boolean;
 
   args: Arg[];
@@ -60,10 +64,14 @@ export default abstract class implements CommandOptions {
     this.aliases = new Set(options.aliases);
     this.flags = options.flags ?? [];
     this.description = options.description;
+    this.requiredPerms = options.requiredPerms;
     this.promptOnly = options.promptOnly ?? false;
     this.args = Util.arrayify(options.args);
     this.sub = options.sub ?? false;
   }
 
-  abstract async run(this: Havoc, params: CommandParams): Promise<void>;
+  abstract async run(
+    this: Havoc,
+    params: CommandParams
+  ): Promise<void | HavocMessage | Message>;
 }
