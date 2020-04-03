@@ -7,7 +7,6 @@ import {
   GuildChannel
 } from 'discord.js';
 import HavocMessage from '../structures/extensions/HavocMessage';
-import HavocGuild from '../structures/extensions/HavocGuild';
 import Regex from './Regex';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { Emoji, find } from 'node-emoji';
@@ -26,6 +25,7 @@ export enum Target {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type TargetFn = (message: HavocMessage) => any;
 export type TargetType = Target | TargetFn;
+export type NotFound = null | undefined;
 
 export interface Targets {
   user: User;
@@ -39,17 +39,15 @@ export interface Targets {
   fn: any;
 }
 
-type NotFound = null | undefined;
-
 export const Targetter: {
   [target in Target]?: {
     mentionOrIDSearch?(
-      query: string,
+      query: string | undefined,
       message: HavocMessage
     ): Promise<Targets[target] | NotFound>;
     nameSearch?(
-      query: string,
-      guild: HavocGuild | null
+      query: string | undefined,
+      message: HavocMessage
     ): Promise<Targets[target] | NotFound>;
     get(
       message: HavocMessage,
@@ -70,7 +68,7 @@ export const Targetter: {
         .fetch(target.match(/\d+/)![0])
         .catch(() => null);
     },
-    async nameSearch(query: string, guild: HavocGuild | null) {
+    async nameSearch(query, { guild }) {
       if (!guild || !query) return null;
       const findFn = (member: GuildMember) =>
         member.user.tag === query || member.user.username === query;
@@ -92,8 +90,20 @@ export const Targetter: {
     async get(message, query) {
       return (
         (await this.mentionOrIDSearch!(query || message.text, message)) ||
-        (await this.nameSearch!(query || message.text, message.guild))
+        (await this.nameSearch!(query || message.text, message))
       );
+    }
+  },
+
+  [Target.MEMBER]: {
+    async get(message, query) {
+      const user = message.shiftArg(
+        (await Targetter.user!.mentionOrIDSearch!(
+          message.arg || query,
+          message
+        )) || (await Targetter.user!.nameSearch!(message.arg || query, message))
+      );
+      return user ? message.guild!.members.fetch(user).catch(() => null) : user;
     }
   },
 
@@ -107,20 +117,35 @@ export const Targetter: {
       if (!target) return null;
       return message.guild?.roles.cache.get(target.match(/\d+/)![0]);
     },
-    async nameSearch(query: string, guild: HavocGuild | null) {
-      if (!guild || !query) return null;
-      return (
-        guild.roles.cache.find(
-          role =>
-            role.name === query ||
-            role.name.toLowerCase() === query.toLowerCase()
-        ) || null
-      );
+    async nameSearch(query, message) {
+      if (!message.guild || !query) return null;
+      return query
+        .split(/ +/)
+        .reduce(
+          (
+            foundRole: Role | null,
+            _,
+            i: number,
+            arr: string[]
+          ): Role | null => {
+            if (foundRole) return foundRole;
+            const possibleRoleName = arr.slice(0, i + 1).join(' ');
+            const possibleRole = message.guild!.roles.cache.find(
+              role =>
+                role.name === possibleRoleName ||
+                role.name.toLowerCase() === possibleRoleName.toLowerCase()
+            );
+            if (possibleRole) message.args.splice(0, i + 1);
+            return possibleRole || foundRole;
+          },
+          null
+        );
     },
     async get(message, query) {
       return (
-        (await this.mentionOrIDSearch!(query || message.content, message)) ||
-        (await this.nameSearch!(query || message.content, message.guild))
+        message.shiftArg(
+          await this.mentionOrIDSearch!(query || message.content, message)
+        ) || (await this.nameSearch!(query || message.content, message))
       );
     }
   },
@@ -136,7 +161,7 @@ export const Targetter: {
       if (!target) return null;
       return message.guild?.channels.cache.get(target.match(/\d+/)![0]);
     },
-    async nameSearch(query: string, guild: HavocGuild | null) {
+    async nameSearch(query, { guild }) {
       if (!guild || !query) return null;
       return (
         guild.channels.cache.find(
@@ -147,9 +172,9 @@ export const Targetter: {
       );
     },
     async get(message, query) {
-      return (
+      return message.shiftArg(
         (await this.mentionOrIDSearch!(query || message.content, message)) ||
-        (await this.nameSearch!(query || message.content, message.guild))
+          (await this.nameSearch!(query || message.content, message))
       );
     }
   },
