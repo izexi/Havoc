@@ -14,7 +14,8 @@ export default class extends Command {
         prompt:
           'mention the channel, or enter the ID of the channel that would like the suggestions to be created on.'
       },
-      sub: true
+      sub: true,
+      requiredPerms: 'MANAGE_GUILD'
     });
   }
 

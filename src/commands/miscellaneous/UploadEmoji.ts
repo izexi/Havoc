@@ -41,7 +41,8 @@ export default class extends Command {
         {
           type: Target.TEXT
         }
-      ]
+      ],
+      requiredPerms: 'MANAGE_EMOJIS'
     });
   }
 
@@ -70,22 +71,20 @@ export default class extends Command {
       invalidReason = `The is must be under 256kb in size, you entered one with ${emojiSize}kb`;
     }
 
-    if (invalidReason) {
-      message.respond(invalidReason);
-    } else {
-      message.respond(
-        await message
-          .guild!.emojis.create(url, customName || name || 'emoji', {
-            reason: `Uploaded by ${message.author.tag}`
-          })
-          .then(emoji => `I have uploaded the emoji ${emoji} to this server.`)
-          .catch(
-            (
-              err: Error
-            ) => `I encountered an error while trying to upload this emoji
+    if (invalidReason) return message.respond(invalidReason);
+
+    message.respond(
+      await message
+        .guild!.emojis.create(url, customName || name || 'emoji', {
+          reason: `Uploaded by ${message.author.tag}`
+        })
+        .then(emoji => `I have uploaded the emoji ${emoji} to this server.`)
+        .catch(
+          (
+            err: Error
+          ) => `I encountered an error while trying to upload this emoji
                 ${Util.codeblock(err.toString())}`
-          )
-      );
-    }
+        )
+    );
   }
 }
