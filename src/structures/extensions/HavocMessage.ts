@@ -13,7 +13,13 @@ import Havoc from '../../client/Havoc';
 import Command from '../bases/Command';
 import HavocUser from './HavocUser';
 import Util, { MaybeArray } from '../../util/Util';
-import { TargetType, Targets, resolveTarget } from '../../util/Targetter';
+import {
+  TargetType,
+  Targets,
+  resolveTarget,
+  Target,
+  NotFound
+} from '../../util/Targetter';
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
 import { Responses } from '../../util/Responses';
@@ -87,6 +93,28 @@ export default class extends Message {
     time?: number;
   }) {
     return new Prompt({ message: this, ...options }).create();
+  }
+
+  public async confirmation(action: string) {
+    await this.react('464034357955395585');
+    const { fn: response } = await this.createPrompt({
+      initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
+      invalidMsg: 'Enter __y__es or __n__o',
+      target: msg => msg.arg?.match(/^(yes|y|n|no)$/i)
+    });
+    if (response.charAt(0).toLowerCase() === 'y') {
+      if (!this.deleted) await this.reactions.removeAll();
+      await this.react('464033586748719104');
+      return true;
+    }
+    if (!this.deleted) {
+      await this.reactions.removeAll();
+      await this.react('464034188652183562');
+    }
+    await this.respond(
+      `the \`${this.command.name}\` command has been cancelled.`
+    );
+    return false;
   }
 
   async paginate(options: Omit<EmbedPaginationOptions, 'message'>) {
@@ -219,6 +247,31 @@ export default class extends Message {
 
     this.args.shift();
 
+    if (command.requiredPerms) {
+      const flags = Util.arrayify(command.requiredPerms);
+      if (!this.member!.hasPermission(flags)) {
+        await this.react('⛔');
+        return this.respond(
+          `you need to have the ${flags
+            .map(flag => `\`${Util.normalizePermFlag(flag)}\``)
+            .join(', ')} ${Util.plural(
+            'permission',
+            flags.length
+          )} in order to use this command.`
+        );
+      }
+      if (!this.guild!.me!.hasPermission(flags)) {
+        return this.respond(
+          `I do not have sufficient permisions to use this command I need to have the ${flags
+            .map(flag => `\`${Util.normalizePermFlag(flag)}\``)
+            .join(', ')} ${Util.plural(
+            'permission',
+            flags.length
+          )} in order to use this command.`
+        );
+      }
+    }
+
     if (command.flags.length) {
       params.flags = command.flags.reduce(
         (flags: { [flag: string]: string }, possibleFlag) => {
@@ -239,7 +292,7 @@ export default class extends Message {
 
     if (command.args.length) {
       for (const { type, required, prompt, promptOpts } of command.args) {
-        let found;
+        let found: { [target in Target]?: Targets[target] } | NotFound;
 
         if (this.args.length && !this.command.promptOnly)
           found = await resolveTarget(params, type, this, this.text);
@@ -263,7 +316,13 @@ export default class extends Message {
             invalidMsg: promptOpts?.invalid || '',
             target: type
           }).then(responses => Object.assign(params, responses));
-          if (Object.values(found).every(f => f == null)) return;
+          if (
+            (required &&
+              found![typeof type === 'function' ? Target.FUNCTION : type] ==
+                null) ||
+            Object.values(found!).every(f => f == null)
+          )
+            return;
         }
       }
     }
