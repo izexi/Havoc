@@ -26,6 +26,7 @@ export enum Target {
 export type TargetFn = (message: HavocMessage) => any;
 export type TargetType = Target | TargetFn;
 export type NotFound = null | undefined;
+type MaybePromise<T> = T | Promise<T>;
 
 export interface Targets {
   user: User;
@@ -40,24 +41,24 @@ export interface Targets {
 }
 
 export const Targetter: {
-  [target in Target]?: {
+  [target in Target]: {
     mentionOrIDSearch?(
       query: string | undefined,
       message: HavocMessage
-    ): Promise<Targets[target] | NotFound>;
+    ): MaybePromise<Targets[target] | NotFound>;
     nameSearch?(
       query: string | undefined,
       message: HavocMessage
-    ): Promise<Targets[target] | NotFound>;
+    ): MaybePromise<Targets[target] | NotFound>;
     get(
       message: HavocMessage,
       arg?: string,
       fn?: TargetFn
-    ): Promise<Targets[target] | NotFound>;
+    ): MaybePromise<Targets[target] | NotFound>;
   };
 } = {
   [Target.USER]: {
-    async mentionOrIDSearch(query, message) {
+    mentionOrIDSearch(query, message) {
       if (!query) return null;
       const [target] =
         query.match(
@@ -68,7 +69,7 @@ export const Targetter: {
         .fetch(target.match(/\d+/)![0])
         .catch(() => null);
     },
-    async nameSearch(query, { guild }) {
+    nameSearch(query, { guild }) {
       if (!guild || !query) return null;
       const findFn = (member: GuildMember) =>
         member.user.tag === query || member.user.username === query;
@@ -108,7 +109,7 @@ export const Targetter: {
   },
 
   [Target.ROLE]: {
-    async mentionOrIDSearch(query, message) {
+    mentionOrIDSearch(query, message) {
       if (!query) return null;
       const [target] =
         query.match(
@@ -117,7 +118,7 @@ export const Targetter: {
       if (!target) return null;
       return message.guild?.roles.cache.get(target.match(/\d+/)![0]);
     },
-    async nameSearch(query, message) {
+    nameSearch(query, message) {
       if (!message.guild || !query) return null;
       return query
         .split(/ +/)
@@ -152,7 +153,7 @@ export const Targetter: {
 
   // TODO: Create a utility function for this
   [Target.CHANNEL]: {
-    async mentionOrIDSearch(query, message) {
+    mentionOrIDSearch(query, message) {
       if (!query) return null;
       const [target] =
         query.match(
@@ -161,7 +162,7 @@ export const Targetter: {
       if (!target) return null;
       return message.guild?.channels.cache.get(target.match(/\d+/)![0]);
     },
-    async nameSearch(query, { guild }) {
+    nameSearch(query, { guild }) {
       if (!guild || !query) return null;
       return (
         guild.channels.cache.find(
@@ -180,13 +181,19 @@ export const Targetter: {
   },
 
   [Target.TEXT]: {
-    async get(message: HavocMessage) {
+    get(message: HavocMessage) {
       return message.text;
     }
   },
 
+  [Target.NUMBER]: {
+    get(message: HavocMessage) {
+      return message.shiftArg(Number(message.arg) || null);
+    }
+  },
+
   [Target.EMOJI]: {
-    async get(message, query) {
+    get(message, query) {
       const arg = query || message.content;
       const [emojiID] =
         arg.match(`(${Regex.emoji})|(${Regex.id.source})`) ?? [];
@@ -195,7 +202,7 @@ export const Targetter: {
   },
 
   [Target.FUNCTION]: {
-    async get(message, _, fn) {
+    get(message, _, fn) {
       return fn!.call(message.client, message);
     }
   }
