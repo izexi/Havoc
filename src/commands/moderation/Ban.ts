@@ -8,7 +8,8 @@ import Util from '../../util/Util';
 export default class extends Command {
   constructor() {
     super(__filename, {
-      description: 'Bans the inputted user from the server.',
+      description:
+        'Bans the inputted user from the server (with an optional reason).',
       flags: ['force', 'f'],
       args: [
         {
