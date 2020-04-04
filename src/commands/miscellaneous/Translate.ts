@@ -32,7 +32,7 @@ export default class extends Command {
   }: {
     message: HavocMessage;
     text: string;
-    flags: { [flag: string]: undefined };
+    flags: { [language in keyof typeof languages]: undefined };
   }) {
     const to = Object.keys(flags)[0] || 'en';
     const [language, { flag }] = Object.entries(languages).find(

@@ -25,7 +25,7 @@ export default class extends Command {
   }: {
     message: HavocMessage;
     text: string;
-    flags: { [flag: string]: undefined };
+    flags: { silent?: undefined; detailed?: undefined };
   }) {
     const detailed = 'detailed' in flags;
     const silent = 'silent' in flags;
