@@ -16,7 +16,7 @@ export default class extends Command {
           required: true,
           type: Target.USER,
           prompt:
-            "mention the user / enter the user's ID, tag, nickname or username who you would like to add a role to."
+            "mention the user / enter the user's ID, tag, nickname or username who you would like to ban."
         },
         {
           type: Target.TEXT
@@ -37,7 +37,7 @@ export default class extends Command {
       message: HavocMessage;
       user: HavocUser;
       text: string;
-      flags: { [flag: string]: undefined };
+      flags: { force?: undefined; f?: undefined };
     }
   ) {
     let response;
