@@ -1,5 +1,6 @@
 import { Entity, PrimaryKey, Property, AnyEntity } from 'mikro-orm';
 import BaseEntity from './BaseEntity';
+import { EntityProps } from '../Database';
 
 export interface Logs {
   channel: string;
@@ -20,13 +21,12 @@ export default class GuildConfig extends BaseEntity implements AnyEntity {
   @Property()
   suggestion?: string;
 
-  constructor(
-    id: string,
-    { logs, suggestion }: { logs?: Logs; suggestion?: string } = {}
-  ) {
+  @Property()
+  bcPrefixes?: string[];
+
+  constructor(id: string, props: EntityProps<GuildConfig> = {}) {
     super();
     this.id = id;
-    this.logs = logs;
-    this.suggestion = suggestion;
+    Object.assign(this, props);
   }
 }

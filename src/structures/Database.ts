@@ -3,6 +3,10 @@ import GuildConfig from './entities/GuildConfig';
 import BaseEntity from './entities/BaseEntity';
 import User from './entities/User';
 
+export type EntityProps<T> = {
+  [prop in Exclude<keyof T, 'id' | 'createdAt' | 'updatedAt'>]?: T[prop];
+};
+
 export default class Database {
   orm!: MikroORM;
 
@@ -42,9 +46,9 @@ export default class Database {
   }
 
   async upsert<T extends AnyEntity>(
-    Entity: new (id: string, opts: { [prop in keyof T]?: T[prop] }) => T,
+    Entity: new (id: string, opts: EntityProps<T>) => T,
     id: string,
-    opts: { [prop in keyof T]?: T[prop] }
+    opts: EntityProps<T>
   ) {
     const res = await this.orm.em.findOne(Entity, id);
     if (res) {
@@ -56,16 +60,16 @@ export default class Database {
   }
 
   async find<T extends AnyEntity>(
-    Entity: new (id: string, opts: { [prop in keyof T]?: T[prop] }) => T,
+    Entity: new (id: string, opts: EntityProps<T>) => T,
     id: string
   ): Promise<T> {
     return this.orm.em.findOne(Entity, id).then(res => res || null);
   }
 
   async findOrInsert<T extends AnyEntity>(
-    Entity: new (id: string, opts: { [prop in keyof T]?: T[prop] }) => T,
+    Entity: new (id: string, opts: EntityProps<T>) => T,
     id: string,
-    opts: { [prop in keyof T]?: T[prop] }
+    opts: EntityProps<T>
   ): Promise<T> {
     let entitiy = await this.find(Entity, id);
     if (!entitiy) {
