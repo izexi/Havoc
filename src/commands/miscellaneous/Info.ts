@@ -20,9 +20,9 @@ export default class extends Command {
         .members.fetch(message.author)
         .then(
           () =>
-            'https://discordapp.com/channels/406873117215031297/406873578458447873/535928285402628106'
-        )
-        .catch(() => 'http://www.bridgeurl.com/vote-for-havoc/all');
+            'https://discordapp.com/channels/406873117215031297/406873578458447873/535928285402628106',
+          () => 'http://www.bridgeurl.com/vote-for-havoc/all'
+        );
 
     message.respond({
       setTitle: this.user!.username,

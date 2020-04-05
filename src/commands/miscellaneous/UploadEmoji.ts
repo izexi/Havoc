@@ -78,8 +78,8 @@ export default class extends Command {
         .guild!.emojis.create(url, customName || name || 'emoji', {
           reason: `Uploaded by ${message.author.tag}`
         })
-        .then(emoji => `I have uploaded the emoji ${emoji} to this server.`)
-        .catch(
+        .then(
+          emoji => `I have uploaded the emoji ${emoji} to this server.`,
           (
             err: Error
           ) => `I encountered an error while trying to upload this emoji
