@@ -59,7 +59,7 @@ export default class extends Message {
 
   response?: this;
 
-  public _patch(data: object) {
+  _patch(data: object) {
     // @ts-ignore
     super._patch(data);
   }
@@ -95,7 +95,7 @@ export default class extends Message {
     return new Prompt({ message: this, ...options }).create();
   }
 
-  public async confirmation(action: string) {
+  async confirmation(action: string) {
     await this.react('464034357955395585');
     const { fn: response } = await this.createPrompt({
       initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
