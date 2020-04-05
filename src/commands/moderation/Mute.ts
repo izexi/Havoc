@@ -61,7 +61,8 @@ export default class extends Command {
         {
           type: Target.TEXT
         }
-      ]
+      ],
+      requiredPerms: 'MANAGE_ROLES'
     });
   }
 
