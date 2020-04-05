@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
-import User from '../../structures/entities/User';
+import UserEntity from '../../structures/entities/UserEntity';
 import Util from '../../util/Util';
 
 export default class extends Command {
@@ -33,7 +33,7 @@ export default class extends Command {
     else if (rand < 0.95) size = Util.randomInt(16, 20);
 
     const res = await this.db
-      .findOrInsert(User, user.id, { dick: size })
+      .findOrInsert(UserEntity, user.id, { dick: size })
       .then(({ dick }) => dick);
 
     message.respond({

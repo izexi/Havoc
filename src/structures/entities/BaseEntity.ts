@@ -1,6 +1,6 @@
 import { Property } from 'mikro-orm';
 
-export default abstract class BaseEntity {
+export default abstract class Base {
   @Property()
   createdAt = new Date();
 

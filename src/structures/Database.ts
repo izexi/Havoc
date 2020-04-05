@@ -1,7 +1,4 @@
 import { MikroORM, AnyEntity, wrap } from 'mikro-orm';
-import GuildConfig from './entities/GuildConfig';
-import BaseEntity from './entities/BaseEntity';
-import User from './entities/User';
 
 export type EntityProps<T> = {
   [prop in Exclude<keyof T, 'id' | 'createdAt' | 'updatedAt'>]?: T[prop];
@@ -13,18 +10,19 @@ export default class Database {
   async init() {
     this.orm = await MikroORM.init({
       type: 'postgresql',
-      entities: [BaseEntity, GuildConfig, User],
+      entitiesDirs: ['./dist/structures/entities'],
+      entitiesDirsTs: ['./src/structures/entities'],
       dbName: process.env.POSTGRES_DB!,
-      clientUrl: process.env.DATABASE_URL,
-      baseDir: __dirname
+      clientUrl: process.env.DATABASE_URL
     });
     return this.setup();
   }
 
   async setup() {
+    // await this.drop();
     const { to_regclass: tableExists } = await this.orm.em
       .getConnection()
-      .execute(`SELECT to_regclass('public.guild_config')`)
+      .execute(`SELECT to_regclass('public.guild_entity')`)
       .then(([regclass]) => regclass);
     if (!tableExists) {
       await this.orm
@@ -67,9 +65,9 @@ export default class Database {
   }
 
   async findOrInsert<T extends AnyEntity>(
-    Entity: new (id: string, opts: EntityProps<T>) => T,
+    Entity: new (id: string, opts?: EntityProps<T>) => T,
     id: string,
-    opts: EntityProps<T>
+    opts?: EntityProps<T>
   ): Promise<T> {
     let entitiy = await this.find(Entity, id);
     if (!entitiy) {

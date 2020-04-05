@@ -1,7 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
-import GuildConfig from '../../structures/entities/GuildConfig';
+import GuildEntity from '../../structures/entities/GuildEntity';
 import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
 
 export default class extends Command {
@@ -26,7 +26,7 @@ export default class extends Command {
     message: HavocMessage;
     channel: HavocTextChannel;
   }) {
-    await message.client.db.upsert(GuildConfig, message.guild!.id, {
+    await message.client.db.upsert(GuildEntity, message.guild!.id, {
       suggestion: channel.id
     });
     await message.respond(

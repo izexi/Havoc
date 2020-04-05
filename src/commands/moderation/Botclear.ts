@@ -1,7 +1,7 @@
 import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import GuildConfig from '../../structures/entities/GuildConfig';
+import GuildEntity from '../../structures/entities/GuildEntity';
 import Util from '../../util/Util';
 
 export const defaultPrefixes = (message: HavocMessage) => [
@@ -51,9 +51,9 @@ export default class extends Command {
       '<:botclear2:486606870618963968>',
       '<:botclear3:486606906337525765>'
     ];
-    const guildConfig = await this.db.find(GuildConfig, message.guild!.id);
-    const bcPrefixes = guildConfig
-      ? guildConfig.bcPrefixes || defaultPrefixes(message)
+    const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
+    const bcPrefixes = guildEntity
+      ? guildEntity.bcPrefixes || defaultPrefixes(message)
       : defaultPrefixes(message);
     const messages = await message.channel.messages
       .fetch({ limit: 100 })

@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
-import User from '../../structures/entities/User';
+import UserEntity from '../../structures/entities/UserEntity';
 import Util from '../../util/Util';
 
 export default class extends Command {
@@ -32,7 +32,7 @@ export default class extends Command {
       return percentage ? '<:kappapride:462323575375003658>' : '📏';
     };
     const res = await this.db
-      .findOrInsert(User, user.id, { gay: Util.randomInt(0, 100) })
+      .findOrInsert(UserEntity, user.id, { gay: Util.randomInt(0, 100) })
       .then(({ gay }) => gay);
 
     message.respond(

@@ -1,7 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import GuildConfig from '../../structures/entities/GuildConfig';
+import GuildEntity from '../../structures/entities/GuildEntity';
 import { Target } from '../../util/Targetter';
 import { defaultPrefixes } from './Botclear';
 
@@ -39,9 +39,9 @@ export default class extends Command {
       fn: 'view' | 'add' | 'remove';
     }
   ) {
-    const guildConfig = await this.db.find(GuildConfig, message.guild!.id);
-    const bcPrefixes = guildConfig
-      ? guildConfig.bcPrefixes || defaultPrefixes(message)
+    const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
+    const bcPrefixes = guildEntity
+      ? guildEntity.bcPrefixes || defaultPrefixes(message)
       : defaultPrefixes(message);
 
     if (option === 'view')
@@ -77,7 +77,7 @@ export default class extends Command {
       bcPrefixes!.splice(bcPrefixes!.indexOf(prefix), 1);
     }
 
-    await this.db.upsert(GuildConfig, message.guild!.id, { bcPrefixes });
+    await this.db.upsert(GuildEntity, message.guild!.id, { bcPrefixes });
     message.respond(
       `I have ${option}${
         option === 'add' ? 'e' : ''

@@ -1,6 +1,6 @@
 import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import GuildConfig from '../../structures/entities/GuildConfig';
+import GuildEntity from '../../structures/entities/GuildEntity';
 import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
 import { SnowflakeUtil } from 'discord.js';
 
@@ -9,14 +9,14 @@ export async function getSuggestionChannel(message: HavocMessage) {
   const existing = guild.channels.cache.find(
     channel => channel.name === 'suggestions'
   );
-  const guildConfig = await message.client.db.find(GuildConfig, guild.id);
+  const guildEntity = await message.client.db.find(GuildEntity, guild.id);
   const setupResponse = `${
     message.member!.permissions.has('MANAGE_GUILD')
       ? 'U'
       : 'You will need to ask someone with the `Manage Guild` permission to u'
   }se \`${message.prefix}suggestion config\` to set one up.`;
 
-  if (!guildConfig || !guildConfig.suggestion) {
+  if (!guildEntity || !guildEntity.suggestion) {
     if (!existing) {
       message.respond({
         setDescription: `**${message.author.tag}** I couldn't find a \`#suggestions\` and a suggestion channel hasn't been configured. ${setupResponse}`
@@ -26,13 +26,13 @@ export async function getSuggestionChannel(message: HavocMessage) {
     return existing;
   }
 
-  const channel = guildConfig.suggestion;
+  const channel = guildEntity.suggestion;
   const suggestionChannel = guild.channels.cache.get(channel);
   if (!suggestionChannel) {
     message.respond({
       setDescription: `**${message.author.tag}** the suggestion channel that was in the configuration doesn't exist. ${setupResponse}.`
     });
-    delete guildConfig.suggestion;
+    delete guildEntity.suggestion;
     await message.client.db.flush();
     return null;
   }

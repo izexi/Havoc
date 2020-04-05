@@ -1,8 +1,8 @@
 import { Entity, PrimaryKey, Property, AnyEntity } from 'mikro-orm';
-import BaseEntity from './BaseEntity';
+import Base from './BaseEntity';
 
 @Entity()
-export default class User extends BaseEntity implements AnyEntity {
+export default class UserEntity extends Base implements AnyEntity {
   @PrimaryKey()
   id: string;
 
