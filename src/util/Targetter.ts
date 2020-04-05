@@ -10,6 +10,7 @@ import HavocMessage from '../structures/extensions/HavocMessage';
 import Regex from './Regex';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { Emoji, find } from 'node-emoji';
+import Time from './Time';
 
 export enum Target {
   USER = 'user',
@@ -19,6 +20,7 @@ export enum Target {
   EMOJI = 'emoji',
   TEXT = 'text',
   NUMBER = 'number',
+  TIME = 'time',
   FUNCTION = 'fn'
 }
 
@@ -36,6 +38,7 @@ export interface Targets {
   emoji: GuildEmoji | Emoji;
   number: number;
   text: string;
+  time: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: any;
 }
@@ -181,14 +184,20 @@ export const Targetter: {
   },
 
   [Target.TEXT]: {
-    get(message: HavocMessage) {
+    get(message) {
       return message.text;
     }
   },
 
   [Target.NUMBER]: {
-    get(message: HavocMessage) {
+    get(message) {
       return message.shiftArg(Number(message.arg) || null);
+    }
+  },
+
+  [Target.TIME]: {
+    get(message) {
+      return message.shiftArg(Time.parse(message.arg!));
     }
   },
 
