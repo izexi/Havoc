@@ -12,6 +12,10 @@ export default class Mute extends Schedule<MuteEntity> {
     super(client);
   }
 
+  schedule(mute: MuteEntity) {
+    if (mute.end) this.enqueue(mute, new Date(mute.end).getTime() - Date.now());
+  }
+
   async start(
     { id }: HavocGuild,
     mute: Exclude<EntityProps<MuteEntity>, 'guild'>
@@ -22,8 +26,7 @@ export default class Mute extends Schedule<MuteEntity> {
 
     guild.mutes.add(muteEntity);
     await this.client.db.flush();
-    if (mute.end)
-      this.enqueue(muteEntity, new Date(mute.end).getTime() - Date.now());
+    this.schedule(muteEntity);
   }
 
   async end(mute: MuteEntity) {
@@ -47,6 +50,6 @@ export default class Mute extends Schedule<MuteEntity> {
     const mutes = await this.client.db.guildRepo
       .find({ mutes: { end: { $ne: null } } }, { populate: ['mutes'] })
       .then(guilds => guilds.flatMap(({ mutes }) => mutes.getItems()));
-    await Promise.all(mutes.map(this.enqueue.bind(this)));
+    await Promise.all(mutes.map(this.schedule.bind(this)));
   }
 }
