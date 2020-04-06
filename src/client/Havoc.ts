@@ -3,8 +3,6 @@ import Database from '../structures/Database';
 import Logger from '../util/Logger';
 import CommandHandler from '../handlers/CommandHandler';
 import MuteSchedule from '../schedules/Mute';
-import Schedule from '../structures/bases/Schedule';
-import { AnyEntity } from 'mikro-orm';
 import { once } from 'events';
 import Util from '../util/Util';
 
@@ -13,9 +11,7 @@ export default class Havoc extends Client {
 
   commandHandler = new CommandHandler();
 
-  schedules: Map<string, Schedule<AnyEntity>> = new Map([
-    ['mute', new MuteSchedule(this)]
-  ]);
+  schedules = new Map([['mute', new MuteSchedule(this)]]);
 
   constructor(options = {}) {
     super(options);
