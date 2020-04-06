@@ -5,6 +5,9 @@ import GuildEntity from './GuildEntity';
 @Entity()
 export default class MuteEntity implements AnyEntity {
   @PrimaryKey()
+  id!: number;
+
+  @Property()
   start = new Date();
 
   @Property()
