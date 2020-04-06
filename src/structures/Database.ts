@@ -1,4 +1,5 @@
 import { MikroORM, AnyEntity, wrap } from 'mikro-orm';
+import GuildEntity from './entities/GuildEntity';
 
 export type EntityProps<T> = {
   [prop in Exclude<keyof T, 'id' | 'createdAt' | 'updatedAt'>]?: T[prop];
@@ -30,6 +31,10 @@ export default class Database {
         .getCreateSchemaSQL()
         .then(sql => this.orm.em.getConnection().execute(sql));
     }
+  }
+
+  get guildRepo() {
+    return this.orm.em.getRepository(GuildEntity);
   }
 
   drop() {
