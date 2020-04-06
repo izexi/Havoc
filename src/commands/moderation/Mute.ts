@@ -88,15 +88,17 @@ export default class extends Command {
       await message.react('😢');
       return message.channel.send('😢');
     }
+
     const highestMeRole = message.guild!.me!.roles.highest;
     const highestMemberRole = message.member!.roles.highest;
+    const tag = member.user.tag;
     if (highestMeRole.comparePositionTo(muteRole) < 1)
-      response = `the \`HavocMute\` role has a higher position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to mute msg user.`;
+      response = `the \`HavocMute\` role has a higher position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to mute \`${tag}\`.`;
     if (
       highestMemberRole.comparePositionTo(muteRole) < 1 &&
       message.author.id !== message.guild!.ownerID
     )
-      response = `the \`HavocMute\` role has a higher position compared to your highest role \`${highestMemberRole.name}\`, therefore you do not have permission to mute msg user.`;
+      response = `the \`HavocMute\` role has a higher position compared to your highest role \`${highestMemberRole.name}\`, therefore you do not have permission to mute \`${tag}\`.`;
 
     if (response) {
       await message.react('⛔');
@@ -104,7 +106,7 @@ export default class extends Command {
     }
 
     if (member.roles.cache.has(muteRole.id))
-      return message.respond(`\`${member.user.tag}\` is already muted.`);
+      return message.respond(`\`${tag}\` is already muted.`);
 
     await this.schedules.get('mute')?.start(message.guild!, {
       end: time ? new Date(Date.now() + time) : undefined,
