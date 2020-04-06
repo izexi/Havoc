@@ -34,6 +34,8 @@ export default abstract class Schedule<T extends AnyEntity> {
     await this.client.db.flush();
   }
 
+  abstract schedule(entity: T): void;
+
   abstract start(guild: HavocGuild, mute: EntityProps<T>): Promise<void>;
 
   abstract end(entity: T): Promise<void>;
