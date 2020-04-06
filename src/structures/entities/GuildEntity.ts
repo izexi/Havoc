@@ -8,7 +8,7 @@ import {
 } from 'mikro-orm';
 import BaseEntity from './BaseEntity';
 import { EntityProps } from '../Database';
-import Mute from './MuteEntity';
+import MuteEntity from './MuteEntity';
 
 export interface Logs {
   channel: string;
@@ -33,11 +33,11 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
   bcPrefixes?: string[];
 
   @OneToMany(
-    () => Mute,
+    () => MuteEntity,
     mute => mute.guild,
     { orphanRemoval: true }
   )
-  mutes = new Collection<Mute>(this);
+  mutes = new Collection<MuteEntity>(this);
 
   constructor(id: string, data: EntityProps<GuildEntity> = {}) {
     super();
