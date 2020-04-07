@@ -1,7 +1,5 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { getSuggestionChannel } from './Suggestion';
-import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
 import Util from '../../util/Util';
 import Regex from '../../util/Regex';
 import { Target } from '../../util/Targetter';
@@ -52,10 +50,10 @@ export async function review(
 
 export async function getSuggestionMsg(message: HavocMessage) {
   if (!message.arg) return null;
-  const suggestionChannel = (await getSuggestionChannel(
-    message
-  )) as HavocTextChannel;
+
+  const suggestionChannel = await message.findConfigChannel('suggestion');
   if (!suggestionChannel) return null;
+
   const suggestionMsg = await suggestionChannel.messages
     .fetch(message.arg)
     .catch(() => null);

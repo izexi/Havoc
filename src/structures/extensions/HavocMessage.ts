@@ -23,6 +23,8 @@ import {
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
 import { Responses } from '../../util/Responses';
+import GuildEntity from '../entities/GuildEntity';
+import HavocTextChannel from './HavocTextChannel';
 
 export interface EmbedMethods {
   addField: [string, string];
@@ -237,6 +239,43 @@ export default class extends Message {
           }
         : toSend
     );
+  }
+
+  async findConfigChannel(config: 'suggestion' | 'giveaway') {
+    const guild = this.guild!;
+    const existing = guild.channels.cache.find(
+      channel => channel.name === `${config}s`
+    );
+    const guildEntity = await this.client.db.find(GuildEntity, guild.id);
+    const setupResponse = `${
+      this.member!.permissions.has('MANAGE_GUILD')
+        ? 'U'
+        : 'You will need to ask someone with the `Manage Guild` permission to u'
+    }se \`${this.prefix}${config} config\` to set one up.`;
+
+    // @ts-ignore
+    if (!guildEntity || !guildEntity[config]) {
+      if (!existing) {
+        this.respond({
+          setDescription: `**${this.author.tag}** I couldn't find a \`#${config}s\` and a ${config} channel hasn't been configured. ${setupResponse}`
+        });
+        return null;
+      }
+      return existing as HavocTextChannel;
+    }
+
+    // @ts-ignore
+    const channel = guild.channels.cache.get(guildEntity[config]);
+    if (!channel) {
+      this.respond({
+        setDescription: `**${this.author.tag}** the ${config} channel that was in the configuration doesn't exist. ${setupResponse}.`
+      });
+      // @ts-ignore
+      delete guildEntity[config];
+      await this.client.db.flush();
+      return null;
+    }
+    return channel as HavocTextChannel;
   }
 
   async runCommand() {
