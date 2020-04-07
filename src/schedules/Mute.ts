@@ -1,32 +1,17 @@
 import Schedule from '../structures/bases/Schedule';
 import Havoc from '../client/Havoc';
-import GuildEntity from '../structures/entities/GuildEntity';
 import MuteEntity from '../structures/entities/MuteEntity';
 import { getMuteRole } from '../commands/moderation/Mute';
-import HavocGuild from '../structures/extensions/HavocGuild';
 import ms = require('ms');
-import { EntityProps } from '../structures/Database';
 
 export default class Mute extends Schedule<MuteEntity> {
   constructor(client: Havoc) {
-    super(client);
+    super(client, MuteEntity, 'mutes');
   }
 
   schedule(mute: MuteEntity) {
-    if (mute.end) this.enqueue(mute, new Date(mute.end).getTime() - Date.now());
-  }
-
-  async start(
-    { id }: HavocGuild,
-    mute: Exclude<EntityProps<MuteEntity>, 'guild'>
-  ) {
-    const guild = await this.client.db.findOrInsert(GuildEntity, id);
-    await guild.mutes.init();
-    const muteEntity = new MuteEntity({ ...mute, guild });
-
-    guild.mutes.add(muteEntity);
-    await this.client.db.flush();
-    this.schedule(muteEntity);
+    if (mute.end) super.schedule(mute);
+    return mute;
   }
 
   async end(mute: MuteEntity) {
