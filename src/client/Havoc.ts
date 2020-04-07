@@ -3,6 +3,7 @@ import Database from '../structures/Database';
 import Logger from '../util/Logger';
 import CommandHandler from '../handlers/CommandHandler';
 import MuteSchedule from '../schedules/Mute';
+import GiveawaySchedule from '../schedules/Giveaway';
 import { once } from 'events';
 import Util from '../util/Util';
 
@@ -11,7 +12,10 @@ export default class Havoc extends Client {
 
   commandHandler = new CommandHandler();
 
-  schedules = new Map([['mute', new MuteSchedule(this)]]);
+  schedules = {
+    mute: new MuteSchedule(this),
+    giveaway: new GiveawaySchedule(this)
+  };
 
   constructor(options = {}) {
     super(options);
@@ -21,14 +25,14 @@ export default class Havoc extends Client {
   async init() {
     await this.db.init().catch(error => Logger.error('Database#init()', error));
     await once(this, 'ready');
-    Promise.all(
-      [...this.schedules.values()].map(schedule => schedule.init())
-    ).then(
+
+    const schedules = Object.values(this.schedules);
+    Promise.all(schedules.map(schedule => schedule.init())).then(
       () =>
         Logger.status(
-          `Initialised ${this.schedules.size} ${Util.plural(
+          `Initialised ${schedules.length} ${Util.plural(
             'schedule',
-            this.schedules.size
+            schedules.length
           )}`
         ),
       error => Logger.error('Schedule#init()', error)
