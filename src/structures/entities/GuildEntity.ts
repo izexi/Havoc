@@ -9,6 +9,7 @@ import {
 import BaseEntity from './BaseEntity';
 import { EntityProps } from '../Database';
 import MuteEntity from './MuteEntity';
+import GiveawayEntity from './GiveawayEntity';
 
 export interface Logs {
   channel: string;
@@ -30,6 +31,9 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
   suggestion?: string;
 
   @Property()
+  giveaway?: string;
+
+  @Property()
   bcPrefixes?: string[];
 
   @OneToMany(
@@ -39,11 +43,16 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
   )
   mutes = new Collection<MuteEntity>(this);
 
+  @OneToMany(
+    () => GiveawayEntity,
+    giveaway => giveaway.guild,
+    { orphanRemoval: true }
+  )
+  giveaways = new Collection<GiveawayEntity>(this);
+
   constructor(id: string, data: EntityProps<GuildEntity> = {}) {
     super();
     this.id = id;
-    this.logs = data.logs;
-    this.suggestion = data.suggestion;
-    this.bcPrefixes = data.bcPrefixes;
+    Object.assign(this, data);
   }
 }
