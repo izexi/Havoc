@@ -108,7 +108,7 @@ export default class extends Command {
     if (member.roles.cache.has(muteRole.id))
       return message.respond(`\`${tag}\` is already muted.`);
 
-    await this.schedules.get('mute')?.start(message.guild!, {
+    await this.schedules.mute.start(message.guild!.id, {
       end: time ? new Date(Date.now() + time) : undefined,
       member: member.id,
       muter: message.author.id,

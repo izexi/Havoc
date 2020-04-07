@@ -85,7 +85,7 @@ export default class extends Command {
     const mutes = await guild?.mutes.init();
     const mute = mutes?.getItems().find(mute => mute.member === member.id);
 
-    if (mute) await this.schedules.get('mute')!.dequeue(mute, mutes!);
+    if (mute) await this.schedules.mute.dequeue(mute, mutes!);
     message.respond(
       `I have unmuted \`${tag}\`${
         reason ? ` due to the reason: \`${reason}\`` : ''
