@@ -11,6 +11,8 @@ import ms = require('ms');
 export default class Mute extends Schedule<GiveawayEntity> {
   edits: Map<GiveawayEntity['id'], NodeJS.Timer> = new Map();
 
+  active: Set<GiveawayEntity['message']> = new Set();
+
   constructor(client: Havoc) {
     super(client, GiveawayEntity, 'giveaways');
   }
@@ -67,6 +69,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
     entityProps: Exclude<EntityProps<T>, 'guild'>
   ) {
     const giveaway = await super.start(guildId, entityProps);
+    this.active.add(giveaway.message);
     this.scheduleEdits(giveaway);
   }
 
