@@ -2,18 +2,49 @@ import Havoc from '../../client/Havoc';
 import HavocGuild from '../extensions/HavocGuild';
 import { EntityProps } from '../Database';
 import { AnyEntity, Collection } from 'mikro-orm';
+import GuildEntity from '../entities/GuildEntity';
 
 export default abstract class Schedule<T extends AnyEntity> {
   client: Havoc;
 
   tasks: Map<T['id'], NodeJS.Timer> = new Map();
 
-  constructor(client: Havoc) {
+  Entity: new (opts: EntityProps<T>) => T;
+
+  type: 'mutes' | 'giveaways';
+
+  constructor(
+    client: Havoc,
+    Entity: new (opts: EntityProps<T>) => T,
+    type: 'mutes' | 'giveaways'
+  ) {
     this.client = client;
+    this.Entity = Entity;
+    this.type = type;
   }
 
   init() {
     return this.load();
+  }
+
+  schedule(entity: T) {
+    this.enqueue(entity, new Date(entity.end).getTime() - Date.now());
+    return entity;
+  }
+
+  async start(
+    guildId: HavocGuild['id'],
+    entityProps: Exclude<EntityProps<T>, 'guild'>
+  ) {
+    const guild = await this.client.db.findOrInsert(GuildEntity, guildId);
+    const entity = new this.Entity({ ...entityProps, guild });
+    const collection = (guild[this.type] as unknown) as Collection<T>;
+
+    await collection.init();
+    collection.add(entity);
+    await this.client.db.flush();
+
+    return this.schedule(entity);
   }
 
   enqueue(entity: T, delay: number) {
@@ -33,10 +64,6 @@ export default abstract class Schedule<T extends AnyEntity> {
     parent.remove(entity);
     await this.client.db.flush();
   }
-
-  abstract schedule(entity: T): void;
-
-  abstract start(guild: HavocGuild, mute: EntityProps<T>): Promise<void>;
 
   abstract end(entity: T): Promise<void>;
 
