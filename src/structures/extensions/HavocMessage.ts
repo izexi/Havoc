@@ -25,6 +25,7 @@ import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
 import { Responses } from '../../util/Responses';
 import GuildEntity from '../entities/GuildEntity';
 import HavocTextChannel from './HavocTextChannel';
+import { stripIndents } from 'common-tags';
 
 export interface EmbedMethods {
   addField: [string, string];
@@ -159,6 +160,7 @@ export default class extends Message {
       // @ts-ignore
       embed[method](...Util.arrayify(values))
     );
+    if (embed.description) embed.description = stripIndents(embed.description);
     if (
       !methods.setFooter &&
       !embed.footer?.text &&
