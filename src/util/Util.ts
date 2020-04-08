@@ -78,5 +78,10 @@ export default {
 
   inObj(flags: { [key: string]: undefined }, ...flag: string[]) {
     return flag.some(f => f in flags);
+  },
+
+  stripBlankLines(str: string) {
+    // https://github.com/IonicaBizau/remove-blank-lines/blob/master/lib/index.js#L9
+    return str.replace(/(^[ \t]*\n)/gm, '');
   }
 };
