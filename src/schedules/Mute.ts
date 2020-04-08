@@ -33,7 +33,7 @@ export default class Mute extends Schedule<MuteEntity> {
 
   async load() {
     const mutes = await this.client.db.guildRepo
-      .find({ mutes: { end: { $ne: null } } }, { populate: ['mutes'] })
+      .findAll({ populate: ['mutes'] })
       .then(guilds => guilds.flatMap(({ mutes }) => mutes.getItems()));
     await Promise.all(mutes.map(this.schedule.bind(this)));
   }
