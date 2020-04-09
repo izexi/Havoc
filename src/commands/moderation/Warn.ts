@@ -83,6 +83,7 @@ export default class extends Command {
     const amount = (existing?.history.length || 0) + 1;
     const [action, time] = (punishments.get(amount) || '').split(' ');
     const warn = {
+      at: new Date(),
       warner: message.author.id,
       reason
     };

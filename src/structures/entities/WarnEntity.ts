@@ -3,6 +3,7 @@ import { EntityProps } from '../Database';
 import GuildEntity from './GuildEntity';
 
 export interface Warn {
+  at: Date;
   reason?: string;
   warner: string;
 }
