@@ -86,7 +86,7 @@ export default class {
     if (this.totalPages === 1)
       return this.message.channel.send(this.pageEmbed(this.page, false));
     this.embed = await this.message.channel.send(this.pageEmbed(this.page));
-    for (const emoji of emojis) await this.embed.react(emoji);
+    emojis.forEach(emoji => this.embed.react(emoji));
     const collector = this.embed.createReactionCollector(
       (reaction, user) =>
         emojis.includes(reaction.emoji.name) &&
