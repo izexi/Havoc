@@ -22,6 +22,7 @@ export default class extends Command {
     const members = await message
       .guild!.members.fetch()
       .then(() => role.members);
+
     message.paginate({
       title: `List of ${members.size} ${Util.plural(
         'member',

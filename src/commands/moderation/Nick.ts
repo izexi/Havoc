@@ -47,6 +47,7 @@ export default class extends Command {
     const oldNick = member.displayName;
     const newNick = nick.substring(0, 32);
     await member.setNickname(newNick);
+
     message.respond(
       `I have changed \`${member.user.tag}\`'s nickname from \`${oldNick}\` to \`${newNick}\``
     );

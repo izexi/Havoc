@@ -51,6 +51,7 @@ export default class extends Command {
         reason ? ` for the reason ${reason}` : ''
       }`
     );
+
     message.respond(
       `I have added the role \`${role.name}\` to ${member.user.tag}${
         reason ? ` for the reason \`${reason}\`` : ''

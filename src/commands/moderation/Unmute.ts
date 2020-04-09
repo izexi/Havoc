@@ -75,6 +75,7 @@ export default class extends Command {
     const mute = mutes?.getItems().find(mute => mute.member === member.id);
 
     if (mute) await this.schedules.mute.dequeue(mute, mutes!);
+
     message.respond(
       `I have unmuted \`${member.user.tag}\`${
         reason ? ` due to the reason: \`${reason}\`` : ''

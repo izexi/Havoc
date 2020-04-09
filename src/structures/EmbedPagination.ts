@@ -83,25 +83,31 @@ export default class {
 
   async setup() {
     let emojis = ['⏮', '◀', '⬇', '▶', '⏭', '📜', '✅'];
+
     if (this.totalPages === 1)
       return this.message.channel.send(this.pageEmbed(this.page, false));
+
     this.embed = await this.message.channel.send(this.pageEmbed(this.page));
     emojis.forEach(emoji => this.embed.react(emoji));
+
     const collector = this.embed.createReactionCollector(
       (reaction, user) =>
         emojis.includes(reaction.emoji.name) &&
         user.id === this.message.author.id,
       { time: 100000 }
     );
+
     for await (const reaction of collector) {
       switch (reaction.emoji.name) {
         case '⏮':
           if (this.page !== 1)
             await this.embed.edit(this.pageEmbed((this.page = 1)));
           break;
+
         case '◀':
           if (this.page > 1) await this.embed.edit(this.pageEmbed(--this.page));
           break;
+
         case '⬇':
           await this.message
             .createPrompt({
@@ -121,25 +127,30 @@ export default class {
             })
             .catch(err => Logger.error('EmbedPagination#setup()', err));
           break;
+
         case '▶':
           if (this.page < this.totalPages)
             await this.embed.edit(this.pageEmbed(++this.page));
           break;
+
         case '⏭':
           if (this.page !== this.totalPages)
             await this.embed.edit(
               this.pageEmbed((this.page = this.totalPages))
             );
           break;
+
         case '📜':
           await this.attach();
           break;
+
         case '✅':
           collector.stop();
           break;
       }
       await reaction.users.remove(this.message.author);
     }
+
     if (!this.embed.deleted) {
       await this.embed.reactions.removeAll();
       this.embed.edit(

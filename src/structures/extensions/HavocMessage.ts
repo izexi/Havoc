@@ -108,15 +108,18 @@ export default class extends Message {
       invalidMsg: 'Enter __y__es or __n__o',
       target: msg => msg.arg?.match(/^(yes|y|n|no)$/i)?.[0]
     });
+
     if (response.charAt(0).toLowerCase() === 'y') {
       if (!this.deleted) await this.reactions.removeAll();
       await this.react('464033586748719104');
       return true;
     }
+
     if (!this.deleted) {
       await this.reactions.removeAll();
       await this.react('464034188652183562');
     }
+
     await this.respond(
       `the \`${this.command.name}\` command has been cancelled.`
     );
@@ -142,9 +145,9 @@ export default class extends Message {
           typeof content === 'string' &&
           !(options instanceof MessageEmbed) &&
           response.embeds.length
-        ) {
+        )
           return response.edit(content, { embed: null });
-        }
+
         return options instanceof MessageEmbed
           ? response.edit(content, options)
           : response.edit(content);
@@ -163,15 +166,15 @@ export default class extends Message {
       // @ts-ignore
       embed[method](...Util.arrayify(values))
     );
+
     if (embed.description) embed.description = stripIndents(embed.description);
     if (
       !methods.setFooter &&
       !embed.footer?.text &&
       !embed.description?.includes(this.author.tag) &&
       this.author.id !== this.client.user?.id
-    ) {
+    )
       embed.setFooter(`Requested by ${this.author.tag}`, this.author.pfp);
-    }
     if (embed.description) {
       const [image] =
         embed.description.match(/\bhttps:\/\/i\.imgur\.com\/[^\s]+/) || [];
@@ -180,6 +183,7 @@ export default class extends Message {
         embed.setImage(image);
       }
     }
+
     return embed;
   }
 
@@ -193,11 +197,11 @@ export default class extends Message {
       !(this.channel as TextChannel)
         .permissionsFor(this.guild.me!)!
         .has('EMBED_LINKS')
-    ) {
+    )
       return (this.response = await this.send(
         `**${this.author}** I require the \`Embed Links\` permission to execute this command.`
       ));
-    }
+
     const embed = await this.send({
       content,
       files,
@@ -206,6 +210,7 @@ export default class extends Message {
           ? methodsOrEmbed
           : this.constructEmbed(methodsOrEmbed)
     });
+
     if (this.command) {
       await embed.react('🗑');
       embed
@@ -226,6 +231,7 @@ export default class extends Message {
             embed.reactions.cache.get('🗑')?.users.remove(embed.author);
         });
     }
+
     return embed;
   }
 

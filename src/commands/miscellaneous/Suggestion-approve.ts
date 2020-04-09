@@ -14,19 +14,19 @@ export async function review(
   if (
     !embed.footer?.text?.startsWith('Suggestion') ||
     suggestionMsg.author.id !== suggestionMsg.client.user?.id
-  ) {
+  )
     return suggestionMsg.respond({
       setDescription: `**${approvedBy}** you have entered an invalid Suggestion ID.`,
       setImage: 'https://i.imgur.com/IK7JkVw.png'
     });
-  }
-  if (embed.fields[1].value !== 'Open') {
+
+  if (embed.fields[1].value !== 'Open')
     return suggestionMsg.respond(
       `this suggestion has already been ${Util.captialise(
         embed.fields[1].value.split(' -')[0]
       )}.`
     );
-  }
+
   embed.spliceFields(1, 1, {
     name: 'Status:',
     value: `${approved ? 'Approved' : 'Denied'} by ${approvedBy}${
@@ -35,6 +35,7 @@ export async function review(
   });
   embed.setColor(approved ? 'GREEN' : 'RED');
   await suggestionMsg.edit(embed);
+
   const [userID] = embed.author?.name?.match(Regex.id) || [];
   embed.setAuthor(
     `💡Your suggestion in ${suggestionMsg.guild!.name} has been ${
@@ -42,6 +43,7 @@ export async function review(
     }💡`
   );
   embed.setDescription(`\n\nClick [here](${suggestionMsg.url}) to view it.`);
+
   suggestionMsg.client.users
     .fetch(userID)
     .then(user => user.send(embed))
@@ -57,6 +59,7 @@ export async function getSuggestionMsg(message: HavocMessage) {
   const suggestionMsg = await suggestionChannel.messages
     .fetch(message.arg)
     .catch(() => null);
+
   return message.shiftArg(suggestionMsg);
 }
 
@@ -93,6 +96,6 @@ export default class extends Command {
     text?: string;
   }) {
     await message.delete();
-    await review(suggestionMsg, reason, true, message.author.tag);
+    review(suggestionMsg, reason, true, message.author.tag);
   }
 }

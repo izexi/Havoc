@@ -46,6 +46,7 @@ export default class extends Command {
     }
   ) {
     if (fn === Status.SUBCOMMAND) return;
+
     const emojis = [
       '<:botclear1:486606839015014400>',
       '<:botclear2:486606870618963968>',

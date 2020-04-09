@@ -18,6 +18,7 @@ export default class extends Command {
     const [animated, normal] = emojis.partition(
       (emoji: GuildEmoji) => emoji.animated
     );
+
     message.paginate({
       title: `List of ${emojis.size} ${Util.plural('emoji', emojis.size)} in ${
         message.guild!.name

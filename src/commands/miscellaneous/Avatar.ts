@@ -21,6 +21,7 @@ export default class extends Command {
   }) {
     if (!user) user = message.author;
     const avatar = user.pfp;
+
     message.sendEmbed({
       setDescription: `[URL for ${
         user.id === message.author.id ? 'your' : `${user.tag}'s`

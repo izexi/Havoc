@@ -29,7 +29,8 @@ export default class extends Command {
     await message.client.db.upsert(GuildEntity, message.guild!.id, {
       suggestion: channel.id
     });
-    await message.respond(
+
+    message.respond(
       `I have updated the suggestions channel to ${channel} for this server.`
     );
   }

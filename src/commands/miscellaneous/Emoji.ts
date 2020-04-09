@@ -63,6 +63,7 @@ export default class extends Command {
         ]
       };
     }
+
     message.respond(embed);
   }
 }

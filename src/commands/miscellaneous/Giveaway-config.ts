@@ -29,7 +29,8 @@ export default class extends Command {
     await message.client.db.upsert(GuildEntity, message.guild!.id, {
       giveaway: channel.id
     });
-    await message.respond(
+
+    message.respond(
       `I have updated the giveaways channel to ${channel} for this server.`
     );
   }

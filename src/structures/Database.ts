@@ -20,7 +20,7 @@ export default class Database {
   }
 
   async setup() {
-    // await this.drop();
+    await this.drop();
     const { to_regclass: tableExists } = await this.orm.em
       .getConnection()
       .execute(`SELECT to_regclass('public.guild_entity')`)

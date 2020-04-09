@@ -29,9 +29,9 @@ export default class extends GuildMember {
     else if (
       highestRole.comparePositionTo(highestTargetRole) < 1 &&
       this.id !== this.guild.ownerID
-    ) {
+    )
       response = `${tag} has the role \`${highestTargetRole.name}\` which has a higher / equivalent position compared to your highest role \`${highestRole.name}\`, therefore you do not have permission to ${formattedAction}.`;
-    }
+
     return response;
   }
 }

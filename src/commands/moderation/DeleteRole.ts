@@ -49,6 +49,7 @@ export default class extends Command {
     const formattedMembers = members
       .map(member => `${member.user.tag} | ${member.id}`)
       .join('\n');
+
     if (
       Util.inObj(flags, 'force', 'f') ||
       (await message.confirmation(

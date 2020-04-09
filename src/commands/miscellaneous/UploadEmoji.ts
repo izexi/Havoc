@@ -60,16 +60,13 @@ export default class extends Command {
     const emojiSize = await fetch(url).then(
       res => Number(res.headers.get('content-length')) / 1024
     );
-    if (message.guild!.emojis.cache.size >= maxEmojis) {
+
+    if (message.guild!.emojis.cache.size >= maxEmojis)
       invalidReason = `This server already has the maximum amount of emojis (${maxEmojis})`;
-    } else if (
-      customName &&
-      (customName.length < 2 || customName.length > 32)
-    ) {
+    else if (customName && (customName.length < 2 || customName.length > 32))
       invalidReason = `The emoji name must be between 2 and 32 characters, you entered one with ${customName.length} characters`;
-    } else if (!emojiSize || emojiSize > 256) {
+    else if (!emojiSize || emojiSize > 256)
       invalidReason = `The is must be under 256kb in size, you entered one with ${emojiSize}kb`;
-    }
 
     if (invalidReason) return message.respond(invalidReason);
 

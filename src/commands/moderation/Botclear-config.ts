@@ -78,6 +78,7 @@ export default class extends Command {
     }
 
     await this.db.upsert(GuildEntity, message.guild!.id, { bcPrefixes });
+
     message.respond(
       `I have ${option}${
         option === 'add' ? 'e' : ''

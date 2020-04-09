@@ -36,6 +36,6 @@ export default class extends Command {
     text?: string;
   }) {
     await message.delete();
-    await review(suggestionMsg, reason, false, message.author.tag);
+    review(suggestionMsg, reason, false, message.author.tag);
   }
 }

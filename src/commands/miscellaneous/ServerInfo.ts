@@ -12,6 +12,7 @@ export default class extends Command {
 
   async run({ message }: { message: HavocMessage }) {
     const guild = message.guild!;
+
     message.respond({
       setThumbnail:
         guild.iconURL() ||

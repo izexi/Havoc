@@ -53,6 +53,7 @@ export default class extends Command {
         reason ? ` for the reason ${reason}` : ''
       }`
     );
+
     message.respond(
       `I have removed the role \`${role.name}\` from ${member.user.tag}${
         reason ? ` for the reason \`${reason}\`` : ''

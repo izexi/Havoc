@@ -48,6 +48,7 @@ export default class {
       setFooter: `You have ${this.time / 1000} seconds left to enter an option.`
     });
     this.promptMsgs.push(promptEmbed.id);
+
     let timeRemaining = this.time;
     this.editInterval = message.client.setInterval(async () => {
       if (!timeRemaining) return clearInterval(this.editInterval);
@@ -58,6 +59,7 @@ export default class {
         )
       );
     }, 5000);
+
     return this.collect(
       message.channel.createMessageCollector(
         msg => message.author.id === msg.author.id,
@@ -71,12 +73,14 @@ export default class {
     for await (const collected of collector) {
       const message = collected as HavocMessage;
       this.promptMsgs.push(message.id);
+
       if (message.content.toLowerCase() === 'cancel') {
         await this.message.react('❌');
         collector.stop();
       } else {
         const target = this.targets[this.curr];
         const found = await resolveTarget(this.responses, target, message);
+
         if (found == null) {
           message
             .sendEmbed({
@@ -101,8 +105,10 @@ export default class {
 
   cleanup = async (_: Collection<Message['id'], Message>, reason: string) => {
     const { message } = this;
+
     message.client.clearInterval(this.editInterval);
     await message.channel.bulkDelete(this.promptMsgs);
+
     if (reason === 'time') {
       if (!message.deleted) await message.reactions.removeAll();
       message.react('⏱');

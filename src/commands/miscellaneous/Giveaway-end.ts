@@ -44,6 +44,7 @@ export default class extends Command {
     }
   ) {
     await this.schedules.giveaway.end(giveaway);
+
     message.respond(
       `I have ended the [giveaway](https://discordapp.com/channels/${
         message.guild!.id
