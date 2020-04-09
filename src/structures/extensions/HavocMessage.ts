@@ -26,6 +26,7 @@ import { Responses } from '../../util/Responses';
 import GuildEntity from '../entities/GuildEntity';
 import HavocTextChannel from './HavocTextChannel';
 import { stripIndents } from 'common-tags';
+import HavocGuildMember from './HavocGuildMember';
 
 export interface EmbedMethods {
   addField: [string, string];
@@ -48,6 +49,8 @@ export default class extends Message {
   client!: Havoc;
 
   guild!: HavocGuild | null;
+
+  member!: HavocGuildMember;
 
   edits!: this[];
 
