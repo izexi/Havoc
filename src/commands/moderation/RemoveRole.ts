@@ -1,7 +1,8 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
-import { Role, GuildMember } from 'discord.js';
+import { GuildMember } from 'discord.js';
+import HavocRole from '../../structures/extensions/HavocRole';
 
 export default class extends Command {
   constructor() {
@@ -37,32 +38,14 @@ export default class extends Command {
   }: {
     message: HavocMessage;
     member: GuildMember;
-    role: Role;
+    role: HavocRole;
     text: string;
   }) {
-    let response;
-    const tag = member.user.tag;
-    if (message.guild!.me!.roles.highest.comparePositionTo(role) < 1)
-      response = `the role \`${
-        role.name
-      }\` has a higher / equivalent position compared to my highest role \`${
-        message.guild!.me!.roles.highest.name
-      }\`, therefore I do not have permission to add this role to ${tag}.`;
-
-    if (
-      message.member!.roles.highest.comparePositionTo(role) < 1 &&
-      message.author.id !== message.guild!.ownerID
-    )
-      response = `the role \`${
-        role.name
-      }\` has a higher / equivalent position compared to your highest role \`${
-        message.member!.roles.highest.name
-      }\`, therefore you do not have permission to add this role to ${tag}.`;
-
-    if (!member.roles.cache.has(role.id))
-      response = `${tag} doesn't even have the \`${role.name}\` role.`;
-
-    if (response) return message.respond(response);
+    const response = role.canBe('removed', member);
+    if (response) {
+      await message.react('⛔');
+      return message.respond(response);
+    }
 
     await member.roles.remove(
       role,
@@ -71,7 +54,7 @@ export default class extends Command {
       }`
     );
     message.respond(
-      `I have removed the role \`${role.name}\` from ${tag}${
+      `I have removed the role \`${role.name}\` from ${member.user.tag}${
         reason ? ` for the reason \`${reason}\`` : ''
       }.`
     );

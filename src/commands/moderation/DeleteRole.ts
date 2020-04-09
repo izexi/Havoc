@@ -1,8 +1,8 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
-import { Role } from 'discord.js';
 import Util from '../../util/Util';
+import HavocRole from '../../structures/extensions/HavocRole';
 
 export default class extends Command {
   constructor() {
@@ -33,23 +33,11 @@ export default class extends Command {
     flags
   }: {
     message: HavocMessage;
-    role: Role;
+    role: HavocRole;
     text: string;
     flags: { force?: undefined; f?: undefined };
   }) {
-    let response;
-    if (role.managed)
-      response = `the role \`${role.name}\` is a managed role, therefore I do not have permission to delete this role.`;
-    const highestMeRole = message.guild!.me!.roles.highest;
-    const highestMemberRole = message.member!.roles.highest;
-    if (highestMeRole.comparePositionTo(role) < 1)
-      response = `the role \`${role.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to delete this role.`;
-    if (
-      highestMemberRole.comparePositionTo(role) < 1 &&
-      message.author.id !== message.guild!.ownerID
-    )
-      response = `the role \`${role.name}\` which has a higher / equivalent position compared to your highest role \`${highestMemberRole.name}\`, therefore you do not have permission to delete this role.`;
-
+    const response = role.canBe('deleted');
     if (response) {
       await message.react('⛔');
       return message.respond(response);
