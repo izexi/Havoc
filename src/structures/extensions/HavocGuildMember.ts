@@ -2,7 +2,15 @@ import { GuildMember } from 'discord.js';
 
 export default class extends GuildMember {
   can(
-    action: 'nick' | 'warn' | 'unmute' | 'mute' | 'kick' | 'softban' | 'ban',
+    action:
+      | 'nick'
+      | 'warn'
+      | 'unwarn'
+      | 'unmute'
+      | 'mute'
+      | 'kick'
+      | 'softban'
+      | 'ban',
     target: GuildMember,
     checkOwner = true
   ) {
@@ -14,7 +22,7 @@ export default class extends GuildMember {
     const formattedAction =
       action === 'nick' ? 'change their nickname' : `${action} this member`;
 
-    if (checkOwner && this.id === this.guild.ownerID)
+    if (checkOwner && target.id === this.guild.ownerID)
       response = `${tag} is the owner of this server, therefore I do not have permission to ${formattedAction}.`;
     else if (highestMeRole.comparePositionTo(highestTargetRole) < 1)
       response = `${tag} has the role \`${highestTargetRole.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to ${formattedAction}.`;
