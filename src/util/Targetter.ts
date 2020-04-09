@@ -93,8 +93,8 @@ export const Targetter: {
     },
     async get(message, query) {
       return (
-        (await this.mentionOrIDSearch!(query || message.text, message)) ||
-        (await this.nameSearch!(query || message.text, message))
+        (await this.mentionOrIDSearch!(message.arg || query, message)) ||
+        (await this.nameSearch!(message.arg || query, message))
       );
     }
   },
