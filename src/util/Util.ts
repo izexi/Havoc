@@ -83,5 +83,25 @@ export default {
   stripBlankLines(str: string) {
     // https://github.com/IonicaBizau/remove-blank-lines/blob/master/lib/index.js#L9
     return str.replace(/(^[ \t]*\n)/gm, '');
+  },
+
+  ordinal(n: number) {
+    // https://v8.dev/features/intl-pluralrules#ordinal-numbers
+    const pr = new Intl.PluralRules('en', {
+      type: 'ordinal'
+    });
+    const suffixes = new Map([
+      ['one', 'st'],
+      ['two', 'nd'],
+      ['few', 'rd'],
+      ['other', 'th']
+    ]);
+    const rule = pr.select(n);
+    const suffix = suffixes.get(rule);
+    return `${n}${suffix}`;
+  },
+
+  auditClean(reason: string) {
+    return reason.replace(/`/g, '');
   }
 };
