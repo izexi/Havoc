@@ -2,7 +2,7 @@ import { MikroORM, AnyEntity, wrap } from 'mikro-orm';
 import GuildEntity from './entities/GuildEntity';
 
 export type EntityProps<T> = {
-  [prop in Exclude<keyof T, 'id' | 'createdAt' | 'updatedAt'>]?: T[prop];
+  [prop in Exclude<keyof T, 'createdAt' | 'updatedAt'>]?: T[prop];
 };
 
 export default class Database {
