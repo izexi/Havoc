@@ -22,7 +22,7 @@ export default class extends Command {
     }
   ) {
     const muted = await this.db.guildRepo
-      .findOne({ mutes: { guild: message.guild!.id } }, { populate: ['mutes'] })
+      .findOne({ id: message.guild!.id }, { populate: ['mutes'] })
       .then(guild =>
         guild?.mutes.getItems().sort((prev, curr) => {
           if (!prev.end) return 1;
