@@ -2,6 +2,7 @@ import HavocMessage from './extensions/HavocMessage';
 import { Message } from 'discord.js';
 import { Target } from '../util/Targetter';
 import Logger from '../util/Logger';
+import Util from '../util/Util';
 
 export interface EmbedPaginationOptions {
   message: HavocMessage;
@@ -56,12 +57,11 @@ export default class {
     return embed;
   }
 
-  async attach(send = true) {
+  async attach() {
     if (this.attached) {
       if (
-        send &&
         this.message.channel.lastMessage?.embeds[0]?.description !==
-          this.attached
+        this.attached
       )
         return this.message.respond({ setDescription: this.attached });
     } else {
@@ -140,10 +140,16 @@ export default class {
       }
       await reaction.users.remove(this.message.author);
     }
-    if (!this.embed.deleted) await this.embed.reactions.removeAll();
-    await this.attach(false);
-    this.embed.edit(
-      this.embed.embeds[0].setTitle(this.title).setDescription(this.attached)
-    );
+    if (!this.embed.deleted) {
+      await this.embed.reactions.removeAll();
+      this.embed.edit(
+        this.embed.embeds[0].setDescription(
+          await Util.haste(
+            `${this.title}
+            ${this.descriptions.join('\n')}`
+          )
+        )
+      );
+    }
   }
 }
