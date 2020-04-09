@@ -10,6 +10,8 @@ import BaseEntity from './BaseEntity';
 import { EntityProps } from '../Database';
 import MuteEntity from './MuteEntity';
 import GiveawayEntity from './GiveawayEntity';
+import WarnEntity from './WarnEntity';
+import WarnPunishmentEntity from './WarnPunishmentEntity';
 
 export interface Logs {
   channel: string;
@@ -49,6 +51,20 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
     { orphanRemoval: true }
   )
   giveaways = new Collection<GiveawayEntity>(this);
+
+  @OneToMany(
+    () => WarnEntity,
+    warn => warn.guild,
+    { orphanRemoval: true }
+  )
+  warns = new Collection<WarnEntity>(this);
+
+  @OneToMany(
+    () => WarnPunishmentEntity,
+    warnPunishment => warnPunishment.guild,
+    { orphanRemoval: true }
+  )
+  warnPunishments = new Collection<WarnPunishmentEntity>(this);
 
   constructor(id: string, data: EntityProps<GuildEntity> = {}) {
     super();
