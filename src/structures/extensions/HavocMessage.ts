@@ -103,7 +103,7 @@ export default class extends Message {
     const { fn: response } = await this.createPrompt({
       initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
       invalidMsg: 'Enter __y__es or __n__o',
-      target: msg => msg.arg?.match(/^(yes|y|n|no)$/i)
+      target: msg => msg.arg?.match(/^(yes|y|n|no)$/i)?.[0]
     });
     if (response.charAt(0).toLowerCase() === 'y') {
       if (!this.deleted) await this.reactions.removeAll();
