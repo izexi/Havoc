@@ -38,24 +38,7 @@ export default class extends Command {
       text: string;
     }
   ) {
-    let response;
-    const tag = member.user.tag;
-    if (member.id === message.guild!.ownerID)
-      response = `${member.user.tag} is the owner of this server, therefore I do not have permission to change this member's nickname.`;
-
-    const highestRole = message.member!.roles.highest;
-    const highestMemberRole = member.roles.highest;
-    const highestMeRole = message.guild!.me!.roles.highest;
-    if (highestMeRole.comparePositionTo(highestMemberRole) < 1) {
-      response = `${tag} has the role \`${highestMemberRole.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to change their nickname.`;
-    }
-    if (
-      highestRole.comparePositionTo(highestMemberRole) < 1 &&
-      message.author.id !== message.guild!.ownerID
-    ) {
-      response = `${tag} has the role \`${highestMemberRole.name}\` which has a higher / equivalent position compared to your highest role \`${highestRole.name}\`, therefore you do not have permission to change their nickname.`;
-    }
-
+    const response = message.member.can('nick', member);
     if (response) {
       await message.react('⛔');
       return message.respond(response);
@@ -65,7 +48,7 @@ export default class extends Command {
     const newNick = nick.substring(0, 32);
     await member.setNickname(newNick);
     message.respond(
-      `I have changed \`${tag}\`'s nickname from \`${oldNick}\` to \`${newNick}\``
+      `I have changed \`${member.user.tag}\`'s nickname from \`${oldNick}\` to \`${newNick}\``
     );
   }
 }

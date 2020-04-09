@@ -41,30 +41,19 @@ export default class extends Command {
     const muteRole = await getMuteRole(message.guild!);
     if (!muteRole) return;
 
-    let response;
     if (member.id === this.user!.id) {
       await message.react('😢');
       return message.channel.send('😢');
     }
 
-    const highestMeRole = message.guild!.me!.roles.highest;
-    const highestMemberRole = message.member!.roles.highest;
-    const tag = member.user.tag;
-    if (highestMeRole.comparePositionTo(muteRole) < 1)
-      response = `the \`HavocMute\` role has a higher position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to unmute \`${tag}\`.`;
-    if (
-      highestMemberRole.comparePositionTo(muteRole) < 1 &&
-      message.author.id !== message.guild!.ownerID
-    )
-      response = `the \`HavocMute\` role has a higher position compared to your highest role \`${highestMemberRole.name}\`, therefore you do not have permission to unmute \`${tag}\`.`;
-
+    const response = message.member.can('unmute', member);
     if (response) {
       await message.react('⛔');
       return message.respond(response);
     }
 
     if (!member.roles.cache.has(muteRole.id))
-      return message.respond(`\`${tag}\` is not muted.`);
+      return message.respond(`\`${member.user.tag}\` is not muted.`);
 
     await member.roles.remove(
       muteRole,
@@ -87,7 +76,7 @@ export default class extends Command {
 
     if (mute) await this.schedules.mute.dequeue(mute, mutes!);
     message.respond(
-      `I have unmuted \`${tag}\`${
+      `I have unmuted \`${member.user.tag}\`${
         reason ? ` due to the reason: \`${reason}\`` : ''
       }`
     );

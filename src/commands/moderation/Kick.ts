@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import Havoc from '../../client/Havoc';
 import Util from '../../util/Util';
-import { GuildMember } from 'discord.js';
+import HavocGuildMember from '../../structures/extensions/HavocGuildMember';
 
 export default class extends Command {
   constructor() {
@@ -35,13 +35,11 @@ export default class extends Command {
       flags
     }: {
       message: HavocMessage;
-      member: GuildMember;
+      member: HavocGuildMember;
       text: string;
       flags: { force?: undefined; f?: undefined };
     }
   ) {
-    let response;
-    const tag = member.user.tag;
     if (member.id === message.author.id) {
       await message.react('463993771961483264');
       return message.channel.send('<:WaitWhat:463993771961483264>');
@@ -50,22 +48,8 @@ export default class extends Command {
       await message.react('😢');
       return message.channel.send('😢');
     }
-    if (member.id === message.guild!.ownerID)
-      response = `${tag} is the owner of this server, therefore I do not have permission to kick this user.`;
 
-    const highestRole = message.member!.roles.highest;
-    const highestMemberRole = member.roles.highest;
-    const highestMeRole = message.guild!.me!.roles.highest;
-    if (highestMeRole.comparePositionTo(highestMemberRole) < 1) {
-      response = `${tag} has the role \`${highestMemberRole.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to kick this user.`;
-    }
-    if (
-      highestRole.comparePositionTo(highestMemberRole) < 1 &&
-      message.author.id !== message.guild!.ownerID
-    ) {
-      response = `${tag} has the role \`${highestMemberRole.name}\` which has a higher / equivalent position compared to your highest role \`${highestRole.name}\`, therefore you do not have permission to kick this user.`;
-    }
-
+    const response = message.member.can('kick', member);
     if (response) {
       await message.react('⛔');
       return message.respond(response);
@@ -74,7 +58,7 @@ export default class extends Command {
     if (
       Util.inObj(flags, 'force', 'f') ||
       (await message.confirmation(
-        `kick \`${tag}\` from \`${message.guild!.name}\``
+        `kick \`${member.user.tag}\` from \`${message.guild!.name}\``
       ))
     ) {
       await member.kick(
@@ -83,9 +67,9 @@ export default class extends Command {
         }`
       );
       message.sendEmbed({
-        setDescription: `**${
-          message.author.tag
-        }** I have kicked \`${tag}\` from \`${message.guild!.name}\`${
+        setDescription: `**${message.author.tag}** I have kicked \`${
+          member.user.tag
+        }\` from \`${message.guild!.name}\`${
           reason ? ` for the reason ${reason}` : '.'
         } <:boot3:402540975605678081>`
       });

@@ -41,8 +41,6 @@ export default class extends Command {
       text: string;
     }
   ) {
-    let response;
-    const tag = member.user.tag;
     if (member.id === message.author.id) {
       await message.react('463993771961483264');
       return message.channel.send('<:WaitWhat:463993771961483264>');
@@ -51,22 +49,8 @@ export default class extends Command {
       await message.react('😢');
       return message.channel.send('😢');
     }
-    if (member.id === message.guild!.ownerID)
-      response = `${tag} is the owner of this server, therefore I do not have permission to warn this user.`;
 
-    const highestRole = message.member!.roles.highest;
-    const highestMemberRole = member.roles.highest;
-    const highestMeRole = message.guild!.me!.roles.highest;
-    if (highestMeRole.comparePositionTo(highestMemberRole) < 1) {
-      response = `${tag} has the role \`${highestMemberRole.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to warn this user.`;
-    }
-    if (
-      highestRole.comparePositionTo(highestMemberRole) < 1 &&
-      message.author.id !== message.guild!.ownerID
-    ) {
-      response = `${tag} has the role \`${highestMemberRole.name}\` which has a higher / equivalent position compared to your highest role \`${highestRole.name}\`, therefore you do not have permission to warn this user.`;
-    }
-
+    const response = message.member.can('warn', member);
     if (response) {
       await message.react('⛔');
       return message.respond(response);
@@ -106,7 +90,9 @@ export default class extends Command {
     if (
       (action === 'kick' || action === 'ban') &&
       !(await message.confirmation(
-        `warn \`${tag}\`, which will ${action} them (punishment for reaching their ${Util.ordinal(
+        `warn \`${
+          member.user.tag
+        }\`, which will ${action} them (punishment for reaching their ${Util.ordinal(
           amount
         )} warning.`
       ))
