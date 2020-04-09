@@ -92,9 +92,9 @@ export const Targetter: {
       );
     },
     async get(message, query) {
-      return (
+      return message.shiftArg(
         (await this.mentionOrIDSearch!(message.arg || query, message)) ||
-        (await this.nameSearch!(message.arg || query, message))
+          (await this.nameSearch!(message.arg || query, message))
       );
     }
   },
