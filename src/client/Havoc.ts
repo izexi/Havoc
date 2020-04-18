@@ -51,6 +51,7 @@ export default class Havoc extends Client {
             guildEntity.deletedAt > new Date(Date.now() + 12096e5)
           )
             return this.db.guildRepo.removeAndFlush(guildEntity);
+          return;
         }
 
         if (guildEntity.logs) guild.logs = guildEntity.logs.webhook;
