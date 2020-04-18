@@ -5,7 +5,7 @@ export default {
     );
   },
   mentionPrefix(clientID: string) {
-    return new RegExp(`^<@!?${clientID}>`);
+    return new RegExp(`^<@!?${clientID}>$`);
   },
   id: /\d{17,19}/g,
   user: {
