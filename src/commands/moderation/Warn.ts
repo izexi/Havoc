@@ -9,6 +9,29 @@ import Util from '../../util/Util';
 import { getMuteRole } from './Mute';
 import ms = require('ms');
 
+export function getPunishments(client: Havoc, message: HavocMessage) {
+  return client.db.guildRepo
+    .findOne({ id: message.guild!.id }, { populate: ['warnPunishments'] })
+    .then(guild => {
+      if (!guild || !guild.warnPunishments.count())
+        return new Map([
+          [3, 'mute 1800000'],
+          [5, 'kick'],
+          [10, 'ban']
+        ]);
+      return guild.warnPunishments
+        .getItems()
+        .reduce(
+          (map: Map<number, string>, p) =>
+            map.set(
+              p.amount,
+              `${p.punishment}${p.duration ? ` ${p.duration}` : ''}`
+            ),
+          new Map()
+        );
+    });
+}
+
 export default class extends Command {
   constructor() {
     super(__filename, {
@@ -56,26 +79,7 @@ export default class extends Command {
       return message.respond(response);
     }
 
-    const punishments = await this.db.guildRepo
-      .findOne({ id: message.guild!.id }, { populate: ['warnPunishments'] })
-      .then(guild => {
-        if (!guild || !guild.warnPunishments.count())
-          return new Map([
-            [3, 'mute 1800000'],
-            [5, 'kick'],
-            [10, 'ban']
-          ]);
-        return guild.warnPunishments
-          .getItems()
-          .reduce(
-            (map: Map<number, string>, p) =>
-              map.set(
-                p.amount,
-                `${p.punishment}${p.duration ? ` ${p.duration}` : ''}`
-              ),
-            new Map()
-          );
-      });
+    const punishments = await getPunishments(this, message);
 
     const guild = await this.db.findOrInsert(GuildEntity, message.guild!.id);
     const warns = await guild.warns.init();
