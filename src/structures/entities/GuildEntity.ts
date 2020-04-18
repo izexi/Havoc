@@ -12,6 +12,7 @@ import MuteEntity from './MuteEntity';
 import GiveawayEntity from './GiveawayEntity';
 import WarnEntity from './WarnEntity';
 import WarnPunishmentEntity from './WarnPunishmentEntity';
+import TagEntity from './TagEntity';
 
 export interface Logs {
   channel: string;
@@ -27,6 +28,15 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
   id: string;
 
   @Property()
+  deletedAt?: Date;
+
+  @Property()
+  prefix?: string;
+
+  @Property()
+  welcomer?: string;
+
+  @Property()
   logs?: Logs;
 
   @Property()
@@ -34,6 +44,12 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
 
   @Property()
   giveaway?: string;
+
+  @Property()
+  autorole?: string;
+
+  @Property()
+  modlog?: string;
 
   @Property()
   bcPrefixes?: string[];
@@ -44,6 +60,13 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
     { orphanRemoval: true }
   )
   mutes = new Collection<MuteEntity>(this);
+
+  @OneToMany(
+    () => TagEntity,
+    tag => tag.guild,
+    { orphanRemoval: true }
+  )
+  tags = new Collection<TagEntity>(this);
 
   @OneToMany(
     () => GiveawayEntity,
