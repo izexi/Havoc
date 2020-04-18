@@ -3,7 +3,6 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { Target } from '../../util/Targetter';
-import { defaultPrefixes } from './Botclear';
 
 export default class extends Command {
   constructor() {
@@ -39,10 +38,7 @@ export default class extends Command {
       fn: 'view' | 'add' | 'remove';
     }
   ) {
-    const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
-    const bcPrefixes = guildEntity
-      ? guildEntity.bcPrefixes || defaultPrefixes(message)
-      : defaultPrefixes(message);
+    const bcPrefixes = [message.guild!.prefix, ...message.guild!.bcPrefixes]!;
 
     if (option === 'view')
       return message.respond(

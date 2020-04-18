@@ -1,15 +1,7 @@
 import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import GuildEntity from '../../structures/entities/GuildEntity';
 import Util from '../../util/Util';
-
-export const defaultPrefixes = (message: HavocMessage) => [
-  message.prefix!,
-  '!',
-  '.',
-  '?'
-];
 
 export default class extends Command {
   constructor() {
@@ -22,7 +14,7 @@ export default class extends Command {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
           if (possibleSubCmd === 'config') {
-            message.command = message.client.commandHandler.commands.get(
+            message.command = message.client.commandHandler.find(
               'botclear-config'
             )!;
             message.runCommand();
@@ -52,10 +44,6 @@ export default class extends Command {
       '<:botclear2:486606870618963968>',
       '<:botclear3:486606906337525765>'
     ];
-    const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
-    const bcPrefixes = guildEntity
-      ? guildEntity.bcPrefixes || defaultPrefixes(message)
-      : defaultPrefixes(message);
     const messages = await message.channel.messages
       .fetch({ limit: 100 })
       .catch(() => null);
@@ -70,7 +58,7 @@ export default class extends Command {
         messages.filter(
           msg =>
             msg.author!.bot ||
-            (bcPrefixes || [message.prefix!, '!', '.', '?']).some(prefix =>
+            [message.guild!.prefix, ...message.guild!.bcPrefixes].some(prefix =>
               msg.content.startsWith(prefix)
             )
         ),
