@@ -11,7 +11,7 @@ export default class extends Command {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
           if (['start', 'end', 'reroll', 'config'].includes(possibleSubCmd)) {
-            message.command = message.client.commandHandler.commands.get(
+            message.command = message.client.commandHandler.find(
               `giveaway-${possibleSubCmd}`
             )!;
             message.runCommand();

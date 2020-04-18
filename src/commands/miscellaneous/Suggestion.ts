@@ -14,7 +14,7 @@ export default class extends Command {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
           if (['approve', 'deny', 'config'].includes(possibleSubCmd)) {
-            message.command = message.client.commandHandler.commands.get(
+            message.command = message.client.commandHandler.find(
               `suggestion-${possibleSubCmd}`
             )!;
             message.runCommand();
