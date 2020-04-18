@@ -33,13 +33,15 @@ export default class extends Command {
             this.user!.id
           }&scope=bot&permissions=2146958591)
             - [Vote for me](${await getVoteLink()})
-            - [Support server](https://discord.gg/3Fewsxq)`,
+            - [Support server](https://discord.gg/3Fewsxq)
+            - [Vultr hosting (refferal)](https://www.vultr.com/?ref=7321055)`,
           inline: true
         },
         {
           name: '❯Uptime',
           value: `- Shard: ${prettyMs(this.uptime!)}
-                  - Process: ${prettyMs(process.uptime())}`,
+                  - Process: ${prettyMs(process.uptime())}
+                  - Host: ${prettyMs(os.uptime() * 1000)}`,
           inline: true
         },
         {
