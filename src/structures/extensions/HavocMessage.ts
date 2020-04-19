@@ -6,7 +6,8 @@ import {
   MessageOptions,
   MessageAttachment,
   StringResolvable,
-  MessageEditOptions
+  MessageEditOptions,
+  FileOptions
 } from 'discord.js';
 import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
@@ -31,7 +32,7 @@ import HavocGuildMember from './HavocGuildMember';
 export interface EmbedMethods {
   addField: [string, string];
   addFields: { name: string; value: string; inline?: boolean }[];
-  attachFiles: string;
+  attachFiles: (string | FileOptions)[];
   setAuthor: string | [string, string];
   setColor: string;
   setDescription: string;
