@@ -7,13 +7,18 @@ import GiveawaySchedule from '../schedules/Giveaway';
 import { once } from 'events';
 import Util from '../util/Util';
 import HavocGuild from '../structures/extensions/HavocGuild';
+import EventHandler from '../handlers/EventHandler';
 
 export default class Havoc extends Client {
   initialised = false;
 
+  logger = Logger;
+
   db = new Database();
 
-  commandHandler = new CommandHandler();
+  commandHandler = new CommandHandler(this);
+
+  eventHandler = new EventHandler(this);
 
   schedules = {
     mute: new MuteSchedule(this),
@@ -26,19 +31,24 @@ export default class Havoc extends Client {
   }
 
   async init() {
-    await this.db.init().catch(error => Logger.error('Database#init()', error));
+    await this.db
+      .init()
+      .catch(error =>
+        this.logger.error(error.message, { origin: 'Database#init()' })
+      );
     await once(this, 'ready');
 
     const schedules = Object.values(this.schedules);
     await Promise.all(schedules.map(schedule => schedule.init())).then(
       () =>
-        Logger.status(
+        this.logger.info(
           `Initialised ${schedules.length} ${Util.plural(
             'schedule',
             schedules.length
-          )}`
+          )}`,
+          { origin: 'Schedule#init()' }
         ),
-      error => Logger.error('Schedule#init()', error)
+      error => this.logger.error(error.message, { origin: 'Havoc#init()' })
     );
 
     const guilds = await this.db.guildRepo.findAll({ populate: ['tags'] });
@@ -54,10 +64,15 @@ export default class Havoc extends Client {
           return;
         }
 
-        if (guildEntity.logs) guild.logs = guildEntity.logs.webhook;
-        if (guildEntity.prefix) guild.prefix = guildEntity.prefix;
-        if (guildEntity.bcPrefixes) guild.bcPrefixes = guildEntity.bcPrefixes;
-        if (guildEntity.welcomer) guild.welcomer = guildEntity.welcomer;
+        Util.truthyObjMerge(
+          guild,
+          guildEntity,
+          'logs',
+          'prefix',
+          'bcPrefixes',
+          'welcomer'
+        );
+
         if (guildEntity.tags && guildEntity.tags.count()) {
           await guildEntity.tags.init();
           guildEntity.tags
