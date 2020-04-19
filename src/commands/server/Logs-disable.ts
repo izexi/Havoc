@@ -18,6 +18,17 @@ export default class extends Command {
     if (!guildEntity || !guildEntity.logs)
       return message.respond(`logs have not been enabled on this server.`);
 
+    const webhooks = await message.guild!.fetchWebhooks();
+    const logHook =
+      webhooks.get(message.guild!.logs?.webhook.id!) ||
+      webhooks.find(
+        webhook =>
+          // @ts-ignore
+          webhook.owner?.id === this.user!.id &&
+          (webhook.name === ',HavocLogs' || webhook.name === 'HavocLogs')
+      );
+    await logHook?.delete();
+
     delete guildEntity.logs;
     delete message.guild!.logs;
     await this.db.flush();
