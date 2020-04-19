@@ -1,6 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import * as moment from 'moment';
+import HavocGuild from '../../structures/extensions/HavocGuild';
 
 export default class extends Command {
   constructor() {
@@ -11,14 +12,10 @@ export default class extends Command {
   }
 
   async run({ message }: { message: HavocMessage }) {
-    const guild = message.guild!;
+    const guild = message.guild as HavocGuild;
 
     message.respond({
-      setThumbnail:
-        guild.iconURL() ||
-        `https://via.placeholder.com/128/2f3136/808080%20?text=${guild.name
-          .match(/\b(.)/g)
-          ?.join('')}`,
+      setThumbnail: guild.iconURL(),
       addFields: [
         { name: '❯Name', value: guild.name, inline: true },
         {
