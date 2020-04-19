@@ -1,49 +1,38 @@
-/* eslint-disable no-console */
-import * as chalk from 'chalk';
-import { Guild } from 'discord.js';
+import { createLogger, format, transports } from 'winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
 
-export default {
-  log(text: { toString(): string }, type = '') {
-    console.log(
-      `[${chalk(new Date().toLocaleTimeString())}]${
-        type ? ` ${type}` : ''
-      } ${text}`
-    );
-  },
-  status(text: string) {
-    this.log(text, `[${chalk.green('STATUS')}]`);
-  },
-
-  info(text: string) {
-    this.log(text, `[${chalk.yellow('INFO')}]`);
-  },
-
-  command(text: string) {
-    this.log(text, `[${chalk.cyan('COMMAND')}]`);
-  },
-
-  joined(guild: Guild) {
-    this.log(
-      `Joined ${guild.name} (${guild.id}) with ${guild.memberCount} members`,
-      `[${chalk.bgGreen('JOINED')}]`
-    );
-  },
-
-  left(guild: Guild) {
-    this.log(`Left ${guild.name} (${guild.id})`, `[${chalk.bgRed('LEFT')}]`);
-  },
-
-  ping(text: string) {
-    this.log(text, `[${chalk.magenta('PING')}]`);
-  },
-
-  error(text: string, err: Error) {
-    this.log(text, `[${chalk.red('ERROR')}]`);
-    console.error(err);
-  },
-
-  unhandledRejection(rej: Error) {
-    this.log(`[${chalk.red('UNHANDLEDREJECTION')}]`);
-    console.warn(rej);
-  }
-};
+export default createLogger({
+  format: format.combine(
+    format.timestamp({ format: 'DD/MM/YYYY HH:mm:ss' }),
+    format.errors({ stack: true }),
+    format.printf(
+      ({ timestamp, level, origin, message }) =>
+        `${timestamp} | [${level} ~ ${origin}]: ${message}`
+    )
+  ),
+  transports: [
+    new transports.Console({
+      level: 'info',
+      format: format.colorize({ level: true })
+    }),
+    new transports.File({
+      level: 'error',
+      filename: 'error.log',
+      dirname: 'logs',
+      maxFiles: 7,
+      maxsize: 20 * 1024 * 1024
+    }),
+    new DailyRotateFile({
+      level: 'debug',
+      format: format.combine(format.timestamp(), format.json()),
+      dirname: 'logs',
+      datePattern: 'DD-MM-YYYY',
+      filename: '%DATE%.debug.log',
+      maxFiles: '7d',
+      maxSize: '20m'
+    }).on('rotate', (oldFileName, newFilename) =>
+      // eslint-disable-next-line no-console
+      console.log(`Rotating logs | ${oldFileName} => ${newFilename}`)
+    )
+  ]
+});
