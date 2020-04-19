@@ -15,6 +15,7 @@ import WarnPunishmentEntity from './WarnPunishmentEntity';
 import TagEntity from './TagEntity';
 
 export interface Logs {
+  disabled: number[];
   channel: string;
   webhook: {
     id: string;
