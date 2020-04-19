@@ -12,7 +12,7 @@ export default class extends Command {
         type: message => {
           const possibleCmd = message.arg?.toLowerCase();
           if (!possibleCmd) return;
-          const commands = message.client.commandHandler.commands;
+          const commands = message.client.commandHandler.holds;
           return (
             commands.get(possibleCmd) ||
             [...commands.values()].find(command =>
@@ -42,7 +42,7 @@ export default class extends Command {
             inline: false
           }
         ],
-        attachFiles: `src/assets/images/${command.category}.png`,
+        attachFiles: [`src/assets/images/${command.category}.png`],
         setThumbnail: `attachment://${command.category}.png`
       };
       if (command.aliases.size) {
@@ -86,7 +86,7 @@ export default class extends Command {
 				Click **[here](https://discordapp.com/oauth2/authorize?client_id=${message.client.user?.id}&scope=bot&permissions=2146958591)** to invite me to your server
 				Click **[here](https://www.patreon.com/user?u=15028160)** to support me by donating
 				⠀`,
-      addFields: [...message.client.commandHandler.commands.values()]
+      addFields: [...message.client.commandHandler.holds.values()]
         .filter(command => command.category !== 'dev' && !command.sub)
         .reduce(
           (

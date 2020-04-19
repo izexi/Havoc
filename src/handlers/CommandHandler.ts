@@ -1,26 +1,26 @@
-import Logger from '../util/Logger';
 import Command from '../structures/bases/Command';
 import Util from '../util/Util';
 import HavocMessage from '../structures/extensions/HavocMessage';
 import Regex from '../util/Regex';
+import Handler from '../structures/bases/Handler';
 
-export default class {
-  commands: Map<Command['name'], Command> = new Map();
-
-  constructor() {
-    this.load();
-  }
-
+export default class extends Handler<Command> {
   async load() {
     const commandPaths = await Util.flattenPaths('commands');
     await Promise.all(commandPaths)
       .then(this.loadFromPaths)
-      .catch(error => Logger.error('CommandHandler#load()', error));
-    Logger.status(`Loaded ${this.commands.size} commands`);
+      .catch(error =>
+        this.client.logger.error(error, {
+          origin: 'CommandHandler#loadFromPaths()'
+        })
+      );
+    this.client.logger.info(`Loaded ${this.holds.size} commands`, {
+      origin: 'CommandHandler#load()'
+    });
   }
 
   loadFromPaths = (commandPaths: string[]) => {
-    this.commands = new Map(
+    this.holds = new Map(
       commandPaths.map(cmdPath => {
         const command: Command = new (require(cmdPath).default)();
         return [command.name.toLowerCase(), command];
@@ -30,10 +30,8 @@ export default class {
 
   find(nameOrAlias: string) {
     return (
-      this.commands.get(nameOrAlias) ||
-      [...this.commands.values()].find(command =>
-        command.aliases.has(nameOrAlias)
-      )
+      this.holds.get(nameOrAlias) ||
+      [...this.holds.values()].find(command => command.aliases.has(nameOrAlias))
     );
   }
 
