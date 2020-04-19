@@ -46,6 +46,8 @@
     "rimraf": "^3.0.2",
     "sql": "^0.78.0",
     "typescript": "^3.8.3",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.4.2",
     "ytdl-core": "^1.0.9"
   },
   "devDependencies": {
