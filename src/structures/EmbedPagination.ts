@@ -1,7 +1,6 @@
 import HavocMessage from './extensions/HavocMessage';
 import { Message } from 'discord.js';
 import { Target } from '../util/Targetter';
-import Logger from '../util/Logger';
 import Util from '../util/Util';
 
 export interface EmbedPaginationOptions {
@@ -125,7 +124,11 @@ export default class {
                 this.embed.edit(this.pageEmbed(page));
               }
             })
-            .catch(err => Logger.error('EmbedPagination#setup()', err));
+            .catch(err =>
+              this.message.client.logger.error(err.message, {
+                origin: 'EmbedPagination#setup()'
+              })
+            );
           break;
 
         case '▶':
