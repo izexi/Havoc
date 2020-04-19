@@ -103,5 +103,17 @@ export default {
 
   auditClean(reason: string) {
     return reason.replace(/`/g, '');
+  },
+
+  truthyObjMerge(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    source: { [key: string]: any },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    target: { [key: string]: any },
+    ...props: string[]
+  ) {
+    props
+      .filter(prop => target[prop])
+      .forEach(prop => (source[prop] = target[prop]));
   }
 };
