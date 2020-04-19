@@ -6,9 +6,10 @@ import {
   MessageEmbed
 } from 'discord.js';
 import Util from '../../util/Util';
+import HavocUser from './HavocUser';
 
 export default class HavocTextChannel extends TextChannel {
-  prompts = new Set();
+  prompts: Set<HavocUser['id']> = new Set();
 
   // @ts-ignore
   async send(
