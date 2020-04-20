@@ -1,12 +1,19 @@
 import { MikroORM, AnyEntity, wrap } from 'mikro-orm';
 import GuildEntity from './entities/GuildEntity';
+import Havoc from '../client/Havoc';
 
 export type EntityProps<T> = {
   [prop in Exclude<keyof T, 'createdAt' | 'updatedAt'>]?: T[prop];
 };
 
 export default class Database {
+  client: Havoc;
+
   orm!: MikroORM;
+
+  constructor(client: Havoc) {
+    this.client = client;
+  }
 
   async init() {
     this.orm = await MikroORM.init({
@@ -20,7 +27,7 @@ export default class Database {
   }
 
   async setup() {
-    await this.drop();
+    // await this.drop();
     const { to_regclass: tableExists } = await this.orm.em
       .getConnection()
       .execute(`SELECT to_regclass('public.guild_entity')`)
@@ -45,7 +52,16 @@ export default class Database {
   }
 
   flush() {
-    return this.orm.em.flush();
+    return this.orm.em.flush().then(
+      () =>
+        this.client.logger.info('Database flushed', {
+          origin: 'Database#flush()'
+        }),
+      error =>
+        this.client.logger.error(error.message, {
+          origin: 'Database#flush()'
+        })
+    );
   }
 
   async upsert<T extends AnyEntity>(
