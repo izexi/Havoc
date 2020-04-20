@@ -105,12 +105,11 @@ export default {
     return reason.replace(/`/g, '');
   },
 
-  truthyObjMerge(
+  truthyObjMerge<T>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    source: { [key: string]: any },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    target: { [key: string]: any },
-    ...props: string[]
+    source: { [key in keyof T]?: any },
+    target: T,
+    ...props: (keyof T)[]
   ) {
     props
       .filter(prop => target[prop])
