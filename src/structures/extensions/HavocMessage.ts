@@ -33,7 +33,7 @@ export interface EmbedMethods {
   addField: [string, string];
   addFields: { name: string; value: string; inline?: boolean }[];
   attachFiles: (string | FileOptions)[];
-  setAuthor: string | [string, string];
+  setAuthor: string | string[];
   setColor: string;
   setDescription: string;
   setFooter: string | [string, string];
