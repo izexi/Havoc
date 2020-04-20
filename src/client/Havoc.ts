@@ -14,7 +14,7 @@ export default class Havoc extends Client {
 
   logger = Logger;
 
-  db = new Database();
+  db = new Database(this);
 
   commandHandler = new CommandHandler(this);
 
