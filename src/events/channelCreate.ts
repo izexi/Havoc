@@ -10,7 +10,7 @@ export default async function(
   channel: TextChannel | VoiceChannel | CategoryChannel | NewsChannel
 ) {
   const guild = channel.guild as HavocGuild;
-  if (!guild || !guild.logs?.disabled.includes(0)) return;
+  if (!guild || guild.logs?.disabled.includes(0)) return;
 
   const muteRole = guild.roles.cache.find(role => role.name === 'HavocMute');
   if (muteRole && (channel.type === 'text' || channel.type === 'category')) {

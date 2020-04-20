@@ -10,7 +10,7 @@ export default async function(
   channel: TextChannel | VoiceChannel | CategoryChannel | NewsChannel
 ) {
   const guild = channel.guild as HavocGuild;
-  if (!guild || !guild.logs?.disabled.includes(1)) return;
+  if (!guild || guild.logs?.disabled.includes(1)) return;
 
   guild.sendLog({
     addFields: [
