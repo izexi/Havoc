@@ -55,10 +55,10 @@ export default class extends Command {
           `[${timestamp}] :: ${level}
         ${message}`
       )
+      .reverse()
       .join('\n\n')
       .match(/[\s\S]{1,2048}/g)!
       .map(logs => Util.codeblock(logs, 'asciidoc'))
-      .reverse()
       .slice(-10);
 
     message.paginate({
