@@ -1,6 +1,5 @@
 import Havoc from '../client/Havoc';
-import HavocTextChannel from '../structures/extensions/HavocTextChannel';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, WebhookClient } from 'discord.js';
 
 export default function(this: Havoc) {
   this.logger.info(
@@ -8,13 +7,20 @@ export default function(this: Havoc) {
     { origin: 'Havoc#on:ready' }
   );
 
-  (this.channels.cache.get('614043112662368277') as HavocTextChannel).send(
-    new MessageEmbed()
-      .setTitle(
-        // @ts-ignore
-        `Client is ready (${this.ws.sessionStartLimit?.remaining} identifies remaining)`
-      )
-      .setColor('GREEN')
-      .setTimestamp()
-  );
+  new WebhookClient(
+    process.env.STATUS_WEBHOOK_ID!,
+    process.env.STATUS_WEBHOOK_TOKEN!
+  ).send({
+    embeds: [
+      new MessageEmbed()
+        .setTitle(
+          // @ts-ignore
+          `Client is ready (${this.ws.sessionStartLimit?.remaining} identifies remaining)`
+        )
+        .setColor('GREEN')
+        .setTimestamp()
+    ],
+    avatarURL:
+      'https://icons-for-free.com/iconfiles/png/512/check+checkbox+checkmark+confirm+success+yes+icon-1320196711226060446.png'
+  });
 }
