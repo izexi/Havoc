@@ -41,7 +41,7 @@ export default class extends Command {
           name: '❯Uptime',
           value: `- Shard: ${prettyMs(this.uptime!)}
                   - Process: ${prettyMs(process.uptime())}
-                  - Host: ${prettyMs(os.uptime() * 1000)}`,
+                  - Docker container: ${prettyMs(os.uptime() * 1000)}`,
           inline: true
         },
         {
