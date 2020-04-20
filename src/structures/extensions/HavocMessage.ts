@@ -66,11 +66,6 @@ export default class extends Message {
 
   response?: this;
 
-  _patch(data: object) {
-    // @ts-ignore
-    super._patch(data);
-  }
-
   get text() {
     return this.args.join(' ');
   }
@@ -378,6 +373,62 @@ export default class extends Message {
       }
     }
 
-    command.run.call(this.client, { message: this, ...params });
+    command.run
+      .call(this.client, { message: this, ...params })
+      .then(() =>
+        this.client.logger.info(
+          `${this.author.tag} (${this.author.id}) used command ${this.prefix}${
+            command.name
+          } in ${this.guild ? `${this.guild.name} (${this.guild.id})` : 'DM'} ${
+            this.channel.type === 'text'
+              ? `on #${this.channel.name} (${this.guild!.id})`
+              : ''
+          }`,
+          { origin: 'HavocMessage#runCommand()' }
+        )
+      )
+      .catch(async rej => {
+        this.client.logger.warn(rej, { origin: `${command.name}#run()` });
+
+        this.channel.send(
+          new MessageEmbed()
+            .setColor('ORANGE')
+            .setTitle('Something may have gone wrong?')
+            .setDescription(stripIndents`
+              Check \`${this.prefix}help ${
+            command.name
+          }\` to check how to properly use the command
+              However, if you have used the command correctly please join **https://discord.gg/3Fewsxq** and report your issue in the ${await this.client.guilds.cache
+                .get('406873117215031297')
+                ?.members.fetch(this.author.id)
+                .then(
+                  () => '<#406873476591517706>',
+                  () => '#bugs-issues'
+                )} channel.
+            `)
+        );
+
+        (this.client.channels.cache.get(
+          '612603429591973928'
+        ) as HavocTextChannel).send(
+          new MessageEmbed()
+            .setDescription(
+              `**Server:** ${
+                this.guild ? `${this.guild.name} (${this.guild.id})` : 'DM'
+              }
+              **Unhandled Rejection:** ${Util.codeblock(rej.stack || rej)}
+              **User:** ${this.author.tag} (${this.author.id})
+              **Command:** ${command.name}
+              **Message Content:**
+              ${Util.codeblock(this.content)}
+              **Params:**
+              ${Util.codeblock(JSON.stringify(params, null, 2))}`
+            )
+            .setColor('ORANGE')
+            .setAuthor(`⚠${rej}⚠`, this.guild ? this.guild.iconURL() : '')
+            .setTimestamp()
+            .setFooter('', this.author.pfp)
+        );
+      });
   }
 }
