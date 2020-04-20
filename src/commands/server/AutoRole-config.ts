@@ -32,6 +32,7 @@ export default class extends Command {
         guild?.autorole ? message.guild!.roles.cache.get(guild.autorole) : null
       );
 
+    message.guild!.autorole = role.id;
     await this.db.upsert(GuildEntity, message.guild!.id, {
       autorole: role.id
     });

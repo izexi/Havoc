@@ -19,6 +19,7 @@ export default class extends Command {
     if (!guildEntity || !guildEntity.autorole)
       return message.respond(`autorole has not been enabled on this server.`);
 
+    delete message.guild!.autorole;
     delete guildEntity.autorole;
     await this.db.flush();
 

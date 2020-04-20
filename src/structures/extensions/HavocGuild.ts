@@ -26,6 +26,8 @@ export default class extends Guild {
     };
   };
 
+  autorole?: string;
+
   welcomer?: string;
 
   get logHook() {
