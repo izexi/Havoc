@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv';
-import HavoClient from './client/Havoc';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { Structures } from 'discord.js';
+import Havoc from './client/Havoc';
 
 dotenv.config();
 
@@ -14,6 +14,13 @@ fs.readdir(extensionsDir).then(structures => {
       () => require(join(extensionsDir, struct)).default
     )
   );
-  const Havoc = new HavoClient();
-  Havoc.login(process.env.TOKEN);
+
+  const client = new Havoc();
+  client.login(process.env.TOKEN);
+
+  process.on('unhandledRejection', rej =>
+    client.logger.warn(rej?.toString() ?? '', {
+      origin: 'process.on:unhandledRejection'
+    })
+  );
 });
