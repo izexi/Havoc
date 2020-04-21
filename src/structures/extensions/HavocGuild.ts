@@ -38,10 +38,7 @@ export default class extends Guild {
   iconURL() {
     return (
       super.iconURL() ||
-      `https://via.placeholder.com/128/2f3136/808080%20?text=${this.name
-        .replace(/'s /g, ' ')
-        .replace(/\w+/g, ([w]) => w)
-        .replace(/\s/g, '')}`
+      `https://via.placeholder.com/128/2f3136/808080%20?text=${this.nameAcronym}`
     );
   }
 
