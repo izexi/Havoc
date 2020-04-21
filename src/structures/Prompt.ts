@@ -37,7 +37,7 @@ export default class {
     this.initialMsgs = Util.arrayify(options.initialMsg);
     this.invalidMsgs = Util.arrayify(options.invalidMsg);
     this.targets = Util.arrayify(options.target);
-    this.time = options.time ?? SECONDS(3);
+    this.time = options.time ?? SECONDS(30);
   }
 
   async create() {
