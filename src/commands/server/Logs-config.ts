@@ -123,6 +123,8 @@ export default class extends Command {
       .on('end', async (_, reason) => {
         let footer;
         let emoji;
+        // @ts-ignore
+        message.channel.prompts.delete(message.author.id);
         this.clearInterval(editInterval);
         await prompt.reactions.removeAll();
 

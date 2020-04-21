@@ -41,7 +41,9 @@ export default class extends Handler<Command> {
       message.author?.bot ||
       message.webhookID ||
       !message.prefix ||
-      !message.content.startsWith(message.prefix)
+      !message.content.startsWith(message.prefix) ||
+      // @ts-ignore
+      message.channel.prompts.has(message.author.id)
     )
       return;
 

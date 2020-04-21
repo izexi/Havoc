@@ -42,6 +42,8 @@ export default class {
 
   async create() {
     const { message } = this;
+    // @ts-ignore
+    message.channel.prompts.add(message.author.id);
     const promptEmbed = await message.sendEmbed({
       setDescription: `**${message.author.tag}** ${
         this.initialMsgs[this.curr]
@@ -103,12 +105,15 @@ export default class {
         }
       }
     }
+    // @ts-ignore
+    this.message.channel.prompts.delete(this.message.author.id);
     return this.responses;
   }
 
   cleanup = async (_: Collection<Message['id'], Message>, reason: string) => {
     const { message } = this;
-
+    // @ts-ignore
+    message.channel.prompts.delete(this.message.author.id);
     message.client.clearInterval(this.editInterval);
     await message.channel.bulkDelete(this.promptMsgs);
 
