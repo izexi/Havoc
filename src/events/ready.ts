@@ -1,5 +1,6 @@
 import Havoc from '../client/Havoc';
 import { MessageEmbed, WebhookClient } from 'discord.js';
+import { STATUS_ICONS } from '../util/Constants';
 
 export default function(this: Havoc) {
   this.logger.info(
@@ -20,7 +21,6 @@ export default function(this: Havoc) {
         .setColor('GREEN')
         .setTimestamp()
     ],
-    avatarURL:
-      'https://icons-for-free.com/iconfiles/png/512/check+checkbox+checkmark+confirm+success+yes+icon-1320196711226060446.png'
+    avatarURL: STATUS_ICONS.READY
   });
 }
