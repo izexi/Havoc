@@ -7,7 +7,9 @@ import {
   MessageAttachment,
   StringResolvable,
   MessageEditOptions,
-  FileOptions
+  FileOptions,
+  EmojiResolvable,
+  APIMessage
 } from 'discord.js';
 import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
@@ -55,11 +57,6 @@ export default class extends Message {
 
   edits!: this[];
 
-  edit!: (
-    content?: StringResolvable,
-    options?: MessageEditOptions | MessageEmbed
-  ) => Promise<this>;
-
   command!: Command;
 
   args = this.content.split(/ +/);
@@ -83,6 +80,29 @@ export default class extends Message {
     return matchedPrefix;
   }
 
+  safeReact(emoji: EmojiResolvable) {
+    return this.deleted ? null : this.react(emoji).catch(() => null);
+  }
+
+  async delete(options?: { timeout?: number; reason?: string }) {
+    return this.deleted ? this : super.delete(options);
+  }
+
+  async edit(
+    contentOrOptions:
+      | StringResolvable
+      | MessageEditOptions
+      | MessageEmbed
+      | APIMessage,
+    options?: MessageEditOptions | MessageEmbed
+  ) {
+    return this.deleted
+      ? this
+      : options
+      ? ((super.edit(contentOrOptions, options) as unknown) as this)
+      : ((super.edit(contentOrOptions) as unknown) as this);
+  }
+
   shiftArg<T>(arg: T) {
     if (arg) this.args.shift();
     return arg;
@@ -98,7 +118,7 @@ export default class extends Message {
   }
 
   async confirmation(action: string) {
-    await this.react('464034357955395585');
+    await this.safeReact('464034357955395585');
     const { fn: response } = await this.createPrompt({
       initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
       invalidMsg: 'Enter __y__es or __n__o',
@@ -107,13 +127,13 @@ export default class extends Message {
 
     if (response.charAt(0).toLowerCase() === 'y') {
       if (!this.deleted) await this.reactions.removeAll();
-      await this.react('464033586748719104');
+      await this.safeReact('464033586748719104');
       return true;
     }
 
     if (!this.deleted) {
       await this.reactions.removeAll();
-      await this.react('464034188652183562');
+      await this.safeReact('464034188652183562');
     }
 
     await this.respond(
@@ -208,7 +228,7 @@ export default class extends Message {
     });
 
     if (this.command) {
-      await embed.react('🗑');
+      await embed.safeReact('🗑');
       embed
         .awaitReactions(
           (reaction, user) =>
@@ -296,7 +316,7 @@ export default class extends Message {
     if (command.requiredPerms) {
       const flags = Util.arrayify(command.requiredPerms);
       if (!this.member!.hasPermission(flags)) {
-        await this.react('⛔');
+        await this.safeReact('⛔');
         return this.respond(
           `you need to have the ${flags
             .map(flag => `\`${Util.normalizePermFlag(flag)}\``)
