@@ -16,7 +16,7 @@ export default class extends GuildMember {
     checkOwner = true
   ) {
     let response;
-    const { tag } = this.user;
+    const { tag } = target.user;
     const highestRole = this.roles.highest as HavocRole;
     const highestTargetRole = target.roles.highest;
     const highestMeRole = this.guild.me!.roles.highest as HavocRole;
