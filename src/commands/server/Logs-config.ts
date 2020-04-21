@@ -4,6 +4,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { stripIndents } from 'common-tags';
 import Util from '../../util/Util';
 import GuildEntity from '../../structures/entities/GuildEntity';
+import { MIN_LIMITS } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -88,7 +89,10 @@ export default class extends Command {
         const selected = Number(option) - 1 || logEvents.indexOf(option);
         await message.delete();
 
-        if (selected < 0 || selected >= logEvents.length)
+        if (
+          selected < MIN_LIMITS.LOGS_CONFIG_OPTION ||
+          selected >= logEvents.length
+        )
           return message
             .respond(
               `you have entered an invalid type of log type, you need to either enter the type itself or the according number

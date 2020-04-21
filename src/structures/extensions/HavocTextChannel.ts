@@ -7,6 +7,7 @@ import {
 } from 'discord.js';
 import Util from '../../util/Util';
 import HavocUser from './HavocUser';
+import { MAX_LIMITS } from '../../util/Constants';
 
 export default class HavocTextChannel extends TextChannel {
   prompts: Set<HavocUser['id']> = new Set();
@@ -26,7 +27,10 @@ export default class HavocTextChannel extends TextChannel {
       return;
     if (options instanceof MessageEmbed) {
       let { description } = options;
-      if (typeof description === 'string' && description.length > 2048) {
+      if (
+        typeof description === 'string' &&
+        description.length > MAX_LIMITS.EMBED_DESCRIPTION
+      ) {
         options.files = [
           {
             attachment: Buffer.from(description, 'utf8'),

@@ -7,6 +7,7 @@ import Regex from '../util/Regex';
 import Util from '../util/Util';
 import { MessageEmbed } from 'discord.js';
 import ms = require('ms');
+import { SECONDS, MINUTES, HOURS, DAYS } from '../util/Constants';
 
 export default class Mute extends Schedule<GiveawayEntity> {
   edits: Map<GiveawayEntity['id'], NodeJS.Timer> = new Map();
@@ -27,10 +28,10 @@ export default class Mute extends Schedule<GiveawayEntity> {
       this.client.setInterval(async () => {
         const timeLeft = giveaway.end.getTime() - Date.now();
         if (
-          (timeLeft <= 3000 && timeLeft % 1000 <= 1000) ||
-          (timeLeft <= 180000 && timeLeft % 60000 <= 1000) ||
-          Math.abs(timeLeft - 3600000) <= 1000 ||
-          timeLeft >= 86400000
+          (timeLeft <= SECONDS(3) && timeLeft % SECONDS(1) <= SECONDS(1)) ||
+          (timeLeft <= MINUTES(3) && timeLeft % MINUTES(1) <= SECONDS(1)) ||
+          Math.abs(timeLeft - HOURS(1)) <= SECONDS(1) ||
+          timeLeft >= DAYS(1)
         ) {
           const channel = this.client.channels.cache.get(
             giveaway.channel
@@ -42,25 +43,25 @@ export default class Mute extends Schedule<GiveawayEntity> {
           if (message.embeds[0].footer?.text?.includes('ended')) return;
 
           if (
-            timeLeft >= 86400000 &&
+            timeLeft >= DAYS(1) &&
             message.embeds[0].description.match(
               /\nTime remaining: (.+)$/
             )![1] === `**${ms(timeLeft, { long: true })}**`
           )
             return;
           const embed = new MessageEmbed(message.embeds[0])
-            .setColor(timeLeft <= 3000 ? 'RED' : 'ORANGE')
+            .setColor(timeLeft <= SECONDS(3) ? 'RED' : 'ORANGE')
             .setDescription(
               message.embeds[0].description.replace(
                 /\nTime remaining: (.+)$/,
-                `\nTime remaining: **${ms(Math.max(timeLeft, 1000), {
+                `\nTime remaining: **${ms(Math.max(timeLeft, SECONDS(1)), {
                   long: true
                 })}**`
               )
             );
           return message.edit(message.content, embed);
         }
-      }, 1000)
+      }, SECONDS(1))
     );
   }
 

@@ -4,6 +4,7 @@ import HavocMessage, {
 import Util from '../util/Util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import Havoc from '../client/Havoc';
+import { MIN_LIMITS } from '../util/Constants';
 
 export default async function(
   this: Havoc,
@@ -39,12 +40,12 @@ export default async function(
       inline: true
     }
   ];
-  if (updated.content.length < 900)
+  if (updated.content.length < MIN_LIMITS.MESSAGE_UPDATE_CONTENT)
     fields.unshift({
       name: '**✏ After :**',
       value: Util.codeblock(updated.content)
     });
-  if (outdated.content.length < 900)
+  if (outdated.content.length < MIN_LIMITS.MESSAGE_UPDATE_CONTENT)
     fields.unshift({
       name: '**📝 Before :**',
       value: Util.codeblock(outdated.content)

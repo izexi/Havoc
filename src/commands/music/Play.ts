@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import * as ytdl from 'ytdl-core';
+import { MAX_LIMITS } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -26,7 +27,7 @@ export default class extends Command {
 
     await message.channel.send(`
 			${message.author}\nɴᴏᴡ ᴘʟᴀʏɪɴɢ: \`${url.substring(0, 32)}${
-      url.length > 32 ? '...' : ''
+      url.length > MAX_LIMITS.PLAY_URL ? '...' : ''
       /* eslint-disable no-irregular-whitespace */
     }\`
 			:white_circle:───────────────────────────────────────────

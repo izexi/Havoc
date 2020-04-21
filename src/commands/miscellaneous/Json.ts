@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { URL } from 'url';
 import fetch from 'node-fetch';
 import Util from '../../util/Util';
+import { MAX_LIMITS } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -46,7 +47,7 @@ export default class extends Command {
     message.send({
       embed: message.constructEmbed({
         setDescription: (Util as { [key: string]: Function })[
-          json.length > 2036 ? 'haste' : 'codeblock'
+          json.length > MAX_LIMITS.JSON_EMBED ? 'haste' : 'codeblock'
         ](formattedJSON, 'json')
       }),
       files: [

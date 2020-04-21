@@ -5,6 +5,7 @@ import { URL } from 'url';
 import fetch from 'node-fetch';
 import { Target } from '../../util/Targetter';
 import Util from '../../util/Util';
+import { MAX_LIMITS, MIN_LIMITS } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -63,9 +64,13 @@ export default class extends Command {
 
     if (message.guild!.emojis.cache.size >= maxEmojis)
       invalidReason = `This server already has the maximum amount of emojis (${maxEmojis})`;
-    else if (customName && (customName.length < 2 || customName.length > 32))
+    else if (
+      customName &&
+      (customName.length < MIN_LIMITS.EMOJI_NAME ||
+        customName.length > MAX_LIMITS.EMOJI_NAME)
+    )
       invalidReason = `The emoji name must be between 2 and 32 characters, you entered one with ${customName.length} characters`;
-    else if (!emojiSize || emojiSize > 256)
+    else if (!emojiSize || emojiSize > MAX_LIMITS.EMOJI_SIZE)
       invalidReason = `The is must be under 256kb in size, you entered one with ${emojiSize}kb`;
 
     if (invalidReason) return message.respond(invalidReason);

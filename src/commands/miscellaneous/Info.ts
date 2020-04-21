@@ -4,6 +4,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import * as prettyMs from 'pretty-ms';
 import os = require('os');
 import { TextChannel, DMChannel, version } from 'discord.js';
+import { SECONDS, MEGABYTES, PERCENTAGE } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -41,16 +42,16 @@ export default class extends Command {
           name: '❯Uptime',
           value: `- Shard: ${prettyMs(this.uptime!)}
                   - Process: ${prettyMs(process.uptime())}
-                  - Docker container: ${prettyMs(os.uptime() * 1000)}`,
+                  - Docker container: ${prettyMs(os.uptime() * SECONDS(1))}`,
           inline: true
         },
         {
           name: '❯Memory usage',
-          value: `${(process.memoryUsage().heapUsed / 1048576).toFixed(
+          value: `${MEGABYTES(process.memoryUsage().heapUsed).toFixed(
             2
-          )}MB (${(
-            (process.memoryUsage().heapUsed / os.totalmem()) *
-            100
+          )}MB (${PERCENTAGE(
+            process.memoryUsage().heapUsed,
+            os.totalmem()
           ).toFixed(2)}%)`,
           inline: true
         },

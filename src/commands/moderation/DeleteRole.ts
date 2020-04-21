@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import Util from '../../util/Util';
 import HavocRole from '../../structures/extensions/HavocRole';
+import { MAX_LIMITS } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -56,9 +57,11 @@ export default class extends Command {
         `delete the role \`${
           role.name
         }\` which will also remove the role from \`${members.size} member(s)\`
-        ${Util[formattedMembers.length > 1700 ? 'haste' : 'codeblock'](
-          formattedMembers
-        )}`
+        ${Util[
+          formattedMembers.length > MAX_LIMITS.DELETE_ROLE_EMBED
+            ? 'haste'
+            : 'codeblock'
+        ](formattedMembers)}`
       ))
     ) {
       await role.delete(

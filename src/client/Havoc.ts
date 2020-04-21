@@ -8,6 +8,7 @@ import { once } from 'events';
 import Util from '../util/Util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import EventHandler from '../handlers/EventHandler';
+import { WEEKS } from '../util/Constants';
 
 export default class Havoc extends Client {
   initialised = false;
@@ -58,7 +59,7 @@ export default class Havoc extends Client {
         if (!guild) {
           if (
             guildEntity.deletedAt &&
-            guildEntity.deletedAt > new Date(Date.now() + 12096e5)
+            guildEntity.deletedAt > new Date(Date.now() + WEEKS(2))
           )
             return this.db.guildRepo.removeAndFlush(guildEntity);
           return;

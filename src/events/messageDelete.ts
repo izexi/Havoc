@@ -4,6 +4,7 @@ import HavocMessage, {
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import Util from '../util/Util';
 import HavocGuild from '../structures/extensions/HavocGuild';
+import { MIN_LIMITS } from '../util/Constants';
 
 export default async function(message: HavocMessage) {
   const guild = message.guild as HavocGuild;
@@ -33,7 +34,10 @@ export default async function(message: HavocMessage) {
       inline: true
     }
   ];
-  if (message.content && message.content.length < 1800)
+  if (
+    message.content &&
+    message.content.length < MIN_LIMITS.MESSAGE_DELETE_CONTENT
+  )
     fields.push({
       name: '**🗒 Message content :**',
       value: Util.codeblock(message.content)
