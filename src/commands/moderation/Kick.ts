@@ -41,17 +41,17 @@ export default class extends Command {
     }
   ) {
     if (member.id === message.author.id) {
-      await message.react('463993771961483264');
+      await message.safeReact('463993771961483264');
       return message.channel.send('<:WaitWhat:463993771961483264>');
     }
     if (member.id === this.user!.id) {
-      await message.react('😢');
+      await message.safeReact('😢');
       return message.channel.send('😢');
     }
 
     const response = message.member.can('kick', member);
     if (response) {
-      await message.react('⛔');
+      await message.safeReact('⛔');
       return message.respond(response);
     }
 

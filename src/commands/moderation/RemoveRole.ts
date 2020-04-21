@@ -43,7 +43,7 @@ export default class extends Command {
   }) {
     const response = role.canBe('removed', member);
     if (response) {
-      await message.react('⛔');
+      await message.safeReact('⛔');
       return message.respond(response);
     }
 

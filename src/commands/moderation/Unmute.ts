@@ -42,13 +42,13 @@ export default class extends Command {
     if (!muteRole) return;
 
     if (member.id === this.user!.id) {
-      await message.react('😢');
+      await message.safeReact('😢');
       return message.channel.send('😢');
     }
 
     const response = message.member.can('unmute', member);
     if (response) {
-      await message.react('⛔');
+      await message.safeReact('⛔');
       return message.respond(response);
     }
 

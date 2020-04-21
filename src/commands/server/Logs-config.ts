@@ -54,13 +54,13 @@ export default class extends Command {
           inline: true
         }))
       });
-    const prompt = await message.channel.send(
+    const prompt = (await message.channel.send(
       stripIndents`**${message.author}** enter the number according to the action you would like to enable/disable.
                   E.g: if \`Channel creations\` is \`On\` and you would like to disable it enter \`channel creations\` or \`1\`.
                   Enter \`cancel\` to cancel this command and enter \`done\` if you have finished using this command.`,
       buildEmbed()
-    );
-    await prompt.react('464034357955395585');
+    )) as HavocMessage;
+    await prompt.safeReact('464034357955395585');
     // @ts-ignore
     message.channel.prompts.add(message.author.id);
 
@@ -149,7 +149,7 @@ export default class extends Command {
             message.author.toString(),
             prompt.embeds[0].setFooter(`Command ${footer}`)
           );
-          prompt.react(emoji);
+          prompt.safeReact(emoji);
         }
       });
   }

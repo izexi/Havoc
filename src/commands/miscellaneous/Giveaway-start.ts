@@ -70,11 +70,14 @@ export default class extends Command {
     });
     if (time > 60000) embed.setTimestamp(Date.now() + time);
 
-    const giveawayMsg = await giveawayChannel.send('🎉 **GIVEAWAY** 🎉', embed);
+    const giveawayMsg = (await giveawayChannel.send(
+      '🎉 **GIVEAWAY** 🎉',
+      embed
+    )) as HavocMessage;
     if (!giveawayMsg) return;
 
     await Promise.all([
-      giveawayMsg.react('🎉'),
+      giveawayMsg.safeReact('🎉'),
       giveawayMsg.edit(
         giveawayMsg.embeds[0].setFooter(
           `${winners || 1} ${Util.plural(

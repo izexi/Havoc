@@ -3,6 +3,7 @@ import { Targets, TargetType, resolveTarget, Target } from '../util/Targetter';
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
 import { Responses } from '../util/Responses';
+import { SECONDS } from '../util/Constants';
 
 interface PromptOptions {
   message: HavocMessage;
@@ -36,7 +37,7 @@ export default class {
     this.initialMsgs = Util.arrayify(options.initialMsg);
     this.invalidMsgs = Util.arrayify(options.invalidMsg);
     this.targets = Util.arrayify(options.target);
-    this.time = options.time ?? 30000;
+    this.time = options.time ?? SECONDS(3);
   }
 
   async create() {
@@ -45,20 +46,22 @@ export default class {
       setDescription: `**${message.author.tag}** ${
         this.initialMsgs[this.curr]
       }`,
-      setFooter: `You have ${this.time / 1000} seconds left to enter an option.`
+      setFooter: `You have ${this.time /
+        SECONDS(1)} seconds left to enter an option.`
     });
     this.promptMsgs.push(promptEmbed.id);
 
     let timeRemaining = this.time;
     this.editInterval = message.client.setInterval(async () => {
-      if (!timeRemaining) return clearInterval(this.editInterval);
+      if (!timeRemaining || promptEmbed.deleted)
+        return clearInterval(this.editInterval);
       await promptEmbed.edit(
         promptEmbed.embeds[0].setFooter(
-          `You have ${(timeRemaining -= 5000) /
-            1000} seconds left to enter an option.`
+          `You have ${(timeRemaining -= SECONDS(5)) /
+            SECONDS(1)} seconds left to enter an option.`
         )
       );
-    }, 5000);
+    }, SECONDS(5));
 
     return this.collect(
       message.channel.createMessageCollector(
@@ -75,7 +78,7 @@ export default class {
       this.promptMsgs.push(message.id);
 
       if (message.content.toLowerCase() === 'cancel') {
-        await this.message.react('❌');
+        await this.message.safeReact('❌');
         collector.stop();
       } else {
         const target = this.targets[this.curr];
@@ -111,10 +114,12 @@ export default class {
 
     if (reason === 'time') {
       if (!message.deleted) await message.reactions.removeAll();
-      message.react('⏱');
+      message.safeReact('⏱');
       message.respond(
         `it have been over ${this.time /
-          1000} seconds and you did not enter a valid option, so I will go ahead and cancel this.`
+          SECONDS(
+            1
+          )} seconds and you did not enter a valid option, so I will go ahead and cancel this.`
       );
     }
   };

@@ -41,18 +41,18 @@ export default class extends Command {
     }
   ) {
     if (user.id === message.author.id) {
-      await message.react('463993771961483264');
+      await message.safeReact('463993771961483264');
       return message.channel.send('<:WaitWhat:463993771961483264>');
     }
     if (user.id === this.user!.id) {
-      await message.react('😢');
+      await message.safeReact('😢');
       return message.channel.send('😢');
     }
 
     const member = await message.guild!.members.fetch(user).catch(() => null);
     const response = member ? message.member.can('softban', member) : null;
     if (response) {
-      await message.react('⛔');
+      await message.safeReact('⛔');
       return message.respond(response);
     }
 

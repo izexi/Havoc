@@ -40,7 +40,7 @@ export default class extends Command {
   ) {
     const response = message.member.can('nick', member);
     if (response) {
-      await message.react('⛔');
+      await message.safeReact('⛔');
       return message.respond(response);
     }
 

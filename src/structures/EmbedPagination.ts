@@ -1,5 +1,4 @@
 import HavocMessage from './extensions/HavocMessage';
-import { Message } from 'discord.js';
 import { Target } from '../util/Targetter';
 import Util from '../util/Util';
 
@@ -25,7 +24,7 @@ export default class {
 
   thumbnails: string[];
 
-  embed!: Message;
+  embed!: HavocMessage;
 
   attached?: string;
 
@@ -86,8 +85,10 @@ export default class {
     if (this.totalPages === 1)
       return this.message.channel.send(this.pageEmbed(this.page, false));
 
-    this.embed = await this.message.channel.send(this.pageEmbed(this.page));
-    emojis.forEach(emoji => this.embed.react(emoji));
+    this.embed = (await this.message.channel.send(
+      this.pageEmbed(this.page)
+    )) as HavocMessage;
+    emojis.forEach(emoji => this.embed.safeReact(emoji));
 
     const collector = this.embed.createReactionCollector(
       (reaction, user) =>

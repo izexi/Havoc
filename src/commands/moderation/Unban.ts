@@ -38,7 +38,7 @@ export default class extends Command {
   ) {
     const tag = user.tag;
     if (user.id === message.author.id || user.id === this.user!.id) {
-      await message.react('463993771961483264');
+      await message.safeReact('463993771961483264');
       return message.channel.send('<:WaitWhat:463993771961483264>');
     }
 

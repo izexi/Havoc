@@ -44,7 +44,7 @@ export default class extends Command {
     if (!suggestionChannel) return;
 
     await message.delete();
-    const suggestionMessage = await suggestionChannel.send(
+    const suggestionMessage = (await suggestionChannel.send(
       message.constructEmbed({
         addFields: [
           { name: 'Suggestion:', value: suggestion },
@@ -57,17 +57,19 @@ export default class extends Command {
         setColor: 'YELLOW',
         setFooter: `Suggestion ID: ${SnowflakeUtil.generate(new Date())}`
       })
-    );
+    )) as HavocMessage;
     if (!suggestionMessage) return;
 
     await Promise.all([
-      suggestionMessage.edit(
-        suggestionMessage?.embeds[0].setFooter(
-          `Suggestion ID: ${suggestionMessage.id}`
+      suggestionMessage
+        .edit(
+          suggestionMessage?.embeds[0].setFooter(
+            `Suggestion ID: ${suggestionMessage.id}`
+          )
         )
-      ),
-      suggestionMessage.react('416985886509498369'),
-      suggestionMessage.react('416985887616925726')
+        .catch(() => null),
+      suggestionMessage.safeReact('416985886509498369'),
+      suggestionMessage.safeReact('416985887616925726')
     ]);
 
     const embed = message.constructEmbed({
