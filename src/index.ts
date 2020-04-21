@@ -18,9 +18,11 @@ fs.readdir(extensionsDir).then(structures => {
   const client = new Havoc();
   client.login(process.env.TOKEN);
 
-  process.on('unhandledRejection', rej =>
+  process.on('unhandledRejection', (rej, promise) => {
     client.logger.warn(rej?.toString() ?? '', {
       origin: 'process.on:unhandledRejection'
-    })
-  );
+    });
+    // eslint-disable-next-line no-console
+    console.warn(promise);
+  });
 });
