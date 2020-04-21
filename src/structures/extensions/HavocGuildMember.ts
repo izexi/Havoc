@@ -1,4 +1,5 @@
 import { GuildMember } from 'discord.js';
+import HavocRole from './HavocRole';
 
 export default class extends GuildMember {
   can(
@@ -16,18 +17,18 @@ export default class extends GuildMember {
   ) {
     let response;
     const { tag } = this.user;
-    const highestRole = this.roles.highest;
+    const highestRole = this.roles.highest as HavocRole;
     const highestTargetRole = target.roles.highest;
-    const highestMeRole = this.guild.me!.roles.highest;
+    const highestMeRole = this.guild.me!.roles.highest as HavocRole;
     const formattedAction =
       action === 'nick' ? 'change their nickname' : `${action} this member`;
 
     if (checkOwner && target.id === this.guild.ownerID)
       response = `${tag} is the owner of this server, therefore I do not have permission to ${formattedAction}.`;
-    else if (highestMeRole.comparePositionTo(highestTargetRole) < 1)
+    else if (highestMeRole.cantManage(highestTargetRole))
       response = `${tag} has the role \`${highestTargetRole.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to ${formattedAction}.`;
     else if (
-      highestRole.comparePositionTo(highestTargetRole) < 1 &&
+      highestRole.cantManage(highestTargetRole) &&
       this.id !== this.guild.ownerID
     )
       response = `${tag} has the role \`${highestTargetRole.name}\` which has a higher / equivalent position compared to your highest role \`${highestRole.name}\`, therefore you do not have permission to ${formattedAction}.`;

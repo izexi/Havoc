@@ -1,6 +1,10 @@
 import { GuildMember, Role } from 'discord.js';
 
 export default class extends Role {
+  cantManage(role: Role | this) {
+    return role.managed ? false : this.comparePositionTo(role) < 1;
+  }
+
   canBe(action: 'added' | 'removed' | 'deleted', member?: GuildMember) {
     let response;
     const formattedAction =
@@ -10,7 +14,7 @@ export default class extends Role {
         ? `remove this role from ${member?.user.tag}`
         : 'delete this role';
 
-    if (this.guild.me!.roles.highest.comparePositionTo(this) < 1)
+    if ((this.guild.me!.roles.highest as this).cantManage(this))
       response = `the role \`${
         this.name
       }\` has a higher / equivalent position compared to my highest role \`${
@@ -19,7 +23,7 @@ export default class extends Role {
 
     if (member) {
       if (
-        member.roles.highest.comparePositionTo(this) < 1 &&
+        (member.roles.highest as this).cantManage(this) &&
         this.id !== this.guild.ownerID
       )
         response = `the role \`${this.name}\` has a higher / equivalent position compared to your highest role \`${member.roles.highest.name}\`, therefore you do not have permission to ${formattedAction}.`;
