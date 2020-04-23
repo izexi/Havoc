@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docker": "docker build -t havoc . && cls && docker-compose up",
+    "docker": "docker build -t havoc . && docker-compose up -d",
     "compile": "rimraf dist && tsc",
     "node": "node dist/index.js",
     "start": "npm run compile && npm run node",
@@ -37,6 +37,7 @@
     "moment": "^2.24.0",
     "ms": "^2.1.2",
     "node-cmd": "^3.0.0",
+    "node-cron": "^2.0.3",
     "node-emoji": "^1.10.0",
     "node-fetch": "^2.3.0",
     "node-opus": "^0.3.2",
