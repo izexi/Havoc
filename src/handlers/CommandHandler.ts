@@ -43,7 +43,7 @@ export default class extends Handler<Command> {
       !message.prefix ||
       !message.content.startsWith(message.prefix) ||
       // @ts-ignore
-      message.channel.prompts.has(message.author.id)
+      message.channel.prompts?.has(message.author.id)
     )
       return;
 
