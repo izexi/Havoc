@@ -8,6 +8,7 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Configure the giveaway channel for this server.',
+      aliases: ['g-config'],
       args: {
         type: Target.CHANNEL,
         required: true,

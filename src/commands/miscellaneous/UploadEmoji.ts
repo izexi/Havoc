@@ -14,6 +14,7 @@ export default class extends Command {
       aliases: ['uemoji'],
       args: [
         {
+          name: 'emoji | url',
           type: async message => {
             const { arg: possibleEmoji } = message;
             if (!possibleEmoji) return;
@@ -40,6 +41,7 @@ export default class extends Command {
           prompt: 'enter the text that you would like to embed.'
         },
         {
+          name: 'name',
           type: Target.TEXT
         }
       ],

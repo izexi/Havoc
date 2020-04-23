@@ -33,8 +33,9 @@ export async function tagFields(tag: TagEntity, client: Havoc) {
 export default class extends Command {
   constructor() {
     super(__filename, {
-      description: 'Delete a tag from the server.',
+      description: 'View info about a tag from the server.',
       args: {
+        name: 'name',
         type: message => {
           let possibleName = message.text;
           if (message.guild!.tags.has(possibleName))

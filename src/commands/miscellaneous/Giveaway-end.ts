@@ -7,7 +7,9 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Ends a giveaway.',
+      aliases: ['g-end'],
       args: {
+        name: 'ID',
         type: async message => {
           const guild = await message.client.db.guildRepo.findOne(
             {

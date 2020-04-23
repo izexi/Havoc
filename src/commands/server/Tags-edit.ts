@@ -9,6 +9,7 @@ export default class extends Command {
       description: 'Delete a tag from the server.',
       args: [
         {
+          name: 'name',
           type: message => {
             let name = message.arg;
             if (name && name.startsWith('"')) {
@@ -31,6 +32,7 @@ export default class extends Command {
           }
         },
         {
+          name: 'new content',
           type: Target.TEXT,
           required: true,
           promptOpts: {

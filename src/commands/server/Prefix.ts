@@ -8,7 +8,10 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'View or change the current prefix.',
-      args: { type: Target.TEXT },
+      args: {
+        name: 'new prefix',
+        type: Target.TEXT
+      },
       requiredPerms: 'MANAGE_GUILD'
     });
   }

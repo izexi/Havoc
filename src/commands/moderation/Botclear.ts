@@ -10,6 +10,7 @@ export default class extends Command {
         'Deletes recent bot messages & messages that contain bot commands (messages that start with popular bot prefixes along with the configured prefixes) to keep the chat clean.',
       aliases: ['bc'],
       args: {
+        name: 'config',
         type: message => {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;

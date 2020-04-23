@@ -8,8 +8,10 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Rerolls a giveaway.',
+      aliases: ['g-reroll'],
       args: [
         {
+          name: 'ID',
           type: async message => {
             const giveawayMsg = await message
               .findConfigChannel('giveaway')
@@ -26,6 +28,7 @@ export default class extends Command {
           }
         },
         {
+          name: 'amount of winners',
           type: Target.NUMBER,
           required: true,
           promptOpts: {

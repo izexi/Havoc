@@ -11,10 +11,12 @@ export default class extends Command {
       promptOnly: true,
       args: [
         {
+          name: 'question',
           type: Target.TEXT,
           prompt: 'enter the question that you would like to poll.'
         },
         {
+          name: 'options (option1;option2;...)',
           type: message => message.text.split(';'),
           prompt:
             'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no'

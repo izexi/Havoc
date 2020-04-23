@@ -9,6 +9,7 @@ export default class extends Command {
     super(__filename, {
       description: 'Plays the inputted song url.',
       args: {
+        name: 'url',
         type: Target.TEXT,
         required: true,
         promptOpts: {

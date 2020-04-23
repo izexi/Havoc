@@ -13,6 +13,7 @@ export default class extends Command {
       aliases: ['warnp', 'punishments'],
       args: [
         {
+          name: 'warning amount',
           type: Target.NUMBER,
           promptOpts: {
             initial:
@@ -22,6 +23,7 @@ export default class extends Command {
         },
         {
           required: true,
+          name: 'punishment',
           type: message => {
             const possiblePunishment = message.arg?.toLowerCase();
             if (!possiblePunishment) return;
@@ -36,6 +38,7 @@ export default class extends Command {
           }
         },
         {
+          name: 'mute duration',
           type: Target.TIME,
           promptOpts: {
             initial:

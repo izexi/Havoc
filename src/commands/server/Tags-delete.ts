@@ -8,6 +8,7 @@ export default class extends Command {
     super(__filename, {
       description: 'Delete a tag from the server.',
       args: {
+        name: 'name',
         type: message => {
           let name = message.arg;
           if (name && name.startsWith('"')) {

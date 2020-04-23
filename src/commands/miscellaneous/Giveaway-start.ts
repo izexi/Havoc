@@ -9,14 +9,17 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Starts a giveaway with options.',
+      aliases: ['g-start'],
       args: [
         {
+          name: 'duration',
           type: Target.TIME,
           required: true,
           prompt:
             'enter the time limit for how long the giveaway should last suffix the time with `w`/`d`/`h`/`m`/`s`, e.g: `3m5s` would be 3 minutes and 5 seconds.'
         },
         {
+          name: 'amount of winners',
           type: Target.NUMBER,
           required: true,
           promptOpts: {
@@ -26,6 +29,7 @@ export default class extends Command {
           }
         },
         {
+          name: 'prize',
           type: Target.TEXT,
           required: true,
           promptOpts: {

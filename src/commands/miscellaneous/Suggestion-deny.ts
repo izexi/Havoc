@@ -7,8 +7,10 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Denies a suggestion with an optional reason.',
+      aliases: ['s-deny', 'suggest-deny'],
       args: [
         {
+          name: 'ID',
           type: getSuggestionMsg,
           required: true,
           promptOpts: {
@@ -19,6 +21,7 @@ export default class extends Command {
           }
         },
         {
+          name: 'reason',
           type: Target.TEXT
         }
       ],

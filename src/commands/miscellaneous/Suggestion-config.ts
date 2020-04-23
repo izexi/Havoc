@@ -8,6 +8,7 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Configure the suggestion channel for this server.',
+      aliases: ['s-config', 'suggest-config'],
       args: {
         type: Target.CHANNEL,
         required: true,

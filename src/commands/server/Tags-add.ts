@@ -11,6 +11,7 @@ export default class extends Command {
       description: 'Add a tag to the server.',
       args: [
         {
+          name: 'name',
           type: message => {
             const name = message.arg;
             if (name && !name.startsWith('"')) return message.shiftArg(name);
@@ -28,6 +29,7 @@ export default class extends Command {
             'enter what you would like to name the tag, e.g: `name` or `"a name"`'
         },
         {
+          name: 'content',
           type: Target.TEXT,
           required: true,
           prompt: 'enter what you would like the content of the tag to be'

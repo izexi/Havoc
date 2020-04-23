@@ -67,8 +67,10 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Approves a suggestion with an optional reason.',
+      aliases: ['s-approve', 'suggest-approve'],
       args: [
         {
+          name: 'ID',
           type: getSuggestionMsg,
           required: true,
           promptOpts: {
@@ -79,6 +81,7 @@ export default class extends Command {
           }
         },
         {
+          name: 'reason',
           type: Target.TEXT
         }
       ],
