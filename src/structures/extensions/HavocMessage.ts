@@ -46,7 +46,7 @@ export interface EmbedMethods {
   [key: string]: EmbedMethods[keyof EmbedMethods];
 }
 
-export default class extends Message {
+export default class HavocMessage extends Message {
   author!: HavocUser;
 
   client!: Havoc;
@@ -313,6 +313,9 @@ export default class extends Message {
 
     this.args.shift();
 
+    if (!command.dm && this.channel.type === 'dm')
+      return this.respond('this command cannot be used in DMs');
+
     if (command.requiredPerms) {
       const flags = Util.arrayify(command.requiredPerms);
       if (!this.member!.hasPermission(flags)) {
@@ -354,6 +357,33 @@ export default class extends Message {
         },
         {}
       );
+    }
+
+    const { subParent } = command;
+    if (subParent) {
+      const type = (message: HavocMessage) => {
+        const possibleSubCmd = message.arg?.toLowerCase();
+        if (!possibleSubCmd) return;
+        if (subParent.subCommands.includes(possibleSubCmd)) {
+          message.command = message.client.commandHandler.find(
+            `${command.name}-${possibleSubCmd}`
+          )!;
+          message.runCommand();
+          return true;
+        }
+      };
+      const { subCommands } = subParent;
+
+      (await resolveTarget(params, type, this, this.text)) ||
+        (await this.createPrompt({
+          initialMsg: subParent.prompt,
+          invalidMsg: `'You will need to enter either ${subCommands
+            .slice(0, -1)
+            .map(cmd => `\`${cmd}\``)
+            .join(', ')} or ${subCommands[subCommands.length - 1]}`,
+          target: type
+        }));
+      return;
     }
 
     if (command.args.length) {
@@ -408,7 +438,9 @@ export default class extends Message {
         )
       )
       .catch(async rej => {
-        this.client.logger.warn(rej, { origin: `${command.name}#run()` });
+        this.client.logger.warn(rej, {
+          origin: `${Util.captialise(command.name)}#run()`
+        });
 
         this.channel.send(
           new MessageEmbed()
