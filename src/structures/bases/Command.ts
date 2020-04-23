@@ -7,6 +7,7 @@ import { BitFieldResolvable, PermissionString, Message } from 'discord.js';
 
 interface Arg {
   type: TargetType;
+  name?: string;
   required?: boolean;
   prompt?: string | ((message: HavocMessage) => string);
   promptOpts?: {
@@ -20,6 +21,8 @@ interface CommandOptions {
   description: string;
   promptOnly?: boolean;
   sub?: boolean;
+  dm?: boolean;
+  subParent?: { prompt: string; subCommands: string[] };
   args?: Arg | Arg[];
   flags?: string[];
   requiredPerms?: BitFieldResolvable<PermissionString>;
@@ -51,11 +54,15 @@ export default abstract class implements CommandOptions {
 
   requiredPerms?: CommandOptions['requiredPerms'];
 
+  subParent?: CommandOptions['subParent'];
+
   promptOnly: boolean;
 
   args: Arg[];
 
   sub: boolean;
+
+  dm: boolean;
 
   constructor(__path: string, options: CommandOptions) {
     const { name, dir } = parse(__path);
@@ -68,6 +75,8 @@ export default abstract class implements CommandOptions {
     this.promptOnly = options.promptOnly ?? false;
     this.args = Util.arrayify(options.args);
     this.sub = options.sub ?? false;
+    this.dm = options.dm ?? false;
+    this.subParent = options.subParent;
   }
 
   abstract async run(
