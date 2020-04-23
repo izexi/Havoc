@@ -6,8 +6,10 @@ import { find } from 'node-emoji';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'Enlarges the inputted emoji',
       args: {
+        name: 'emoji',
         type: message => {
           const { arg: possibleEmoji } = message;
           if (!possibleEmoji) return;

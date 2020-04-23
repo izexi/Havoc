@@ -8,6 +8,7 @@ export default class extends Command {
     super(__filename, {
       description: "Returns a Google reverse image search of someone's avatar.",
       aliases: ['cf'],
+      dm: true,
       args: {
         type: Target.USER,
         required: true,

@@ -5,20 +5,25 @@ import Util from '../../util/Util';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description:
         'Shows a list of all avaiable commands, or detailed info about a specific command.',
       aliases: ['h'],
       args: {
+        name: 'command',
         type: message => {
           const possibleCmd = message.arg?.toLowerCase();
           if (!possibleCmd) return;
-          const commands = message.client.commandHandler.holds;
-          return (
-            commands.get(possibleCmd) ||
-            [...commands.values()].find(command =>
-              command.aliases.has(possibleCmd)
-            )
-          );
+
+          const command = message.client.commandHandler.find(possibleCmd);
+          if (!command) return;
+
+          const [, possibleSubCommand] = message.args;
+          return command.subParent && possibleSubCommand
+            ? message.client.commandHandler.find(
+                `${command.name}-${possibleSubCommand}`
+              ) || command
+            : command;
         }
       }
     });
@@ -32,8 +37,9 @@ export default class extends Command {
     fn: Command | undefined;
   }) {
     if (command && command.category !== 'dev') {
+      const name = command.name.split('-').join(' ');
       const embed = {
-        setTitle: `Command info for  **\`${command.name}\`**\n⠀`,
+        setTitle: `Command info for  **\`${name}\`**\n⠀`,
         addFields: [
           { name: '❯Description', value: command.description, inline: true },
           {
@@ -45,6 +51,7 @@ export default class extends Command {
         attachFiles: [`src/assets/images/${command.category}.png`],
         setThumbnail: `attachment://${command.category}.png`
       };
+
       if (command.aliases.size) {
         embed.addFields.push({
           name: '❯Aliases',
@@ -52,21 +59,48 @@ export default class extends Command {
           inline: true
         });
       }
-      // TODO: Add examples
-      if (command.args) {
+
+      if (command.subParent) {
         embed.addFields.push({
-          name: '❯Arguments',
-          value: command.args.map(arg => arg.type).join(', '),
+          name: '❯Usage',
+          value: `\`${
+            message.prefix
+          }${name} <sub command (${command.subParent.subCommands.join(
+            ' | '
+          )})>\``,
           inline: true
         });
       }
-      if (command.flags.length) {
+
+      if (command.args.length && !command.promptOnly) {
+        const prefixedFlags = command.flags
+          .map(flag => `${message.prefix}${flag}`)
+          .join(' | ');
+        const formattedFlags = command.flags.length
+          ? ` <${
+              command.name === 'translate'
+                ? await Util.haste(prefixedFlags)
+                : prefixedFlags
+            }>`
+          : '';
+
         embed.addFields.push({
-          name: '❯Aliases',
-          value: command.flags.map(flag => `\`${flag}\``).join(', '),
+          name: '❯Usage',
+          value: `\`${message.prefix}${name} ${command.args
+            .map(arg => {
+              const [s, e] = arg.required ? '<>' : '[]';
+              const formattedArg =
+                typeof arg !== 'function' && arg.name && !arg.name.includes('(')
+                  ? ` (${arg.type})`
+                  : '';
+
+              return `${s}${arg.name || arg.type}${formattedArg}${e}`;
+            })
+            .join(' ')}${formattedFlags}\``,
           inline: true
         });
       }
+
       return message.respond(embed);
     }
 

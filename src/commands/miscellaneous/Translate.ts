@@ -9,6 +9,7 @@ const translate = require('@vitalets/google-translate-api');
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description:
         'Translates the inputted text to English (by default) / optional flag language via Google Translate.',
       args: {

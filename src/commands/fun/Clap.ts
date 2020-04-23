@@ -5,6 +5,7 @@ import { Target } from '../../util/Targetter';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'Displays👏text👏like👏this👏',
       args: {
         type: Target.TEXT,

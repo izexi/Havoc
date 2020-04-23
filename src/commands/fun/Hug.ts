@@ -6,6 +6,7 @@ import Havoc from '../../client/Havoc';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: '🙅'
     });
   }

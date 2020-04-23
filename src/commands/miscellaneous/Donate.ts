@@ -5,6 +5,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'Supports me.'
     });
   }

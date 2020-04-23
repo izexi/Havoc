@@ -5,6 +5,7 @@ import { Target } from '../../util/Targetter';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'Embeds the inputted text.',
       args: {
         type: Target.TEXT,

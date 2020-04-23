@@ -6,6 +6,7 @@ import HavocUser from '../../structures/extensions/HavocUser';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: "View a user's avatar along with the URL.",
       aliases: ['a', 'av'],
       args: { type: Target.USER }

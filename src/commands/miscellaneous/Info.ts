@@ -9,6 +9,7 @@ import { SECONDS, MEGABYTES, PERCENTAGE } from '../../util/Constants';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'Info about me.',
       aliases: ['i', 'stats']
     });

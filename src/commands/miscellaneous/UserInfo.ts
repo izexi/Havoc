@@ -8,6 +8,7 @@ import Util from '../../util/Util';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'View info about a user.',
       aliases: ['uinfo', 'user'],
       args: { type: Target.USER }

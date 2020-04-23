@@ -5,6 +5,7 @@ import { Target } from '../../util/Targetter';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description:
         'Replaces any `o`s with <:OMEGALUL:695303479790665758> in the inputted message.',
       args: {

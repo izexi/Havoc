@@ -8,9 +8,11 @@ import { MAX_LIMITS } from '../../util/Constants';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description:
         'View a pretty printed JSON that is parsed from the entered URL.',
       args: {
+        name: 'url',
         type: ({ arg }) => {
           const possibleUrl = arg;
           if (!possibleUrl) return;

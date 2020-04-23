@@ -9,6 +9,7 @@ import Util from '../../util/Util';
 export default class extends Command {
   constructor() {
     super(__filename, {
+      dm: true,
       description: 'A 100% accurate gayness calculator.',
       args: { type: Target.USER }
     });
