@@ -21,14 +21,25 @@ export enum Target {
   TEXT = 'text',
   NUMBER = 'number',
   TIME = 'time',
-  FUNCTION = 'fn'
+  FUNCTION = 'fn',
+  OPTION = 'option'
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type TargetFn = (message: HavocMessage) => any;
-export type TargetType = Target | TargetFn;
+export type TargetArr = string[];
+export type TargetType = Target | TargetFn | TargetArr;
 export type NotFound = null | undefined;
+export type NotOther = Exclude<TargetType, TargetFn | TargetArr>;
 type MaybePromise<T> = T | Promise<T>;
+
+export const isOther = (type: TargetType) =>
+  typeof type === 'function' || Array.isArray(type);
+export const resolveTargetKey = (type: TargetType) => {
+  if (typeof type === 'function') return Target.FUNCTION;
+  if (Array.isArray(type)) return Target.OPTION;
+  return type;
+};
 
 export interface Targets {
   user: User;
@@ -39,6 +50,7 @@ export interface Targets {
   number: number;
   text: string;
   time: number;
+  option: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: any;
 }
@@ -56,7 +68,7 @@ export const Targetter: {
     get(
       message: HavocMessage,
       arg?: string,
-      fn?: TargetFn
+      other?: TargetFn | TargetArr
     ): MaybePromise<Targets[target] | NotFound>;
   };
 } = {
@@ -211,8 +223,18 @@ export const Targetter: {
   },
 
   [Target.FUNCTION]: {
-    get(message, _, fn) {
+    get(message, _, fn: TargetFn) {
       return fn!.call(message.client, message);
+    }
+  },
+
+  [Target.OPTION]: {
+    get(message, _, options: TargetArr) {
+      const possibleOption = message.arg?.toLowerCase();
+      if (!possibleOption) return;
+      if (options.includes(possibleOption)) {
+        return message.shiftArg(possibleOption);
+      }
     }
   }
 };
@@ -224,7 +246,10 @@ export async function resolveTarget(
   query?: string
 ) {
   let found;
-  if (typeof target === 'function') {
+  if (Array.isArray(target)) {
+    found = Targetter[Target.OPTION]!.get(message, '', target);
+    obj[Target.OPTION] = found;
+  } else if (typeof target === 'function') {
     found = await Targetter[Target.FUNCTION]!.get(message, '', target);
     obj[Target.FUNCTION] = found;
   } else {
