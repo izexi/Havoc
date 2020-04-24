@@ -150,5 +150,9 @@ export default {
       new RegExp(Object.keys(obj).join('|'), 'gi'),
       letter => obj[letter] || letter
     );
+  },
+
+  randomArrEl<T>(arr: T[]) {
+    return arr[this.randomInt(0, arr.length - 1)];
   }
 };
