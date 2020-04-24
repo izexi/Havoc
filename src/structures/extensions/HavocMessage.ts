@@ -21,7 +21,10 @@ import {
   Targets,
   resolveTarget,
   Target,
-  NotFound
+  NotFound,
+  isOther,
+  NotOther,
+  resolveTargetKey
 } from '../../util/Targetter';
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
@@ -404,7 +407,7 @@ export default class HavocMessage extends Message {
             initialMsg = `\`${
               this.text
             }\` is an invalid option! ${promptOpts?.invalid ||
-              (typeof type === 'function' ? '' : Responses[type]!(this))}
+              (isOther(type) ? '' : Responses[type as NotOther]!(this))}
               Enter \`cancel\` to exit out of this prompt.`;
 
           found = await this.createPrompt({
@@ -413,9 +416,7 @@ export default class HavocMessage extends Message {
             target: type
           }).then(responses => Object.assign(params, responses));
           if (
-            (required &&
-              found![typeof type === 'function' ? Target.FUNCTION : type] ==
-                null) ||
+            (required && found![resolveTargetKey(type)] == null) ||
             Object.values(found!).every(f => f == null)
           )
             return;

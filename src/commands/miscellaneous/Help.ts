@@ -106,7 +106,9 @@ export default class extends Command {
         });
 
         const generateExample = ({ example, type }: Arg) =>
-          example || EXAMPLE_ARG[type as Exclude<Target, 'fn'>];
+          example || Array.isArray(type)
+            ? (type as string[])
+            : EXAMPLE_ARG[type as Exclude<Target, 'fn' | 'option'>];
         const generateHandled = (args: Arg[], i: number) => {
           const handledArgs = args
             .slice(0, i)

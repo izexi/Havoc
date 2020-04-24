@@ -1,5 +1,12 @@
 import Util, { MaybeArray } from '../util/Util';
-import { Targets, TargetType, resolveTarget, Target } from '../util/Targetter';
+import {
+  Targets,
+  TargetType,
+  resolveTarget,
+  Target,
+  isOther,
+  NotOther
+} from '../util/Targetter';
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
 import { Responses } from '../util/Responses';
@@ -36,7 +43,7 @@ export default class {
     this.message = options.message;
     this.initialMsgs = Util.arrayify(options.initialMsg);
     this.invalidMsgs = Util.arrayify(options.invalidMsg);
-    this.targets = Util.arrayify(options.target);
+    this.targets = [options.target] as TargetType[];
     this.time = options.time ?? SECONDS(30);
   }
 
@@ -92,9 +99,9 @@ export default class {
               setDescription: `**${message.author.tag}** \`${
                 message.content
               }\` is an invalid option!\n${this.invalidMsgs[this.curr] ??
-                (typeof target === 'function'
+                (isOther(target)
                   ? ''
-                  : Responses[target]!(
+                  : Responses[target as NotOther]!(
                       message
                     ))}\nEnter \`cancel\` to exit out of this prompt.`
             })

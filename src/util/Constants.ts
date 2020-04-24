@@ -27,7 +27,9 @@ export enum MIN_LIMITS {
   MESSAGE_UPDATE_CONTENT = 900
 }
 
-export const EXAMPLE_ARG: { [key in Exclude<Target, 'fn'>]: string[] } = {
+export const EXAMPLE_ARG: {
+  [key in Exclude<Target, 'fn' | 'option'>]: string[];
+} = {
   [Target.CHANNEL]: ['#channel', 'channel', '406873117215031299'],
   [Target.EMOJI]: ['<:POGGIES:542850548043612190>'],
   [Target.MEMBER]: ['@Havoc', 'havoc', '191615925336670208'],
