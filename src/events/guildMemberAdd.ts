@@ -51,9 +51,9 @@ export default async function(this: Havoc, member: HavocGuildMember) {
           `
 				**${member.user.tag}**
 				Welcome to the **${member.guild.name}** server! ⠀ 
-				You're the ${Util.ordinal(member.guild.memberCount)} member here ${
-            emojis[Util.randomInt(0, emojis.length - 1)]
-          }
+				You're the ${Util.ordinal(
+          member.guild.memberCount
+        )} member here ${Util.randomArrEl(emojis)}
 				⠀⠀⠀⠀⠀⠀⠀
 			`
         )

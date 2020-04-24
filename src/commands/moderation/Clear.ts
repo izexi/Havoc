@@ -73,9 +73,10 @@ export default class extends Command {
 
     message
       .respond(
-        `cleared \`${cleared.size} ${Util.plural('message', cleared.size)}\` ${
-          emojis[Util.randomInt(0, emojis.length - 1)]
-        }`
+        `cleared \`${cleared.size} ${Util.plural(
+          'message',
+          cleared.size
+        )}\` ${Util.randomArrEl(emojis)}`
       )
       .then(async message => message.delete({ timeout: 1300 }))
       .catch(() => null);

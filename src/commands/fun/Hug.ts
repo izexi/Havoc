@@ -22,9 +22,7 @@ export default class extends Command {
     ];
     message
       .respond(
-        this.emojis.cache
-          .get(emojis[Util.randomInt(0, emojis.length - 1)])!
-          .toString(),
+        this.emojis.cache.get(Util.randomArrEl(emojis))!.toString(),
         false,
         true
       )
