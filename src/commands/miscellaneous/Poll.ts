@@ -17,6 +17,7 @@ export default class extends Command {
         },
         {
           name: 'options (option1;option2;...)',
+          example: ['yes;no'],
           type: message => message.text.split(';'),
           prompt:
             'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no'

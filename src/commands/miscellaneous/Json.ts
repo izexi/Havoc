@@ -13,6 +13,7 @@ export default class extends Command {
         'View a pretty printed JSON that is parsed from the entered URL.',
       args: {
         name: 'url',
+        example: ['https://jsonplaceholder.typicode.com/todos/1'],
         type: ({ arg }) => {
           const possibleUrl = arg;
           if (!possibleUrl) return;

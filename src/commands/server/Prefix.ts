@@ -9,6 +9,7 @@ export default class extends Command {
     super(__filename, {
       description: 'View or change the current prefix.',
       args: {
+        example: ['-'],
         name: 'new prefix',
         type: Target.TEXT
       },

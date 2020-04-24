@@ -71,6 +71,7 @@ export default class extends Command {
       args: [
         {
           name: 'ID',
+          example: ['5637006579059427073'],
           type: getSuggestionMsg,
           required: true,
           promptOpts: {

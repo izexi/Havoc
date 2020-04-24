@@ -11,6 +11,7 @@ export default class extends Command {
       aliases: ['bc'],
       args: {
         name: 'config',
+        example: ['config'],
         type: message => {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
@@ -77,7 +78,7 @@ export default class extends Command {
         `bot cleared \`${cleared.size} ${Util.plural(
           'message',
           cleared.size
-        )}\` ${emojis[Util.randomInt(0, emojis.length - 1)]}`
+        )}\` ${Util.randomArrEl(emojis)}`
       )
       .then(async message => message.delete({ timeout: 1300 }))
       .catch(() => null);

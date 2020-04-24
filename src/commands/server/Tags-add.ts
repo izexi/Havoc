@@ -12,6 +12,7 @@ export default class extends Command {
       args: [
         {
           name: 'name',
+          example: ['name', '"a name with spaces"'],
           type: message => {
             const name = message.arg;
             if (name && !name.startsWith('"')) return message.shiftArg(name);

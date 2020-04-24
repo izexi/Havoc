@@ -9,17 +9,11 @@ export default class extends Command {
       description: 'Delete a tag from the server.',
       args: {
         name: 'name',
+        example: ['name', 'a name with spaces'],
         type: message => {
-          let name = message.arg;
-          if (name && name.startsWith('"')) {
-            const endIndex = message.args.findIndex(arg => arg.endsWith('"'));
-            if (endIndex !== -1)
-              name = message.args
-                .splice(0, endIndex + 1)
-                .join(' ')
-                .slice(1, -1);
-          }
-          if (message.guild!.tags.has(name)) return message.shiftArg(name);
+          let possibleName = message.text;
+          if (message.guild!.tags.has(possibleName))
+            return message.shiftArg(possibleName);
         },
         required: true,
         promptOpts: {

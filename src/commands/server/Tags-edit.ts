@@ -10,6 +10,7 @@ export default class extends Command {
       args: [
         {
           name: 'name',
+          example: ['name', '"a name with spaces"'],
           type: message => {
             let name = message.arg;
             if (name && name.startsWith('"')) {

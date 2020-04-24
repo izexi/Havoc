@@ -24,6 +24,7 @@ export default class extends Command {
         {
           required: true,
           name: 'punishment',
+          example: ['mute'],
           type: message => {
             const possiblePunishment = message.arg?.toLowerCase();
             if (!possiblePunishment) return;

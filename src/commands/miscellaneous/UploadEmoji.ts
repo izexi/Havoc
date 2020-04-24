@@ -15,6 +15,10 @@ export default class extends Command {
       args: [
         {
           name: 'emoji | url',
+          example: [
+            '<:POGGIES:542850548043612190>',
+            'https://cdn.discordapp.com/emojis/542850548043612190.png?v=1'
+          ],
           type: async message => {
             const { arg: possibleEmoji } = message;
             if (!possibleEmoji) return;

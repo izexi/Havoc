@@ -13,6 +13,7 @@ export default class extends Command {
       args: {
         required: true,
         name: 'sub command',
+        example: ['view', 'add ~', 'remove ~'],
         type: message => {
           const possibleOption = message.arg?.toLowerCase();
           if (!possibleOption) return;

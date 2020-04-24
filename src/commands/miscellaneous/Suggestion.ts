@@ -10,6 +10,7 @@ export default class extends Command {
       aliases: ['s', 'suggest'],
       args: {
         required: true,
+        example: ['delete this server', 'deny'],
         name: 'suggestion | sub command (approve | deny | config)',
         type: message => {
           const possibleSubCmd = message.arg?.toLowerCase();

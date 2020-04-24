@@ -12,6 +12,7 @@ export default class extends Command {
       args: [
         {
           name: 'ID',
+          example: ['581073145482575875'],
           type: async message => {
             const giveawayMsg = await message
               .findConfigChannel('giveaway')

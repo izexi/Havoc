@@ -10,6 +10,7 @@ export default class extends Command {
       description: 'Enlarges the inputted emoji',
       args: {
         name: 'emoji',
+        example: ['<:POGGIES:542850548043612190>', '😩'],
         type: message => {
           const { arg: possibleEmoji } = message;
           if (!possibleEmoji) return;

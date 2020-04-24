@@ -36,6 +36,7 @@ export default class extends Command {
       description: 'View info about a tag from the server.',
       args: {
         name: 'name',
+        example: ['name', 'a name with spaces'],
         type: message => {
           let possibleName = message.text;
           if (message.guild!.tags.has(possibleName))
