@@ -5,10 +5,11 @@ import Util from '../../util/Util';
 import { parse, sep } from 'path';
 import { BitFieldResolvable, PermissionString, Message } from 'discord.js';
 
-interface Arg {
+export interface Arg {
   type: TargetType;
   name?: string;
   required?: boolean;
+  example?: string[];
   prompt?: string | ((message: HavocMessage) => string);
   promptOpts?: {
     initial: string;
