@@ -1,5 +1,7 @@
 // TODO: Move random strings here
 
+import { Target } from './Targetter';
+
 export enum STATUS_ICONS {
   READY = 'https://www.dictionary.com/e/wp-content/uploads/2016/01/paris-green-color-paint-code-swatch-chart-rgb-html-hex.png',
   DISCONNECTED = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Red.svg/240px-Red.svg.png',
@@ -24,6 +26,17 @@ export enum MIN_LIMITS {
   MESSAGE_DELETE_CONTENT = 1800,
   MESSAGE_UPDATE_CONTENT = 900
 }
+
+export const EXAMPLE_ARG: { [key in Exclude<Target, 'fn'>]: string[] } = {
+  [Target.CHANNEL]: ['#channel', 'channel', '406873117215031299'],
+  [Target.EMOJI]: ['<:POGGIES:542850548043612190>'],
+  [Target.MEMBER]: ['@Havoc', 'havoc', '191615925336670208'],
+  [Target.NUMBER]: ['1', '2', '3'],
+  [Target.ROLE]: ['@Role', 'role', '406904075112677377'],
+  [Target.TEXT]: ['some text'],
+  [Target.TIME]: ['5', '5m', '2h5m'],
+  [Target.USER]: ['@Havoc', 'havoc', '191615925336670208']
+};
 
 export const SECONDS = (seconds: number) => seconds * 1000;
 export const MINUTES = (minutes: number) => minutes * 60000;
