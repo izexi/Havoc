@@ -14,12 +14,7 @@ export default class extends Command {
         required: true,
         name: 'sub command',
         example: ['view', 'add ~', 'remove ~'],
-        type: message => {
-          const possibleOption = message.arg?.toLowerCase();
-          if (!possibleOption) return;
-          if (['view', 'add', 'remove'].includes(possibleOption))
-            return message.shiftArg(possibleOption);
-        },
+        type: ['view', 'add', 'remove'],
         promptOpts: {
           initial:
             'what would you like to configure from prefixes that will be botcleared?\nEnter `view` / `add` / `remove`.',
