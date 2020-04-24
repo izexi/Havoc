@@ -1,6 +1,8 @@
-import Command from '../../structures/bases/Command';
+import Command, { Arg } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util/Util';
+import { EXAMPLE_ARG } from '../../util/Constants';
+import { Target } from '../../util/Targetter';
 
 export default class extends Command {
   constructor() {
@@ -11,6 +13,7 @@ export default class extends Command {
       aliases: ['h'],
       args: {
         name: 'command',
+        example: ['giveaway', 'giveaway config'],
         type: message => {
           const possibleCmd = message.arg?.toLowerCase();
           if (!possibleCmd) return;
@@ -68,7 +71,7 @@ export default class extends Command {
           }${name} <sub command (${command.subParent.subCommands.join(
             ' | '
           )})>\``,
-          inline: true
+          inline: false
         });
       }
 
@@ -90,14 +93,74 @@ export default class extends Command {
             .map(arg => {
               const [s, e] = arg.required ? '<>' : '[]';
               const formattedArg =
-                typeof arg !== 'function' && arg.name && !arg.name.includes('(')
+                typeof arg.type !== 'function' &&
+                arg.name &&
+                !arg.name.includes('(')
                   ? ` (${arg.type})`
                   : '';
 
               return `${s}${arg.name || arg.type}${formattedArg}${e}`;
             })
             .join(' ')}${formattedFlags}\``,
-          inline: true
+          inline: false
+        });
+
+        const generateExample = ({ example, type }: Arg) =>
+          example || EXAMPLE_ARG[type as Exclude<Target, 'fn'>];
+        const generateHandled = (args: Arg[], i: number) => {
+          const handledArgs = args
+            .slice(0, i)
+            .map(arg => Util.randomArrEl(generateExample(arg)));
+          return handledArgs.length ? `${handledArgs.join(' ')} ` : '';
+        };
+
+        embed.addFields.push({
+          name: '❯Examples',
+          value: command.args
+            .reduce((examples, { example, type, required }, i, args) => {
+              const generatedExamples = generateExample({ example, type });
+
+              if (args.every(({ required }) => required)) {
+                if (examples.length) return examples;
+
+                return args.length == 1
+                  ? generatedExamples
+                  : [
+                      args
+                        .map(arg => Util.randomArrEl(generateExample(arg)))
+                        .join(' ')
+                    ];
+              }
+
+              if (!required) {
+                return args.length === 1
+                  ? ['', ...generatedExamples]
+                  : examples.concat(
+                      generateHandled(args, i).slice(0, -1),
+                      ...generatedExamples.map(
+                        eg => `${generateHandled(args, i)}${eg}`
+                      )
+                    );
+              }
+
+              return examples;
+            }, [] as string[])
+            .map(
+              eg =>
+                `• \`${message.prefix}${command.name}${eg ? ` ${eg}` : ''}\``
+            )
+            .join('\n'),
+          inline: false
+        });
+      }
+
+      if (command.subParent) {
+        embed.addFields.push({
+          name: '❯Examples',
+          value: command.subParent.subCommands
+            .map(subCmd => `• \`${message.prefix}${command.name} ${subCmd}\``)
+            .join('\n'),
+          inline: false
         });
       }
 
