@@ -1,6 +1,6 @@
 // TODO: Move random strings here
 
-import { Target } from './Targetter';
+import { Target, ExcludedOther } from './Targetter';
 
 export enum STATUS_ICONS {
   READY = 'https://www.dictionary.com/e/wp-content/uploads/2016/01/paris-green-color-paint-code-swatch-chart-rgb-html-hex.png',
@@ -28,7 +28,7 @@ export enum MIN_LIMITS {
 }
 
 export const EXAMPLE_ARG: {
-  [key in Exclude<Target, 'fn' | 'option'>]: string[];
+  [key in ExcludedOther]: string[];
 } = {
   [Target.CHANNEL]: ['#channel', 'channel', '406873117215031299'],
   [Target.EMOJI]: ['<:POGGIES:542850548043612190>'],
@@ -39,6 +39,35 @@ export const EXAMPLE_ARG: {
   [Target.TIME]: ['5', '5m', '2h5m'],
   [Target.USER]: ['@Havoc', 'havoc', '191615925336670208']
 };
+
+export const PROMPT_INITIAL = {
+  [Target.CHANNEL]: (action: string) =>
+    `mention the channel, or enter the name / ID of the channel that would like ${action}.`,
+  [Target.USER]: (action: string) =>
+    `mention the user, or enter the tag / ID of who${action}.`,
+  [Target.MEMBER]: (action: string) =>
+    `mention the member / enter the member's ID, tag, nickname or username of who ${action}.`,
+  [Target.ROLE]: (action: string) =>
+    `mention the role, or enter the role's name / ID that you would like to ${action}.`,
+  [Target.TEXT]: (action: string) =>
+    `enter the text that you would like to ${action}.`,
+  [Target.EMOJI]: (action: string) =>
+    `enter the emoji that you would like to ${action}.`,
+  [Target.NUMBER]: (entity: string, action: string) =>
+    `enter the amount of ${entity} that you would like to ${action}.`,
+  [Target.TIME]: (action: string) =>
+    `enter the duration for how long you would like the ${action} to last, e.g: \`5\` would be 5 minutes or \`5h\` would be 5 hours.`,
+  [Target.OPTION]: (options: string[], action: string) =>
+    `would you like to ${options
+      .slice(0, -1)
+      .map(opt => `\`${opt}\``)
+      .join(', ')} or \`${
+      options[options.length - 1]
+    }\` the ${action}? (enter the according option)`
+};
+
+export const PROMPT_ENTER = (action: string) => `enter ${action}.`;
+export const PROMPT_INVALD = (action: string) => `you need to enter ${action}.`;
 
 export const SECONDS = (seconds: number) => seconds * 1000;
 export const MINUTES = (minutes: number) => minutes * 60000;
