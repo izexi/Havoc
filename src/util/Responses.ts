@@ -45,5 +45,5 @@ export const Responses: {
   },
 
   [Target.TIME]: () =>
-    'You need to a enter a valid time format. `5h30m5s` would be 5 hours, 30 minutes and 5 seconds for example'
+    'You need to enter a valid time format (e.g: `5` would be 5 minutes or `5h` would be 5 hours or `5h30m5s` would be 5 hours, 30 minutes and 5 seconds)'
 };
