@@ -14,7 +14,8 @@ export default class extends Command {
         required: true,
         type: Target.ROLE,
         prompt: PROMPT_INITIAL[Target.ROLE]('list members from')
-      }
+      },
+      requiredPerms: 'VIEW_AUDIT_LOG'
     });
   }
 

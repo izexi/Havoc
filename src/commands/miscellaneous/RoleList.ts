@@ -6,7 +6,8 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'View a list of roles on this server.',
-      aliases: ['rl', 'roles', 'roleslist']
+      aliases: ['rl', 'roles', 'roleslist'],
+      requiredPerms: 'MANAGE_ROLES'
     });
   }
 
