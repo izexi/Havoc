@@ -154,5 +154,9 @@ export default {
 
   randomArrEl<T>(arr: T[]) {
     return arr[this.randomInt(0, arr.length - 1)];
+  },
+
+  lastArrEl<T>(arr: T[]) {
+    return arr[arr.length - 1];
   }
 };
