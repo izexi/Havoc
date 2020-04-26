@@ -158,7 +158,7 @@ export default class HavocMessage extends Message {
       | (MessageEmbed | MessageAttachment)[]
   ) {
     if (this.edits.length > 1) {
-      const { response } = this.edits[this.edits.length - 1] ?? {};
+      const { response } = Util.lastArrEl(this.edits) ?? {};
       if (response) {
         if (
           typeof content === 'string' &&

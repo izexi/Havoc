@@ -1,6 +1,7 @@
 // TODO: Move random strings here
 
 import { Target, ExcludedOther } from './targetter';
+import Util from '.';
 
 export enum STATUS_ICONS {
   READY = 'https://www.dictionary.com/e/wp-content/uploads/2016/01/paris-green-color-paint-code-swatch-chart-rgb-html-hex.png',
@@ -61,9 +62,9 @@ export const PROMPT_INITIAL = {
     `would you like to ${options
       .slice(0, -1)
       .map(opt => `\`${opt}\``)
-      .join(', ')} or \`${
-      options[options.length - 1]
-    }\` the ${action}? (enter the according option)`
+      .join(', ')} or \`${Util.lastArrEl(
+      options
+    )}\` the ${action}? (enter the according option)`
 };
 
 export const PROMPT_ENTER = (action: string) => `enter ${action}.`;
