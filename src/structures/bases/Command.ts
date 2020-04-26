@@ -23,7 +23,6 @@ interface CommandOptions {
   promptOnly?: boolean;
   sub?: boolean;
   dm?: boolean;
-  subParent?: { prompt: string; subCommands: string[] };
   args?: Arg | Arg[];
   flags?: string[];
   requiredPerms?: BitFieldResolvable<PermissionString>;
@@ -55,8 +54,6 @@ export default abstract class implements CommandOptions {
 
   requiredPerms?: CommandOptions['requiredPerms'];
 
-  subParent?: CommandOptions['subParent'];
-
   promptOnly: boolean;
 
   args: Arg[];
@@ -77,7 +74,6 @@ export default abstract class implements CommandOptions {
     this.args = Util.arrayify(options.args);
     this.sub = options.sub ?? false;
     this.dm = options.dm ?? false;
-    this.subParent = options.subParent;
   }
 
   abstract async run(

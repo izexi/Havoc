@@ -362,33 +362,6 @@ export default class HavocMessage extends Message {
       );
     }
 
-    const { subParent } = command;
-    if (subParent) {
-      const type = (message: HavocMessage) => {
-        const possibleSubCmd = message.arg?.toLowerCase();
-        if (!possibleSubCmd) return;
-        if (subParent.subCommands.includes(possibleSubCmd)) {
-          message.command = message.client.commandHandler.find(
-            `${command.name}-${possibleSubCmd}`
-          )!;
-          message.runCommand();
-          return true;
-        }
-      };
-      const { subCommands } = subParent;
-
-      (await resolveTarget(params, type, this, this.text)) ||
-        (await this.createPrompt({
-          initialMsg: subParent.prompt,
-          invalidMsg: `'You will need to enter either ${subCommands
-            .slice(0, -1)
-            .map(cmd => `\`${cmd}\``)
-            .join(', ')} or ${subCommands[subCommands.length - 1]}`,
-          target: type
-        }));
-      return;
-    }
-
     if (command.args.length) {
       for (const { type, required, prompt, promptOpts } of command.args) {
         let found: { [target in Target]?: Targets[target] } | NotFound;
