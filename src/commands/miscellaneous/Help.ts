@@ -4,6 +4,11 @@ import Util from '../../util';
 import { EXAMPLE_ARG } from '../../util/CONSTANTS';
 import { Target, ExcludedOther, isOther } from '../../util/targetter';
 
+const generateExample = ({ example, type }: Arg) =>
+  example || Array.isArray(type)
+    ? (type as string[])
+    : EXAMPLE_ARG[type as ExcludedOther];
+
 export default class extends Command {
   constructor() {
     super(__filename, {
@@ -70,7 +75,7 @@ export default class extends Command {
         const formattedFlags = command.flags.length
           ? ` <${
               command.name === 'translate'
-                ? await Util.haste(prefixedFlags)
+                ? `${message.prefix}language`
                 : prefixedFlags
             }>`
           : '';
@@ -95,10 +100,6 @@ export default class extends Command {
           inline: false
         });
 
-        const generateExample = ({ example, type }: Arg) =>
-          example || Array.isArray(type)
-            ? (type as string[])
-            : EXAMPLE_ARG[type as ExcludedOther];
         const generateHandled = (args: Arg[], i: number) => {
           const handledArgs = args
             .slice(0, i)
@@ -144,6 +145,14 @@ export default class extends Command {
             .join('\n'),
           inline: false
         });
+      }
+
+      if (command.flags.length) {
+        Util.lastArrEl(embed.addFields).value += `\n• \`${message.prefix}${
+          command.name
+        } ${Util.randomArrEl(
+          generateExample(command.args.find(({ required }) => required)!)
+        )} ${message.prefix}${Util.randomArrEl(command.flags)}\``;
       }
 
       return message.respond(embed);
