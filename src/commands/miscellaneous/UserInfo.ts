@@ -24,8 +24,8 @@ export default class extends Command {
   }) {
     if (!user) user = message.author;
     const fields = [
-      { name: '❯Tag', value: user.tag, inline: true },
       { name: '❯ID', value: user.id, inline: true },
+      { name: '❯Tag', value: user.tag, inline: true },
       {
         name: '❯Status',
         value: Util.captialise(user.presence.status),

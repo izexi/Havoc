@@ -17,6 +17,7 @@ export default class extends Command {
     message.respond({
       setThumbnail: guild.iconURL(),
       addFields: [
+        { name: '❯ID', value: guild.id, inline: false },
         { name: '❯Name', value: guild.name, inline: true },
         {
           name: '❯Owner',
