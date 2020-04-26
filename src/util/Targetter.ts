@@ -31,6 +31,7 @@ export type TargetArr = string[];
 export type TargetType = Target | TargetFn | TargetArr;
 export type NotFound = null | undefined;
 export type NotOther = Exclude<TargetType, TargetFn | TargetArr>;
+export type ExcludedOther = Exclude<Target, 'fn' | 'option'>;
 type MaybePromise<T> = T | Promise<T>;
 
 export const isOther = (type: TargetType) =>
