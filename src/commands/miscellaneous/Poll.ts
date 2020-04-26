@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import Util from '../../util/Util';
-import { MAX_LIMITS } from '../../util/Constants';
+import { MAX_LIMITS, PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -13,14 +13,15 @@ export default class extends Command {
         {
           name: 'question',
           type: Target.TEXT,
-          prompt: 'enter the question that you would like to poll.'
+          prompt: PROMPT_ENTER('the question that you would like to poll')
         },
         {
           name: 'options (option1;option2;...)',
           example: ['yes;no'],
           type: message => message.text.split(';'),
-          prompt:
-            'enter the options seperated by `;`, e.g: `yes;no` would be options yes and no'
+          prompt: PROMPT_ENTER(
+            'the options seperated by `;`, e.g: `yes;no` would be options yes and no'
+          )
         }
       ]
     });

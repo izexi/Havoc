@@ -2,6 +2,8 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Util } from 'discord.js';
 import { find } from 'node-emoji';
+import { PROMPT_INITIAL, PROMPT_INVALD } from '../../util/Constants';
+import { Target } from '../../util/Targetter';
 
 export default class extends Command {
   constructor() {
@@ -32,8 +34,8 @@ export default class extends Command {
         },
         required: true,
         promptOpts: {
-          initial: 'enter the emoji that you would like to enlarge.',
-          invalid: 'you need to enter a custom or unicode emoji.'
+          initial: PROMPT_INITIAL[Target.EMOJI]('enlarge'),
+          invalid: PROMPT_INVALD('a custom or unicode emoji')
         }
       }
     });

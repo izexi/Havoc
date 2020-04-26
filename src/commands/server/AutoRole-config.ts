@@ -4,6 +4,7 @@ import { Target } from '../../util/Targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { Role } from 'discord.js';
 import Havoc from '../../client/Havoc';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -14,8 +15,7 @@ export default class extends Command {
       args: {
         type: Target.ROLE,
         required: true,
-        prompt:
-          'mention the role, or enter the ID of the role that would like to set as the autorol.'
+        prompt: PROMPT_INITIAL[Target.ROLE]('set the autorole to')
       },
       sub: true,
       requiredPerms: 'MANAGE_GUILD'

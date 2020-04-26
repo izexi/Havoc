@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -12,8 +13,9 @@ export default class extends Command {
       args: {
         type: Target.USER,
         required: true,
-        prompt:
-          "mention the user / enter the users's ID, tag, nickname or username whose avatar you would like to search."
+        prompt: PROMPT_INITIAL[Target.USER](
+          'se avatar you would like to search'
+        )
       }
     });
   }

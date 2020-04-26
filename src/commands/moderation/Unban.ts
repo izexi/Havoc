@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -13,8 +14,7 @@ export default class extends Command {
         {
           required: true,
           type: Target.USER,
-          prompt:
-            "mention the user / enter the user's ID, tag, nickname or username who you would like to unban."
+          prompt: PROMPT_INITIAL[Target.USER](' you would like to unban')
         },
         {
           type: Target.TEXT

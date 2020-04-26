@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util/Util';
 import { Target } from '../../util/Targetter';
 import { Role } from 'discord.js';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -12,8 +13,7 @@ export default class extends Command {
       args: {
         required: true,
         type: Target.ROLE,
-        prompt:
-          "mention the role / enter the role's name or ID that you would like to list members from."
+        prompt: PROMPT_INITIAL[Target.ROLE]('list members from')
       }
     });
   }

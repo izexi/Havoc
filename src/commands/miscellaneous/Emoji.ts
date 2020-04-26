@@ -6,6 +6,7 @@ import { Target } from '../../util/Targetter';
 import { GuildEmoji } from 'discord.js';
 import { Emoji } from 'node-emoji';
 import * as moment from 'moment';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -14,7 +15,7 @@ export default class extends Command {
       args: {
         type: Target.EMOJI,
         required: true,
-        prompt: 'enter the emoji that you would like info about.'
+        prompt: PROMPT_INITIAL[Target.EMOJI]('view info about')
       }
     });
   }

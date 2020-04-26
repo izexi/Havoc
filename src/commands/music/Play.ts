@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import * as ytdl from 'ytdl-core';
-import { MAX_LIMITS } from '../../util/Constants';
+import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -13,8 +13,8 @@ export default class extends Command {
         type: Target.TEXT,
         required: true,
         promptOpts: {
-          initial: 'enter the song you would like to play.',
-          invalid: "You need to enter the song's name or a URL."
+          initial: PROMPT_ENTER('the song you would like to play'),
+          invalid: PROMPT_INVALD("the song's name or a URL")
         }
       }
     });

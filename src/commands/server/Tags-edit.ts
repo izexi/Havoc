@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import { Target } from '../../util/Targetter';
+import { PROMPT_INVALD, PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -27,8 +28,9 @@ export default class extends Command {
           },
           required: true,
           promptOpts: {
-            initial:
-              'enter the name of the tag you would like to delete, e.g: `name` or `"a name"`',
+            initial: PROMPT_ENTER(
+              'the name of the tag you would like to delete, e.g: `name` or `"a name"`'
+            ),
             invalid: "I couldn't find a tag with that name"
           }
         },
@@ -37,9 +39,10 @@ export default class extends Command {
           type: Target.TEXT,
           required: true,
           promptOpts: {
-            initial:
-              'enter what you would like the new content of the tag to be',
-            invalid: 'you need to enter the new content of the tag'
+            initial: PROMPT_ENTER(
+              'what you would like the new content of the tag to be'
+            ),
+            invalid: PROMPT_INVALD('the new content of the tag')
           }
         }
       ],

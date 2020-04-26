@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { Target } from '../../util/Targetter';
+import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -16,9 +17,11 @@ export default class extends Command {
         example: ['view', 'add ~', 'remove ~'],
         type: ['view', 'add', 'remove'],
         promptOpts: {
-          initial:
-            'what would you like to configure from prefixes that will be botcleared?\nEnter `view` / `add` / `remove`.',
-          invalid: 'You will need to enter either `view` or `add` or `remove`.'
+          initial: PROMPT_INITIAL[Target.OPTION](
+            ['view', 'add', 'remove'],
+            'prefixes that will be botcleared'
+          ),
+          invalid: PROMPT_INVALD('either `view` or `add` or `remove`.')
         }
       },
       requiredPerms: 'MANAGE_MESSAGES'

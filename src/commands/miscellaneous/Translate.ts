@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import * as languages from '../../assets/languages.json';
 import Util from '../../util/Util';
+import { PROMPT_ENTER } from '../../util/Constants';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const translate = require('@vitalets/google-translate-api');
 
@@ -16,7 +17,9 @@ export default class extends Command {
         type: Target.TEXT,
         required: true,
         prompt: message =>
-          `'enter the text that you would like to translate with an optional language that you would like to translate to as a flag (e.g:  \`${message.prefix}t ${message.prefix}spanish hello\`).`
+          PROMPT_ENTER(
+            `the text that you would like to translate with an optional language that you would like to translate to as a flag (e.g:  \`${message.prefix}t ${message.prefix}spanish hello\`).`
+          )
       },
       aliases: ['t'],
       flags: Object.entries(languages).flatMap(([language, { aliases }]) => [

@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { URL } from 'url';
 import fetch from 'node-fetch';
 import Util from '../../util/Util';
-import { MAX_LIMITS } from '../../util/Constants';
+import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -26,8 +26,8 @@ export default class extends Command {
         },
         required: true,
         promptOpts: {
-          initial: 'enter the URL.',
-          invalid: 'You need to enter a valid absolute URL.'
+          initial: PROMPT_ENTER('the URL'),
+          invalid: PROMPT_INVALD('a valid absolute URL')
         }
       }
     });

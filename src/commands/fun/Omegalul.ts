@@ -1,6 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -11,8 +12,7 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt:
-          'enter the text that you would like to <:OMEGALUL:695303479790665758>.'
+        prompt: PROMPT_INITIAL[Target.TEXT]('<:OMEGALUL:695303479790665758>')
       }
     });
   }

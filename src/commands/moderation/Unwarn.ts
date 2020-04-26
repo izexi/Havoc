@@ -4,6 +4,11 @@ import { Target } from '../../util/Targetter';
 import Havoc from '../../client/Havoc';
 import Util from '../../util/Util';
 import HavocUser from '../../structures/extensions/HavocUser';
+import {
+  PROMPT_INITIAL,
+  PROMPT_INVALD,
+  PROMPT_ENTER
+} from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -15,15 +20,19 @@ export default class extends Command {
         {
           required: true,
           type: Target.USER,
-          prompt:
-            "mention the user / enter the user's ID, or tag who you would like to clear warnings from."
+          prompt: PROMPT_INITIAL[Target.USER](
+            ' you would like to clear warnings from'
+          )
         },
         {
           type: Target.NUMBER,
           promptOpts: {
-            initial: 'enter which of the warnings you would like to clear.',
-            invalid:
-              'you need to enter the number of the warn that you would like to clear (e.g: enter `2` to clear the second warning)'
+            initial: PROMPT_ENTER(
+              'which of the warnings you would like to clear'
+            ),
+            invalid: PROMPT_INVALD(
+              'the number of the warn that you would like to clear (e.g: enter `2` to clear the second warning)'
+            )
           }
         }
       ],

@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Util from '../../util/Util';
+import { PROMPT_INITIAL, PROMPT_INVALD } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -16,10 +17,10 @@ export default class extends Command {
           type: Target.NUMBER,
           required: true,
           promptOpts: {
-            initial:
-              'enter the amount of messages that you would like to clear.',
-            invalid:
-              'You need to enter the number of messages you would like to clear, e.g: entering `5` would clear 5 messages.'
+            initial: PROMPT_INITIAL[Target.NUMBER]('messages', 'clear'),
+            invalid: PROMPT_INVALD(
+              'the number of messages you would like to clear, e.g: entering `5` would clear 5 messages'
+            )
           }
         },
         {

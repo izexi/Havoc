@@ -1,5 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
+import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/Constants';
+import { Target } from '../../util/Targetter';
 
 export default class extends Command {
   constructor() {
@@ -9,10 +11,13 @@ export default class extends Command {
         required: true,
         type: ['add', 'delete', 'edit', 'info', 'list'],
         promptOpts: {
-          initial:
-            'would you like to `add`, `delete`, `edit`, `info` or `list` tags to/from this server? (enter the according option)',
-          invalid:
-            'You will need to enter either `add`, `delete`, `edit`, `info` or `list`'
+          initial: PROMPT_INITIAL[Target.OPTION](
+            ['add', 'delete', 'edit', 'info', 'list'],
+            'tags to / from this server'
+          ),
+          invalid: PROMPT_INVALD(
+            'either `add`, `delete`, `edit`, `info` or `list`'
+          )
         }
       },
       requiredPerms: 'MANAGE_GUILD'

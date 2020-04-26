@@ -5,6 +5,11 @@ import { Target } from '../../util/Targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { getPunishments } from '../moderation/Warn';
 import WarnPunishmentEntity from '../../structures/entities/WarnPunishmentEntity';
+import {
+  PROMPT_INITIAL,
+  PROMPT_INVALD,
+  PROMPT_ENTER
+} from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -16,9 +21,11 @@ export default class extends Command {
           name: 'warning amount',
           type: Target.NUMBER,
           promptOpts: {
-            initial:
-              'enter the amount of warnings that must be reached for this punishment',
-            invalid: 'you need to enter the number of warnings, e.g: `3`'
+            initial: PROMPT_INITIAL[Target.NUMBER](
+              'warnings',
+              'set as the amount of warnings that must be reached for this punishment'
+            ),
+            invalid: PROMPT_INVALD('the number of warnings, e.g: `3`')
           }
         },
         {
@@ -32,21 +39,16 @@ export default class extends Command {
               return message.shiftArg(possiblePunishment);
           },
           promptOpts: {
-            initial:
-              'enter the punishment, which can be either `none`, `mute`, `kick` or `ban` (enter the according option)',
-            invalid:
-              'You will need to enter either `none`, `mute`, `kick` or `ban`'
+            initial: PROMPT_ENTER(
+              'the punishment, which can be either `none`, `mute`, `kick` or `ban` (enter the according option)'
+            ),
+            invalid: PROMPT_INVALD('either `none`, `mute`, `kick` or `ban`')
           }
         },
         {
           name: 'mute duration',
           type: Target.TIME,
-          promptOpts: {
-            initial:
-              'enter the duration for how long you would like the mute to be, e.g: `5` would be 5 minutes or `5h` would be 5 hours.',
-            invalid:
-              'You will need to a valid time format, e.g: `5` would be 5 minutes or `5h` would be 5 hours'
-          }
+          prompt: PROMPT_INITIAL[Target.TIME]('mute')
         }
       ],
       requiredPerms: 'MANAGE_GUILD'
@@ -69,11 +71,8 @@ export default class extends Command {
   ) {
     if (punishment.startsWith('mute') && !duration) {
       const target = await message.createPrompt({
-        initialMsg:
-          'enter the duration for how long you would like the mute to be, e.g: `5` would be 5 minutes or `5h` would be 5 hours.',
-        invalidMsg:
-          'You will need to a valid time format, e.g: `5` would be 5 minutes or `5h` would be 5 hours',
-        target: Target.TIME
+        target: Target.TIME,
+        initialMsg: PROMPT_INITIAL[Target.TIME]('mute')
       });
       if (!target.time) return;
       duration = target.time;

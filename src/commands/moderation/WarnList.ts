@@ -4,6 +4,7 @@ import { Target } from '../../util/Targetter';
 import Havoc from '../../client/Havoc';
 import Util from '../../util/Util';
 import HavocUser from '../../structures/extensions/HavocUser';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -13,8 +14,9 @@ export default class extends Command {
       args: {
         required: true,
         type: Target.USER,
-        prompt:
-          "mention the user / enter the user's ID, or tag of whose warnings you would like to view."
+        prompt: PROMPT_INITIAL[Target.USER](
+          'se warnings you would like to view'
+        )
       },
       requiredPerms: 'MANAGE_GUILD'
     });

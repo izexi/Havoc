@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import { GuildMember } from 'discord.js';
 import HavocRole from '../../structures/extensions/HavocRole';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -14,14 +15,14 @@ export default class extends Command {
         {
           required: true,
           type: Target.MEMBER,
-          prompt:
-            "mention the member / enter the member's ID, tag, nickname or username who you would like to add a role to."
+          prompt: PROMPT_INITIAL[Target.MEMBER](
+            ' you would like to add a role to'
+          )
         },
         {
           required: true,
           type: Target.ROLE,
-          prompt:
-            "mention the role / enter the role's ID or name that you would like to add to the member."
+          prompt: PROMPT_INITIAL[Target.ROLE]('add to the member')
         },
         {
           type: Target.TEXT

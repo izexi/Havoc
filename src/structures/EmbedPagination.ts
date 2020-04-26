@@ -1,6 +1,7 @@
 import HavocMessage from './extensions/HavocMessage';
 import { Target } from '../util/Targetter';
 import Util from '../util/Util';
+import { PROMPT_INVALD, PROMPT_ENTER } from '../util/Constants';
 
 export interface EmbedPaginationOptions {
   message: HavocMessage;
@@ -111,8 +112,10 @@ export default class {
         case '⬇':
           await this.message
             .createPrompt({
-              initialMsg: 'enter the page you like to jump to.',
-              invalidMsg: `You need to enter a number between 1 to ${this.totalPages}, e.g: entering \`2\` will jump to page 2.`,
+              initialMsg: PROMPT_ENTER('the page you like to jump to'),
+              invalidMsg: PROMPT_INVALD(
+                `a number between 1 to ${this.totalPages}, e.g: entering \`2\` will jump to page 2`
+              ),
               target: (message: HavocMessage) => {
                 const number = Number(message.content);
                 if (number && number <= this.totalPages) return number;

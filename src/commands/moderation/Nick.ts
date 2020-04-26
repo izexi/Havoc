@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import Havoc from '../../client/Havoc';
 import { GuildMember } from 'discord.js';
+import { PROMPT_INITIAL, PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -13,13 +14,14 @@ export default class extends Command {
         {
           type: Target.MEMBER,
           required: true,
-          prompt:
-            "mention the user / enter the users's ID, tag, nickname or username who's nickname you would like to change."
+          prompt: PROMPT_INITIAL[Target.USER](
+            'se nickname you would like to change.'
+          )
         },
         {
           type: Target.TEXT,
           required: true,
-          prompt: 'enter the nickname.'
+          prompt: PROMPT_ENTER('the nickname')
         }
       ],
       requiredPerms: 'MANAGE_NICKNAMES'

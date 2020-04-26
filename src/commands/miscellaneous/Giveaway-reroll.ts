@@ -3,6 +3,11 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import { Target } from '../../util/Targetter';
 import { MessageEmbed } from 'discord.js';
+import {
+  PROMPT_INITIAL,
+  PROMPT_INVALD,
+  PROMPT_ENTER
+} from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -22,8 +27,9 @@ export default class extends Command {
           },
           required: true,
           promptOpts: {
-            initial:
-              "enter the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed",
+            initial: PROMPT_ENTER(
+              "the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed"
+            ),
             invalid:
               'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png'
           }
@@ -33,10 +39,10 @@ export default class extends Command {
           type: Target.NUMBER,
           required: true,
           promptOpts: {
-            initial:
-              'enter the amount of winners that you would like to reroll.',
-            invalid:
-              'You need to a enter a valid number. `5` would reroll 5 new winners on the giveaway for example'
+            initial: PROMPT_INITIAL[Target.NUMBER]('winners', 'reroll'),
+            invalid: PROMPT_INVALD(
+              'a valid number. `5` would reroll 5 new winners on the giveaway for example'
+            )
           }
         }
       ],

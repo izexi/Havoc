@@ -1,6 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
+import { PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -10,7 +11,9 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: 'enter the name that you would like to name the new role'
+        prompt: PROMPT_ENTER(
+          'the name that you would like to name the new role'
+        )
       },
       requiredPerms: 'MANAGE_ROLES'
     });

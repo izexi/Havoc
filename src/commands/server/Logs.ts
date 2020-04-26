@@ -1,5 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
+import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/Constants';
+import { Target } from '../../util/Targetter';
 
 export default class extends Command {
   constructor() {
@@ -9,10 +11,11 @@ export default class extends Command {
         required: true,
         type: ['enable', 'config', 'disable'],
         promptOpts: {
-          initial:
-            'would you like to `enable`, `config` or `disable` the logs for this server? (enter the according option)',
-          invalid:
-            'You will need to enter either `enable`, `config` or `disable`'
+          initial: PROMPT_INITIAL[Target.OPTION](
+            ['enable', 'config', 'disable'],
+            'logs for this server'
+          ),
+          invalid: PROMPT_INVALD('either `enable`, `config` or `disable`')
         }
       },
       requiredPerms: 'MANAGE_GUILD'

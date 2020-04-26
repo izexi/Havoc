@@ -4,6 +4,7 @@ import { Target } from '../../util/Targetter';
 import { GuildMember } from 'discord.js';
 import Havoc from '../../client/Havoc';
 import { getMuteRole } from './Mute';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -15,8 +16,7 @@ export default class extends Command {
         {
           required: true,
           type: Target.MEMBER,
-          prompt:
-            "mention the member / enter the member's ID, tag, nickname or username who you would like to unmute."
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to unmute')
         },
         {
           type: Target.TEXT

@@ -5,7 +5,7 @@ import { URL } from 'url';
 import fetch from 'node-fetch';
 import { Target } from '../../util/Targetter';
 import Util from '../../util/Util';
-import { MAX_LIMITS, MIN_LIMITS } from '../../util/Constants';
+import { MAX_LIMITS, MIN_LIMITS, PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -42,7 +42,9 @@ export default class extends Command {
             }
           },
           required: true,
-          prompt: 'enter the text that you would like to embed.'
+          prompt: PROMPT_ENTER(
+            'the emoji or url that you would like to upload as an emoji.'
+          )
         },
         {
           name: 'name',

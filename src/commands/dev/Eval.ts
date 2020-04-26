@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import { inspect } from 'util';
 import Util from '../../util/Util';
+import { PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -12,7 +13,7 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: 'enter the code that you would like to evaluate.'
+        prompt: PROMPT_ENTER('the code that you would like to evaluate')
       },
       flags: ['silent', 'detailed']
     });

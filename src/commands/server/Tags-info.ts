@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import Util from '../../util/Util';
 import TagEntity from '../../structures/entities/TagEntity';
+import { PROMPT_ENTER } from '../../util/Constants';
 
 export async function tagFields(tag: TagEntity, client: Havoc) {
   const fields = [
@@ -44,8 +45,9 @@ export default class extends Command {
         },
         required: true,
         promptOpts: {
-          initial:
-            'enter the name of the tag you would like to view info about, e.g: `name` or `a name`',
+          initial: PROMPT_ENTER(
+            'the name of the tag you would like to view info about, e.g: `name` or `a name`'
+          ),
           invalid: "I couldn't find a tag with that name"
         }
       },

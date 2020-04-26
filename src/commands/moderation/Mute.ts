@@ -5,6 +5,7 @@ import Havoc from '../../client/Havoc';
 import { GuildMember, Guild } from 'discord.js';
 import HavocGuild from '../../structures/extensions/HavocGuild';
 import ms = require('ms');
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export async function getMuteRole(guild?: HavocGuild | Guild) {
   if (!guild) return;
@@ -45,18 +46,12 @@ export default class extends Command {
       args: [
         {
           type: Target.TIME,
-          promptOpts: {
-            initial:
-              'enter the duration how long the memebr should be muted for, suffix the time with `w`/`d`/`h`/`m`/`s`, e.g: `3m5s` would be 3 minutes and 5 seconds.',
-            invalid:
-              'You need to a enter a valid time format. `5h30m5s` would be 5 hours, 30 minutes and 5 seconds for example'
-          }
+          prompt: PROMPT_INITIAL[Target.TIME]('mute')
         },
         {
           type: Target.MEMBER,
           required: true,
-          prompt:
-            "mention the member / enter the member's ID, tag, nickname or username who you would like to mute."
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to mute')
         },
         {
           type: Target.TEXT

@@ -8,6 +8,7 @@ import WarnEntity from '../../structures/entities/WarnEntity';
 import Util from '../../util/Util';
 import { getMuteRole } from './Mute';
 import ms = require('ms');
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export function getPunishments(client: Havoc, message: HavocMessage) {
   return client.db.guildRepo
@@ -41,8 +42,7 @@ export default class extends Command {
         {
           required: true,
           type: Target.MEMBER,
-          prompt:
-            "mention the member / enter the member's ID, tag, nickname or username who you would like to warn."
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to warn')
         },
         {
           type: Target.TEXT

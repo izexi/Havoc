@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/Targetter';
 import Util from '../../util/Util';
 import HavocRole from '../../structures/extensions/HavocRole';
-import { MAX_LIMITS } from '../../util/Constants';
+import { MAX_LIMITS, PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -16,8 +16,7 @@ export default class extends Command {
         {
           required: true,
           type: Target.ROLE,
-          prompt:
-            "mention the role / enter the role's ID or name that you would like to delete."
+          prompt: PROMPT_INITIAL[Target.ROLE]('delete')
         },
         {
           type: Target.TEXT

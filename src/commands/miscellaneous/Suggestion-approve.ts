@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util/Util';
 import Regex from '../../util/Regex';
 import { Target } from '../../util/Targetter';
+import { PROMPT_ENTER } from '../../util/Constants';
 
 export async function review(
   suggestionMsg: HavocMessage,
@@ -75,8 +76,9 @@ export default class extends Command {
           type: getSuggestionMsg,
           required: true,
           promptOpts: {
-            initial:
-              "enter the ID of the suggestion which you can find on the footer of the suggestion's embed, followed by the reason of approval (optional)",
+            initial: PROMPT_ENTER(
+              "the ID of the suggestion which you can find on the footer of the suggestion's embed, followed by the reason of approval (optional)"
+            ),
             invalid:
               "I couldn't find any suggestions that corresponds the ID that you entered https://i.imgur.com/IK7JkVw.png"
           }

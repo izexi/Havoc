@@ -4,6 +4,7 @@ import { Target } from '../../util/Targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import TagEntity from '../../structures/entities/TagEntity';
+import { PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -26,14 +27,17 @@ export default class extends Command {
               .slice(1, -1);
           },
           required: true,
-          prompt:
-            'enter what you would like to name the tag, e.g: `name` or `"a name"`'
+          prompt: PROMPT_ENTER(
+            'what you would like to name the tag, e.g: `name` or `"a name"`'
+          )
         },
         {
           name: 'content',
           type: Target.TEXT,
           required: true,
-          prompt: 'enter what you would like the content of the tag to be'
+          prompt: PROMPT_ENTER(
+            'what you would like the content of the tag to be'
+          )
         }
       ],
       sub: true,

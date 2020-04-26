@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import GiveawayEntity from '../../structures/entities/GiveawayEntity';
 import Havoc from '../../client/Havoc';
+import { PROMPT_ENTER } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -25,8 +26,9 @@ export default class extends Command {
         },
         required: true,
         promptOpts: {
-          initial:
-            "enter the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed",
+          initial: PROMPT_ENTER(
+            "the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed"
+          ),
           invalid:
             'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png'
         }

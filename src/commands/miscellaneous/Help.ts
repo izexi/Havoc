@@ -2,7 +2,7 @@ import Command, { Arg } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util/Util';
 import { EXAMPLE_ARG } from '../../util/Constants';
-import { Target } from '../../util/Targetter';
+import { Target, ExcludedOther, isOther } from '../../util/Targetter';
 
 export default class extends Command {
   constructor() {
@@ -22,7 +22,7 @@ export default class extends Command {
           if (!command) return;
 
           const [, possibleSubCommand] = message.args;
-          return command.subParent && possibleSubCommand
+          return command.args[0].type === Target.OPTION && possibleSubCommand
             ? message.client.commandHandler.find(
                 `${command.name}-${possibleSubCommand}`
               ) || command
@@ -63,18 +63,6 @@ export default class extends Command {
         });
       }
 
-      if (command.subParent) {
-        embed.addFields.push({
-          name: '❯Usage',
-          value: `\`${
-            message.prefix
-          }${name} <sub command (${command.subParent.subCommands.join(
-            ' | '
-          )})>\``,
-          inline: false
-        });
-      }
-
       if (command.args.length && !command.promptOnly) {
         const prefixedFlags = command.flags
           .map(flag => `${message.prefix}${flag}`)
@@ -93,13 +81,15 @@ export default class extends Command {
             .map(arg => {
               const [s, e] = arg.required ? '<>' : '[]';
               const formattedArg =
-                typeof arg.type !== 'function' &&
-                arg.name &&
-                !arg.name.includes('(')
+                !isOther(arg.type) && arg.name && !arg.name.includes('(')
                   ? ` (${arg.type})`
                   : '';
 
-              return `${s}${arg.name || arg.type}${formattedArg}${e}`;
+              return `${s}${
+                arg.name || Array.isArray(arg.type)
+                  ? (arg.type as string[]).join(' | ')
+                  : arg.type
+              }${formattedArg}${e}`;
             })
             .join(' ')}${formattedFlags}\``,
           inline: false
@@ -108,7 +98,7 @@ export default class extends Command {
         const generateExample = ({ example, type }: Arg) =>
           example || Array.isArray(type)
             ? (type as string[])
-            : EXAMPLE_ARG[type as Exclude<Target, 'fn' | 'option'>];
+            : EXAMPLE_ARG[type as ExcludedOther];
         const generateHandled = (args: Arg[], i: number) => {
           const handledArgs = args
             .slice(0, i)
@@ -151,16 +141,6 @@ export default class extends Command {
               eg =>
                 `• \`${message.prefix}${command.name}${eg ? ` ${eg}` : ''}\``
             )
-            .join('\n'),
-          inline: false
-        });
-      }
-
-      if (command.subParent) {
-        embed.addFields.push({
-          name: '❯Examples',
-          value: command.subParent.subCommands
-            .map(subCmd => `• \`${message.prefix}${command.name} ${subCmd}\``)
             .join('\n'),
           inline: false
         });

@@ -4,6 +4,7 @@ import { Target } from '../../util/Targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
+import { PROMPT_INITIAL } from '../../util/Constants';
 
 export default class extends Command {
   constructor() {
@@ -13,8 +14,7 @@ export default class extends Command {
       args: {
         type: Target.CHANNEL,
         required: true,
-        prompt:
-          'mention the channel, or enter the ID of the channel that would like to set the mod logs to.'
+        prompt: PROMPT_INITIAL[Target.CHANNEL]('to set the mod logs to')
       },
       sub: true,
       requiredPerms: 'MANAGE_GUILD'
