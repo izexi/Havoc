@@ -2,11 +2,11 @@ import Command from '../../structures/bases/Command';
 import HavocMessage, {
   EmbedMethods
 } from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import { GuildEmoji } from 'discord.js';
 import { Emoji } from 'node-emoji';
 import * as moment from 'moment';
-import { PROMPT_INITIAL } from '../../util/Constants';
+import { PROMPT_INITIAL } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

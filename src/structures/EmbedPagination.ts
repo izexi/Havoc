@@ -1,7 +1,7 @@
 import HavocMessage from './extensions/HavocMessage';
-import { Target } from '../util/Targetter';
-import Util from '../util/Util';
-import { PROMPT_INVALD, PROMPT_ENTER } from '../util/Constants';
+import { Target } from '../util/targetter';
+import Util from '../util';
+import { PROMPT_INVALD, PROMPT_ENTER } from '../util/CONSTANTS';
 
 export interface EmbedPaginationOptions {
   message: HavocMessage;

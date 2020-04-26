@@ -5,7 +5,7 @@ import {
   DiscordAPIError
 } from 'discord.js';
 import { EmbedMethods } from './HavocMessage';
-import Util from '../../util/Util';
+import Util from '../../util';
 import HavocTextChannel from './HavocTextChannel';
 import GuildEntity from '../entities/GuildEntity';
 import Havoc from '../../client/Havoc';

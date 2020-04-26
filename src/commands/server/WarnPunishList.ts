@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import Havoc from '../../client/Havoc';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { getPunishments } from '../moderation/Warn';
-import Util from '../../util/Util';
+import Util from '../../util';
 import ms = require('ms');
 
 export default class extends Command {

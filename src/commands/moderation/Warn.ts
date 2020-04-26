@@ -1,14 +1,14 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import Havoc from '../../client/Havoc';
 import { GuildMember } from 'discord.js';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import WarnEntity from '../../structures/entities/WarnEntity';
-import Util from '../../util/Util';
+import Util from '../../util';
 import { getMuteRole } from './Mute';
 import ms = require('ms');
-import { PROMPT_INITIAL } from '../../util/Constants';
+import { PROMPT_INITIAL } from '../../util/CONSTANTS';
 
 export function getPunishments(client: Havoc, message: HavocMessage) {
   return client.db.guildRepo

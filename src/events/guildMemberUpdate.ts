@@ -1,6 +1,6 @@
 import HavocGuild from '../structures/extensions/HavocGuild';
 import HavocGuildMember from '../structures/extensions/HavocGuildMember';
-import Util from '../util/Util';
+import Util from '../util';
 
 export default async function(
   outdated: HavocGuildMember,

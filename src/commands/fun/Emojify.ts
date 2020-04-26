@@ -2,8 +2,8 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Util } from 'discord.js';
 import { find } from 'node-emoji';
-import { PROMPT_INITIAL, PROMPT_INVALD } from '../../util/Constants';
-import { Target } from '../../util/Targetter';
+import { PROMPT_INITIAL, PROMPT_INVALD } from '../../util/CONSTANTS';
+import { Target } from '../../util/targetter';
 
 export default class extends Command {
   constructor() {

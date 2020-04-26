@@ -1,7 +1,7 @@
 import HavocGuild from '../structures/extensions/HavocGuild';
 import HavocGuildMember from '../structures/extensions/HavocGuildMember';
 import { MessageEmbed } from 'discord.js';
-import Util from '../util/Util';
+import Util from '../util';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 
 export default async function(member: HavocGuildMember) {

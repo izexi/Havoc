@@ -1,13 +1,13 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import { MessageEmbed } from 'discord.js';
 import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   PROMPT_ENTER
-} from '../../util/Constants';
+} from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

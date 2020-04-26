@@ -1,14 +1,14 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
-import Util from '../../util/Util';
+import { Target } from '../../util/targetter';
+import Util from '../../util';
 import ms = require('ms');
 import Havoc from '../../client/Havoc';
 import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   PROMPT_ENTER
-} from '../../util/Constants';
+} from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

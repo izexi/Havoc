@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import Util from '../../util/Util';
+import Util from '../../util';
 import TagEntity from '../../structures/entities/TagEntity';
-import { PROMPT_ENTER } from '../../util/Constants';
+import { PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export async function tagFields(tag: TagEntity, client: Havoc) {
   const fields = [

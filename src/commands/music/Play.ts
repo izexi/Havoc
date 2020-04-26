@@ -1,8 +1,8 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import * as ytdl from 'ytdl-core';
-import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/Constants';
+import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

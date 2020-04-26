@@ -7,10 +7,10 @@ import {
   GuildChannel
 } from 'discord.js';
 import HavocMessage from '../structures/extensions/HavocMessage';
-import Regex from './Regex';
+import Regex from './regex';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { Emoji, find } from 'node-emoji';
-import Time from './Time';
+import Time from './time';
 
 export enum Target {
   USER = 'user',

@@ -4,7 +4,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import * as prettyMs from 'pretty-ms';
 import os = require('os');
 import { TextChannel, DMChannel, version } from 'discord.js';
-import { SECONDS, MEGABYTES, PERCENTAGE } from '../../util/Constants';
+import { SECONDS, MEGABYTES, PERCENTAGE } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

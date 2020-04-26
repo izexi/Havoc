@@ -1,4 +1,4 @@
-import Regex from '../../util/Regex';
+import Regex from '../../util/regex';
 import {
   Message,
   MessageEmbed,
@@ -15,7 +15,7 @@ import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
 import Command from '../bases/Command';
 import HavocUser from './HavocUser';
-import Util, { MaybeArray } from '../../util/Util';
+import Util, { MaybeArray } from '../../util';
 import {
   TargetType,
   Targets,
@@ -25,10 +25,10 @@ import {
   isOther,
   NotOther,
   resolveTargetKey
-} from '../../util/Targetter';
+} from '../../util/targetter';
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
-import { Responses } from '../../util/Responses';
+import { Responses } from '../../util/responses';
 import GuildEntity from '../entities/GuildEntity';
 import HavocTextChannel from './HavocTextChannel';
 import { stripIndents } from 'common-tags';

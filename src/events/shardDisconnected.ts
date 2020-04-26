@@ -1,6 +1,6 @@
 import Havoc from '../client/Havoc';
 import { CloseEvent, WebhookClient, MessageEmbed } from 'discord.js';
-import { STATUS_ICONS } from '../util/Constants';
+import { STATUS_ICONS } from '../util/CONSTANTS';
 
 export default function(this: Havoc, event: CloseEvent, id: number) {
   const info = `Shard ${id} disconnected (${event.reason})`;

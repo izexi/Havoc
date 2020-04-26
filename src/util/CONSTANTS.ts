@@ -1,6 +1,6 @@
 // TODO: Move random strings here
 
-import { Target, ExcludedOther } from './Targetter';
+import { Target, ExcludedOther } from './targetter';
 
 export enum STATUS_ICONS {
   READY = 'https://www.dictionary.com/e/wp-content/uploads/2016/01/paris-green-color-paint-code-swatch-chart-rgb-html-hex.png',

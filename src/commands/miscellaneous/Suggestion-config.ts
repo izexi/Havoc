@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
-import { PROMPT_INITIAL } from '../../util/Constants';
+import { PROMPT_INITIAL } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

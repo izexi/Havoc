@@ -1,7 +1,7 @@
 import Havoc from '../../client/Havoc';
-import { Target, Targets, TargetType, TargetFn } from '../../util/Targetter';
+import { Target, Targets, TargetType, TargetFn } from '../../util/targetter';
 import HavocMessage from '../extensions/HavocMessage';
-import Util from '../../util/Util';
+import Util from '../../util';
 import { parse, sep } from 'path';
 import { BitFieldResolvable, PermissionString, Message } from 'discord.js';
 

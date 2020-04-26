@@ -1,7 +1,7 @@
 import Command from '../../structures/bases/Command';
 import Havoc from '../../client/Havoc';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { getPunishments } from '../moderation/Warn';
 import WarnPunishmentEntity from '../../structures/entities/WarnPunishmentEntity';
@@ -9,7 +9,7 @@ import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   PROMPT_ENTER
-} from '../../util/Constants';
+} from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

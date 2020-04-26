@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import * as languages from '../../assets/languages.json';
-import Util from '../../util/Util';
-import { PROMPT_ENTER } from '../../util/Constants';
+import Util from '../../util';
+import { PROMPT_ENTER } from '../../util/CONSTANTS';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const translate = require('@vitalets/google-translate-api');
 

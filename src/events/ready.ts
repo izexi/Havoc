@@ -1,6 +1,6 @@
 import Havoc from '../client/Havoc';
 import { MessageEmbed, WebhookClient } from 'discord.js';
-import { STATUS_ICONS } from '../util/Constants';
+import { STATUS_ICONS } from '../util/CONSTANTS';
 
 export default function(this: Havoc) {
   this.logger.info(

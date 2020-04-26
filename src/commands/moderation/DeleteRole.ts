@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
-import Util from '../../util/Util';
+import { Target } from '../../util/targetter';
+import Util from '../../util';
 import HavocRole from '../../structures/extensions/HavocRole';
-import { MAX_LIMITS, PROMPT_INITIAL } from '../../util/Constants';
+import { MAX_LIMITS, PROMPT_INITIAL } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

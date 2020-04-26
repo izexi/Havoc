@@ -1,7 +1,7 @@
 import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import Util from '../../util/Util';
+import Util from '../../util';
 
 export default class extends Command {
   constructor() {

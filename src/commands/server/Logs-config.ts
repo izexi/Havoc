@@ -2,9 +2,9 @@ import Command from '../../structures/bases/Command';
 import Havoc from '../../client/Havoc';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { stripIndents } from 'common-tags';
-import Util from '../../util/Util';
+import Util from '../../util';
 import GuildEntity from '../../structures/entities/GuildEntity';
-import { MIN_LIMITS } from '../../util/Constants';
+import { MIN_LIMITS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

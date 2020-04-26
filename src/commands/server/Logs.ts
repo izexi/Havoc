@@ -1,7 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/Constants';
-import { Target } from '../../util/Targetter';
+import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { Target } from '../../util/targetter';
 
 export default class extends Command {
   constructor() {

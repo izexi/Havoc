@@ -1,7 +1,7 @@
 import Command from '../structures/bases/Command';
-import Util from '../util/Util';
+import Util from '../util';
 import HavocMessage from '../structures/extensions/HavocMessage';
-import Regex from '../util/Regex';
+import Regex from '../util/regex';
 import Handler from '../structures/bases/Handler';
 
 export default class extends Handler<Command> {

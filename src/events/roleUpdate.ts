@@ -1,6 +1,6 @@
 import HavocGuild from '../structures/extensions/HavocGuild';
 import HavocRole from '../structures/extensions/HavocRole';
-import Util from '../util/Util';
+import Util from '../util';
 
 export default async function(outdated: HavocRole, updated: HavocRole) {
   const guild = updated.guild as HavocGuild;

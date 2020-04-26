@@ -1,7 +1,7 @@
 import Havoc from '../client/Havoc';
 import { WebhookClient, MessageEmbed } from 'discord.js';
-import { STATUS_ICONS } from '../util/Constants';
-import Util from '../util/Util';
+import { STATUS_ICONS } from '../util/CONSTANTS';
+import Util from '../util';
 
 export default function(this: Havoc, error: Error, shardID: number) {
   const message = `Shard ${shardID} encountered an error`;

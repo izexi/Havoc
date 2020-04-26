@@ -2,8 +2,8 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { URL } from 'url';
 import fetch from 'node-fetch';
-import Util from '../../util/Util';
-import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/Constants';
+import Util from '../../util';
+import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

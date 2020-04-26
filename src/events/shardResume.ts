@@ -1,6 +1,6 @@
 import Havoc from '../client/Havoc';
 import { WebhookClient, MessageEmbed } from 'discord.js';
-import { STATUS_ICONS } from '../util/Constants';
+import { STATUS_ICONS } from '../util/CONSTANTS';
 
 export default function(this: Havoc, shardID: number, replayedEvents: number) {
   const message = `${shardID} is resuming (replaying ${replayedEvents} events)`;

@@ -1,4 +1,4 @@
-import { Target } from './Targetter';
+import { Target } from './targetter';
 import { TextChannel } from 'discord.js';
 import HavocMessage from '../structures/extensions/HavocMessage';
 

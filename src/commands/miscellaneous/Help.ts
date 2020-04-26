@@ -1,8 +1,8 @@
 import Command, { Arg } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import Util from '../../util/Util';
-import { EXAMPLE_ARG } from '../../util/Constants';
-import { Target, ExcludedOther, isOther } from '../../util/Targetter';
+import Util from '../../util';
+import { EXAMPLE_ARG } from '../../util/CONSTANTS';
+import { Target, ExcludedOther, isOther } from '../../util/targetter';
 
 export default class extends Command {
   constructor() {

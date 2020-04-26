@@ -1,14 +1,14 @@
 import { Client } from 'discord.js';
 import Database from '../structures/Database';
-import Logger from '../util/Logger';
+import Logger from '../util/logger';
 import CommandHandler from '../handlers/CommandHandler';
 import MuteSchedule from '../schedules/Mute';
 import GiveawaySchedule from '../schedules/Giveaway';
 import { once } from 'events';
-import Util from '../util/Util';
+import Util from '../util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import EventHandler from '../handlers/EventHandler';
-import { WEEKS } from '../util/Constants';
+import { WEEKS } from '../util/CONSTANTS';
 
 export default class Havoc extends Client {
   initialised = false;

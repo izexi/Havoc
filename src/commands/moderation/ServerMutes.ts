@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import ms = require('ms');
-import Util from '../../util/Util';
+import Util from '../../util';
 
 export default class extends Command {
   constructor() {

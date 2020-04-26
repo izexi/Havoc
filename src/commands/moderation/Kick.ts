@@ -1,10 +1,10 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import Havoc from '../../client/Havoc';
-import Util from '../../util/Util';
+import Util from '../../util';
 import HavocGuildMember from '../../structures/extensions/HavocGuildMember';
-import { PROMPT_INITIAL } from '../../util/Constants';
+import { PROMPT_INITIAL } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

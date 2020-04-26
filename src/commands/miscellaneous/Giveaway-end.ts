@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import GiveawayEntity from '../../structures/entities/GiveawayEntity';
 import Havoc from '../../client/Havoc';
-import { PROMPT_ENTER } from '../../util/Constants';
+import { PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

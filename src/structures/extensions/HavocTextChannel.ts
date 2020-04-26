@@ -5,9 +5,9 @@ import {
   MessageAdditions,
   MessageEmbed
 } from 'discord.js';
-import Util from '../../util/Util';
+import Util from '../../util';
 import HavocUser from './HavocUser';
-import { MAX_LIMITS } from '../../util/Constants';
+import { MAX_LIMITS } from '../../util/CONSTANTS';
 
 export default class HavocTextChannel extends TextChannel {
   prompts: Set<HavocUser['id']> = new Set();

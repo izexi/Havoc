@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import Util from '../../util/Util';
-import Regex from '../../util/Regex';
-import { Target } from '../../util/Targetter';
-import { PROMPT_ENTER } from '../../util/Constants';
+import Util from '../../util';
+import Regex from '../../util/regex';
+import { Target } from '../../util/targetter';
+import { PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export async function review(
   suggestionMsg: HavocMessage,

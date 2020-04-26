@@ -1,10 +1,10 @@
 import HavocMessage, {
   EmbedMethods
 } from '../structures/extensions/HavocMessage';
-import Util from '../util/Util';
+import Util from '../util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import Havoc from '../client/Havoc';
-import { MIN_LIMITS } from '../util/Constants';
+import { MIN_LIMITS } from '../util/CONSTANTS';
 
 export default async function(
   this: Havoc,

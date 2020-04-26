@@ -1,11 +1,11 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import Havoc from '../../client/Havoc';
 import { GuildMember, Guild } from 'discord.js';
 import HavocGuild from '../../structures/extensions/HavocGuild';
 import ms = require('ms');
-import { PROMPT_INITIAL } from '../../util/Constants';
+import { PROMPT_INITIAL } from '../../util/CONSTANTS';
 
 export async function getMuteRole(guild?: HavocGuild | Guild) {
   if (!guild) return;

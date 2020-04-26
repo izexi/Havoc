@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import * as moment from 'moment';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
-import Util from '../../util/Util';
+import Util from '../../util';
 
 export default class extends Command {
   constructor() {

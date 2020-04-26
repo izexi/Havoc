@@ -1,8 +1,8 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
-import Util from '../../util/Util';
-import { PROMPT_ENTER } from '../../util/Constants';
+import Util from '../../util';
+import { PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

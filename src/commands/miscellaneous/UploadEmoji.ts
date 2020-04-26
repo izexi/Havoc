@@ -3,9 +3,9 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Util as DjsUtil } from 'discord.js';
 import { URL } from 'url';
 import fetch from 'node-fetch';
-import { Target } from '../../util/Targetter';
-import Util from '../../util/Util';
-import { MAX_LIMITS, MIN_LIMITS, PROMPT_ENTER } from '../../util/Constants';
+import { Target } from '../../util/targetter';
+import Util from '../../util';
+import { MAX_LIMITS, MIN_LIMITS, PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

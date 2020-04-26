@@ -1,8 +1,8 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import { review, getSuggestionMsg } from './Suggestion-approve';
-import { PROMPT_ENTER } from '../../util/Constants';
+import { PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

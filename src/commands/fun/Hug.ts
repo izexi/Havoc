@@ -1,6 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import Util from '../../util/Util';
+import Util from '../../util';
 import Havoc from '../../client/Havoc';
 
 export default class extends Command {

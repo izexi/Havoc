@@ -1,9 +1,9 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
-import { Target } from '../../util/Targetter';
+import { Target } from '../../util/targetter';
 import Havoc from '../../client/Havoc';
 import { GuildMember } from 'discord.js';
-import { PROMPT_INITIAL, PROMPT_ENTER } from '../../util/Constants';
+import { PROMPT_INITIAL, PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {

@@ -1,4 +1,4 @@
-import Util, { MaybeArray } from '../util/Util';
+import Util, { MaybeArray } from '../util';
 import {
   Targets,
   TargetType,
@@ -6,11 +6,11 @@ import {
   Target,
   isOther,
   NotOther
-} from '../util/Targetter';
+} from '../util/targetter';
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
-import { Responses } from '../util/Responses';
-import { SECONDS } from '../util/Constants';
+import { Responses } from '../util/responses';
+import { SECONDS } from '../util/CONSTANTS';
 
 interface PromptOptions {
   message: HavocMessage;

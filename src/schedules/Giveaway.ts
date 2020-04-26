@@ -3,11 +3,11 @@ import Schedule from '../structures/bases/Schedule';
 import GiveawayEntity from '../structures/entities/GiveawayEntity';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import Havoc from '../client/Havoc';
-import Regex from '../util/Regex';
-import Util from '../util/Util';
+import Regex from '../util/regex';
+import Util from '../util';
 import { MessageEmbed } from 'discord.js';
 import ms = require('ms');
-import { SECONDS, MINUTES, HOURS, DAYS } from '../util/Constants';
+import { SECONDS, MINUTES, HOURS, DAYS } from '../util/CONSTANTS';
 
 export default class Mute extends Schedule<GiveawayEntity> {
   edits: Map<GiveawayEntity['id'], NodeJS.Timer> = new Map();

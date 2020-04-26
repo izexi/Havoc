@@ -4,7 +4,7 @@ import Havoc from '../client/Havoc';
 import { getMuteRole } from '../commands/moderation/Mute';
 import ms = require('ms');
 import { MessageEmbed } from 'discord.js';
-import Util from '../util/Util';
+import Util from '../util';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 
 export default async function(this: Havoc, member: HavocGuildMember) {
