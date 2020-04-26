@@ -9,6 +9,7 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Evals stuff.',
+      dm: true,
       aliases: ['ev'],
       args: {
         type: Target.TEXT,

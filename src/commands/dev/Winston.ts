@@ -8,6 +8,7 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'View store winston logs.',
+      dm: true,
       flags: ['filter']
     });
   }
