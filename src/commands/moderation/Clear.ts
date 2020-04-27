@@ -4,6 +4,7 @@ import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Util from '../../util';
 import { PROMPT_INITIAL, PROMPT_INVALD } from '../../util/CONSTANTS';
+import { TextChannel } from 'discord.js';
 
 export default class extends Command {
   constructor() {
@@ -60,7 +61,7 @@ export default class extends Command {
     if (user) messages = messages.filter(msg => msg.author.id === user.id);
     if ('nopin' in flags)
       messages = messages.filter(message => !message.pinned);
-    const cleared = await message.channel
+    const cleared = await (message.channel as TextChannel)
       .bulkDelete(
         isNaN(number) ? messages : messages.first(Math.min(number, 100)),
         true

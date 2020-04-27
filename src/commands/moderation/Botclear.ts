@@ -2,6 +2,7 @@ import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import Util from '../../util';
+import { TextChannel } from 'discord.js';
 
 export default class extends Command {
   constructor() {
@@ -55,7 +56,7 @@ export default class extends Command {
         'I encountered an error when attempting to fetch recent messages to botclear, maybe try again later?'
       );
 
-    const cleared = await message.channel
+    const cleared = await (message.channel as TextChannel)
       .bulkDelete(
         messages.filter(
           msg =>
