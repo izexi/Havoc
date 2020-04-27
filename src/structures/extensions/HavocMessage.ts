@@ -188,7 +188,7 @@ export default class HavocMessage extends Message {
 
     if (embed.description) embed.description = stripIndents(embed.description);
     if (
-      !methods.setFooter &&
+      methods.setFooter === undefined &&
       !embed.footer?.text &&
       !embed.description?.includes(this.author.tag) &&
       this.author.id !== this.client.user?.id
@@ -243,7 +243,9 @@ export default class HavocMessage extends Message {
           }
         )
         .then(async () =>
-          this.guild ? this.channel.bulkDelete([embed, this]) : embed.delete()
+          this.guild
+            ? (this.channel as TextChannel).bulkDelete([embed, this])
+            : embed.delete()
         )
         .catch(() => {
           if (!embed.deleted)
@@ -265,7 +267,7 @@ export default class HavocMessage extends Message {
         ? {
             setDescription: `${
               author ? `**${this.author.tag}** ` : ''
-            }${toSend}`
+            }${toSend}${toSend.endsWith('.') ? '' : '.'}`
           }
         : toSend
     );
