@@ -3,6 +3,9 @@ import Util from '../util';
 import HavocMessage from '../structures/extensions/HavocMessage';
 import Regex from '../util/regex';
 import Handler from '../structures/bases/Handler';
+import { promises as fs } from 'fs';
+import { join } from 'path';
+import EmojiCommand from '../structures/bases/EmojiCommand';
 
 export default class extends Handler<Command> {
   async load() {
@@ -19,13 +22,22 @@ export default class extends Handler<Command> {
     });
   }
 
-  loadFromPaths = (commandPaths: string[]) => {
+  loadFromPaths = async (commandPaths: string[]) => {
     this.holds = new Map(
       commandPaths.map(cmdPath => {
         const command: Command = new (require(cmdPath).default)();
         return [command.name.toLowerCase(), command];
       })
     );
+
+    await fs
+      .readdir(join(__dirname, '..', 'assets', 'images', 'emojis'))
+      .then(emojiFiles =>
+        emojiFiles.forEach(emojiFile => {
+          const emojiName = emojiFile.split('.')[0].toLowerCase();
+          this.holds.set(emojiName, new EmojiCommand(emojiName));
+        })
+      );
   };
 
   find(nameOrAlias: string) {
