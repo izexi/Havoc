@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "docker": "docker build -t havoc . && docker-compose up -d",
-    "compile": "rimraf dist && tsc",
+    "postbuild": "copyfiles -u 1 src/assets/images/**/*.png dist/",
+    "compile": "rimraf dist && tsc && npm run postbuild",
     "node": "node dist/index.js",
     "start": "npm run compile && npm run node",
     "prod": "tsnd src/",
@@ -28,6 +29,7 @@
     "@vitalets/google-translate-api": "^3.0.0",
     "chalk": "^3.0.0",
     "common-tags": "^1.8.0",
+    "copyfiles": "^2.2.0",
     "discord.js": "github:discordjs/discord.js",
     "dotenv": "^8.2.0",
     "eslint-config-prettier": "^6.10.1",
