@@ -28,6 +28,46 @@ export enum MIN_LIMITS {
   MESSAGE_UPDATE_CONTENT = 900
 }
 
+export const SMALL_CAPS: { [key: string]: string } = {
+  a: 'ᴀ',
+  b: 'ʙ',
+  c: 'ᴄ',
+  d: 'ᴅ',
+  e: 'ᴇ',
+  f: 'ғ',
+  g: 'ɢ',
+  h: 'ʜ',
+  i: 'ɪ',
+  j: 'ᴊ',
+  k: 'ᴋ',
+  l: 'ʟ',
+  m: 'ᴍ',
+  n: 'ɴ',
+  o: 'ᴏ',
+  p: 'ᴘ',
+  q: 'ǫ',
+  r: 'ʀ',
+  s: 's',
+  t: 'ᴛ',
+  u: 'ᴜ',
+  v: 'ᴠ',
+  w: 'ᴡ',
+  x: 'x',
+  y: 'ʏ',
+  z: 'ᴢ'
+};
+
+export const CATEGORY_EMOJIS: { [key: string]: string } = {
+  emojis: '<:POGGIES:542850548043612190>',
+  fun: '<:fun:407988457772810241>',
+  miscellaneous: '<:miscellaneous:404688801903017984>',
+  moderation: '<:moderation:407990341157912587>',
+  server: '🛠',
+  donators: '💸',
+  music: '🎶',
+  image: '🖼'
+};
+
 export const EXAMPLE_ARG: {
   [key in ExcludedOther]: string[];
 } = {
