@@ -1,7 +1,7 @@
 import Command, { Arg } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util';
-import { EXAMPLE_ARG } from '../../util/CONSTANTS';
+import { EXAMPLE_ARG, CATEGORY_EMOJIS } from '../../util/CONSTANTS';
 import { Target, ExcludedOther, isOther } from '../../util/targetter';
 
 const generateExample = ({ example, type }: Arg) =>
@@ -56,7 +56,7 @@ export default class extends Command {
             inline: false
           }
         ],
-        attachFiles: [`src/assets/images/${command.category}.png`],
+        attachFiles: [`src/assets/images/categories/${command.category}.png`],
         setThumbnail: `attachment://${command.category}.png`
       };
 
@@ -158,16 +158,6 @@ export default class extends Command {
       return message.respond(embed);
     }
 
-    const emojis: { [key: string]: string } = {
-      emojis: '<:emojis:466978216339570701>',
-      fun: '<:fun:407988457772810241>',
-      miscellaneous: '<:miscellaneous:404688801903017984>',
-      moderation: '<:moderation:407990341157912587>',
-      server: '🛠',
-      donators: '💸',
-      music: '🎶',
-      image: '🖼'
-    };
     message.respond({
       setDescription: `You can view more info about a command by doing \`${message.prefix}help [command name]\`
 				Click **[here](https://discord.gg/3Fewsxq)** to join the support server here
@@ -179,21 +169,35 @@ export default class extends Command {
         .reduce(
           (
             fields: { name: string; value: string }[],
-            { category, name: cmdName }
+            { category, name: cmdName },
+            _,
+            commands
           ) => {
-            const formattedCatgory = `${emojis[category]} ${Util.captialise(
-              category
-            )}`;
+            const formattedCategory = `${
+              CATEGORY_EMOJIS[category]
+            } ${Util.captialise(category)}`;
             const formattedName = `\`${cmdName}\``;
             const existing = fields.find(
-              ({ name }) => name === formattedCatgory
+              ({ name }) => name === formattedCategory
             );
-            if (existing) existing.value += `, ${formattedName}`;
-            else fields.push({ name: formattedCatgory, value: formattedName });
+            if (existing) {
+              existing.value += `, ${formattedName}`;
+
+              if (
+                commands
+                  .filter(command => command.category === category)
+                  .every(command => existing.value.includes(command.name))
+              )
+                existing.value += '\n⠀';
+            } else {
+              fields.push({ name: formattedCategory, value: formattedName });
+            }
+
             return fields;
           },
           []
         )
+        .sort((prev, curr) => curr.value.length - prev.value.length)
     });
   }
 }
