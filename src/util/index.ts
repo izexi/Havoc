@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import fetch from 'node-fetch';
+import { SMALL_CAPS } from './CONSTANTS';
 
 export type MaybeArray<T> = T | T[];
 
@@ -28,7 +29,7 @@ export default {
   },
 
   arrayify<T>(arg: T) {
-    return arg ? [arg].flat() : [];
+    return typeof arg === 'undefined' ? [] : [arg].flat();
   },
 
   plural(str: string, n: number) {
@@ -117,38 +118,9 @@ export default {
   },
 
   smallCaps(str: string) {
-    const obj: { [key: string]: string } = {
-      a: 'ᴀ',
-      b: 'ʙ',
-      c: 'ᴄ',
-      d: 'ᴅ',
-      e: 'ᴇ',
-      f: 'ғ',
-      g: 'ɢ',
-      h: 'ʜ',
-      i: 'ɪ',
-      j: 'ᴊ',
-      k: 'ᴋ',
-      l: 'ʟ',
-      m: 'ᴍ',
-      n: 'ɴ',
-      o: 'ᴏ',
-      p: 'ᴘ',
-      q: 'ǫ',
-      r: 'ʀ',
-      s: 's',
-      t: 'ᴛ',
-      u: 'ᴜ',
-      v: 'ᴠ',
-      w: 'ᴡ',
-      x: 'x',
-      y: 'ʏ',
-      z: 'ᴢ'
-    };
-
     return str.replace(
-      new RegExp(Object.keys(obj).join('|'), 'gi'),
-      letter => obj[letter] || letter
+      new RegExp(Object.keys(SMALL_CAPS).join('|'), 'gi'),
+      letter => SMALL_CAPS[letter] || letter
     );
   },
 
