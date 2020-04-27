@@ -122,7 +122,8 @@ export default class {
     // @ts-ignore
     message.channel.prompts.delete(this.message.author.id);
     message.client.clearInterval(this.editInterval);
-    await message.channel.bulkDelete(this.promptMsgs);
+    if (message.channel.type !== 'dm')
+      await message.channel.bulkDelete(this.promptMsgs);
 
     if (reason === 'time') {
       if (!message.deleted) await message.reactions.removeAll();
