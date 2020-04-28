@@ -69,10 +69,12 @@ export default class extends Command {
     }
 
     const guild = await this.db.guildRepo.findOne(
-      { id: message.guild!.id, warns: { id: user.id } },
+      { id: message.guild!.id, warns: { member: user.id } },
       { populate: ['warns'] }
     );
-    const warns = guild?.warns.getItems().find(({ id }) => id === user.id);
+    const warns = guild?.warns
+      .getItems()
+      .find(({ member }) => member === user.id);
     if (!warns)
       return message.respond(
         `\`${user.tag}\` doesn't have any warnings in this server.`

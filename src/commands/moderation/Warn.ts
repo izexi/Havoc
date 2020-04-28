@@ -83,7 +83,7 @@ export default class extends Command {
 
     const guild = await this.db.findOrInsert(GuildEntity, message.guild!.id);
     const warns = await guild.warns.init();
-    const existing = warns.getItems().find(({ id }) => id === member.id);
+    const existing = warns.getItems().find(warn => warn.member === member.id);
     const amount = (existing?.history.length || 0) + 1;
     const [action, time] = (punishments.get(amount) || '').split(' ');
     const warn = {
@@ -109,7 +109,7 @@ export default class extends Command {
     } else {
       warns.add(
         new WarnEntity({
-          id: member.id,
+          member: member.id,
           history: [warn]
         })
       );
