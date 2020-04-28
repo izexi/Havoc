@@ -27,7 +27,7 @@ export default class Database {
   }
 
   async setup() {
-    // await this.drop();
+    await this.drop();
     const { to_regclass: tableExists } = await this.orm.em
       .getConnection()
       .execute(`SELECT to_regclass('public.guild_entity')`)
@@ -53,10 +53,11 @@ export default class Database {
 
   flush() {
     return this.orm.em.flush().then(
-      () =>
-        this.client.logger.info('Database flushed', {
+      () => {
+        /* this.client.logger.info('Database flushed', {
           origin: 'Database#flush()'
-        }),
+        }) */
+      },
       error =>
         this.client.logger.error(error.message, {
           origin: 'Database#flush()'
