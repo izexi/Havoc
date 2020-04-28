@@ -68,6 +68,17 @@ export const CATEGORY_EMOJIS: { [key: string]: string } = {
   image: '🖼'
 };
 
+export const MODLOGS_COLOUR: { [key: string]: string } = {
+  warn: 'YELLOW',
+  clearwarnings: 'WHITE',
+  mute: 'GOLD',
+  kick: 'ORANGE',
+  softban: 'DARK_ORANGE',
+  ban: 'RED',
+  unban: 'GREEN',
+  unmute: 'GREEN'
+};
+
 export const EXAMPLE_ARG: {
   [key in ExcludedOther]: string[];
 } = {
