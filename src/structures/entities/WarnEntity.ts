@@ -1,6 +1,7 @@
 import { Entity, Property, AnyEntity, PrimaryKey, ManyToOne } from 'mikro-orm';
 import { EntityProps } from '../Database';
 import GuildEntity from './GuildEntity';
+import { v4 } from 'uuid';
 
 export interface Warn {
   at: Date;
@@ -11,7 +12,10 @@ export interface Warn {
 @Entity()
 export default class WarnEntity implements AnyEntity {
   @PrimaryKey()
-  id!: string;
+  id = v4();
+
+  @Property()
+  member!: string;
 
   @Property()
   history!: Warn[];
