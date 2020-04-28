@@ -18,6 +18,7 @@ export default class extends Command {
     if (!guildEntity || !guildEntity.modlogs)
       return message.respond(`mod logs have not been enabled on this server.`);
 
+    delete message.guild!.modlogs;
     delete guildEntity.modlogs;
     await this.db.flush();
 

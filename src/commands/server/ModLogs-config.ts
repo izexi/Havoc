@@ -31,6 +31,7 @@ export default class extends Command {
         guild?.modlogs ? message.guild!.channels.cache.get(guild.modlogs) : null
       );
 
+    message.guild!.modlogs = channel.id;
     await this.db.upsert(GuildEntity, message.guild!.id, {
       modlogs: channel.id
     });

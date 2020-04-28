@@ -72,7 +72,8 @@ export default class Havoc extends Client {
           'prefix',
           'bcPrefixes',
           'welcomer',
-          'autorole'
+          'autorole',
+          'modlogs'
         );
 
         if (guildEntity.tags && guildEntity.tags.count()) {
