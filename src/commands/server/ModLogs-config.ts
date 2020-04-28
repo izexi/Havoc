@@ -28,11 +28,11 @@ export default class extends Command {
     const existing = await this.db
       .find(GuildEntity, message.guild!.id)
       .then(guild =>
-        guild?.modlog ? message.guild!.channels.cache.get(guild.modlog) : null
+        guild?.modlogs ? message.guild!.channels.cache.get(guild.modlogs) : null
       );
 
     await this.db.upsert(GuildEntity, message.guild!.id, {
-      modlog: channel.id
+      modlogs: channel.id
     });
 
     message.respond(

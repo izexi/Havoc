@@ -50,7 +50,7 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
   autorole?: string;
 
   @Property()
-  modlog?: string;
+  modlogs?: string;
 
   @Property()
   bcPrefixes?: string[];

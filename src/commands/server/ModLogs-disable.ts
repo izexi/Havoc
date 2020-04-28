@@ -15,10 +15,10 @@ export default class extends Command {
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
 
-    if (!guildEntity || !guildEntity.modlog)
+    if (!guildEntity || !guildEntity.modlogs)
       return message.respond(`mod logs have not been enabled on this server.`);
 
-    delete guildEntity.modlog;
+    delete guildEntity.modlogs;
     await this.db.flush();
 
     message.respond(`I have disabled mod logs for this server.`);
