@@ -99,11 +99,11 @@ export default class extends Command {
                           reason
                         }: {
                           warner: string;
-                          reason: string;
+                          reason: string | null;
                         }) => ({
                           at: new Date(),
-                          warner,
-                          reason
+                          reason: reason ?? undefined,
+                          warner
                         })
                       )
                     })
@@ -124,9 +124,9 @@ export default class extends Command {
                     ({ endTime, member, muter, reason }) =>
                       new MuteEntity({
                         end: new Date(endTime),
+                        reason: reason ?? undefined,
                         member,
-                        muter,
-                        reason
+                        muter
                       })
                   )
               );
