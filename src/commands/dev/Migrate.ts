@@ -10,7 +10,8 @@ import Havoc from '../../client/Havoc';
 import MuteEntity from '../../structures/entities/MuteEntity';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
-import { PROMPT_ENTER } from '../../util/CONSTANTS';
+import { PROMPT_ENTER, MINUTES } from '../../util/CONSTANTS';
+import WarnPunishmentEntity from '../../structures/entities/WarnPunishmentEntity';
 
 export default class extends Command {
   constructor() {
@@ -66,14 +67,39 @@ export default class extends Command {
             }
 
             await this.db.upsert(GuildEntity, id, opts);
+            const guildEntity = await this.db.findOrInsert(GuildEntity, id);
+
+            if (data.punishments) {
+              await guildEntity.warnPunishments.init();
+              const entries = Object.entries(data.punishments);
+              if (
+                entries.every(
+                  ([p, w]) =>
+                    Number(p) && /^(mute \d+|kick|ban)/.test(w as string)
+                )
+              ) {
+                guildEntity.warnPunishments.add(
+                  ...entries.map(([p, w]) => {
+                    const [punishment, duration] = (w as string).split(' ');
+                    return new WarnPunishmentEntity({
+                      amount: Number(p),
+                      punishment,
+                      duration:
+                        punishment === 'mute'
+                          ? MINUTES(Number(duration))
+                          : undefined
+                    });
+                  })
+                );
+              }
+            }
 
             const tags = mappedDump.filter(
               (v, k) => k.startsWith('tags') && v.guild === id
             );
             if (tags.size) {
-              const guild = await this.db.findOrInsert(GuildEntity, id);
-              await guild.tags.init();
-              guild.tags.add(
+              await guildEntity.tags.init();
+              guildEntity.tags.add(
                 ...tags.map(
                   ({ name, content, createdBy }) =>
                     new TagEntity({ name, content, createdBy })
@@ -85,9 +111,8 @@ export default class extends Command {
               (_, k) => k.startsWith('warn') && k.slice(-18) === id
             );
             if (warns.size) {
-              const guild = await this.db.findOrInsert(GuildEntity, id);
-              await guild.warns.init();
-              guild.warns.add(
+              await guildEntity.warns.init();
+              guildEntity.warns.add(
                 ...warns.map(
                   (warn, k) =>
                     new WarnEntity({
@@ -114,9 +139,8 @@ export default class extends Command {
               (v, k) => k.startsWith('mute') && v.guild === id
             );
             if (mutes.size) {
-              const guild = await this.db.findOrInsert(GuildEntity, id);
-              await guild.mutes.init();
-              guild.mutes.add(
+              await guildEntity.mutes.init();
+              guildEntity.mutes.add(
                 ...mutes
                   .filter(mute => !Number.isInteger(mute))
                   .map(
