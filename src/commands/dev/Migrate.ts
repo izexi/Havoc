@@ -34,7 +34,6 @@ export default class extends Command {
     const dump = await fetch(text).then(r => r.text());
     const mappedDump: Collection<string, any> = dump
       .split('\n')
-      .filter(d => /^(config|dick|gay)/.test(d))
       .reduce((col, d) => {
         const [k, v] = d.split('\t');
         return col.set(k, JSON.parse(v));
@@ -83,16 +82,16 @@ export default class extends Command {
             }
 
             const warns = mappedDump.filter(
-              (v, k) => k.startsWith('warn') && v.guild === id.slice(-18)
+              (_, k) => k.startsWith('warn') && k.slice(-18) === id
             );
             if (warns.size) {
               const guild = await this.db.findOrInsert(GuildEntity, id);
               await guild.warns.init();
               guild.warns.add(
                 ...warns.map(
-                  warn =>
+                  (warn, k) =>
                     new WarnEntity({
-                      id: id.slice(0, 18),
+                      member: k.split(':')[1].slice(0, 18),
                       history: warn.map(
                         ({
                           warner,
@@ -114,7 +113,7 @@ export default class extends Command {
             const mutes = mappedDump.filter(
               (v, k) => k.startsWith('mute') && v.guild === id
             );
-            if (tags.size) {
+            if (mutes.size) {
               const guild = await this.db.findOrInsert(GuildEntity, id);
               await guild.mutes.init();
               guild.mutes.add(
