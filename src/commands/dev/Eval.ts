@@ -16,7 +16,7 @@ export default class extends Command {
         required: true,
         prompt: PROMPT_ENTER('the code that you would like to evaluate')
       },
-      flags: ['silent', 'detailed']
+      flags: ['silent', 'detailed', 'async']
     });
   }
 
@@ -27,14 +27,15 @@ export default class extends Command {
   }: {
     message: HavocMessage;
     text: string;
-    flags: { silent?: undefined; detailed?: undefined };
+    flags: { silent?: undefined; detailed?: undefined; async?: undefined };
   }) {
     const detailed = 'detailed' in flags;
     const silent = 'silent' in flags;
+    const async = 'async' in flags;
     const start = process.hrtime.bigint();
 
     try {
-      let evaled = eval(code);
+      let evaled = eval(async ? `(async () => {\n${code}\n})()` : code);
       if (evaled instanceof Promise) evaled = await evaled;
       const end = process.hrtime.bigint();
       const type =
