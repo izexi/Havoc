@@ -164,5 +164,7 @@ export default class extends Command {
           } and banned them as punishment for reaching ${amount} warns.`
         );
     }
+
+    message.guild!.sendModLog({ message, target: member });
   }
 }

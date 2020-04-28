@@ -106,10 +106,17 @@ export default class extends Command {
       }${reason ? ` due to the reason: ${reason}` : ''}`
     );
 
-    message.respond(
+    await message.respond(
       `I have muted \`${member.user.tag}\`${
         time ? ` for ${ms(time, { long: true })}` : ''
       }${reason ? ` due to the reason: \`${reason}\`` : ''} 🙊`
     );
+
+    message.guild!.sendModLog({
+      message,
+      reason,
+      target: member,
+      duration: time
+    });
   }
 }

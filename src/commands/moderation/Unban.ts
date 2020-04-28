@@ -52,12 +52,14 @@ export default class extends Command {
         reason ? ` for the reason ${reason}` : ''
       }`
     );
-    message.sendEmbed({
+    await message.sendEmbed({
       setDescription: `**${message.author.tag}** I have unbanned \`${
         user.tag
       }\` from \`${message.guild!.name}\`${
         reason ? ` for the reason ${reason}` : '.'
       } 🩹`
     });
+
+    message.guild!.sendModLog({ message, reason, target: user });
   }
 }

@@ -66,13 +66,15 @@ export default class extends Command {
           reason ? ` for the reason ${reason}` : ''
         }`
       );
-      message.sendEmbed({
+      await message.sendEmbed({
         setDescription: `**${message.author.tag}** I have kicked \`${
           member.user.tag
         }\` from \`${message.guild!.name}\`${
           reason ? ` for the reason ${reason}` : '.'
         } <:boot3:402540975605678081>`
       });
+
+      message.guild!.sendModLog({ message, reason, target: member });
     }
   }
 }

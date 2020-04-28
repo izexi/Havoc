@@ -98,10 +98,12 @@ export default class extends Command {
     await guild!.warns.init();
     guild!.warns.remove(warns);
     await this.db.flush();
-    message.respond(
+    await message.respond(
       `I have cleared the ${amount} ${Util.plural('warning', amount)} from \`${
         user.tag
       }\`.`
     );
+
+    message.guild!.sendModLog({ message, target: user });
   }
 }

@@ -76,10 +76,12 @@ export default class extends Command {
 
     if (mute) await this.schedules.mute.dequeue(mute, mutes!);
 
-    message.respond(
+    await message.respond(
       `I have unmuted \`${member.user.tag}\`${
         reason ? ` due to the reason: \`${reason}\`` : ''
       }`
     );
+
+    message.guild!.sendModLog({ message, target: member });
   }
 }
