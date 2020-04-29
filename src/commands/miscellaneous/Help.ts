@@ -162,7 +162,7 @@ export default class extends Command {
       setDescription: `You can view more info about a command by doing \`${message.prefix}help [command name]\`
 				Click **[here](https://discord.gg/3Fewsxq)** to join the support server here
 				Click **[here](https://discordapp.com/oauth2/authorize?client_id=${message.client.user?.id}&scope=bot&permissions=2146958591)** to invite me to your server
-				Click **[here](https://www.patreon.com/user?u=15028160)** to support me by donating
+				Click **[here](https://www.patreon.com/user?u=15028160)** or **[here](https://paypal.me/havoceditor)** to support me by donating
 				⠀`,
       addFields: [...message.client.commandHandler.holds.values()]
         .filter(command => command.category !== 'dev' && !command.sub)
