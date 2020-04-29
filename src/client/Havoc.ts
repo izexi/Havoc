@@ -9,6 +9,7 @@ import Util from '../util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import EventHandler from '../handlers/EventHandler';
 import { WEEKS } from '../util/CONSTANTS';
+import Prometheus from '../structures/Prometheus';
 
 export default class Havoc extends Client {
   initialised = false;
@@ -16,6 +17,8 @@ export default class Havoc extends Client {
   logger = Logger;
 
   db = new Database(this);
+
+  prometheus = new Prometheus(this);
 
   commandHandler = new CommandHandler(this);
 
