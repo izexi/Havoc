@@ -130,3 +130,7 @@ export const WEEKS = (weeks: number) => weeks * 604800000;
 export const MEGABYTES = (bytes: number) => bytes / 1048576;
 
 export const PERCENTAGE = (from: number, base: number) => (from / base) * 100;
+
+export const PROM_PORT = 666;
+
+export const HTTP_OK = 200;
