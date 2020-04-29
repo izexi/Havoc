@@ -14,3 +14,4 @@ RUN apk add --update \
 COPY . /usr/src/havoc
 
 CMD ["npm", "start"]
+EXPOSE 666
