@@ -29,6 +29,12 @@ export default class Havoc extends Client {
     giveaway: new GiveawaySchedule(this)
   };
 
+  blacklisted: Record<'commands' | 'users' | 'guilds', Set<string>> = {
+    users: new Set(),
+    guilds: new Set(),
+    commands: new Set()
+  };
+
   constructor() {
     super({
       ws: {
@@ -47,6 +53,13 @@ export default class Havoc extends Client {
     this.init();
   }
 
+  get totalMemberCount() {
+    return this.guilds.cache.reduce(
+      (total, guild) => total + guild.memberCount,
+      0
+    );
+  }
+
   async init() {
     await this.db
       .init()
@@ -54,6 +67,9 @@ export default class Havoc extends Client {
         this.logger.error(error.message, { origin: 'Database#init()' })
       );
     await once(this, 'ready');
+
+    this.prometheus.guildGauge.set(this.guilds.cache.size);
+    this.prometheus.userGauge.set(this.totalMemberCount);
 
     const schedules = Object.values(this.schedules);
     await Promise.all(schedules.map(schedule => schedule.init())).then(
