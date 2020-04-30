@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, Intents } from 'discord.js';
 import Database from '../structures/Database';
 import Logger from '../util/logger';
 import CommandHandler from '../handlers/CommandHandler';
@@ -29,8 +29,21 @@ export default class Havoc extends Client {
     giveaway: new GiveawaySchedule(this)
   };
 
-  constructor(options = {}) {
-    super(options);
+  constructor() {
+    super({
+      ws: {
+        intents:
+          Intents.ALL &
+          ~(
+            Intents.FLAGS.GUILD_INTEGRATIONS |
+            Intents.FLAGS.GUILD_WEBHOOKS |
+            Intents.FLAGS.GUILD_INVITES |
+            Intents.FLAGS.GUILD_PRESENCES |
+            Intents.FLAGS.GUILD_MESSAGE_TYPING |
+            Intents.FLAGS.DIRECT_MESSAGE_TYPING
+          )
+      }
+    });
     this.init();
   }
 
