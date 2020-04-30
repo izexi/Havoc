@@ -74,9 +74,10 @@ export default class Database {
     const res = await this.orm.em.findOne(Entity, id);
     if (res) {
       wrap(res).assign(opts);
-      await this.orm.em.flush();
+      return this.flush();
     } else {
-      await this.orm.em.persistAndFlush(new Entity(id, opts));
+      await this.orm.em.persistLater(new Entity(id, opts));
+      return this.flush();
     }
   }
 
