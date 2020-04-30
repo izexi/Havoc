@@ -316,7 +316,7 @@ export default class HavocMessage extends Message {
     } = {};
     const { command } = this;
 
-    this.args.shift();
+    if (!command.sub) this.args.shift();
 
     if (!command.dm && this.channel.type === 'dm')
       return this.respond('this command cannot be used in DMs');
