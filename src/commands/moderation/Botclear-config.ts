@@ -4,6 +4,7 @@ import Havoc from '../../client/Havoc';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { Target } from '../../util/targetter';
 import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/CONSTANTS';
+import util from '../../util';
 
 export default class extends Command {
   constructor() {
@@ -32,10 +33,10 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      fn: option
+      option
     }: {
       message: HavocMessage;
-      fn: 'view' | 'add' | 'remove';
+      option: 'view' | 'add' | 'remove';
     }
   ) {
     const bcPrefixes = [message.guild!.prefix, ...message.guild!.bcPrefixes]!;
@@ -73,6 +74,7 @@ export default class extends Command {
       bcPrefixes!.splice(bcPrefixes!.indexOf(prefix), 1);
     }
 
+    message.guild!.bcPrefixes = util.spliceDupes(bcPrefixes);
     await this.db.upsert(GuildEntity, message.guild!.id, { bcPrefixes });
 
     message.respond(
