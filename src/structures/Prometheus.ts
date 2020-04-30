@@ -32,6 +32,11 @@ export default class {
     'Gauge for total guild count'
   );
 
+  userGauge = this.createGauge(
+    'havoc_user_gauge',
+    'Gauge for total (estimated) user count'
+  );
+
   cpuGauge = this.createGauge('havoc_cpu_gauge', 'Gauge for CPU percentage');
 
   memoryGauge = this.createGauge(
