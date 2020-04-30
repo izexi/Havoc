@@ -17,6 +17,7 @@ export default class extends Command {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
           if (possibleSubCmd === 'config') {
+            message.args.shift();
             message.command = message.client.commandHandler.find(
               'botclear-config'
             )!;
