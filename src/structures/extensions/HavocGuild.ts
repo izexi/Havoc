@@ -12,7 +12,7 @@ import HavocTextChannel from './HavocTextChannel';
 import GuildEntity from '../entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import ms = require('ms');
-import { MODLOGS_COLOUR } from '../../util/CONSTANTS';
+import { MODLOGS_COLOUR, NOOP } from '../../util/CONSTANTS';
 
 export default class extends Guild {
   client!: Havoc;
@@ -76,7 +76,7 @@ export default class extends Guild {
           .createWebhook(',HavocLogs', {
             avatar: this.client.user!.displayAvatarURL()
           })
-          .catch(() => null);
+          .catch(NOOP);
         if (!webhook) return delete this.logs;
 
         this.logs!.webhook = {

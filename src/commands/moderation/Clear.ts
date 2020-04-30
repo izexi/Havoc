@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Util from '../../util';
-import { PROMPT_INITIAL, PROMPT_INVALD } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, PROMPT_INVALD, NOOP } from '../../util/CONSTANTS';
 import { TextChannel } from 'discord.js';
 
 export default class extends Command {
@@ -52,7 +52,7 @@ export default class extends Command {
 
     let messages = await message.channel.messages
       .fetch({ limit: 100 })
-      .catch(() => null);
+      .catch(NOOP);
     if (!messages)
       return message.respond(
         'I encountered an error when attempting to fetch recent messages to clear, maybe try again later?'
@@ -66,7 +66,7 @@ export default class extends Command {
         isNaN(number) ? messages : messages.first(Math.min(number, 100)),
         true
       )
-      .catch(() => null);
+      .catch(NOOP);
 
     if (!cleared)
       return message.respond(
@@ -81,6 +81,6 @@ export default class extends Command {
         )}\` ${Util.randomArrEl(emojis)}`
       )
       .then(async message => message.delete({ timeout: 1300 }))
-      .catch(() => null);
+      .catch(NOOP);
   }
 }

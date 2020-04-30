@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import Util from '../../util';
 import { TextChannel } from 'discord.js';
+import { NOOP } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -50,7 +51,7 @@ export default class extends Command {
     ];
     const messages = await message.channel.messages
       .fetch({ limit: 100 })
-      .catch(() => null);
+      .catch(NOOP);
 
     if (!messages)
       return message.respond(
@@ -68,7 +69,7 @@ export default class extends Command {
         ),
         true
       )
-      .catch(() => null);
+      .catch(NOOP);
 
     if (!cleared)
       return message.respond(
@@ -83,6 +84,6 @@ export default class extends Command {
         )}\` ${Util.randomArrEl(emojis)}`
       )
       .then(async message => message.delete({ timeout: 1300 }))
-      .catch(() => null);
+      .catch(NOOP);
   }
 }

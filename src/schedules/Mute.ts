@@ -3,6 +3,7 @@ import Havoc from '../client/Havoc';
 import MuteEntity from '../structures/entities/MuteEntity';
 import { getMuteRole } from '../commands/moderation/Mute';
 import ms = require('ms');
+import { NOOP } from '../util/CONSTANTS';
 
 export default class Mute extends Schedule<MuteEntity> {
   constructor(client: Havoc) {
@@ -16,7 +17,7 @@ export default class Mute extends Schedule<MuteEntity> {
 
   async end(mute: MuteEntity) {
     const guild = this.client.guilds.cache.get(mute.guild.id);
-    const member = await guild?.members.fetch(mute.member).catch(() => null);
+    const member = await guild?.members.fetch(mute.member).catch(NOOP);
     const muteRole = await getMuteRole(guild);
 
     if (member && muteRole)

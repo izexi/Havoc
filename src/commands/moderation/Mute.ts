@@ -5,7 +5,7 @@ import Havoc from '../../client/Havoc';
 import { GuildMember, Guild } from 'discord.js';
 import HavocGuild from '../../structures/extensions/HavocGuild';
 import ms = require('ms');
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, NOOP } from '../../util/CONSTANTS';
 
 export async function getMuteRole(guild?: HavocGuild | Guild) {
   if (!guild) return;
@@ -29,7 +29,7 @@ export async function getMuteRole(guild?: HavocGuild | Guild) {
               SEND_MESSAGES: false,
               ADD_REACTIONS: false
             })
-            .catch(() => null);
+            .catch(NOOP);
         }
       });
     await Promise.all(promises);

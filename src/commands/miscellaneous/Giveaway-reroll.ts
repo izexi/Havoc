@@ -6,7 +6,8 @@ import { MessageEmbed } from 'discord.js';
 import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
-  PROMPT_ENTER
+  PROMPT_ENTER,
+  NOOP
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -22,7 +23,7 @@ export default class extends Command {
             const giveawayMsg = await message
               .findConfigChannel('giveaway')
               .then(channel => channel?.messages.fetch(message.arg!))
-              .catch(() => null);
+              .catch(NOOP);
             return message.shiftArg(giveawayMsg);
           },
           required: true,
@@ -103,7 +104,7 @@ export default class extends Command {
                   )
                   .setColor('GOLD')
               )
-              .catch(() => null)
+              .catch(NOOP)
           )
         )
       );

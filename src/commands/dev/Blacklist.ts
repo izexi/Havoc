@@ -2,7 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import DevEntity, { Blacklistable } from '../../structures/entities/DevEntity';
-import { PROMPT_ENTER } from '../../util/CONSTANTS';
+import { PROMPT_ENTER, NOOP } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -63,7 +63,7 @@ export default class extends Command {
               this.blacklisted.users.add(user.id);
               blacklisted = user.tag;
             })
-            .catch(() => null);
+            .catch(NOOP);
           break;
         case 'guild':
           {

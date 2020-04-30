@@ -33,6 +33,7 @@ import GuildEntity from '../entities/GuildEntity';
 import HavocTextChannel from './HavocTextChannel';
 import { stripIndents } from 'common-tags';
 import HavocGuildMember from './HavocGuildMember';
+import { NOOP } from '../../util/CONSTANTS';
 
 export interface EmbedMethods {
   addField: [string, string];
@@ -84,7 +85,7 @@ export default class HavocMessage extends Message {
   }
 
   safeReact(emoji: EmojiResolvable) {
-    return this.deleted ? null : this.react(emoji).catch(() => null);
+    return this.deleted ? null : this.react(emoji).catch(NOOP);
   }
 
   async delete(options?: { timeout?: number; reason?: string }) {

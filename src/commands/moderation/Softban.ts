@@ -4,7 +4,7 @@ import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
 import Util from '../../util';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, NOOP } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -49,14 +49,14 @@ export default class extends Command {
       return message.channel.send('😢');
     }
 
-    const member = await message.guild!.members.fetch(user).catch(() => null);
+    const member = await message.guild!.members.fetch(user).catch(NOOP);
     const response = member ? message.member.can('softban', member) : null;
     if (response) {
       await message.safeReact('⛔');
       return message.respond(response);
     }
 
-    const existing = await message.guild!.fetchBan(user).catch(() => null);
+    const existing = await message.guild!.fetchBan(user).catch(NOOP);
     if (existing)
       return message.respond(`${user.tag} is already banned in this server.`);
 

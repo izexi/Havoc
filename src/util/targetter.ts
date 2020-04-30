@@ -11,6 +11,7 @@ import Regex from './regex';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { Emoji, find } from 'node-emoji';
 import Time from './time';
+import { NOOP } from './CONSTANTS';
 
 export enum Target {
   USER = 'user',
@@ -81,9 +82,7 @@ export const Targetter: {
           `(${MessageMentions.USERS_PATTERN})|(${Regex.id.source})`
         ) ?? [];
       if (!target) return null;
-      return message.client.users
-        .fetch(target.match(/\d+/)![0])
-        .catch(() => null);
+      return message.client.users.fetch(target.match(/\d+/)![0]).catch(NOOP);
     },
     nameSearch(query, { guild }) {
       if (!guild || !query) return null;
@@ -100,7 +99,7 @@ export const Targetter: {
                   findFn(member) || member.displayName.toLowerCase() === query
               )?.user
           )
-          .catch(() => null) ||
+          .catch(NOOP) ||
         null
       );
     },
@@ -120,7 +119,7 @@ export const Targetter: {
           message
         )) || (await Targetter.user!.nameSearch!(message.arg || query, message))
       );
-      return user ? message.guild!.members.fetch(user).catch(() => null) : user;
+      return user ? message.guild!.members.fetch(user).catch(NOOP) : user;
     }
   },
 

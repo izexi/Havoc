@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util';
 import Regex from '../../util/regex';
 import { Target } from '../../util/targetter';
-import { PROMPT_ENTER } from '../../util/CONSTANTS';
+import { PROMPT_ENTER, NOOP } from '../../util/CONSTANTS';
 
 export async function review(
   suggestionMsg: HavocMessage,
@@ -48,7 +48,7 @@ export async function review(
   suggestionMsg.client.users
     .fetch(userID)
     .then(user => user.send(embed))
-    .catch(() => null);
+    .catch(NOOP);
 }
 
 export async function getSuggestionMsg(message: HavocMessage) {
@@ -59,7 +59,7 @@ export async function getSuggestionMsg(message: HavocMessage) {
 
   const suggestionMsg = await suggestionChannel.messages
     .fetch(message.arg)
-    .catch(() => null);
+    .catch(NOOP);
 
   return message.shiftArg(suggestionMsg);
 }

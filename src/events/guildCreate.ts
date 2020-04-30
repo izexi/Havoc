@@ -3,6 +3,7 @@ import Havoc from '../client/Havoc';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { NOOP } from '../util/CONSTANTS';
 
 export default async function(this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
@@ -16,7 +17,7 @@ export default async function(this: Havoc, guild: HavocGuild) {
       .get('406873117215031297')!
       .members.fetch(guild.ownerID)
       .then(member => member.roles.add('473618117113806868'))
-      .catch(() => null);
+      .catch(NOOP);
   }
 
   (this.channels.cache.get('417364417374715924') as HavocTextChannel).send(

@@ -1,6 +1,7 @@
 import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { SnowflakeUtil } from 'discord.js';
+import { NOOP } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -70,7 +71,7 @@ export default class extends Command {
             `Suggestion ID: ${suggestionMessage.id}`
           )
         )
-        .catch(() => null),
+        .catch(NOOP),
       suggestionMessage.safeReact('416985886509498369'),
       suggestionMessage.safeReact('416985887616925726')
     ]);

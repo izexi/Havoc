@@ -7,7 +7,7 @@ import Regex from '../util/regex';
 import Util from '../util';
 import { MessageEmbed } from 'discord.js';
 import ms = require('ms');
-import { SECONDS, MINUTES, HOURS, DAYS } from '../util/CONSTANTS';
+import { SECONDS, MINUTES, HOURS, DAYS, NOOP } from '../util/CONSTANTS';
 
 export default class Mute extends Schedule<GiveawayEntity> {
   edits: Map<GiveawayEntity['id'], NodeJS.Timer> = new Map();
@@ -38,7 +38,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
           ) as HavocTextChannel;
           const message = await channel?.messages
             .fetch(giveaway.message)
-            .catch(() => null);
+            .catch(NOOP);
           if (!message) return;
           if (message.embeds[0].footer?.text?.includes('ended')) return;
 
@@ -78,9 +78,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
     const channel = this.client.channels.cache.get(
       giveaway.channel
     ) as HavocTextChannel;
-    const message = await channel?.messages
-      .fetch(giveaway.message)
-      .catch(() => null);
+    const message = await channel?.messages.fetch(giveaway.message).catch(NOOP);
 
     if (message) {
       if (message.embeds[0].footer!.text!.includes('ended')) return;
@@ -145,9 +143,9 @@ export default class Mute extends Schedule<GiveawayEntity> {
             );
           delete dmEmbed.footer;
           delete dmEmbed.title;
-          return user.send(dmEmbed).catch(() => null);
+          return user.send(dmEmbed).catch(NOOP);
         })
-      ).catch(() => null);
+      ).catch(NOOP);
     }
 
     const giveaways = await giveaway.guild.giveaways.init();

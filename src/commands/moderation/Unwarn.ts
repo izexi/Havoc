@@ -7,7 +7,8 @@ import HavocUser from '../../structures/extensions/HavocUser';
 import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
-  PROMPT_ENTER
+  PROMPT_ENTER,
+  NOOP
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -61,7 +62,7 @@ export default class extends Command {
       return message.channel.send('😢');
     }
 
-    const member = await message.guild!.members.fetch(user).catch(() => null);
+    const member = await message.guild!.members.fetch(user).catch(NOOP);
     const response = member ? message.member.can('unwarn', member) : null;
     if (response) {
       await message.safeReact('⛔');

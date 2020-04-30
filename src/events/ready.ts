@@ -1,6 +1,6 @@
 import Havoc from '../client/Havoc';
 import { MessageEmbed, WebhookClient } from 'discord.js';
-import { STATUS_ICONS, HAVOC } from '../util/CONSTANTS';
+import { STATUS_ICONS, HAVOC, NOOP } from '../util/CONSTANTS';
 import DevEntity, { Blacklistable } from '../structures/entities/DevEntity';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import ms = require('ms');
@@ -34,7 +34,7 @@ export default async function(this: Havoc) {
       restart.channel
     ) as HavocTextChannel)?.messages
       .fetch(restart.message)
-      .catch(() => null);
+      .catch(NOOP);
     if (message?.author.id === this.user?.id) {
       message?.edit(
         message.embeds[0].setDescription(

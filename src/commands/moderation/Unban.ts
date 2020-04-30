@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, NOOP } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -42,7 +42,7 @@ export default class extends Command {
       return message.channel.send('<:WaitWhat:463993771961483264>');
     }
 
-    const existing = await message.guild!.fetchBan(user).catch(() => null);
+    const existing = await message.guild!.fetchBan(user).catch(NOOP);
     if (!existing)
       return message.respond(`${tag} is not banned in this server.`);
 
