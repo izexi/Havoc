@@ -27,6 +27,11 @@ export default class {
     ['event_name']
   );
 
+  dbFlushCounter = this.createCounter(
+    'havoc_db_flush_counter',
+    'Counter of database flushes'
+  );
+
   guildGauge = this.createGauge(
     'havoc_guild_gauge',
     'Gauge for total guild count'
