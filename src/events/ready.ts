@@ -32,7 +32,9 @@ export default async function(this: Havoc) {
     const { restart } = devEntity;
     const message = await (this.channels.cache.get(
       restart.channel
-    ) as HavocTextChannel)?.messages.fetch(restart.message);
+    ) as HavocTextChannel)?.messages
+      .fetch(restart.message)
+      .catch(() => null);
     if (message?.author.id === this.user?.id) {
       message?.edit(
         message.embeds[0].setDescription(
