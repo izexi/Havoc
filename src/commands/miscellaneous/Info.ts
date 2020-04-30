@@ -59,10 +59,7 @@ export default class extends Command {
         {
           name: '❯Stats',
           value: `- Servers: ${this.guilds.cache.size}
-            - Users: ${`~${this.guilds.cache.reduce(
-              (total, guild) => total + guild.memberCount,
-              0
-            )}`}
+            - Users: ${`~${this.totalMemberCount}`}
             - Cached users: ${this.users.cache.size}
             - Channels: ${this.channels.cache.size}
             - Cached messages: ${this.channels.cache
