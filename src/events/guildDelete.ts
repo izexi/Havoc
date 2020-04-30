@@ -4,11 +4,13 @@ import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { MessageEmbed } from 'discord.js';
 import GuildEntity from '../structures/entities/GuildEntity';
 import fetch from 'node-fetch';
+import { stripIndents } from 'common-tags';
 
 export default async function(this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
 
-  this.prometheus.guildGauge.dec(1);
+  this.prometheus.guildGauge.dec();
+  this.prometheus.userGauge.dec(guild.memberCount ?? this.totalMemberCount);
 
   const guildEntity = await this.db.find(GuildEntity, guild.id);
   if (guildEntity) {
@@ -39,12 +41,9 @@ export default async function(this: Havoc, guild: HavocGuild) {
   (this.channels.cache.get('417364417374715924') as HavocTextChannel).send(
     new MessageEmbed()
       .setDescription(
-        `**Guild Name :**  ${guild.name}
+        stripIndents`**Guild Name :**  ${guild.name}
 				**Total guild count :**  ${this.guilds.cache.size}
-				**Total user count :**  ${this.guilds.cache.reduce(
-          (total, guild) => total + guild.memberCount,
-          0
-        )}`
+				**Total user count :**  ${this.totalMemberCount}`
       )
       .setColor('RED')
       .setAuthor('Left a guild', guild.iconURL())

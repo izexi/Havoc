@@ -2,11 +2,14 @@ import HavocGuild from '../structures/extensions/HavocGuild';
 import Havoc from '../client/Havoc';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { MessageEmbed } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
 export default async function(this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
+  if (this.blacklisted.guilds.has(guild.id)) guild.leave();
 
-  this.prometheus.guildGauge.inc(1);
+  this.prometheus.guildGauge.inc();
+  this.prometheus.userGauge.inc(guild.memberCount);
 
   if (guild.memberCount >= 25) {
     await this.guilds.cache
@@ -19,14 +22,11 @@ export default async function(this: Havoc, guild: HavocGuild) {
   (this.channels.cache.get('417364417374715924') as HavocTextChannel).send(
     new MessageEmbed()
       .setDescription(
-        `**Guild name :**  ${guild.name}
+        stripIndents`**Guild name :**  ${guild.name}
 				**Guild owner :**  ${(await this.users.fetch(guild.ownerID)).tag}
 				**Guild members size :**  ${guild.memberCount}
 				**Total guild count :**  ${this.guilds.cache.size}
-				**Total user count :**  ~${this.guilds.cache.reduce(
-          (total, guild) => total + guild.memberCount,
-          0
-        )}`
+				**Total user count :**  ~${this.totalMemberCount}`
       )
       .setColor('GREEN')
       .setAuthor('Joined a new guild', guild.iconURL())

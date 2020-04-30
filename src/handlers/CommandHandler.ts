@@ -6,6 +6,7 @@ import Handler from '../structures/bases/Handler';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import EmojiCommand from '../structures/bases/EmojiCommand';
+import { HAVOC } from '../util/CONSTANTS';
 
 export default class extends Handler<Command> {
   async load() {
@@ -55,7 +56,8 @@ export default class extends Handler<Command> {
       !message.prefix ||
       !message.content.startsWith(message.prefix) ||
       // @ts-ignore
-      message.channel.prompts?.has(message.author.id)
+      message.channel.prompts?.has(message.author.id) ||
+      this.client.blacklisted.users.has(message.author.id)
     )
       return;
 
@@ -77,7 +79,8 @@ export default class extends Handler<Command> {
     const command = this.find(possibleCmd);
     if (
       !command ||
-      (command.category === 'dev' && message.author.id !== '191615925336670208')
+      (command.category === 'dev' && message.author.id !== HAVOC) ||
+      this.client.blacklisted.commands.has(command.name)
     )
       return;
 
