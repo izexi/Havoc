@@ -8,6 +8,8 @@ import fetch from 'node-fetch';
 export default async function(this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
 
+  this.prometheus.guildGauge.dec(1);
+
   const guildEntity = await this.db.find(GuildEntity, guild.id);
   if (guildEntity) {
     guildEntity.deletedAt = new Date();

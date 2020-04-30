@@ -6,6 +6,8 @@ import { MessageEmbed } from 'discord.js';
 export default async function(this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
 
+  this.prometheus.guildGauge.inc(1);
+
   if (guild.memberCount >= 25) {
     await this.guilds.cache
       .get('406873117215031297')!
