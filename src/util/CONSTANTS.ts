@@ -134,3 +134,5 @@ export const PERCENTAGE = (from: number, base: number) => (from / base) * 100;
 export const PROMETHEUS_PORT = 666;
 
 export const HTTP_OK = 200;
+
+export const HAVOC = '191615925336670208';
