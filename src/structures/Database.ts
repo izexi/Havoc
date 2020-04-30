@@ -57,6 +57,7 @@ export default class Database {
         this.client.logger.info('Database flushed', {
           origin: 'Database#flush()'
         });
+        this.client.prometheus.dbFlushCounter.inc();
       },
       error =>
         this.client.logger.error(error.message, {
