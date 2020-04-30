@@ -401,7 +401,7 @@ export default class HavocMessage extends Message {
 
     command.run
       .call(this.client, { message: this, ...params })
-      .then(() =>
+      .then(() => {
         this.client.logger.info(
           `${this.author.tag} (${this.author.id}) used command ${this.prefix}${
             command.name
@@ -411,8 +411,12 @@ export default class HavocMessage extends Message {
               : ''
           }`,
           { origin: 'HavocMessage#runCommand()' }
-        )
-      )
+        );
+
+        this.client.prometheus.commandCounter.inc({
+          command_name: command.name
+        });
+      })
       .catch(async rej => {
         this.client.logger.warn(rej, {
           origin: `${Util.captialise(command.name)}#run()`
