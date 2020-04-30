@@ -131,6 +131,8 @@ export const MEGABYTES = (bytes: number) => bytes / 1048576;
 
 export const PERCENTAGE = (from: number, base: number) => (from / base) * 100;
 
+export const NOOP = () => null;
+
 export const PROMETHEUS_PORT = 666;
 
 export const HTTP_OK = 200;
