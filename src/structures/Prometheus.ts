@@ -2,7 +2,12 @@ import { Counter, Gauge, register } from 'prom-client';
 import { createServer } from 'http';
 import { parse } from 'url';
 import Havoc from '../client/Havoc';
-import { SECONDS, MEGABYTES, PROM_PORT, HTTP_OK } from '../util/CONSTANTS';
+import {
+  SECONDS,
+  MEGABYTES,
+  PROMETHEUS_PORT,
+  HTTP_OK
+} from '../util/CONSTANTS';
 
 export default class {
   client: Havoc;
@@ -36,9 +41,11 @@ export default class {
       }
       res.end();
     })
-      .listen(PROM_PORT)
+      .listen(PROMETHEUS_PORT)
       .once('listening', () => {
-        this.client.logger.info('Listening', { origin: 'createServer()' });
+        this.client.logger.info(`Listening to ${PROMETHEUS_PORT}`, {
+          origin: 'Prometheus#start()'
+        });
 
         setInterval(
           () =>
