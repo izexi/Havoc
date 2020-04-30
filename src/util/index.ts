@@ -130,5 +130,14 @@ export default {
 
   lastArrEl<T>(arr: T[]) {
     return arr[arr.length - 1];
+  },
+
+  spliceDupes<T>(arr: T[]) {
+    arr.forEach((n, i) => {
+      if (arr.indexOf(n) !== i) {
+        arr.splice(i, 1);
+      }
+    });
+    return arr;
   }
 };
