@@ -10,6 +10,7 @@ export default async function(this: Havoc) {
     `${this.user!.tag} is ready in ${this.guilds.cache.size} guilds`,
     { origin: 'Havoc#on:ready' }
   );
+  this.user?.setActivity('you', { type: 'WATCHING' });
 
   new WebhookClient(
     process.env.STATUS_WEBHOOK_ID!,
