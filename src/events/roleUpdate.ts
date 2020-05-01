@@ -108,7 +108,8 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
   }
 
   if (embed) {
-    embed.addFields!.push({
+    if (!embed.addFields) embed.addFields = [];
+    embed.addFields.push({
       name: '**📆 Role created at :**',
       value: `${updated.createdAt.toLocaleString()} (UTC)`
     });
