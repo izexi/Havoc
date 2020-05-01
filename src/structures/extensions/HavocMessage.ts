@@ -129,7 +129,7 @@ export default class HavocMessage extends Message {
       target: msg => msg.arg?.match(/^(yes|y|n|no)$/i)?.[0]
     });
 
-    if (response.charAt(0).toLowerCase() === 'y') {
+    if (response?.charAt(0).toLowerCase() === 'y') {
       if (!this.deleted) await this.reactions.removeAll();
       await this.safeReact('464033586748719104');
       return true;
@@ -231,8 +231,8 @@ export default class HavocMessage extends Message {
           : this.constructEmbed(methodsOrEmbed)
     });
 
-    if (this.command) {
-      await embed.safeReact('🗑');
+    if (this.command && embed) {
+      await embed.safeReact('🗑')?.catch(NOOP);
       embed
         .awaitReactions(
           (reaction, user) =>
