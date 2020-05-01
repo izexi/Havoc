@@ -58,11 +58,13 @@ export default class extends Command {
             if (data.bcPrefixes) opts.bcPrefixes = data.bcPrefixes;
             if (data.logs) {
               const logs: any = { channel: data.logs };
-              const disabled = mappedDump.get(`disabledLogs:${id}`);
               const webhook = mappedDump.get(`webhook:${id}`);
-              if (disabled) logs.disabled = disabled;
               if (webhook) {
-                opts.logs = { ...logs, webhook };
+                opts.logs = {
+                  ...logs,
+                  webhook,
+                  disabled: mappedDump.get(`disabledLogs:${id}`) || []
+                };
               }
             }
 
