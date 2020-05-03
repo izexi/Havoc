@@ -65,12 +65,16 @@ export default class extends Command {
     text: string;
   }) {
     let invalidReason;
+    const isAnimated = url.endsWith('gif');
+    const currentEmojis = message.guild!.emojis.cache.filter(
+      emoji => emoji.animated === isAnimated
+    ).size;
     const maxEmojis = [50, 100, 150, 250][message.guild!.premiumTier];
     const emojiSize = await fetch(url).then(
       res => Number(res.headers.get('content-length')) / 1024
     );
 
-    if (message.guild!.emojis.cache.size >= maxEmojis)
+    if (currentEmojis >= maxEmojis)
       invalidReason = `This server already has the maximum amount of emojis (${maxEmojis})`;
     else if (
       customName &&
