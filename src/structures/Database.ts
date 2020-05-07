@@ -3,8 +3,9 @@ import GuildEntity from './entities/GuildEntity';
 import Havoc from '../client/Havoc';
 
 export type EntityProps<T> = {
-  [prop in Exclude<keyof T, 'createdAt' | 'updatedAt'>]?: T[prop];
+  [prop in keyof T]?: T[prop];
 };
+type Entity<T> = new (id: string, opts: EntityProps<T>) => T;
 
 export default class Database {
   client: Havoc;
@@ -67,7 +68,7 @@ export default class Database {
   }
 
   async upsert<T extends AnyEntity>(
-    Entity: new (id: string, opts: EntityProps<T>) => T,
+    Entity: Entity<T>,
     id: string,
     opts: EntityProps<T>
   ) {
@@ -81,10 +82,7 @@ export default class Database {
     }
   }
 
-  async find<T extends AnyEntity>(
-    Entity: new (id: string, opts: EntityProps<T>) => T,
-    id: string
-  ): Promise<T> {
+  async find<T extends AnyEntity>(Entity: Entity<T>, id: string): Promise<T> {
     return this.orm.em.findOne(Entity, id).then(res => res || null);
   }
 
@@ -94,7 +92,12 @@ export default class Database {
     opts?: EntityProps<T>
   ): Promise<T> {
     let entitiy = await this.find(Entity, id);
-    if (!entitiy) {
+    if (entitiy && opts) {
+      wrap(entitiy).assign(
+        Object.fromEntries(Object.entries(opts).filter(([k]) => !entitiy[k]))
+      );
+      await this.flush();
+    } else if (!entitiy) {
       entitiy = new Entity(id, opts);
       await this.orm.em.persistAndFlush(entitiy);
     }
