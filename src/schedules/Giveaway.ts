@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Schedule from '../structures/bases/Schedule';
 import GiveawayEntity from '../structures/entities/GiveawayEntity';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
@@ -8,6 +7,9 @@ import Util from '../util';
 import { MessageEmbed } from 'discord.js';
 import ms = require('ms');
 import { SECONDS, MINUTES, HOURS, DAYS, NOOP } from '../util/CONSTANTS';
+import HavocGuild from '../structures/extensions/HavocGuild';
+import { EntityProps } from '../structures/Database';
+import HavocMessage from '../structures/extensions/HavocMessage';
 
 export default class Mute extends Schedule<GiveawayEntity> {
   edits: Map<GiveawayEntity['id'], NodeJS.Timer> = new Map();
@@ -44,7 +46,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
 
           if (
             timeLeft >= DAYS(1) &&
-            message.embeds[0].description.match(
+            message.embeds[0].description?.match(
               /\nTime remaining: (.+)$/
             )![1] === `**${ms(timeLeft, { long: true })}**`
           )
@@ -52,7 +54,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
           const embed = new MessageEmbed(message.embeds[0])
             .setColor(timeLeft <= SECONDS(3) ? 'RED' : 'ORANGE')
             .setDescription(
-              message.embeds[0].description.replace(
+              message.embeds[0].description?.replace(
                 /\nTime remaining: (.+)$/,
                 `\nTime remaining: **${ms(Math.max(timeLeft, SECONDS(1)), {
                   long: true
@@ -67,18 +69,21 @@ export default class Mute extends Schedule<GiveawayEntity> {
 
   async start(
     guildId: HavocGuild['id'],
-    entityProps: Exclude<EntityProps<T>, 'guild'>
+    entityProps: Exclude<EntityProps<GiveawayEntity>, 'guild'>
   ) {
     const giveaway = await super.start(guildId, entityProps);
     this.active.add(giveaway.message);
     this.scheduleEdits(giveaway);
+    return giveaway;
   }
 
   async end(giveaway: GiveawayEntity) {
     const channel = this.client.channels.cache.get(
       giveaway.channel
     ) as HavocTextChannel;
-    const message = await channel?.messages.fetch(giveaway.message).catch(NOOP);
+    const message = (await channel?.messages
+      .fetch(giveaway.message)
+      .catch(NOOP)) as HavocMessage;
 
     if (message) {
       if (message.embeds[0].footer!.text!.includes('ended')) return;
@@ -93,7 +98,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
           .filter(user => user)
       );
       if (!winner.length) {
-        return message.edit(
+        message.edit(
           '🎉 **GIVEAWAY ENDED** 🎉',
           message.embeds[0]
             .setDescription(`**Winner:** Could not be determined`)
@@ -105,6 +110,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
             .setColor('RED')
             .setTimestamp(new Date())
         );
+        return;
       }
 
       await message.edit(
