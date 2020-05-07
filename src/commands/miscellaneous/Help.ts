@@ -4,10 +4,12 @@ import Util from '../../util';
 import { EXAMPLE_ARG, CATEGORY_EMOJIS } from '../../util/CONSTANTS';
 import { Target, ExcludedOther, isOther } from '../../util/targetter';
 
-const generateExample = ({ example, type }: Arg) =>
-  example || Array.isArray(type)
+const generateExample = ({ example, type }: Arg) => {
+  if (Array.isArray(example)) return example;
+  return Array.isArray(type)
     ? (type as string[])
     : EXAMPLE_ARG[type as ExcludedOther];
+};
 
 export default class extends Command {
   constructor() {
@@ -91,9 +93,9 @@ export default class extends Command {
                   : '';
 
               return `${s}${
-                arg.name || Array.isArray(arg.type)
+                Array.isArray(arg.type)
                   ? (arg.type as string[]).join(' | ')
-                  : arg.type
+                  : arg.name
               }${formattedArg}${e}`;
             })
             .join(' ')}${formattedFlags}\``,
