@@ -46,7 +46,7 @@
     "node-fetch": "^2.3.0",
     "node-opus": "^0.3.2",
     "node-os-utils": "^1.2.2",
-    "pg": "^7.18.2",
+    "pg": "^8.0.3",
     "prettier": "^1.19.1",
     "pretty-ms": "^7.0.0",
     "prom-client": "^12.0.0",
