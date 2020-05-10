@@ -30,6 +30,9 @@ export default class extends Command {
       .then(guild => guild?.logs);
 
     if (existing) {
+      if (existing.channel === channel.id)
+        return message.respond(`logs are already enabled in ${channel}`);
+
       logs = {
         ...existing,
         channel: channel.id
