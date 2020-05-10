@@ -37,7 +37,7 @@ export default class Database {
       await this.orm
         .getSchemaGenerator()
         .getCreateSchemaSQL()
-        .then(sql => this.orm.em.getConnection().execute(sql));
+        .then(query => this.execute(query));
     }
   }
 
@@ -50,6 +50,10 @@ export default class Database {
       .getSchemaGenerator()
       .getDropSchemaSQL()
       .then(sql => this.orm.em.getConnection().execute(sql));
+  }
+
+  execute(query: string) {
+    return this.orm.em.getConnection().execute(query);
   }
 
   flush() {
