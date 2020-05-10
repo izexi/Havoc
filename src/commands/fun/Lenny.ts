@@ -11,6 +11,9 @@ export default class extends Command {
   }
 
   async run({ message }: { message: HavocMessage }) {
-    message.respond('( ͡° ͜ʖ ͡°)', false, true);
+    message.respond('( ͡° ͜ʖ ͡°)', {
+      author: false,
+      contentOnly: true
+    });
   }
 }

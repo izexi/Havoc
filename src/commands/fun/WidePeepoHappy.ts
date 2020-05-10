@@ -16,8 +16,10 @@ export default class extends Command {
   async run({ message }: { message: HavocMessage }) {
     message.respond(
       '<:widePeepoHappy1:678636233131425805><:widePeepoHappy2:678636283119140864><:widePeepoHappy3:678636320406634516><:widePeepoHappy4:678636358335463445>',
-      false,
-      true
+      {
+        author: false,
+        contentOnly: true
+      }
     );
   }
 }

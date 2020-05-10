@@ -21,11 +21,10 @@ export default class extends Command {
       '695301008326131804'
     ];
     message
-      .respond(
-        this.emojis.cache.get(Util.randomArrEl(emojis))!.toString(),
-        false,
-        true
-      )
+      .respond(this.emojis.cache.get(Util.randomArrEl(emojis))!.toString(), {
+        author: false,
+        contentOnly: true
+      })
       .then(msg => this.setTimeout(() => msg.edit('🙅'), 2000));
   }
 }

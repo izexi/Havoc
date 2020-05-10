@@ -13,7 +13,9 @@ export default class extends Command {
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const restart = await message
-      .respond('<a:Restarting:411680219636826112> Restarting..', false)
+      .respond('<a:Restarting:411680219636826112> Restarting..', {
+        author: false
+      })
       .then(msg => ({ channel: msg.channel.id, message: msg.id }));
 
     await this.db.upsert(DevEntity, message.author.id, { restart });
