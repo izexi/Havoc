@@ -41,7 +41,8 @@ export default class extends Command {
       const webhook = await channel.createWebhook(',HavocLogs', {
         avatar: this.user!.displayAvatarURL()
       });
-      const config = {
+
+      logs = {
         disabled: [],
         channel: channel.id,
         webhook: {
@@ -49,11 +50,9 @@ export default class extends Command {
           token: webhook.token!
         }
       };
-
-      message.guild!.logs = config;
-      logs = config;
     }
 
+    message.guild!.logs = logs;
     await this.db.upsert(GuildEntity, message.guild!.id, { logs });
 
     message.respond(
