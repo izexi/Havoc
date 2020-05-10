@@ -39,7 +39,10 @@ export default class extends Command {
       option: 'view' | 'add' | 'remove';
     }
   ) {
-    const bcPrefixes = [message.guild!.prefix, ...message.guild!.bcPrefixes]!;
+    const bcPrefixes = util.spliceDupes([
+      message.guild!.prefix,
+      ...message.guild!.bcPrefixes
+    ]);
 
     if (option === 'view')
       return message.respond(
@@ -74,7 +77,7 @@ export default class extends Command {
       bcPrefixes!.splice(bcPrefixes!.indexOf(prefix), 1);
     }
 
-    message.guild!.bcPrefixes = util.spliceDupes(bcPrefixes);
+    message.guild!.bcPrefixes = bcPrefixes;
     await this.db.upsert(GuildEntity, message.guild!.id, { bcPrefixes });
 
     message.respond(
