@@ -83,7 +83,7 @@ export default class extends Command {
           cleared.size
         )}\` ${Util.randomArrEl(emojis)}`
       )
-      .then(async message => message.delete({ timeout: 1300 }))
+      .then(message => message.delete({ timeout: 1300 }))
       .catch(NOOP);
   }
 }
