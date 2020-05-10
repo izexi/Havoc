@@ -211,7 +211,7 @@ export default class HavocMessage extends Message {
     methodsOrEmbed: Partial<EmbedMethods> | MessageEmbed,
     content?: string,
     files?: { attachment: Buffer; name?: string }[]
-  ) {
+  ): Promise<HavocMessage> {
     if (
       this.guild &&
       !(this.channel as TextChannel)
