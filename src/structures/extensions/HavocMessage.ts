@@ -259,19 +259,20 @@ export default class HavocMessage extends Message {
 
   async respond(
     toSend: string | Partial<EmbedMethods>,
-    author = true,
-    contentOnly = false
+    { author = true, contentOnly = false, deleteable = true } = {}
   ) {
-    if (contentOnly && typeof toSend === 'string') return this.send(toSend);
-    return this.sendEmbed(
+    const embedMethods =
       typeof toSend === 'string'
         ? {
             setDescription: `${
               author ? `**${this.author.tag}** ` : ''
             }${toSend}${toSend.endsWith('.') ? '' : '.'}`
           }
-        : toSend
-    );
+        : toSend;
+    if (contentOnly && typeof toSend === 'string') return this.send(toSend);
+    if (!deleteable) return this.send(this.constructEmbed(embedMethods));
+
+    return this.sendEmbed(embedMethods);
   }
 
   async findConfigChannel(config: 'suggestion' | 'giveaway') {
