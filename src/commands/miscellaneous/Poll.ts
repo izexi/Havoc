@@ -7,17 +7,20 @@ import { MAX_LIMITS, PROMPT_ENTER } from '../../util/CONSTANTS';
 export default class extends Command {
   constructor() {
     super(__filename, {
-      description: 'Create a poll with options.',
+      description:
+        'Create a poll for a question with options, which can inputted through the prompts invoked by using this command.',
       promptOnly: true,
       args: [
         {
           name: 'question',
+          required: true,
           type: Target.TEXT,
           prompt: PROMPT_ENTER('the question that you would like to poll')
         },
         {
           name: 'options (option1;option2;...)',
           example: ['yes;no'],
+          required: true,
           type: message => message.text.split(';'),
           prompt: PROMPT_ENTER(
             'the options seperated by `;`, e.g: `yes;no` would be options yes and no'
