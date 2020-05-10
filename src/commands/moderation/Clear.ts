@@ -78,7 +78,8 @@ export default class extends Command {
         `cleared \`${cleared.size} ${Util.plural(
           'message',
           cleared.size
-        )}\` ${Util.randomArrEl(emojis)}`
+        )}\` ${Util.randomArrEl(emojis)}`,
+        { deleteable: false }
       )
       .then(message => message.delete({ timeout: 1300 }))
       .catch(NOOP);
