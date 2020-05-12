@@ -8,16 +8,16 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'Restart me.',
-      dm: true
+      dm: true,
     });
   }
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const restart = await message
       .respond(`${EMOJIS.LOADING} Restarting..`, {
-        author: false
+        author: false,
       })
-      .then(msg => ({ channel: msg.channel.id, message: msg.id }));
+      .then((msg) => ({ channel: msg.channel.id, message: msg.id }));
 
     await this.db.upsert(DevEntity, message.author.id, { restart });
     process.exit(1);

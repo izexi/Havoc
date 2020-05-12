@@ -10,7 +10,7 @@ import {
   PERCENTAGE,
   IDS,
   VOTE_MESSAGE_LINK,
-  VOTE_LINK
+  VOTE_LINK,
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -18,7 +18,7 @@ export default class extends Command {
     super(__filename, {
       dm: true,
       description: 'Info about me.',
-      aliases: ['i', 'stats']
+      aliases: ['i', 'stats'],
     });
   }
 
@@ -43,14 +43,14 @@ export default class extends Command {
             - [Vote for me](${await getVoteLink()})
             - [Support server](https://discord.gg/3Fewsxq)
             - [Vultr hosting (refferal)](https://www.vultr.com/?ref=7321055)`,
-          inline: true
+          inline: true,
         },
         {
           name: '❯Uptime',
           value: `- Shard: ${prettyMs(this.uptime!)}
                   - Process: ${prettyMs(process.uptime())}
                   - Docker container: ${prettyMs(os.uptime() * SECONDS(1))}`,
-          inline: true
+          inline: true,
         },
         {
           name: '❯Memory usage',
@@ -60,7 +60,7 @@ export default class extends Command {
             process.memoryUsage().heapUsed,
             os.totalmem()
           ).toFixed(2)}%)`,
-          inline: true
+          inline: true,
         },
         {
           name: '❯Stats',
@@ -69,27 +69,27 @@ export default class extends Command {
             - Cached users: ${this.users.cache.size}
             - Channels: ${this.channels.cache.size}
             - Cached messages: ${this.channels.cache
-              .filter(channel => 'messages' in channel)
+              .filter((channel) => 'messages' in channel)
               .reduce(
                 (total, channel) =>
                   total +
                   (channel as TextChannel | DMChannel).messages.cache.size,
                 0
               )}`,
-          inline: true
+          inline: true,
         },
         {
           name: '❯Github',
           value: '[izexi](https://github.com/izexi/Havoc)',
-          inline: true
+          inline: true,
         },
         {
           name: '❯Versions',
           value: `- [discord.js](https://github.com/discordjs/discord.js): v${version}
             - Node.js: ${process.version}`,
-          inline: true
-        }
-      ]
+          inline: true,
+        },
+      ],
     });
   }
 }

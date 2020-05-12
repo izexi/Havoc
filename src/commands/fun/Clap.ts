@@ -13,15 +13,15 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: clapify('enter the text that you would like to embed.')
-      }
+        prompt: clapify('enter the text that you would like to embed.'),
+      },
     });
   }
 
   async run({ message, text }: { message: HavocMessage; text: string }) {
     message.send(clapify(text), {
       split: { char: ' ' },
-      disableMentions: 'everyone'
+      disableMentions: 'everyone',
     });
   }
 }

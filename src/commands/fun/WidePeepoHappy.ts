@@ -7,14 +7,14 @@ export default class extends Command {
     super(__filename, {
       dm: true,
       description: EMOJIS.WIDEPEEPOHAPPY,
-      aliases: [EMOJIS.WIDEPEEPOHAPPY]
+      aliases: [EMOJIS.WIDEPEEPOHAPPY],
     });
   }
 
   async run({ message }: { message: HavocMessage }) {
     message.respond(EMOJIS.WIDEPEEPOHAPPY, {
       author: false,
-      contentOnly: true
+      contentOnly: true,
     });
   }
 }

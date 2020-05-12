@@ -16,13 +16,13 @@ export default class extends Command {
         {
           required: true,
           type: Target.USER,
-          prompt: PROMPT_INITIAL[Target.USER]('you would like to ban')
+          prompt: PROMPT_INITIAL[Target.USER]('you would like to ban'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'BAN_MEMBERS'
+      requiredPerms: 'BAN_MEMBERS',
     });
   }
 
@@ -32,7 +32,7 @@ export default class extends Command {
       message,
       user,
       text: reason,
-      flags
+      flags,
     }: {
       message: HavocMessage;
       user: HavocUser;
@@ -64,14 +64,14 @@ export default class extends Command {
         reason: `Banned by ${message.author.tag}${
           reason ? ` for the reason ${reason}` : ''
         }`,
-        days: 7
+        days: 7,
       });
       await message.sendEmbed({
         setDescription: `**${message.author.tag}** I have banned \`${
           user.tag
         }\` from \`${message.guild!.name}\`${
           reason ? ` for the reason ${reason}` : '.'
-        } ${EMOJIS.BANNED}`
+        } ${EMOJIS.BANNED}`,
       });
 
       message.guild!.sendModLog({ message, reason, target: user });

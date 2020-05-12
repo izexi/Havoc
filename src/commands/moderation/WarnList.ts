@@ -16,9 +16,9 @@ export default class extends Command {
         type: Target.USER,
         prompt: PROMPT_INITIAL[Target.USER](
           'se warnings you would like to view'
-        )
+        ),
       },
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -26,7 +26,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      user
+      user,
     }: {
       message: HavocMessage;
       user: HavocUser;
@@ -56,7 +56,7 @@ export default class extends Command {
       ),
       thumbnails: Array(warns.history.length).fill(user.pfp),
       maxPerPage: 1,
-      page: Number(message.arg)
+      page: Number(message.arg),
     });
   }
 }

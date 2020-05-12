@@ -13,9 +13,9 @@ export default class extends Command {
       args: {
         type: Target.ROLE,
         required: true,
-        prompt: PROMPT_INITIAL[Target.ROLE]('to view info about')
+        prompt: PROMPT_INITIAL[Target.ROLE]('to view info about'),
       },
-      requiredPerms: ['VIEW_AUDIT_LOG', 'MANAGE_ROLES']
+      requiredPerms: ['VIEW_AUDIT_LOG', 'MANAGE_ROLES'],
     });
   }
 
@@ -29,22 +29,22 @@ export default class extends Command {
         {
           name: '❯Members',
           value: `${role.members.size} (You can view a list of all members by doing \`${message.prefix}memberlist ${role.id}\`)`,
-          inline: false
+          inline: false,
         },
         {
           name: '❯Colour',
           value: role.color ? role.hexColor : 'No colour set.',
-          inline: false
+          inline: false,
         },
         {
           name: '❯Hoisted',
           value: role.hoist ? 'Yes' : 'No',
-          inline: true
+          inline: true,
         },
         {
           name: '❯Mentionable',
           value: role.mentionable ? 'Yes' : 'No',
-          inline: true
+          inline: true,
         },
         {
           name: '❯Permissions',
@@ -60,9 +60,9 @@ export default class extends Command {
                   .join('\n'),
                 'diff'
               ),
-          inline: false
-        }
-      ]
+          inline: false,
+        },
+      ],
     });
   }
 }

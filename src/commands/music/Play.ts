@@ -14,9 +14,9 @@ export default class extends Command {
         required: true,
         promptOpts: {
           initial: PROMPT_ENTER('the song you would like to play'),
-          invalid: PROMPT_INVALD("the song's name or a URL")
-        }
-      }
+          invalid: PROMPT_INVALD("the song's name or a URL"),
+        },
+      },
     });
   }
 
@@ -38,7 +38,7 @@ export default class extends Command {
     connection
       .play(
         ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ', {
-          filter: 'audioonly'
+          filter: 'audioonly',
         })
       )
       .on('finish', () => message.guild!.voice?.channel?.leave());

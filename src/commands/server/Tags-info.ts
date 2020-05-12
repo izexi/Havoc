@@ -11,21 +11,21 @@ export async function tagFields(tag: TagEntity, client: Havoc) {
     { name: '❯Content', value: Util.codeblock(tag.content) },
     {
       name: '❯Created by',
-      value: (await client.users.fetch(tag.createdBy)).tag
+      value: (await client.users.fetch(tag.createdBy)).tag,
     },
     {
       name: '❯Created at',
-      value: `${new Date(tag.createdAt).toLocaleString()} (UTC)`
-    }
+      value: `${new Date(tag.createdAt).toLocaleString()} (UTC)`,
+    },
   ];
   if (tag.updatedBy) {
     fields.push({
       name: '❯Last modified by',
-      value: (await client.users.fetch(tag.updatedBy)).tag
+      value: (await client.users.fetch(tag.updatedBy)).tag,
     });
     fields.push({
       name: '❯Last modified at',
-      value: `${new Date(tag.updatedAt).toLocaleString()} (UTC)`
+      value: `${new Date(tag.updatedAt).toLocaleString()} (UTC)`,
     });
   }
   return fields;
@@ -38,7 +38,7 @@ export default class extends Command {
       args: {
         name: 'name',
         example: ['name', 'a name with spaces'],
-        type: message => {
+        type: (message) => {
           let possibleName = message.text;
           if (message.guild!.tags.has(possibleName))
             return message.shiftArg(possibleName);
@@ -48,11 +48,11 @@ export default class extends Command {
           initial: PROMPT_ENTER(
             'the name of the tag you would like to view info about, e.g: `name` or `a name`'
           ),
-          invalid: "I couldn't find a tag with that name"
-        }
+          invalid: "I couldn't find a tag with that name",
+        },
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -67,13 +67,13 @@ export default class extends Command {
     if (!guild) return;
 
     await guild.tags.init();
-    const tag = guild.tags.getItems().find(tag => tag.name === name)!;
+    const tag = guild.tags.getItems().find((tag) => tag.name === name)!;
 
     message.respond({
       addFields: await tagFields(tag, this),
       setThumbnail: await this.users
         .fetch(tag.createdBy)
-        .then(user => user.displayAvatarURL())
+        .then((user) => user.displayAvatarURL()),
     });
   }
 }

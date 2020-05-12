@@ -15,10 +15,10 @@ export default class extends Command {
       args: {
         type: Target.ROLE,
         required: true,
-        prompt: PROMPT_INITIAL[Target.ROLE]('set the autorole to')
+        prompt: PROMPT_INITIAL[Target.ROLE]('set the autorole to'),
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -28,13 +28,13 @@ export default class extends Command {
   ) {
     const existing = await this.db
       .find(GuildEntity, message.guild!.id)
-      .then(guild =>
+      .then((guild) =>
         guild?.autorole ? message.guild!.roles.cache.get(guild.autorole) : null
       );
 
     message.guild!.autorole = role.id;
     await this.db.upsert(GuildEntity, message.guild!.id, {
-      autorole: role.id
+      autorole: role.id,
     });
 
     message.respond(

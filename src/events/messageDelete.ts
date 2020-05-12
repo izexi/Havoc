@@ -1,12 +1,12 @@
 import HavocMessage, {
-  EmbedMethods
+  EmbedMethods,
 } from '../structures/extensions/HavocMessage';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import Util from '../util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import { MIN_LIMITS } from '../util/CONSTANTS';
 
-export default async function(message: HavocMessage) {
+export default async function (message: HavocMessage) {
   const guild = message.guild as HavocGuild;
   if (
     !guild ||
@@ -21,18 +21,18 @@ export default async function(message: HavocMessage) {
   const fields = [
     {
       name: '**📅 Timestamp of message :**',
-      value: `${message.createdAt.toLocaleString()} (UTC)`
+      value: `${message.createdAt.toLocaleString()} (UTC)`,
     },
     {
       name: '**📂 Channel :**',
       value: message.channel.toString(),
-      inline: true
+      inline: true,
     },
     {
       name: '**✍ Message author :**',
       value: message.author.toString(),
-      inline: true
-    }
+      inline: true,
+    },
   ];
   if (
     message.content &&
@@ -40,7 +40,7 @@ export default async function(message: HavocMessage) {
   )
     fields.push({
       name: '**🗒 Message content :**',
-      value: Util.codeblock(message.content)
+      value: Util.codeblock(message.content),
     });
 
   const embed: Partial<EmbedMethods> = {
@@ -48,22 +48,22 @@ export default async function(message: HavocMessage) {
     setColor: 'RED',
     setAuthor: [
       `${message.author.tag}'s message was deleted`,
-      message.author.pfp
+      message.author.pfp,
     ],
-    setFooter: `Message ID: ${message.id}`
+    setFooter: `Message ID: ${message.id}`,
   };
 
   if (message.attachments.size) {
     attachments.push({
       attachment: message.attachments.first()!.proxyURL,
-      name: 'deleted.png'
+      name: 'deleted.png',
     });
     embed.setImage = 'attachment://deleted.png';
   }
   if (message.content.length >= 1800) {
     attachments.push({
       attachment: Buffer.from(message.content, 'utf8'),
-      name: 'deleted_content.txt'
+      name: 'deleted_content.txt',
     });
   }
   if (attachments.length) embed.attachFiles = attachments;

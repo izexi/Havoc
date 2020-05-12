@@ -2,7 +2,7 @@ import HavocMessage from '../structures/extensions/HavocMessage';
 import Havoc from '../client/Havoc';
 import regex from '../util/regex';
 
-export default function(this: Havoc, message: HavocMessage) {
+export default function (this: Havoc, message: HavocMessage) {
   if (message.content.toLowerCase() === ',havoc')
     return message.channel.send('hi');
 

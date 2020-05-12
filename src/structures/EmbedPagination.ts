@@ -51,7 +51,7 @@ export default class {
       setDescription: `${this.descriptions
         .slice(page * this.maxPerPage - this.maxPerPage, page * this.maxPerPage)
         .join('\n')}`,
-      setThumbnail: this.thumbnails[this.page - 1]
+      setThumbnail: this.thumbnails[this.page - 1],
     });
     return embed;
   }
@@ -72,11 +72,11 @@ export default class {
                 `${this.title}\n\n\n${this.descriptions.join('\n')}`,
                 'utf8'
               ),
-              name: `${this.title}.txt`
-            }
-          ]
+              name: `${this.title}.txt`,
+            },
+          ],
         })
-        .then(msg => msg.url);
+        .then((msg) => msg.url);
     }
   }
 
@@ -87,7 +87,7 @@ export default class {
     this.embed = (await this.message.channel.send(
       this.pageEmbed(this.page)
     )) as HavocMessage;
-    EMOJIS.PAGINATION.forEach(emoji => this.embed.safeReact(emoji));
+    EMOJIS.PAGINATION.forEach((emoji) => this.embed.safeReact(emoji));
 
     const collector = this.embed.createReactionCollector(
       (reaction, user) =>
@@ -117,18 +117,18 @@ export default class {
               target: (message: HavocMessage) => {
                 const number = Number(message.content);
                 if (number && number <= this.totalPages) return number;
-              }
+              },
             })
-            .then(response => {
+            .then((response) => {
               const page = response[Target.FUNCTION];
               if (Number.isInteger(page)) {
                 this.page = page;
                 this.embed.edit(this.pageEmbed(page));
               }
             })
-            .catch(err =>
+            .catch((err) =>
               this.message.client.logger.error(err.message, {
-                origin: 'EmbedPagination#setup()'
+                origin: 'EmbedPagination#setup()',
               })
             );
           break;

@@ -21,7 +21,7 @@ export default class extends Command {
       args: {
         name: 'command',
         example: ['giveaway', 'giveaway config'],
-        type: message => {
+        type: (message) => {
           const possibleCmd = message.arg?.toLowerCase();
           if (!possibleCmd) return;
 
@@ -34,14 +34,14 @@ export default class extends Command {
                 `${command.name}-${possibleSubCommand}`
               ) || command
             : command;
-        }
-      }
+        },
+      },
     });
   }
 
   async run({
     message,
-    fn: command
+    fn: command,
   }: {
     message: HavocMessage;
     fn: Command | undefined;
@@ -55,24 +55,24 @@ export default class extends Command {
           {
             name: '❯Category',
             value: Util.captialise(command.category),
-            inline: false
-          }
+            inline: false,
+          },
         ],
         attachFiles: [`src/assets/images/categories/${command.category}.png`],
-        setThumbnail: `attachment://${command.category}.png`
+        setThumbnail: `attachment://${command.category}.png`,
       };
 
       if (command.aliases.size) {
         embed.addFields.push({
           name: '❯Aliases',
-          value: [...command.aliases].map(alias => `\`${alias}\``).join(', '),
-          inline: true
+          value: [...command.aliases].map((alias) => `\`${alias}\``).join(', '),
+          inline: true,
         });
       }
 
       if (command.args.length && !command.promptOnly) {
         const prefixedFlags = command.flags
-          .map(flag => `${message.prefix}${flag}`)
+          .map((flag) => `${message.prefix}${flag}`)
           .join(' | ');
         const formattedFlags = command.flags.length
           ? ` <${
@@ -85,7 +85,7 @@ export default class extends Command {
         embed.addFields.push({
           name: '❯Usage',
           value: `\`${message.prefix}${name} ${command.args
-            .map(arg => {
+            .map((arg) => {
               const [s, e] = arg.required ? '<>' : '[]';
               const formattedArg =
                 !isOther(arg.type) && arg.name && !arg.name.includes('(')
@@ -99,13 +99,13 @@ export default class extends Command {
               }${formattedArg}${e}`;
             })
             .join(' ')}${formattedFlags}\``,
-          inline: false
+          inline: false,
         });
 
         const generateHandled = (args: Arg[], i: number) => {
           const handledArgs = args
             .slice(0, i)
-            .map(arg => Util.randomArrEl(generateExample(arg)));
+            .map((arg) => Util.randomArrEl(generateExample(arg)));
           return handledArgs.length ? `${handledArgs.join(' ')} ` : '';
         };
 
@@ -122,8 +122,8 @@ export default class extends Command {
                   ? generatedExamples
                   : [
                       args
-                        .map(arg => Util.randomArrEl(generateExample(arg)))
-                        .join(' ')
+                        .map((arg) => Util.randomArrEl(generateExample(arg)))
+                        .join(' '),
                     ];
               }
 
@@ -133,7 +133,7 @@ export default class extends Command {
                   : examples.concat(
                       generateHandled(args, i).slice(0, -1),
                       ...generatedExamples.map(
-                        eg => `${generateHandled(args, i)}${eg}`
+                        (eg) => `${generateHandled(args, i)}${eg}`
                       )
                     );
               }
@@ -141,11 +141,11 @@ export default class extends Command {
               return examples;
             }, [] as string[])
             .map(
-              eg =>
+              (eg) =>
                 `• \`${message.prefix}${command.name}${eg ? ` ${eg}` : ''}\``
             )
             .join('\n'),
-          inline: false
+          inline: false,
         });
       }
 
@@ -167,7 +167,7 @@ export default class extends Command {
 				Click **[here](https://www.patreon.com/user?u=15028160)** or **[here](https://paypal.me/havoceditor)** to support me by donating
 				⠀`,
       addFields: [...message.client.commandHandler.holds.values()]
-        .filter(command => command.category !== 'dev' && !command.sub)
+        .filter((command) => command.category !== 'dev' && !command.sub)
         .reduce(
           (
             fields: { name: string; value: string }[],
@@ -187,8 +187,8 @@ export default class extends Command {
 
               if (
                 commands
-                  .filter(command => command.category === category)
-                  .every(command => existing.value.includes(command.name))
+                  .filter((command) => command.category === category)
+                  .every((command) => existing.value.includes(command.name))
               )
                 existing.value += '\n⠀';
             } else {
@@ -199,7 +199,7 @@ export default class extends Command {
           },
           []
         )
-        .sort((prev, curr) => curr.value.length - prev.value.length)
+        .sort((prev, curr) => curr.value.length - prev.value.length),
     });
   }
 }

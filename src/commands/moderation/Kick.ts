@@ -5,7 +5,6 @@ import Havoc from '../../client/Havoc';
 import Util from '../../util';
 import HavocGuildMember from '../../structures/extensions/HavocGuildMember';
 import { PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
-import { mem } from 'node-os-utils';
 
 export default class extends Command {
   constructor() {
@@ -17,13 +16,13 @@ export default class extends Command {
         {
           required: true,
           type: Target.MEMBER,
-          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to kick')
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to kick'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'KICK_MEMBERS'
+      requiredPerms: 'KICK_MEMBERS',
     });
   }
 
@@ -33,7 +32,7 @@ export default class extends Command {
       message,
       member,
       text: reason,
-      flags
+      flags,
     }: {
       message: HavocMessage;
       member: HavocGuildMember;
@@ -65,7 +64,7 @@ export default class extends Command {
           member.user.tag
         }\` from \`${message.guild!.name}\`${
           reason ? ` for the reason ${reason}` : '.'
-        } ${EMOJIS.KICKED}`
+        } ${EMOJIS.KICKED}`,
       });
 
       message.guild!.sendModLog({ message, reason, target: member });

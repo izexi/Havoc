@@ -9,13 +9,13 @@ export default class extends Command {
       dm: true,
       description: "View a user's avatar along with the URL.",
       aliases: ['a', 'av'],
-      args: { type: Target.USER }
+      args: { type: Target.USER },
     });
   }
 
   async run({
     message,
-    user
+    user,
   }: {
     message: HavocMessage;
     user: HavocUser | null;
@@ -28,7 +28,7 @@ export default class extends Command {
         user.id === message.author.id ? 'your' : `${user.tag}'s`
       } avatar](${avatar})`,
       setImage: avatar,
-      setThumbnail: avatar
+      setThumbnail: avatar,
     });
   }
 }

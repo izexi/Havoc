@@ -8,7 +8,7 @@ export enum STATUS_ICONS {
   DISCONNECTED = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Red.svg/240px-Red.svg.png',
   ERROR = 'https://www.publicdomainpictures.net/pictures/30000/velka/dark-red-background.jpg',
   RECONNECTING = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/ICS_Quebec.svg/1200px-ICS_Quebec.svg.png',
-  RESUMED = 'https://www.tileflair.co.uk/images/sized/images/products/carnaby-yellow/101115/Carnaby-Yellow-180x120mm-RTCRY6_d1974737e8129c7bb88892b7409c39bb.jpg'
+  RESUMED = 'https://www.tileflair.co.uk/images/sized/images/products/carnaby-yellow/101115/Carnaby-Yellow-180x120mm-RTCRY6_d1974737e8129c7bb88892b7409c39bb.jpg',
 }
 
 export enum MAX_LIMITS {
@@ -18,14 +18,14 @@ export enum MAX_LIMITS {
   EMOJI_SIZE = 256,
   DELETE_ROLE_EMBED = 1700,
   PLAY_URL = 32,
-  EMBED_DESCRIPTION = 2048
+  EMBED_DESCRIPTION = 2048,
 }
 
 export enum MIN_LIMITS {
   EMOJI_NAME = 2,
   LOGS_CONFIG_OPTION = 0,
   MESSAGE_DELETE_CONTENT = 1800,
-  MESSAGE_UPDATE_CONTENT = 900
+  MESSAGE_UPDATE_CONTENT = 900,
 }
 
 export enum IDS {
@@ -33,7 +33,7 @@ export enum IDS {
   SERVER_OWNER = '473618117113806868',
   GUILD_JOIN_LEAVE = '417364417374715924',
   BUGS_ISSUES = '406873476591517706',
-  UNHANDLED_REJECTIONS = '612603429591973928'
+  UNHANDLED_REJECTIONS = '612603429591973928',
 }
 
 export const SMALL_CAPS: { [key: string]: string } = {
@@ -62,7 +62,7 @@ export const SMALL_CAPS: { [key: string]: string } = {
   w: 'ᴡ',
   x: 'x',
   y: 'ʏ',
-  z: 'ᴢ'
+  z: 'ᴢ',
 };
 
 export const MODLOGS_COLOUR: { [key: string]: string } = {
@@ -73,7 +73,7 @@ export const MODLOGS_COLOUR: { [key: string]: string } = {
   softban: 'DARK_ORANGE',
   ban: 'RED',
   unban: 'GREEN',
-  unmute: 'GREEN'
+  unmute: 'GREEN',
 };
 
 export const EXAMPLE_ARG: {
@@ -86,7 +86,7 @@ export const EXAMPLE_ARG: {
   [Target.ROLE]: ['@Role', 'role', '406904075112677377'],
   [Target.TEXT]: ['some text'],
   [Target.TIME]: ['5', '5m', '2h5m'],
-  [Target.USER]: ['@Havoc', 'havoc', '191615925336670208']
+  [Target.USER]: ['@Havoc', 'havoc', '191615925336670208'],
 };
 
 export const PROMPT_INITIAL = {
@@ -109,10 +109,10 @@ export const PROMPT_INITIAL = {
   [Target.OPTION]: (options: string[], action: string) =>
     `would you like to ${options
       .slice(0, -1)
-      .map(opt => `\`${opt}\``)
+      .map((opt) => `\`${opt}\``)
       .join(', ')} or \`${Util.lastArrEl(
       options
-    )}\` the ${action}? (enter the according option)`
+    )}\` the ${action}? (enter the according option)`,
 };
 
 export const PROMPT_ENTER = (action: string) => `enter ${action}.`;
@@ -173,7 +173,7 @@ export const EMOJIS = {
   BOTCLEAR: [
     '<:botclear1:709141522364235787>',
     '<:botclear2:709141562935869530>',
-    '<:botclear3:709141596444295189>'
+    '<:botclear3:709141596444295189>',
   ],
   HUG: [
     '695300729736265770',
@@ -181,7 +181,7 @@ export const EMOJIS = {
     '695300820123648011',
     '695300861903110164',
     '695300958271438931',
-    '695301008326131804'
+    '695301008326131804',
   ],
   GAY: (percentage: number) => {
     if (percentage >= 75) return '<:gay:410129441755496448>';
@@ -197,8 +197,8 @@ export const EMOJIS = {
     server: '🛠',
     donators: '💸',
     music: '🎶',
-    image: '🖼'
-  }
+    image: '🖼',
+  },
 };
 
 export const WELCOMER_EMOJIS = ['✨', '🎉', '⚡', '🔥', '☄', '💨', '🌙', '💥'];

@@ -6,7 +6,7 @@ import { tagFields } from './Tags-info';
 export default class extends Command {
   constructor() {
     super(__filename, {
-      description: 'View all the tags in the server.'
+      description: 'View all the tags in the server.',
     });
   }
 
@@ -29,8 +29,8 @@ export default class extends Command {
           .sort(
             (prev, curr) => curr.createdAt.getTime() - prev.createdAt.getTime()
           )
-          .map(tag =>
-            tagFields(tag, this).then(fields =>
+          .map((tag) =>
+            tagFields(tag, this).then((fields) =>
               fields
                 .map(
                   ({ name, value }) =>
@@ -46,11 +46,11 @@ export default class extends Command {
         guild.tags
           .getItems()
           .map(({ createdBy }) =>
-            this.users.fetch(createdBy).then(user => user.displayAvatarURL())
+            this.users.fetch(createdBy).then((user) => user.displayAvatarURL())
           )
       ),
       maxPerPage: 1,
-      page: Number(message.arg)
+      page: Number(message.arg),
     });
   }
 }

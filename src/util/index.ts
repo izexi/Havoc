@@ -21,11 +21,11 @@ export default {
       files.add(
         fs
           .readdir(parentDir)
-          .then(children => children.map(child => join(parentDir, child)))
+          .then((children) => children.map((child) => join(parentDir, child)))
       );
       return files;
     }, new Set() as Set<Promise<string[]>>);
-    return Promise.all(childrenPaths).then(paths => paths.flat());
+    return Promise.all(childrenPaths).then((paths) => paths.flat());
   },
 
   arrayify<T>(arg: T) {
@@ -37,20 +37,21 @@ export default {
   },
 
   captialise(str: string) {
-    return str.replace(/./, letter => letter.toUpperCase());
+    return str.replace(/./, (letter) => letter.toUpperCase());
   },
 
   async haste(body: string, extension = 'txt') {
     return fetch('https://hasteb.in/documents', { method: 'POST', body })
       .then(
-        async res => `https://hasteb.in/${(await res.json()).key}.${extension}`
+        async (res) =>
+          `https://hasteb.in/${(await res.json()).key}.${extension}`
       )
       .catch(async () =>
         fetch('https://paste.nomsy.net/documents', {
           method: 'POST',
-          body
+          body,
         }).then(
-          async res =>
+          async (res) =>
             `https://paste.nomsy.net/${(await res.json()).key}.${extension}`
         )
       );
@@ -67,14 +68,14 @@ export default {
   normalizePermFlag(perm: string) {
     return perm
       .toLowerCase()
-      .replace(/(^|"|_)(\S)/g, s => s.toUpperCase())
+      .replace(/(^|"|_)(\S)/g, (s) => s.toUpperCase())
       .replace(/_/g, ' ')
       .replace(/Guild/g, 'Server')
       .replace(/Use Vad/g, 'Use Voice Acitvity');
   },
 
   inObj(flags: { [key: string]: undefined }, ...flag: string[]) {
-    return flag.some(f => f in flags);
+    return flag.some((f) => f in flags);
   },
 
   stripBlankLines(str: string) {
@@ -85,13 +86,13 @@ export default {
   ordinal(n: number) {
     // https://v8.dev/features/intl-pluralrules#ordinal-numbers
     const pr = new Intl.PluralRules('en', {
-      type: 'ordinal'
+      type: 'ordinal',
     });
     const suffixes = new Map([
       ['one', 'st'],
       ['two', 'nd'],
       ['few', 'rd'],
-      ['other', 'th']
+      ['other', 'th'],
     ]);
     const rule = pr.select(n);
     const suffix = suffixes.get(rule);
@@ -109,14 +110,14 @@ export default {
     ...props: (keyof T)[]
   ) {
     props
-      .filter(prop => target[prop])
-      .forEach(prop => (source[prop] = target[prop]));
+      .filter((prop) => target[prop])
+      .forEach((prop) => (source[prop] = target[prop]));
   },
 
   smallCaps(str: string) {
     return str.replace(
       new RegExp(Object.keys(SMALL_CAPS).join('|'), 'gi'),
-      letter => SMALL_CAPS[letter] || letter
+      (letter) => SMALL_CAPS[letter] || letter
     );
   },
 
@@ -135,5 +136,5 @@ export default {
       }
     });
     return arr;
-  }
+  },
 };

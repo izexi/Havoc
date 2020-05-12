@@ -11,8 +11,8 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: PROMPT_INITIAL[Target.TEXT]('mock')
-      }
+        prompt: PROMPT_INITIAL[Target.TEXT]('mock'),
+      },
     });
   }
 

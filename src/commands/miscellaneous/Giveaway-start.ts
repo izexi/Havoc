@@ -8,7 +8,7 @@ import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   PROMPT_ENTER,
-  EMOJIS
+  EMOJIS,
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -21,7 +21,7 @@ export default class extends Command {
           name: 'duration',
           type: Target.TIME,
           required: true,
-          prompt: PROMPT_INITIAL[Target.TIME]('giveaway')
+          prompt: PROMPT_INITIAL[Target.TIME]('giveaway'),
         },
         {
           name: 'amount of winners',
@@ -34,8 +34,8 @@ export default class extends Command {
             ),
             invalid: PROMPT_INVALD(
               'a valid number. `5` would allow the giveaway to have 5 winners for example'
-            )
-          }
+            ),
+          },
         },
         {
           name: 'prize',
@@ -45,12 +45,12 @@ export default class extends Command {
             initial: PROMPT_ENTER('the prize that of the giveaway'),
             invalid: PROMPT_INVALD(
               'the prize of the giveaway. `Nothing` would start a giveaway that has nothing as a prize for example'
-            )
-          }
-        }
+            ),
+          },
+        },
       ],
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -60,7 +60,7 @@ export default class extends Command {
       message,
       time,
       number: winners,
-      text: prize
+      text: prize,
     }: {
       message: HavocMessage;
       time: number;
@@ -76,13 +76,13 @@ export default class extends Command {
       setDescription: `React with ${
         EMOJIS.GIVEAWAY
       } to enter!\nTime remaining: **${ms(time, {
-        long: true
+        long: true,
       })}**`,
       setFooter: `${winners || 1} ${Util.plural(
         'Winner',
         Number(winners) || 1
       )} | Ends at: `,
-      setColor: 'GREEN'
+      setColor: 'GREEN',
     });
     if (time > 60000) embed.setTimestamp(Date.now() + time);
 
@@ -101,14 +101,14 @@ export default class extends Command {
             Number(winners) || 1
           )} | Giveaway ID: ${giveawayMsg.id} | Ends at: `
         )
-      )
+      ),
     ]);
 
     await this.schedules.giveaway.start(message.guild!.id, {
       end: new Date(Date.now() + time),
       channel: giveawayMsg.channel.id,
       message: giveawayMsg.id,
-      winners
+      winners,
     });
     message.respond(`I have started the [giveaway](${giveawayMsg.url}).`);
   }

@@ -15,8 +15,8 @@ export default class extends Command {
         required: true,
         prompt: PROMPT_INITIAL[Target.USER](
           'se avatar you would like to search'
-        )
-      }
+        ),
+      },
     });
   }
 
@@ -25,7 +25,7 @@ export default class extends Command {
       setDescription: `[Image search of ${user.tag}'s avatar](https://images.google.com/searchbyimage?image_url=${user.pfp})`,
       setThumbnail:
         'https://thesocietypages.org/cyborgology/files/2014/05/Dictionary.png',
-      setURL: `https://images.google.com/searchbyimage?image_url=${user.pfp}`
+      setURL: `https://images.google.com/searchbyimage?image_url=${user.pfp}`,
     });
   }
 }

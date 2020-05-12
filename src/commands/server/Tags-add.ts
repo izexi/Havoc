@@ -14,11 +14,11 @@ export default class extends Command {
         {
           name: 'name',
           example: ['name', '"a name with spaces"'],
-          type: message => {
+          type: (message) => {
             const name = message.arg;
             if (name && !name.startsWith('"')) return message.shiftArg(name);
 
-            const endIndex = message.args.findIndex(arg => arg.endsWith('"'));
+            const endIndex = message.args.findIndex((arg) => arg.endsWith('"'));
             if (endIndex === -1) return message.shiftArg(name);
 
             return message.args
@@ -29,7 +29,7 @@ export default class extends Command {
           required: true,
           prompt: PROMPT_ENTER(
             'what you would like to name the tag, e.g: `name` or `"a name"`'
-          )
+          ),
         },
         {
           name: 'content',
@@ -37,11 +37,11 @@ export default class extends Command {
           required: true,
           prompt: PROMPT_ENTER(
             'what you would like the content of the tag to be'
-          )
-        }
+          ),
+        },
       ],
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -50,7 +50,7 @@ export default class extends Command {
     {
       message,
       fn: name,
-      text: content
+      text: content,
     }: { message: HavocMessage; fn: string; text: string }
   ) {
     if (message.guild!.tags.has(name))
@@ -68,7 +68,7 @@ export default class extends Command {
       new TagEntity({
         name,
         content,
-        createdBy: message.author.id
+        createdBy: message.author.id,
       })
     );
     await this.db.flush();

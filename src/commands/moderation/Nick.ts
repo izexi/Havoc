@@ -16,15 +16,15 @@ export default class extends Command {
           required: true,
           prompt: PROMPT_INITIAL[Target.USER](
             'se nickname you would like to change.'
-          )
+          ),
         },
         {
           type: Target.TEXT,
           required: true,
-          prompt: PROMPT_ENTER('the nickname')
-        }
+          prompt: PROMPT_ENTER('the nickname'),
+        },
       ],
-      requiredPerms: 'MANAGE_NICKNAMES'
+      requiredPerms: 'MANAGE_NICKNAMES',
     });
   }
 
@@ -33,7 +33,7 @@ export default class extends Command {
     {
       message,
       member,
-      text: nick
+      text: nick,
     }: {
       message: HavocMessage;
       member: GuildMember;

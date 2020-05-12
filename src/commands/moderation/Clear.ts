@@ -7,7 +7,7 @@ import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   NOOP,
-  EMOJIS
+  EMOJIS,
 } from '../../util/CONSTANTS';
 import { TextChannel } from 'discord.js';
 
@@ -26,14 +26,14 @@ export default class extends Command {
             initial: PROMPT_INITIAL[Target.NUMBER]('messages', 'clear'),
             invalid: PROMPT_INVALD(
               'the number of messages you would like to clear, e.g: entering `5` would clear 5 messages'
-            )
-          }
+            ),
+          },
         },
         {
-          type: Target.USER
-        }
+          type: Target.USER,
+        },
       ],
-      requiredPerms: 'MANAGE_MESSAGES'
+      requiredPerms: 'MANAGE_MESSAGES',
     });
   }
 
@@ -41,7 +41,7 @@ export default class extends Command {
     message,
     number,
     user,
-    flags
+    flags,
   }: {
     message: HavocMessage;
     number: number;
@@ -58,9 +58,9 @@ export default class extends Command {
         'I encountered an error when attempting to fetch recent messages to clear, maybe try again later?'
       );
 
-    if (user) messages = messages.filter(msg => msg.author.id === user.id);
+    if (user) messages = messages.filter((msg) => msg.author.id === user.id);
     if ('nopin' in flags)
-      messages = messages.filter(message => !message.pinned);
+      messages = messages.filter((message) => !message.pinned);
     const cleared = await (message.channel as TextChannel)
       .bulkDelete(
         isNaN(number) ? messages : messages.first(Math.min(number, 100)),
@@ -81,7 +81,7 @@ export default class extends Command {
         )}\` ${Util.randomArrEl(EMOJIS.BOTCLEAR)}`,
         { deleteable: false }
       )
-      .then(message => message.delete({ timeout: 1300 }))
+      .then((message) => message.delete({ timeout: 1300 }))
       .catch(NOOP);
   }
 }

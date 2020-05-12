@@ -8,7 +8,7 @@ import Util from '../util';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import { WELCOMER_EMOJIS } from '../util/CONSTANTS';
 
-export default async function(this: Havoc, member: HavocGuildMember) {
+export default async function (this: Havoc, member: HavocGuildMember) {
   const guild = member.guild as HavocGuild;
   if (!guild || guild.logs?.disabled.includes(9)) return;
 
@@ -16,8 +16,8 @@ export default async function(this: Havoc, member: HavocGuildMember) {
     {
       mutes: {
         guild: guild.id,
-        member: member.id
-      }
+        member: member.id,
+      },
     },
     { populate: ['mutes'] }
   );
@@ -25,7 +25,7 @@ export default async function(this: Havoc, member: HavocGuildMember) {
 
   const mute = guildEntity?.mutes
     .getItems()
-    .find(muteEntity => muteEntity.member === member.id);
+    .find((muteEntity) => muteEntity.member === member.id);
   if (mute) {
     const muteRole = await getMuteRole(guild);
     if (muteRole)
@@ -67,15 +67,15 @@ export default async function(this: Havoc, member: HavocGuildMember) {
     addFields: [
       {
         name: '**📆 Account created at :**',
-        value: `${member.user.createdAt.toLocaleString()} (UTC)`
+        value: `${member.user.createdAt.toLocaleString()} (UTC)`,
       },
       {
         name: '**ℹ Guild member count :**',
-        value: member.guild.memberCount.toString()
-      }
+        value: member.guild.memberCount.toString(),
+      },
     ],
     setColor: 'GREEN',
     setAuthor: [`${member.user.tag} joined`, guild.iconURL()],
-    setFooter: `Member ID: ${member.id}`
+    setFooter: `Member ID: ${member.id}`,
   });
 }

@@ -16,13 +16,13 @@ export default class extends Command {
         {
           required: true,
           type: Target.ROLE,
-          prompt: PROMPT_INITIAL[Target.ROLE]('delete')
+          prompt: PROMPT_INITIAL[Target.ROLE]('delete'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -30,7 +30,7 @@ export default class extends Command {
     message,
     role,
     text: reason,
-    flags
+    flags,
   }: {
     message: HavocMessage;
     role: HavocRole;
@@ -47,7 +47,7 @@ export default class extends Command {
       .guild!.members.fetch()
       .then(() => role.members);
     const formattedMembers = members
-      .map(member => `${member.user.tag} | ${member.id}`)
+      .map((member) => `${member.user.tag} | ${member.id}`)
       .join('\n');
 
     if (

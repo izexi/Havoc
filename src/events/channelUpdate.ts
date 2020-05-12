@@ -1,7 +1,7 @@
 import { TextChannel } from 'discord.js';
 import HavocGuild from '../structures/extensions/HavocGuild';
 
-export default async function(outdated: TextChannel, updated: TextChannel) {
+export default async function (outdated: TextChannel, updated: TextChannel) {
   const guild = updated.guild as HavocGuild;
   if (
     !guild ||
@@ -15,11 +15,11 @@ export default async function(outdated: TextChannel, updated: TextChannel) {
     addFields.push(
       {
         name: '**📝Old Channel topic :**',
-        value: outdated.topic || '`No topic set.`'
+        value: outdated.topic || '`No topic set.`',
       },
       {
         name: '**✏ New Channel topic :**',
-        value: updated.topic || '`No topic set.`'
+        value: updated.topic || '`No topic set.`',
       }
     );
   if (outdated.name !== updated.name) {
@@ -36,8 +36,8 @@ export default async function(outdated: TextChannel, updated: TextChannel) {
       `Channel was updated${
         updated.parent ? ` in category ${updated.parent.name}` : ''
       }`,
-      guild.iconURL()
+      guild.iconURL(),
     ],
-    setFooter: `Channel ID: ${updated.id}`
+    setFooter: `Channel ID: ${updated.id}`,
   });
 }

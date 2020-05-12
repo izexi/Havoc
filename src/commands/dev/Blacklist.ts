@@ -12,9 +12,9 @@ export default class extends Command {
       args: {
         name: 'type',
         type: ['command', 'user', 'guild'],
-        prompt: PROMPT_ENTER('what you would like to blacklist')
+        prompt: PROMPT_ENTER('what you would like to blacklist'),
       },
-      dm: true
+      dm: true,
     });
   }
 
@@ -22,7 +22,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      option
+      option,
     }: {
       message: HavocMessage;
       option: 'command' | 'user' | 'guild';
@@ -30,7 +30,7 @@ export default class extends Command {
   ) {
     let blacklisted = null;
     const toBlackList = message.arg!.toLowerCase();
-    let deleted = Object.values(this.blacklisted).some(set =>
+    let deleted = Object.values(this.blacklisted).some((set) =>
       set.delete(toBlackList)
     );
 
@@ -45,8 +45,8 @@ export default class extends Command {
               deleted = true;
             } else {
               [...this.commandHandler.holds.values()]
-                .filter(command => command.category !== 'dev')
-                .forEach(command =>
+                .filter((command) => command.category !== 'dev')
+                .forEach((command) =>
                   this.blacklisted.commands.add(command.name)
                 );
             }
@@ -59,7 +59,7 @@ export default class extends Command {
         case 'user':
           await this.users
             .fetch(toBlackList)
-            .then(user => {
+            .then((user) => {
               this.blacklisted.users.add(user.id);
               blacklisted = user.tag;
             })
@@ -83,7 +83,7 @@ export default class extends Command {
     await this.db.upsert(DevEntity, message.author.id, {
       blacklisted: Object.fromEntries(
         Object.entries(this.blacklisted).map(([k, v]) => [k, [...v]])
-      ) as { [key in Blacklistable]: string[] }
+      ) as { [key in Blacklistable]: string[] },
     });
     message.respond(
       `${blacklisted} ha${toBlackList === 'all' ? 've' : 's'} been ${

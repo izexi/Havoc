@@ -8,7 +8,7 @@ export default class extends Command {
     super(__filename, {
       description: 'Disable the logs for this server.',
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -22,7 +22,7 @@ export default class extends Command {
     const logHook =
       webhooks.get(message.guild!.logs?.webhook.id!) ||
       webhooks.find(
-        webhook =>
+        (webhook) =>
           // @ts-ignore
           webhook.owner?.id === this.user!.id &&
           (webhook.name === ',HavocLogs' || webhook.name === 'HavocLogs')

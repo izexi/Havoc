@@ -27,21 +27,21 @@ export default class extends Command {
         required: true,
         promptOpts: {
           initial: PROMPT_ENTER('the URL'),
-          invalid: PROMPT_INVALD('a valid absolute URL')
-        }
-      }
+          invalid: PROMPT_INVALD('a valid absolute URL'),
+        },
+      },
     });
   }
 
   async run({ message, fn: url }: { message: HavocMessage; fn: string }) {
     const json = await fetch(url)
-      .then(res => {
+      .then((res) => {
         if (!res.headers.get('content-type')?.includes('application/json'))
           return `**${message.author.tag}** I couldn't find any JSON to parse on \`${url}\`.`;
         return res.json();
       })
       .catch(
-        err =>
+        (err) =>
           `**${message.author.tag}** I ran into an error while trying to access \`${url}\` \n\`${err}\``
       );
     if (typeof json === 'string') return message.respond(json);
@@ -51,11 +51,11 @@ export default class extends Command {
       embed: message.constructEmbed({
         setDescription: (Util as { [key: string]: Function })[
           json.length > MAX_LIMITS.JSON_EMBED ? 'haste' : 'codeblock'
-        ](formattedJSON, 'json')
+        ](formattedJSON, 'json'),
       }),
       files: [
-        { attachment: Buffer.from(formattedJSON, 'utf8'), name: 'jason.json' }
-      ]
+        { attachment: Buffer.from(formattedJSON, 'utf8'), name: 'jason.json' },
+      ],
     });
   }
 }

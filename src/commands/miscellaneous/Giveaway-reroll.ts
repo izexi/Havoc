@@ -8,7 +8,7 @@ import {
   PROMPT_INVALD,
   PROMPT_ENTER,
   NOOP,
-  EMOJIS
+  EMOJIS,
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -20,10 +20,10 @@ export default class extends Command {
         {
           name: 'ID',
           example: ['581073145482575875'],
-          type: async message => {
+          type: async (message) => {
             const giveawayMsg = await message
               .findConfigChannel('giveaway')
-              .then(channel => channel?.messages.fetch(message.arg!))
+              .then((channel) => channel?.messages.fetch(message.arg!))
               .catch(NOOP);
             return message.shiftArg(giveawayMsg);
           },
@@ -33,8 +33,8 @@ export default class extends Command {
               "the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed"
             ),
             invalid:
-              'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png'
-          }
+              'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png',
+          },
         },
         {
           name: 'amount of winners',
@@ -44,12 +44,12 @@ export default class extends Command {
             initial: PROMPT_INITIAL[Target.NUMBER]('winners', 'reroll'),
             invalid: PROMPT_INVALD(
               'a valid number. `5` would reroll 5 new winners on the giveaway for example'
-            )
-          }
-        }
+            ),
+          },
+        },
       ],
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -58,7 +58,7 @@ export default class extends Command {
     {
       message,
       fn: giveawayMsg,
-      number: winner
+      number: winner,
     }: {
       message: HavocMessage;
       fn: HavocMessage;
@@ -71,11 +71,11 @@ export default class extends Command {
         `a new winner could not be determined as there aren't any ${EMOJIS.GIVEAWAY} reactions on the [giveaway](${giveawayMsg.url}).`
       );
 
-    const newWinners = await reaction.users.fetch().then(users =>
+    const newWinners = await reaction.users.fetch().then((users) =>
       users
-        .filter(user => user.id !== this.user!.id)
+        .filter((user) => user.id !== this.user!.id)
         .random(winner)
-        .filter(user => user)
+        .filter((user) => user)
     );
     if (!newWinners.length)
       return message.respond(
@@ -88,17 +88,17 @@ export default class extends Command {
           setDescription: `${
             EMOJIS.GIVEAWAY
           } Congratulations **${newWinners
-            .map(u => u.tag)
+            .map((u) => u.tag)
             .join(', ')}**! You are the new winner of the [giveaway](${
             giveawayMsg.url
           }) for ${giveawayMsg.embeds[0].title} ${EMOJIS.GIVEAWAY}`,
-          setColor: 'GOLD'
+          setColor: 'GOLD',
         },
-        newWinners.map(u => u.toString()).join(', ')
+        newWinners.map((u) => u.toString()).join(', ')
       )
       .then(() =>
         Promise.all(
-          newWinners.map(async u =>
+          newWinners.map(async (u) =>
             u
               .send(
                 new MessageEmbed()

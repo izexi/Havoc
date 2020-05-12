@@ -9,7 +9,7 @@ export default class extends Command {
       description:
         'Disable the autorole (role to add to members as they join) for this server.',
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 

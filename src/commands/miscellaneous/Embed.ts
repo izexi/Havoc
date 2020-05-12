@@ -11,8 +11,8 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: PROMPT_INITIAL[Target.TEXT]('embed')
-      }
+        prompt: PROMPT_INITIAL[Target.TEXT]('embed'),
+      },
     });
   }
 

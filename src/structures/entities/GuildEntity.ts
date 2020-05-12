@@ -4,7 +4,7 @@ import {
   Property,
   AnyEntity,
   OneToMany,
-  Collection
+  Collection,
 } from 'mikro-orm';
 import BaseEntity from './BaseEntity';
 import { EntityProps } from '../Database';
@@ -55,37 +55,23 @@ export default class GuildEntity extends BaseEntity implements AnyEntity {
   @Property()
   bcPrefixes?: string[];
 
-  @OneToMany(
-    () => MuteEntity,
-    mute => mute.guild,
-    { orphanRemoval: true }
-  )
+  @OneToMany(() => MuteEntity, (mute) => mute.guild, { orphanRemoval: true })
   mutes = new Collection<MuteEntity>(this);
 
-  @OneToMany(
-    () => TagEntity,
-    tag => tag.guild,
-    { orphanRemoval: true }
-  )
+  @OneToMany(() => TagEntity, (tag) => tag.guild, { orphanRemoval: true })
   tags = new Collection<TagEntity>(this);
 
-  @OneToMany(
-    () => GiveawayEntity,
-    giveaway => giveaway.guild,
-    { orphanRemoval: true }
-  )
+  @OneToMany(() => GiveawayEntity, (giveaway) => giveaway.guild, {
+    orphanRemoval: true,
+  })
   giveaways = new Collection<GiveawayEntity>(this);
 
-  @OneToMany(
-    () => WarnEntity,
-    warn => warn.guild,
-    { orphanRemoval: true }
-  )
+  @OneToMany(() => WarnEntity, (warn) => warn.guild, { orphanRemoval: true })
   warns = new Collection<WarnEntity>(this);
 
   @OneToMany(
     () => WarnPunishmentEntity,
-    warnPunishment => warnPunishment.guild,
+    (warnPunishment) => warnPunishment.guild,
     { orphanRemoval: true }
   )
   warnPunishments = new Collection<WarnPunishmentEntity>(this);

@@ -13,19 +13,19 @@ export default class extends Handler<Command> {
     const commandPaths = await Util.flattenPaths('commands');
     await Promise.all(commandPaths)
       .then(this.loadFromPaths)
-      .catch(error =>
+      .catch((error) =>
         this.client.logger.error(error, {
-          origin: 'CommandHandler#loadFromPaths()'
+          origin: 'CommandHandler#loadFromPaths()',
         })
       );
     this.client.logger.info(`Loaded ${this.holds.size} commands`, {
-      origin: 'CommandHandler#load()'
+      origin: 'CommandHandler#load()',
     });
   }
 
   loadFromPaths = async (commandPaths: string[]) => {
     this.holds = new Map(
-      commandPaths.map(cmdPath => {
+      commandPaths.map((cmdPath) => {
         const command: Command = new (require(cmdPath).default)();
         return [command.name.toLowerCase(), command];
       })
@@ -33,8 +33,8 @@ export default class extends Handler<Command> {
 
     await fs
       .readdir(join(__dirname, '..', 'assets', 'images', 'emojis'))
-      .then(emojiFiles =>
-        emojiFiles.forEach(emojiFile => {
+      .then((emojiFiles) =>
+        emojiFiles.forEach((emojiFile) => {
           const emojiName = emojiFile.split('.')[0].toLowerCase();
           this.holds.set(emojiName, new EmojiCommand(emojiName));
         })
@@ -44,7 +44,9 @@ export default class extends Handler<Command> {
   find(nameOrAlias: string) {
     return (
       this.holds.get(nameOrAlias) ||
-      [...this.holds.values()].find(command => command.aliases.has(nameOrAlias))
+      [...this.holds.values()].find((command) =>
+        command.aliases.has(nameOrAlias)
+      )
     );
   }
 

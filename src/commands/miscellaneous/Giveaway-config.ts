@@ -13,22 +13,24 @@ export default class extends Command {
       args: {
         type: Target.CHANNEL,
         required: true,
-        prompt: PROMPT_INITIAL[Target.CHANNEL]('the giveaways to be created on')
+        prompt: PROMPT_INITIAL[Target.CHANNEL](
+          'the giveaways to be created on'
+        ),
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
   async run({
     message,
-    channel
+    channel,
   }: {
     message: HavocMessage;
     channel: HavocTextChannel;
   }) {
     await message.client.db.upsert(GuildEntity, message.guild!.id, {
-      giveaway: channel.id
+      giveaway: channel.id,
     });
 
     message.respond(

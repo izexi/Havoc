@@ -5,7 +5,7 @@ import { MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { NOOP, IDS } from '../util/CONSTANTS';
 
-export default async function(this: Havoc, guild: HavocGuild) {
+export default async function (this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
   if (this.blacklisted.guilds.has(guild.id)) guild.leave();
 
@@ -16,7 +16,7 @@ export default async function(this: Havoc, guild: HavocGuild) {
     await this.guilds.cache
       .get(IDS.SUPPORT_SERVER)!
       .members.fetch(guild.ownerID)
-      .then(member => member.roles.add(IDS.SERVER_OWNER))
+      .then((member) => member.roles.add(IDS.SERVER_OWNER))
       .catch(NOOP);
   }
 

@@ -22,5 +22,5 @@ export default {
         /(?:(\d+)w)?(?:\s?(\d+)d)?(?:\s?(\d+)h)?(?:\s?(\d+)m)?(?:\s?(\d+)s)?/
       ) || [];
     return this._toMs(weeks, days, hours, mins, secs);
-  }
+  },
 };

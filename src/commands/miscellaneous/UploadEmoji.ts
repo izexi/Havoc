@@ -17,9 +17,9 @@ export default class extends Command {
           name: 'emoji | url',
           example: [
             ':POGGIES:',
-            'https://cdn.discordapp.com/emojis/542850548043612190.png?v=1'
+            'https://cdn.discordapp.com/emojis/542850548043612190.png?v=1',
           ],
-          type: async message => {
+          type: async (message) => {
             const { arg: possibleEmoji } = message;
             if (!possibleEmoji) return;
             const emoji = DjsUtil.parseEmoji(possibleEmoji);
@@ -28,7 +28,7 @@ export default class extends Command {
                 url: `https://cdn.discordapp.com/emojis/${emoji.id}.${
                   emoji.animated ? 'gif' : 'png'
                 }`,
-                name: emoji.name
+                name: emoji.name,
               });
             }
             try {
@@ -44,21 +44,21 @@ export default class extends Command {
           required: true,
           prompt: PROMPT_ENTER(
             'the emoji or url that you would like to upload as an emoji.'
-          )
+          ),
         },
         {
           name: 'name',
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'MANAGE_EMOJIS'
+      requiredPerms: 'MANAGE_EMOJIS',
     });
   }
 
   async run({
     message,
     fn: { url, name },
-    text: customName
+    text: customName,
   }: {
     message: HavocMessage;
     fn: { url: string; name?: string };
@@ -67,11 +67,11 @@ export default class extends Command {
     let invalidReason;
     const isAnimated = url.endsWith('gif');
     const currentEmojis = message.guild!.emojis.cache.filter(
-      emoji => emoji.animated === isAnimated
+      (emoji) => emoji.animated === isAnimated
     ).size;
     const maxEmojis = [50, 100, 150, 250][message.guild!.premiumTier];
     const emojiSize = await fetch(url).then(
-      res => Number(res.headers.get('content-length')) / 1024
+      (res) => Number(res.headers.get('content-length')) / 1024
     );
 
     if (currentEmojis >= maxEmojis)
@@ -90,10 +90,10 @@ export default class extends Command {
     message.respond(
       await message
         .guild!.emojis.create(url, customName || name || 'emoji', {
-          reason: `Uploaded by ${message.author.tag}`
+          reason: `Uploaded by ${message.author.tag}`,
         })
         .then(
-          emoji => `I have uploaded the emoji ${emoji} to this server.`,
+          (emoji) => `I have uploaded the emoji ${emoji} to this server.`,
           (
             err: Error
           ) => `I encountered an error while trying to upload this emoji

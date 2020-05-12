@@ -1,12 +1,12 @@
 import HavocMessage, {
-  EmbedMethods
+  EmbedMethods,
 } from '../structures/extensions/HavocMessage';
 import Util from '../util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import Havoc from '../client/Havoc';
 import { MIN_LIMITS } from '../util/CONSTANTS';
 
-export default async function(
+export default async function (
   this: Havoc,
   outdated: HavocMessage,
   updated: HavocMessage
@@ -27,28 +27,28 @@ export default async function(
   const fields = [
     {
       name: '**📅 Timestamp of message :**',
-      value: `${outdated.createdAt.toLocaleString()} (UTC)`
+      value: `${outdated.createdAt.toLocaleString()} (UTC)`,
     },
     {
       name: '**📂 Channel :**',
       value: updated.channel.toString(),
-      inline: true
+      inline: true,
     },
     {
       name: '**✍ Message author :**',
       value: updated.author.toString(),
-      inline: true
-    }
+      inline: true,
+    },
   ];
   if (updated.content.length < MIN_LIMITS.MESSAGE_UPDATE_CONTENT)
     fields.unshift({
       name: '**✏ After :**',
-      value: Util.codeblock(updated.content)
+      value: Util.codeblock(updated.content),
     });
   if (outdated.content.length < MIN_LIMITS.MESSAGE_UPDATE_CONTENT)
     fields.unshift({
       name: '**📝 Before :**',
-      value: Util.codeblock(outdated.content)
+      value: Util.codeblock(outdated.content),
     });
 
   const embed: Partial<EmbedMethods> = {
@@ -56,9 +56,9 @@ export default async function(
     setColor: 'ORANGE',
     setAuthor: [
       `${updated.author.tag}'s message was edited`,
-      updated.author.pfp
+      updated.author.pfp,
     ],
-    setFooter: `Message ID: ${updated.id}`
+    setFooter: `Message ID: ${updated.id}`,
   };
 
   let content = '';
@@ -70,8 +70,8 @@ export default async function(
     embed.attachFiles = [
       {
         attachment: Buffer.from(content, 'utf8'),
-        name: 'edited_content.txt'
-      }
+        name: 'edited_content.txt',
+      },
     ];
   }
 

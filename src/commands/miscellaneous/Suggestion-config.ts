@@ -15,22 +15,22 @@ export default class extends Command {
         required: true,
         prompt: PROMPT_INITIAL[Target.CHANNEL](
           'the suggestions to be created on'
-        )
+        ),
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
   async run({
     message,
-    channel
+    channel,
   }: {
     message: HavocMessage;
     channel: HavocTextChannel;
   }) {
     await message.client.db.upsert(GuildEntity, message.guild!.id, {
-      suggestion: channel.id
+      suggestion: channel.id,
     });
 
     message.respond(

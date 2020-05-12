@@ -17,16 +17,16 @@ export default class extends Command {
           ),
           invalid: PROMPT_INVALD(
             'either `add`, `delete`, `edit`, `info` or `list`'
-          )
-        }
+          ),
+        },
       },
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
   async run({
     message,
-    option: subCommand
+    option: subCommand,
   }: {
     message: HavocMessage;
     option: string;

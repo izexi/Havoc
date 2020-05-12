@@ -5,7 +5,7 @@ import {
   resolveTarget,
   Target,
   isOther,
-  NotOther
+  NotOther,
 } from '../util/targetter';
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
@@ -55,8 +55,9 @@ export default class {
       setDescription: `**${message.author.tag}** ${
         this.initialMsgs[this.curr]
       }`,
-      setFooter: `You have ${this.time /
-        SECONDS(1)} seconds left to enter an option.`
+      setFooter: `You have ${
+        this.time / SECONDS(1)
+      } seconds left to enter an option.`,
     });
     this.promptMsgs.push(promptEmbed.id);
 
@@ -66,15 +67,16 @@ export default class {
         return clearInterval(this.editInterval);
       await promptEmbed.edit(
         promptEmbed.embeds[0].setFooter(
-          `You have ${(timeRemaining -= SECONDS(5)) /
-            SECONDS(1)} seconds left to enter an option.`
+          `You have ${
+            (timeRemaining -= SECONDS(5)) / SECONDS(1)
+          } seconds left to enter an option.`
         )
       );
     }, SECONDS(5));
 
     return this.collect(
       message.channel.createMessageCollector(
-        msg => message.author.id === msg.author.id,
+        (msg) => message.author.id === msg.author.id,
         { time: this.time }
       )
     );
@@ -98,14 +100,12 @@ export default class {
             .sendEmbed({
               setDescription: `**${message.author.tag}** \`${
                 message.content
-              }\` is an invalid option!\n${this.invalidMsgs[this.curr] ??
-                (isOther(target)
-                  ? ''
-                  : Responses[target as NotOther]!(
-                      message
-                    ))}\nEnter \`cancel\` to exit out of this prompt.`
+              }\` is an invalid option!\n${
+                this.invalidMsgs[this.curr] ??
+                (isOther(target) ? '' : Responses[target as NotOther]!(message))
+              }\nEnter \`cancel\` to exit out of this prompt.`,
             })
-            .then(msg => this.promptMsgs.push(msg.id));
+            .then((msg) => this.promptMsgs.push(msg.id));
         } else {
           collector.stop();
           if (this.initialMsgs[++this.curr]) return this.create();
@@ -129,10 +129,9 @@ export default class {
       if (!message.deleted) await message.reactions.removeAll();
       message.safeReact(EMOJIS.TIMED_OUT);
       message.respond(
-        `it have been over ${this.time /
-          SECONDS(
-            1
-          )} seconds and you did not enter a valid option, so I will go ahead and cancel this.`
+        `it have been over ${
+          this.time / SECONDS(1)
+        } seconds and you did not enter a valid option, so I will go ahead and cancel this.`
       );
     }
   };

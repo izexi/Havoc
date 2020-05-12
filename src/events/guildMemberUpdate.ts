@@ -2,7 +2,7 @@ import HavocGuild from '../structures/extensions/HavocGuild';
 import HavocGuildMember from '../structures/extensions/HavocGuildMember';
 import Util from '../util';
 
-export default async function(
+export default async function (
   outdated: HavocGuildMember,
   updated: HavocGuildMember
 ) {
@@ -16,14 +16,14 @@ export default async function(
       addFields: [
         { name: '**⤴ Old nickname :**', value: outdated.displayName },
         { name: '**⤵ New nickname :**', value: updated.displayName },
-        { name: '**🔎 Member :**', value: updated.toString() }
+        { name: '**🔎 Member :**', value: updated.toString() },
       ],
       setColor: 'ORANGE',
       setAuthor: [
         `${updated.user.tag}'s nickname was changed`,
-        guild.iconURL()
+        guild.iconURL(),
       ],
-      setFooter: `User ID: ${updated.id}`
+      setFooter: `User ID: ${updated.id}`,
     };
   }
 
@@ -37,20 +37,20 @@ export default async function(
     let fields = [];
 
     const addedRoles = updated.roles.cache.filter(
-      role => !outdated.roles.cache.has(role.id)
+      (role) => !outdated.roles.cache.has(role.id)
     );
     if (addedRoles.size)
       fields.push({
         name: `**➕ ${Util.plural('Role', addedRoles.size)} added :**`,
-        value: addedRoles.map(String).join(', ')
+        value: addedRoles.map(String).join(', '),
       });
     const removedRoles = outdated.roles.cache.filter(
-      role => !updated.roles.cache.has(role.id)
+      (role) => !updated.roles.cache.has(role.id)
     );
     if (removedRoles.size)
       fields.push({
         name: `**➖ ${Util.plural('Role', removedRoles.size)} removed :**`,
-        value: removedRoles.map(String).join(', ')
+        value: removedRoles.map(String).join(', '),
       });
 
     if (outdated.permissions.has(8) && updated.permissions.has(8)) {
@@ -59,13 +59,13 @@ export default async function(
           oldRolesSize < newRolesSize ? 'gained' : 'lost'
         } :**`,
         value:
-          'Member still has **`Administrator`** permissions, so they still have all other permissions'
+          'Member still has **`Administrator`** permissions, so they still have all other permissions',
       });
     } else if (!outdated.permissions.has(8) && updated.permissions.has(8)) {
       fields.push({
         name: '**📝 Permissions gained :**',
         value:
-          '**`Administrator`** permission granted, which grants the member to all other permissions.'
+          '**`Administrator`** permission granted, which grants the member to all other permissions.',
       });
     } else if (newPerms.length) {
       fields.push({
@@ -73,10 +73,10 @@ export default async function(
         value: Util.codeblock(
           newPerms
             .sort()
-            .map(perm => `+ ${Util.normalizePermFlag(perm)}`)
+            .map((perm) => `+ ${Util.normalizePermFlag(perm)}`)
             .join('\n'),
           'diff'
-        )
+        ),
       });
     } else if (oldPerms.length) {
       fields.push({
@@ -84,10 +84,10 @@ export default async function(
         value: Util.codeblock(
           oldPerms
             .sort()
-            .map(perm => `- ${Util.normalizePermFlag(perm)}`)
+            .map((perm) => `- ${Util.normalizePermFlag(perm)}`)
             .join('\n'),
           'diff'
-        )
+        ),
       });
     }
 
@@ -106,7 +106,7 @@ export default async function(
           ? 'ORANGE'
           : newRolesSize > oldRolesSize
           ? 'GREEN'
-          : 'RED'
+          : 'RED',
     };
   }
 

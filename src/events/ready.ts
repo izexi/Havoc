@@ -5,7 +5,7 @@ import DevEntity, { Blacklistable } from '../structures/entities/DevEntity';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 import ms = require('ms');
 
-export default async function(this: Havoc) {
+export default async function (this: Havoc) {
   this.logger.info(
     `${this.user!.tag} is ready in ${this.guilds.cache.size} guilds`,
     { origin: 'Havoc#on:ready' }
@@ -23,9 +23,9 @@ export default async function(this: Havoc) {
           `Client is ready (${this.ws.sessionStartLimit?.remaining} identifies remaining)`
         )
         .setColor('GREEN')
-        .setTimestamp()
+        .setTimestamp(),
     ],
-    avatarURL: STATUS_ICONS.READY
+    avatarURL: STATUS_ICONS.READY,
   });
 
   const devEntity = await this.db.find(DevEntity, HAVOC);

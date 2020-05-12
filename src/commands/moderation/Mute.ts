@@ -10,24 +10,26 @@ import { PROMPT_INITIAL, NOOP, EMOJIS } from '../../util/CONSTANTS';
 export async function getMuteRole(guild?: HavocGuild | Guild) {
   if (!guild) return;
   const muteRole =
-    guild.roles.cache.find(r => r.name === 'HavocMute') ||
+    guild.roles.cache.find((r) => r.name === 'HavocMute') ||
     (await guild.roles.create({
       data: {
         name: 'HavocMute',
-        position: guild.me!.roles.highest.position - 1
-      }
+        position: guild.me!.roles.highest.position - 1,
+      },
     }));
 
   if (muteRole) {
     const promises = guild.channels.cache
-      .filter(channel => channel.type === 'text' || channel.type === 'category')
-      .map(channel => {
+      .filter(
+        (channel) => channel.type === 'text' || channel.type === 'category'
+      )
+      .map((channel) => {
         const currentMutePerms = channel.permissionOverwrites.get(muteRole!.id);
         if (!currentMutePerms || currentMutePerms.deny.bitfield !== 2112) {
           return channel
             .updateOverwrite(muteRole!, {
               SEND_MESSAGES: false,
-              ADD_REACTIONS: false
+              ADD_REACTIONS: false,
             })
             .catch(NOOP);
         }
@@ -46,18 +48,18 @@ export default class extends Command {
       args: [
         {
           type: Target.TIME,
-          prompt: PROMPT_INITIAL[Target.TIME]('mute')
+          prompt: PROMPT_INITIAL[Target.TIME]('mute'),
         },
         {
           type: Target.MEMBER,
           required: true,
-          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to mute')
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to mute'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -67,7 +69,7 @@ export default class extends Command {
       message,
       time,
       member,
-      text: reason
+      text: reason,
     }: {
       message: HavocMessage;
       time: number;
@@ -93,7 +95,7 @@ export default class extends Command {
       end: time ? new Date(Date.now() + time) : undefined,
       member: member.id,
       muter: message.author.id,
-      reason
+      reason,
     });
 
     await member.roles.add(
@@ -113,7 +115,7 @@ export default class extends Command {
       message,
       reason,
       target: member,
-      duration: time
+      duration: time,
     });
   }
 }

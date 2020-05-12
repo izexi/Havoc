@@ -7,7 +7,7 @@ export default class extends Command {
     super(__filename, {
       description: 'View a list of roles on this server.',
       aliases: ['rl', 'roles', 'roleslist'],
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -21,11 +21,11 @@ export default class extends Command {
         message.guild!.name
       }`,
       descriptions: roles.map(
-        role => `• **${role.name}**
+        (role) => `• **${role.name}**
                   (${role} - ${role.id})`
       ),
       maxPerPage: 20,
-      page: Number(message.arg)
+      page: Number(message.arg),
     });
   }
 }

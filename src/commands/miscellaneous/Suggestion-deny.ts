@@ -20,22 +20,22 @@ export default class extends Command {
               "the ID of the suggestion which you can find on the footer of the suggestion's embed, followed by the reason of approval (optional)"
             ),
             invalid:
-              "I couldn't find any suggestions that corresponds the ID that you entered https://i.imgur.com/IK7JkVw.png"
-          }
+              "I couldn't find any suggestions that corresponds the ID that you entered https://i.imgur.com/IK7JkVw.png",
+          },
         },
         {
           name: 'reason',
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      sub: true
+      sub: true,
     });
   }
 
   async run({
     message,
     fn: suggestionMsg,
-    text: reason
+    text: reason,
   }: {
     message: HavocMessage;
     fn: HavocMessage;

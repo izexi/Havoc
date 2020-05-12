@@ -16,13 +16,13 @@ export default class extends Command {
         {
           required: true,
           type: Target.MEMBER,
-          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to unmute')
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to unmute'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -31,7 +31,7 @@ export default class extends Command {
     {
       message,
       member,
-      text: reason
+      text: reason,
     }: {
       message: HavocMessage;
       member: GuildMember;
@@ -63,13 +63,13 @@ export default class extends Command {
       {
         mutes: {
           guild: message.guild!.id,
-          member: member.id
-        }
+          member: member.id,
+        },
       },
       { populate: ['mutes'] }
     );
     const mutes = await guild?.mutes.init();
-    const mute = mutes?.getItems().find(mute => mute.member === member.id);
+    const mute = mutes?.getItems().find((mute) => mute.member === member.id);
 
     if (mute) await this.schedules.mute.dequeue(mute, mutes!);
 

@@ -22,10 +22,10 @@ export default class extends Command {
             ['view', 'add', 'remove'],
             'prefixes that will be botcleared'
           ),
-          invalid: PROMPT_INVALD('either `view` or `add` or `remove`.')
-        }
+          invalid: PROMPT_INVALD('either `view` or `add` or `remove`.'),
+        },
       },
-      requiredPerms: 'MANAGE_MESSAGES'
+      requiredPerms: 'MANAGE_MESSAGES',
     });
   }
 
@@ -33,7 +33,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      option
+      option,
     }: {
       message: HavocMessage;
       option: 'view' | 'add' | 'remove';
@@ -41,13 +41,13 @@ export default class extends Command {
   ) {
     const bcPrefixes = util.spliceDupes([
       message.guild!.prefix,
-      ...message.guild!.bcPrefixes
+      ...message.guild!.bcPrefixes,
     ]);
 
     if (option === 'view')
       return message.respond(
         `current messages that are prefixed with ${bcPrefixes!
-          .map(prefix => `\`${prefix}\``)
+          .map((prefix) => `\`${prefix}\``)
           .join(', ')} will be cleared when the botclear command is used.`
       );
 
@@ -56,7 +56,7 @@ export default class extends Command {
       (
         await message.createPrompt({
           initialMsg: `**${message.author.tag}** enter the prefix that you would ${option} to the botclears.`,
-          target: Target.TEXT
+          target: Target.TEXT,
         })
       ).text;
     if (!prefix) return;

@@ -1,6 +1,6 @@
 import Havoc from '../client/Havoc';
 
-export default function(
+export default function (
   this: Havoc,
   { op: opCode, t: eventName }: { op: number; t: string }
 ) {

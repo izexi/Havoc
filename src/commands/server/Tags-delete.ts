@@ -11,7 +11,7 @@ export default class extends Command {
       args: {
         name: 'name',
         example: ['name', 'a name with spaces'],
-        type: message => {
+        type: (message) => {
           let possibleName = message.text;
           if (message.guild!.tags.has(possibleName))
             return message.shiftArg(possibleName);
@@ -21,11 +21,11 @@ export default class extends Command {
           initial: PROMPT_ENTER(
             'the name of the tag you would like to delete, e.g: `name` or `"a name"`'
           ),
-          invalid: "I couldn't find a tag with that name"
-        }
+          invalid: "I couldn't find a tag with that name",
+        },
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -40,7 +40,7 @@ export default class extends Command {
     );
     if (!guild) return;
 
-    const tag = guild.tags.getItems().find(tag => tag.name === name)!;
+    const tag = guild.tags.getItems().find((tag) => tag.name === name)!;
     await guild.tags.init();
     guild.tags.remove(tag);
     await this.db.flush();

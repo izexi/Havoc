@@ -13,9 +13,9 @@ export default class extends Command {
         required: true,
         prompt: PROMPT_ENTER(
           'the name that you would like to name the new role'
-        )
+        ),
       },
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -23,7 +23,7 @@ export default class extends Command {
     message
       .guild!.roles.create({
         data: { name: text.substring(0, 100) },
-        reason: `Created By ${message.author.tag}`
+        reason: `Created By ${message.author.tag}`,
       })
       .then(({ name }) =>
         message.respond(`I have created a new role named \`${name}\`.`)

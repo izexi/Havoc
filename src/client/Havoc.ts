@@ -26,13 +26,13 @@ export default class Havoc extends Client {
 
   schedules = {
     mute: new MuteSchedule(this),
-    giveaway: new GiveawaySchedule(this)
+    giveaway: new GiveawaySchedule(this),
   };
 
   blacklisted: Record<'commands' | 'users' | 'guilds', Set<string>> = {
     users: new Set(),
     guilds: new Set(),
-    commands: new Set()
+    commands: new Set(),
   };
 
   constructor() {
@@ -47,8 +47,8 @@ export default class Havoc extends Client {
             Intents.FLAGS.GUILD_PRESENCES |
             Intents.FLAGS.GUILD_MESSAGE_TYPING |
             Intents.FLAGS.DIRECT_MESSAGE_TYPING
-          )
-      }
+          ),
+      },
     });
     this.init();
   }
@@ -63,7 +63,7 @@ export default class Havoc extends Client {
   async init() {
     await this.db
       .init()
-      .catch(error =>
+      .catch((error) =>
         this.logger.error(error.message, { origin: 'Database#init()' })
       );
     await once(this, 'ready');
@@ -72,7 +72,7 @@ export default class Havoc extends Client {
     this.prometheus.userGauge.set(this.totalMemberCount);
 
     const schedules = Object.values(this.schedules);
-    await Promise.all(schedules.map(schedule => schedule.init())).then(
+    await Promise.all(schedules.map((schedule) => schedule.init())).then(
       () =>
         this.logger.info(
           `Initialised ${schedules.length} ${Util.plural(
@@ -81,12 +81,12 @@ export default class Havoc extends Client {
           )}`,
           { origin: 'Schedule#init()' }
         ),
-      error => this.logger.error(error.message, { origin: 'Havoc#init()' })
+      (error) => this.logger.error(error.message, { origin: 'Havoc#init()' })
     );
 
     const guilds = await this.db.guildRepo.findAll({ populate: ['tags'] });
     await Promise.all(
-      guilds.map(async guildEntity => {
+      guilds.map(async (guildEntity) => {
         const guild = this.guilds.cache.get(guildEntity.id) as HavocGuild;
         if (!guild) {
           if (

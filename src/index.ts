@@ -7,8 +7,8 @@ import Havoc from './client/Havoc';
 dotenv.config();
 
 const extensionsDir = join(__dirname, 'structures', 'extensions');
-fs.readdir(extensionsDir).then(structures => {
-  structures.forEach(struct =>
+fs.readdir(extensionsDir).then((structures) => {
+  structures.forEach((struct) =>
     Structures.extend(
       struct.match(/Havoc([a-z]+).js/i)![1],
       () => require(join(extensionsDir, struct)).default
@@ -20,7 +20,7 @@ fs.readdir(extensionsDir).then(structures => {
 
   process.on('unhandledRejection', (rej, promise) => {
     client.logger.warn(rej?.toString() ?? '', {
-      origin: 'process.on:unhandledRejection'
+      origin: 'process.on:unhandledRejection',
     });
     // eslint-disable-next-line no-console
     console.warn(promise);

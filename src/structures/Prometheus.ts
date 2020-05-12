@@ -7,7 +7,7 @@ import {
   SECONDS,
   MEGABYTES,
   PROMETHEUS_PORT,
-  HTTP_OK
+  HTTP_OK,
 } from '../util/CONSTANTS';
 
 export default class {
@@ -73,7 +73,7 @@ export default class {
     createServer((req, res) => {
       if (req.url && parse(req.url).pathname === '/metrics') {
         res.writeHead(HTTP_OK, {
-          'Content-Type': this.register.contentType
+          'Content-Type': this.register.contentType,
         });
         res.write(this.register.metrics());
       }
@@ -82,7 +82,7 @@ export default class {
       .listen(PROMETHEUS_PORT)
       .once('listening', () => {
         this.client.logger.info(`Listening to ${PROMETHEUS_PORT}`, {
-          origin: 'Prometheus#start()'
+          origin: 'Prometheus#start()',
         });
 
         setInterval(
@@ -93,7 +93,7 @@ export default class {
         setInterval(() => {
           cpu
             .usage()
-            .then(percentage => this.cpuGauge.set(Math.round(percentage)));
+            .then((percentage) => this.cpuGauge.set(Math.round(percentage)));
           drive
             .info('/')
             .then(({ usedGb }) => this.driveGauge.set(Math.round(usedGb)));

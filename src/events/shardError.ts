@@ -3,11 +3,11 @@ import { WebhookClient, MessageEmbed } from 'discord.js';
 import { STATUS_ICONS } from '../util/CONSTANTS';
 import Util from '../util';
 
-export default function(this: Havoc, error: Error, shardID: number) {
+export default function (this: Havoc, error: Error, shardID: number) {
   const message = `Shard ${shardID} encountered an error`;
 
   this.logger.error(`${message} |=> \nerror.message`, {
-    origin: 'Havoc#on:shardError'
+    origin: 'Havoc#on:shardError',
   });
 
   new WebhookClient(
@@ -19,8 +19,8 @@ export default function(this: Havoc, error: Error, shardID: number) {
         .setTitle(message)
         .setDescription(Util.codeblock(error.message))
         .setColor('RED')
-        .setTimestamp()
+        .setTimestamp(),
     ],
-    avatarURL: STATUS_ICONS.ERROR
+    avatarURL: STATUS_ICONS.ERROR,
   });
 }

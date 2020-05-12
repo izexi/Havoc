@@ -7,7 +7,7 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       description: 'View a list of emojis on this server.',
-      aliases: ['el', 'emojis', 'emojislist']
+      aliases: ['el', 'emojis', 'emojislist'],
     });
   }
 
@@ -27,10 +27,10 @@ export default class extends Command {
         '__**Emojis**__\n',
         ...normal.map(emojiFormat),
         '\n__**Animated Emojis**__\n',
-        ...animated.map(emojiFormat)
+        ...animated.map(emojiFormat),
       ],
       maxPerPage: 20,
-      page: Number(message.arg)
+      page: Number(message.arg),
     });
   }
 }

@@ -14,10 +14,10 @@ export default class extends Command {
       args: {
         type: Target.CHANNEL,
         required: true,
-        prompt: PROMPT_INITIAL[Target.CHANNEL]('to set the mod logs to')
+        prompt: PROMPT_INITIAL[Target.CHANNEL]('to set the mod logs to'),
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -27,13 +27,13 @@ export default class extends Command {
   ) {
     const existing = await this.db
       .find(GuildEntity, message.guild!.id)
-      .then(guild =>
+      .then((guild) =>
         guild?.modlogs ? message.guild!.channels.cache.get(guild.modlogs) : null
       );
 
     message.guild!.modlogs = channel.id;
     await this.db.upsert(GuildEntity, message.guild!.id, {
-      modlogs: channel.id
+      modlogs: channel.id,
     });
 
     message.respond(

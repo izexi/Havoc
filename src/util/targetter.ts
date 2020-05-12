@@ -4,7 +4,7 @@ import {
   User,
   Role,
   GuildEmoji,
-  GuildChannel
+  GuildChannel,
 } from 'discord.js';
 import HavocMessage from '../structures/extensions/HavocMessage';
 import Regex from './regex';
@@ -23,7 +23,7 @@ export enum Target {
   NUMBER = 'number',
   TIME = 'time',
   FUNCTION = 'fn',
-  OPTION = 'option'
+  OPTION = 'option',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,9 +93,9 @@ export const Targetter: {
         guild.members
           .fetch()
           .then(
-            members =>
+            (members) =>
               members.find(
-                member =>
+                (member) =>
                   findFn(member) || member.displayName.toLowerCase() === query
               )?.user
           )
@@ -108,7 +108,7 @@ export const Targetter: {
         (await this.mentionOrIDSearch!(message.arg || query, message)) ||
           (await this.nameSearch!(message.arg || query, message))
       );
-    }
+    },
   },
 
   [Target.MEMBER]: {
@@ -120,7 +120,7 @@ export const Targetter: {
         )) || (await Targetter.user!.nameSearch!(message.arg || query, message))
       );
       return user ? message.guild!.members.fetch(user).catch(NOOP) : user;
-    }
+    },
   },
 
   [Target.ROLE]: {
@@ -147,7 +147,7 @@ export const Targetter: {
             if (foundRole) return foundRole;
             const possibleRoleName = arr.slice(0, i + 1).join(' ');
             const possibleRole = message.guild!.roles.cache.find(
-              role =>
+              (role) =>
                 role.name === possibleRoleName ||
                 role.name.toLowerCase() === possibleRoleName.toLowerCase()
             );
@@ -163,7 +163,7 @@ export const Targetter: {
           await this.mentionOrIDSearch!(query || message.content, message)
         ) || (await this.nameSearch!(query || message.content, message))
       );
-    }
+    },
   },
 
   // TODO: Create a utility function for this
@@ -181,7 +181,7 @@ export const Targetter: {
       if (!guild || !query) return null;
       return (
         guild.channels.cache.find(
-          role =>
+          (role) =>
             role.name === query ||
             role.name.toLowerCase() === query.toLowerCase()
         ) || null
@@ -192,25 +192,25 @@ export const Targetter: {
         (await this.mentionOrIDSearch!(query || message.content, message)) ||
           (await this.nameSearch!(query || message.content, message))
       );
-    }
+    },
   },
 
   [Target.TEXT]: {
     get(message) {
       return message.text;
-    }
+    },
   },
 
   [Target.NUMBER]: {
     get(message) {
       return message.shiftArg(Number(message.arg) || null);
-    }
+    },
   },
 
   [Target.TIME]: {
     get(message) {
       return message.shiftArg(Time.parse(message.arg!));
-    }
+    },
   },
 
   [Target.EMOJI]: {
@@ -219,13 +219,13 @@ export const Targetter: {
       const [emojiID] =
         arg.match(`(${Regex.emoji})|(${Regex.id.source})`) ?? [];
       return message.guild?.emojis.cache.get(emojiID) || find(arg);
-    }
+    },
   },
 
   [Target.FUNCTION]: {
     get(message, _, fn: TargetFn) {
       return fn!.call(message.client, message);
-    }
+    },
   },
 
   [Target.OPTION]: {
@@ -235,8 +235,8 @@ export const Targetter: {
       if (options.includes(possibleOption)) {
         return message.shiftArg(possibleOption);
       }
-    }
-  }
+    },
+  },
 };
 
 export async function resolveTarget(

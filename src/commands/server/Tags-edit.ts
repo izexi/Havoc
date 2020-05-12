@@ -12,10 +12,12 @@ export default class extends Command {
         {
           name: 'name',
           example: ['name', '"a name with spaces"'],
-          type: message => {
+          type: (message) => {
             let name = message.arg;
             if (name && name.startsWith('"')) {
-              const endIndex = message.args.findIndex(arg => arg.endsWith('"'));
+              const endIndex = message.args.findIndex((arg) =>
+                arg.endsWith('"')
+              );
               if (endIndex !== -1)
                 name = message.args
                   .splice(0, endIndex + 1)
@@ -31,8 +33,8 @@ export default class extends Command {
             initial: PROMPT_ENTER(
               'the name of the tag you would like to delete, e.g: `name` or `"a name"`'
             ),
-            invalid: "I couldn't find a tag with that name"
-          }
+            invalid: "I couldn't find a tag with that name",
+          },
         },
         {
           name: 'new content',
@@ -42,12 +44,12 @@ export default class extends Command {
             initial: PROMPT_ENTER(
               'what you would like the new content of the tag to be'
             ),
-            invalid: PROMPT_INVALD('the new content of the tag')
-          }
-        }
+            invalid: PROMPT_INVALD('the new content of the tag'),
+          },
+        },
       ],
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -56,7 +58,7 @@ export default class extends Command {
     {
       message,
       fn: name,
-      text: newContent
+      text: newContent,
     }: { message: HavocMessage; fn: string; text: string }
   ) {
     message.guild!.tags.delete(name);
@@ -67,7 +69,7 @@ export default class extends Command {
     if (!guild) return;
 
     await guild.tags.init();
-    const tag = guild.tags.getItems().find(tag => tag.name === name)!;
+    const tag = guild.tags.getItems().find((tag) => tag.name === name)!;
 
     message.guild!.tags.set(name, newContent);
     tag.content = newContent;

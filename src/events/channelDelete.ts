@@ -2,11 +2,11 @@ import {
   TextChannel,
   VoiceChannel,
   CategoryChannel,
-  NewsChannel
+  NewsChannel,
 } from 'discord.js';
 import HavocGuild from '../structures/extensions/HavocGuild';
 
-export default async function(
+export default async function (
   channel: TextChannel | VoiceChannel | CategoryChannel | NewsChannel
 ) {
   const guild = channel.guild as HavocGuild;
@@ -16,18 +16,18 @@ export default async function(
     addFields: [
       {
         name: '**📅 Timestamp of creation :**',
-        value: `${channel.createdAt.toLocaleString()} (UTC)`
+        value: `${channel.createdAt.toLocaleString()} (UTC)`,
       },
       { name: '** 📂Channel name:**', value: channel.name },
-      { name: '**📣 Channel type :**', value: channel.type }
+      { name: '**📣 Channel type :**', value: channel.type },
     ],
     setColor: 'RED',
     setAuthor: [
       `Channel was deleted${
         channel.parent ? ` from category ${channel.parent.name}` : ''
       }`,
-      guild.iconURL()
+      guild.iconURL(),
     ],
-    setFooter: `Channel ID: ${channel.id}`
+    setFooter: `Channel ID: ${channel.id}`,
   });
 }

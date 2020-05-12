@@ -4,7 +4,7 @@ import {
   MessageEmbed,
   DiscordAPIError,
   GuildMember,
-  User
+  User,
 } from 'discord.js';
 import HavocMessage, { EmbedMethods } from './HavocMessage';
 import Util from '../../util';
@@ -65,24 +65,24 @@ export default class extends Guild {
     const toSend = {
       embeds: [embed],
       username: ',HavocLogs',
-      avatarURL: HAVOC_LOGS_AVATAR()
+      avatarURL: HAVOC_LOGS_AVATAR(),
     };
 
     this.logHook?.send(toSend).catch(async (error: DiscordAPIError) => {
       if (error.code === 10015) {
         const webhook = await channel
           .createWebhook(',HavocLogs', {
-            avatar: this.client.user!.displayAvatarURL()
+            avatar: this.client.user!.displayAvatarURL(),
           })
           .catch(NOOP);
         if (!webhook) return delete this.logs;
 
         this.logs!.webhook = {
           id: webhook.id,
-          token: webhook.token!
+          token: webhook.token!,
         };
         await (this.client as Havoc).db.upsert(GuildEntity, this.id, {
-          logs: this.logs
+          logs: this.logs,
         });
 
         return webhook.send(toSend);
@@ -95,7 +95,7 @@ export default class extends Guild {
     message,
     target,
     reason,
-    duration
+    duration,
   }: {
     message: HavocMessage;
     target: GuildMember | User;
@@ -127,8 +127,8 @@ export default class extends Guild {
         name: '❯Action',
         value: Util.captialise(
           message.command.name.replace('clearwarnings', 'Clear Warnings')
-        )
-      }
+        ),
+      },
     ];
     if (duration)
       fields.push({ name: '❯Duration', value: ms(duration, { long: true }) });

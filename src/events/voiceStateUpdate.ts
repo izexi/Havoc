@@ -2,7 +2,7 @@ import { VoiceState } from 'discord.js';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import Havoc from '../client/Havoc';
 
-export default async function(
+export default async function (
   this: Havoc,
   outdated: VoiceState,
   updated: VoiceState
@@ -25,7 +25,7 @@ export default async function(
   else
     fields.push({
       name: '**🔈 Channel Name :**',
-      value: (outdated.channel || updated.channel)?.name ?? ''
+      value: (outdated.channel || updated.channel)?.name ?? '',
     });
 
   guild.sendLog({
@@ -35,7 +35,7 @@ export default async function(
           ? 'switched voice channels'
           : `${outdated.channel ? 'left' : 'joined'} a voice channel`
       }`,
-      user.displayAvatarURL()
+      user.displayAvatarURL(),
     ],
     addFields: fields,
     setColor:
@@ -44,6 +44,6 @@ export default async function(
         : outdated.channel
         ? 'RED'
         : 'GREEN',
-    setFooter: `Voice channel ID: ${(outdated.channel || updated.channel)?.id}`
+    setFooter: `Voice channel ID: ${(outdated.channel || updated.channel)?.id}`,
   });
 }

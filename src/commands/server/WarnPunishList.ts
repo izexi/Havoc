@@ -10,7 +10,7 @@ export default class extends Command {
     super(__filename, {
       description: 'View the current punishments for warns on the server.',
       aliases: ['warnplist', 'punishmentlist'],
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -26,13 +26,13 @@ export default class extends Command {
             return `${amount} => ${
               action === 'mute'
                 ? `Mute for ${ms(Number(time), {
-                    long: true
+                    long: true,
                   })}`
                 : Util.captialise(punishment)
             }\n`;
           })
           .join('\n')
-      )
+      ),
     });
   }
 }

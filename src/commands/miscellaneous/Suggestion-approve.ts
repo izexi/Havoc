@@ -18,7 +18,7 @@ export async function review(
   )
     return suggestionMsg.respond({
       setDescription: `**${approvedBy}** you have entered an invalid Suggestion ID.`,
-      setImage: 'https://i.imgur.com/IK7JkVw.png'
+      setImage: 'https://i.imgur.com/IK7JkVw.png',
     });
 
   if (embed.fields[1].value !== 'Open')
@@ -32,7 +32,7 @@ export async function review(
     name: 'Status:',
     value: `${approved ? 'Approved' : 'Denied'} by ${approvedBy}${
       reason ? ` - ${reason}` : ''
-    }`
+    }`,
   });
   embed.setColor(approved ? 'GREEN' : 'RED');
   await suggestionMsg.edit(embed);
@@ -47,7 +47,7 @@ export async function review(
 
   suggestionMsg.client.users
     .fetch(userID)
-    .then(user => user.send(embed))
+    .then((user) => user.send(embed))
     .catch(NOOP);
 }
 
@@ -80,22 +80,22 @@ export default class extends Command {
               "the ID of the suggestion which you can find on the footer of the suggestion's embed, followed by the reason of approval (optional)"
             ),
             invalid:
-              "I couldn't find any suggestions that corresponds the ID that you entered https://i.imgur.com/IK7JkVw.png"
-          }
+              "I couldn't find any suggestions that corresponds the ID that you entered https://i.imgur.com/IK7JkVw.png",
+          },
         },
         {
           name: 'reason',
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      sub: true
+      sub: true,
     });
   }
 
   async run({
     message,
     fn: suggestionMsg,
-    text: reason
+    text: reason,
   }: {
     message: HavocMessage;
     fn: HavocMessage;

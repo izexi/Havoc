@@ -2,7 +2,7 @@ import HavocGuild from '../structures/extensions/HavocGuild';
 import HavocRole from '../structures/extensions/HavocRole';
 import Util from '../util';
 
-export default async function(outdated: HavocRole, updated: HavocRole) {
+export default async function (outdated: HavocRole, updated: HavocRole) {
   const guild = updated.guild as HavocGuild;
   if (!guild || guild.logs?.disabled.includes(17)) return;
 
@@ -14,10 +14,10 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
         { name: '**⤴ Old role name :**', value: outdated.name },
         {
           name: '**⤵ New role name :**',
-          value: updated.name
-        }
+          value: updated.name,
+        },
       ],
-      setAuthor: `Role ${outdated.name}'s name was changed`
+      setAuthor: `Role ${outdated.name}'s name was changed`,
     };
   }
 
@@ -30,13 +30,13 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
       fields.push({
         name: '**📝 Permissions :**',
         value:
-          'Member still has **`Administrator`** permissions, so they still have all other permissions'
+          'Member still has **`Administrator`** permissions, so they still have all other permissions',
       });
     } else if (!outdated.permissions.has(8) && updated.permissions.has(8)) {
       fields.push({
         name: '**📝 Permissions gained :**',
         value:
-          '**`Administrator`** permission granted, which grants the member to all other permissions.'
+          '**`Administrator`** permission granted, which grants the member to all other permissions.',
       });
     } else if (gainedPerms.length) {
       fields.push({
@@ -45,10 +45,10 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
           outdated.permissions
             .missing(updated.permissions)
             .sort()
-            .map(perm => `+ ${Util.normalizePermFlag(perm)}`)
+            .map((perm) => `+ ${Util.normalizePermFlag(perm)}`)
             .join('\n'),
           'diff'
-        )
+        ),
       });
     } else if (lostPerms.length) {
       fields.push({
@@ -57,15 +57,15 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
           updated.permissions
             .missing(outdated.permissions)
             .sort()
-            .map(perm => `- ${Util.normalizePermFlag(perm)}`)
+            .map((perm) => `- ${Util.normalizePermFlag(perm)}`)
             .join('\n'),
           'diff'
-        )
+        ),
       });
     }
     embed = {
       setAuthor: `Role ${outdated.name}'s permissions were updated`,
-      addFields: fields
+      addFields: fields,
     };
   }
 
@@ -74,7 +74,7 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
       setColor: updated.mentionable ? 'GREEN' : 'RED',
       setAuthor: `Role ${updated.name} is ${
         updated.mentionable ? 'now' : 'no longer'
-      } mentionable`
+      } mentionable`,
     };
   }
 
@@ -83,7 +83,7 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
       setColor: updated.hoist ? 'GREEN' : 'RED',
       setAuthor: `Role ${updated.name} is ${
         updated.mentionable ? 'now' : 'no longer'
-      } hoisted`
+      } hoisted`,
     };
   }
 
@@ -95,15 +95,17 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
           value:
             outdated.hexColor === '#000000'
               ? 'Default colour'
-              : outdated.hexColor
+              : outdated.hexColor,
         },
         {
           name: '**🖌 New role color :**',
           value:
-            updated.hexColor === '#000000' ? 'Default colour' : updated.hexColor
-        }
+            updated.hexColor === '#000000'
+              ? 'Default colour'
+              : updated.hexColor,
+        },
       ],
-      setAuthor: `Role ${outdated.name}'s colour was changed`
+      setAuthor: `Role ${outdated.name}'s colour was changed`,
     };
   }
 
@@ -111,13 +113,13 @@ export default async function(outdated: HavocRole, updated: HavocRole) {
     if (!embed.addFields) embed.addFields = [];
     embed.addFields.push({
       name: '**📆 Role created at :**',
-      value: `${updated.createdAt.toLocaleString()} (UTC)`
+      value: `${updated.createdAt.toLocaleString()} (UTC)`,
     });
     if (!embed.setColor) embed.setColor = 'ORANGE';
 
     guild.sendLog({
       ...embed,
-      setAuthor: [embed.setAuthor, guild.iconURL()]
+      setAuthor: [embed.setAuthor, guild.iconURL()],
     });
   }
 }

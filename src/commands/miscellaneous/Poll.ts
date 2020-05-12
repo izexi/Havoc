@@ -14,25 +14,25 @@ export default class extends Command {
           name: 'question',
           required: true,
           type: Target.TEXT,
-          prompt: PROMPT_ENTER('the question that you would like to poll')
+          prompt: PROMPT_ENTER('the question that you would like to poll'),
         },
         {
           name: 'options (option1;option2;...)',
           example: ['yes;no'],
           required: true,
-          type: message => message.text.split(';'),
+          type: (message) => message.text.split(';'),
           prompt: PROMPT_ENTER(
             'the options seperated by `;`, e.g: `yes;no` would be options yes and no'
-          )
-        }
-      ]
+          ),
+        },
+      ],
     });
   }
 
   async run({
     message,
     text: question,
-    fn: options
+    fn: options,
   }: {
     message: HavocMessage;
     text: string;
@@ -47,7 +47,7 @@ export default class extends Command {
     message.sendEmbed({
       setAuthor: [`Poll started by ${message.author.tag}`, message.author.pfp],
       setDescription: `${question}\n\n${formattedOptions.join('\n')}`,
-      setFooter: 'Started at:'
+      setFooter: 'Started at:',
     });
   }
 }

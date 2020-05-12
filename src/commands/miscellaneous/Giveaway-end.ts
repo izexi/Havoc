@@ -12,17 +12,17 @@ export default class extends Command {
       args: {
         name: 'ID',
         example: ['581073145482575875'],
-        type: async message => {
+        type: async (message) => {
           const guild = await message.client.db.guildRepo.findOne(
             {
               giveaways: {
-                message: message.arg
-              }
+                message: message.arg,
+              },
             },
             { populate: ['giveaways'] }
           );
           const giveaways = await guild?.giveaways.init();
-          return giveaways?.getItems().find(g => g.message === message.arg);
+          return giveaways?.getItems().find((g) => g.message === message.arg);
         },
         required: true,
         promptOpts: {
@@ -30,11 +30,11 @@ export default class extends Command {
             "the ID of the giveaway that you would like to end right now which you can find on the footer of the giveaways's embed"
           ),
           invalid:
-            'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png'
-        }
+            'You have entered an invalid Giveaway ID https://i.imgur.com/jZpv4Fk.png',
+        },
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -42,7 +42,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      fn: giveaway
+      fn: giveaway,
     }: {
       message: HavocMessage;
       fn: GiveawayEntity;

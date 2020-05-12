@@ -13,12 +13,12 @@ import { PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
 export function getPunishments(client: Havoc, message: HavocMessage) {
   return client.db.guildRepo
     .findOne({ id: message.guild!.id }, { populate: ['warnPunishments'] })
-    .then(guild => {
+    .then((guild) => {
       if (!guild || !guild.warnPunishments.count())
         return new Map([
           [3, 'mute 1800000'],
           [5, 'kick'],
-          [10, 'ban']
+          [10, 'ban'],
         ]);
       return guild.warnPunishments
         .getItems()
@@ -42,13 +42,13 @@ export default class extends Command {
         {
           required: true,
           type: Target.MEMBER,
-          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to warn')
+          prompt: PROMPT_INITIAL[Target.MEMBER]('you would like to warn'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: ['MANAGE_ROLES', 'KICK_MEMBERS', 'BAN_MEMBERS']
+      requiredPerms: ['MANAGE_ROLES', 'KICK_MEMBERS', 'BAN_MEMBERS'],
     });
   }
 
@@ -57,7 +57,7 @@ export default class extends Command {
     {
       message,
       member,
-      text: reason
+      text: reason,
     }: {
       message: HavocMessage;
       member: GuildMember;
@@ -76,13 +76,13 @@ export default class extends Command {
 
     const guild = await this.db.findOrInsert(GuildEntity, message.guild!.id);
     const warns = await guild.warns.init();
-    const existing = warns.getItems().find(warn => warn.member === member.id);
+    const existing = warns.getItems().find((warn) => warn.member === member.id);
     const amount = (existing?.history.length || 0) + 1;
     const [action, time] = (punishments.get(amount) || '').split(' ');
     const warn = {
       at: new Date(),
       warner: message.author.id,
-      reason
+      reason,
     };
 
     if (
@@ -103,7 +103,7 @@ export default class extends Command {
       warns.add(
         new WarnEntity({
           member: member.id,
-          history: [warn]
+          history: [warn],
         })
       );
     }
@@ -129,14 +129,14 @@ export default class extends Command {
           end: new Date(Date.now() + Number(time)),
           member: member.id,
           muter: message.author.id,
-          reason: fullReason
+          reason: fullReason,
         });
         await member.roles.add(muteRole, Util.auditClean(fullReason));
         return message.respond(
           `I have warned \`${member.user.tag}\`${
             reason ? ` for the reason \`${reason}\`` : ''
           } and muted them for ${ms(Number(time), {
-            long: true
+            long: true,
           })} as punishment for reaching ${amount} warns.`
         );
       }

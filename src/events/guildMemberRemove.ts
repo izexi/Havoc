@@ -4,7 +4,7 @@ import { MessageEmbed } from 'discord.js';
 import Util from '../util';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
 
-export default async function(member: HavocGuildMember) {
+export default async function (member: HavocGuildMember) {
   const guild = member.guild as HavocGuild;
   if (!guild || guild.logs?.disabled.includes(10)) return;
 
@@ -34,13 +34,13 @@ export default async function(member: HavocGuildMember) {
   const fields = [
     {
       name: '**📆 Account created at :**',
-      value: `${member.user.createdAt.toLocaleString()} (UTC)`
-    }
+      value: `${member.user.createdAt.toLocaleString()} (UTC)`,
+    },
   ];
   if (member.joinedTimestamp)
     fields.push({
       name: '**🗓 Joined guild at :**',
-      value: `${member.joinedAt!.toLocaleString()} (UTC)`
+      value: `${member.joinedAt!.toLocaleString()} (UTC)`,
     });
 
   guild.sendLog({
@@ -48,11 +48,11 @@ export default async function(member: HavocGuildMember) {
       ...fields,
       {
         name: '**ℹ Guild member count :**',
-        value: member.guild.memberCount.toString()
-      }
+        value: member.guild.memberCount.toString(),
+      },
     ],
     setColor: 'RED',
     setAuthor: [`${member.user.tag} left`, guild.iconURL()],
-    setFooter: `Member ID: ${member.id}`
+    setFooter: `Member ID: ${member.id}`,
   });
 }

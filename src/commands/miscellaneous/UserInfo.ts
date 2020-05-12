@@ -11,13 +11,13 @@ export default class extends Command {
       dm: true,
       description: 'View info about a user.',
       aliases: ['uinfo', 'user'],
-      args: { type: Target.USER }
+      args: { type: Target.USER },
     });
   }
 
   async run({
     message,
-    user
+    user,
   }: {
     message: HavocMessage;
     user: HavocUser | null;
@@ -29,8 +29,8 @@ export default class extends Command {
       {
         name: '❯Status',
         value: Util.captialise(user.presence.status),
-        inline: true
-      }
+        inline: true,
+      },
     ];
 
     if (message.guild) {
@@ -38,37 +38,37 @@ export default class extends Command {
       fields.push({
         name: '❯Joined server at',
         value: moment(member.joinedAt!).format('LLLL'),
-        inline: true
+        inline: true,
       });
       if (member.roles.cache.size > 1) {
         fields.push({
           name: 'Roles',
           value: member.roles.cache
-            .filter(role => role.id !== message.guild!.id)
+            .filter((role) => role.id !== message.guild!.id)
             .sort((prev, curr) => curr.position - prev.position)
-            .map(role => role.toString())
+            .map((role) => role.toString())
             .join(', '),
-          inline: true
+          inline: true,
         });
       }
     }
 
     const {
-      presence: { activities }
+      presence: { activities },
     } = user;
     if (activities.length)
       fields.push({
         name: `❯Activit${activities.length > 1 ? 'ies' : 'y'}`,
         value:
           activities.length > 1
-            ? activities.map(activity => `• ${activity.name}`).join('\n')
+            ? activities.map((activity) => `• ${activity.name}`).join('\n')
             : activities[0].name,
-        inline: true
+        inline: true,
       });
 
     message.sendEmbed({
       setThumbnail: user.pfp,
-      addFields: fields
+      addFields: fields,
     });
   }
 }

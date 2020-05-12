@@ -7,17 +7,18 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       dm: true,
-      description: 'View the heartbeat/latency in ms.'
+      description: 'View the heartbeat/latency in ms.',
     });
   }
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
-    message.respond({ setTitle: `${EMOJIS.PING} Pinging...` }).then(msg => {
+    message.respond({ setTitle: `${EMOJIS.PING} Pinging...` }).then((msg) => {
       msg.edit(
         message.constructEmbed({
           setTitle: `${EMOJIS.PONG} Pong!`,
-          setDescription: `Latency: ${msg.createdTimestamp -
-            message.createdTimestamp}ms\nHeartbeat: ${~~this.ws.ping}ms`
+          setDescription: `Latency: ${
+            msg.createdTimestamp - message.createdTimestamp
+          }ms\nHeartbeat: ${~~this.ws.ping}ms`,
         })
       );
     });

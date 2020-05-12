@@ -9,7 +9,7 @@ import {
   MessageEditOptions,
   FileOptions,
   EmojiResolvable,
-  APIMessage
+  APIMessage,
 } from 'discord.js';
 import HavocGuild from './HavocGuild';
 import Havoc from '../../client/Havoc';
@@ -24,7 +24,7 @@ import {
   NotFound,
   isOther,
   NotOther,
-  resolveTargetKey
+  resolveTargetKey,
 } from '../../util/targetter';
 import Prompt from '../Prompt';
 import EmbedPagination, { EmbedPaginationOptions } from '../EmbedPagination';
@@ -141,7 +141,7 @@ export default class HavocMessage extends Message {
     const { fn: response } = await this.createPrompt({
       initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
       invalidMsg: 'Enter __y__es or __n__o',
-      target: msg => msg.arg?.match(/^(yes|y|n|no)$/i)?.[0]
+      target: (msg) => msg.arg?.match(/^(yes|y|n|no)$/i)?.[0],
     });
 
     if (response?.charAt(0).toLowerCase() === 'y') {
@@ -190,7 +190,7 @@ export default class HavocMessage extends Message {
     }
     return this.channel
       .send(content, options)
-      .then(msg => (this.response = msg as this));
+      .then((msg) => (this.response = msg as this));
   }
 
   constructEmbed(methods: Partial<EmbedMethods>) {
@@ -243,7 +243,7 @@ export default class HavocMessage extends Message {
       embed:
         methodsOrEmbed instanceof MessageEmbed
           ? methodsOrEmbed
-          : this.constructEmbed(methodsOrEmbed)
+          : this.constructEmbed(methodsOrEmbed),
     });
 
     if (this.command && embed) {
@@ -256,7 +256,7 @@ export default class HavocMessage extends Message {
           {
             time: 3000,
             max: 1,
-            errors: ['time']
+            errors: ['time'],
           }
         )
         .then(async () =>
@@ -284,7 +284,7 @@ export default class HavocMessage extends Message {
         ? {
             setDescription: `${
               author ? `**${this.author.tag}** ` : ''
-            }${toSend}${toSend.endsWith('.') ? '' : '.'}`
+            }${toSend}${toSend.endsWith('.') ? '' : '.'}`,
           }
         : toSend;
     if (contentOnly && typeof toSend === 'string') return this.send(toSend);
@@ -296,7 +296,7 @@ export default class HavocMessage extends Message {
   async findConfigChannel(config: 'suggestion' | 'giveaway') {
     const guild = this.guild!;
     const existing = guild.channels.cache.find(
-      channel => channel.name === `${config}s`
+      (channel) => channel.name === `${config}s`
     );
     const guildEntity = await this.client.db.find(GuildEntity, guild.id);
     const setupResponse = `${
@@ -309,7 +309,7 @@ export default class HavocMessage extends Message {
     if (!guildEntity || !guildEntity[config]) {
       if (!existing) {
         this.respond({
-          setDescription: `**${this.author.tag}** I couldn't find a \`#${config}s\` and a ${config} channel hasn't been configured. ${setupResponse}`
+          setDescription: `**${this.author.tag}** I couldn't find a \`#${config}s\` and a ${config} channel hasn't been configured. ${setupResponse}`,
         });
         return null;
       }
@@ -320,7 +320,7 @@ export default class HavocMessage extends Message {
     const channel = guild.channels.cache.get(guildEntity[config]);
     if (!channel) {
       this.respond({
-        setDescription: `**${this.author.tag}** the ${config} channel that was in the configuration doesn't exist. ${setupResponse}.`
+        setDescription: `**${this.author.tag}** the ${config} channel that was in the configuration doesn't exist. ${setupResponse}.`,
       });
       // @ts-ignore
       delete guildEntity[config];
@@ -347,7 +347,7 @@ export default class HavocMessage extends Message {
         await this.safeReact(EMOJIS.DENIED);
         return this.respond(
           `you need to have the ${flags
-            .map(flag => `\`${Util.normalizePermFlag(flag)}\``)
+            .map((flag) => `\`${Util.normalizePermFlag(flag)}\``)
             .join(', ')} ${Util.plural(
             'permission',
             flags.length
@@ -357,7 +357,7 @@ export default class HavocMessage extends Message {
       if (!this.guild!.me!.hasPermission(flags)) {
         return this.respond(
           `I do not have sufficient permisions to use this command I need to have the ${flags
-            .map(flag => `\`${Util.normalizePermFlag(flag)}\``)
+            .map((flag) => `\`${Util.normalizePermFlag(flag)}\``)
             .join(', ')} ${Util.plural(
             'permission',
             flags.length
@@ -369,7 +369,7 @@ export default class HavocMessage extends Message {
     if (command.flags.length) {
       params.flags = command.flags.reduce(
         (flags: { [flag: string]: string }, possibleFlag) => {
-          const flagIndex = this.args.findIndex(arg =>
+          const flagIndex = this.args.findIndex((arg) =>
             new RegExp(`${this.prefix}${possibleFlag}(=.+)?$`).test(arg)
           );
           if (flagIndex === -1) return flags;
@@ -399,20 +399,20 @@ export default class HavocMessage extends Message {
               : prompt!);
 
           if (this.args.length && !command.promptOnly)
-            initialMsg = `\`${
-              this.text
-            }\` is an invalid option! ${promptOpts?.invalid ||
-              (isOther(type) ? '' : Responses[type as NotOther]!(this))}
+            initialMsg = `\`${this.text}\` is an invalid option! ${
+              promptOpts?.invalid ||
+              (isOther(type) ? '' : Responses[type as NotOther]!(this))
+            }
               Enter \`cancel\` to exit out of this prompt.`;
 
           found = await this.createPrompt({
             initialMsg,
             invalidMsg: promptOpts?.invalid || '',
-            target: type
-          }).then(responses => Object.assign(params, responses));
+            target: type,
+          }).then((responses) => Object.assign(params, responses));
           if (
             (required && found![resolveTargetKey(type)] == null) ||
-            Object.values(found!).every(f => f == null)
+            Object.values(found!).every((f) => f == null)
           )
             return;
         }
@@ -434,12 +434,12 @@ export default class HavocMessage extends Message {
         );
 
         this.client.prometheus.commandCounter.inc({
-          command_name: command.name
+          command_name: command.name,
         });
       })
-      .catch(async rej => {
+      .catch(async (rej) => {
         this.client.logger.warn(rej, {
-          origin: `${Util.captialise(command.name)}#run()`
+          origin: `${Util.captialise(command.name)}#run()`,
         });
 
         this.channel.send(

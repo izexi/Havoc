@@ -11,9 +11,9 @@ export default class extends Command {
       args: {
         example: ['-'],
         name: 'new prefix',
-        type: Target.TEXT
+        type: Target.TEXT,
       },
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -21,7 +21,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      text: prefix
+      text: prefix,
     }: {
       message: HavocMessage;
       text: string | null;

@@ -20,8 +20,8 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: PROMPT_ENTER('the dump URL.')
-      }
+        prompt: PROMPT_ENTER('the dump URL.'),
+      },
     });
   }
 
@@ -30,7 +30,7 @@ export default class extends Command {
     { message, text }: { message: HavocMessage; text: string }
   ) {
     const status = await message.channel.send(`Migrating... ${EMOJIS.LOADING}`);
-    const dump = await fetch(text).then(r => r.text());
+    const dump = await fetch(text).then((r) => r.text());
     const mappedDump: Collection<string, any> = dump
       .split('\n')
       .reduce((col, d) => {
@@ -61,7 +61,7 @@ export default class extends Command {
                 opts.logs = {
                   ...logs,
                   webhook,
-                  disabled: mappedDump.get(`disabledLogs:${id}`) || []
+                  disabled: mappedDump.get(`disabledLogs:${id}`) || [],
                 };
               }
             }
@@ -87,7 +87,7 @@ export default class extends Command {
                       duration:
                         punishment === 'mute'
                           ? MINUTES(Number(duration))
-                          : undefined
+                          : undefined,
                     });
                   })
                 );
@@ -120,16 +120,16 @@ export default class extends Command {
                       history: warn.map(
                         ({
                           warner,
-                          reason
+                          reason,
                         }: {
                           warner: string;
                           reason: string | null;
                         }) => ({
                           at: new Date(),
                           reason: reason ?? undefined,
-                          warner
+                          warner,
                         })
-                      )
+                      ),
                     })
                 )
               );
@@ -142,14 +142,14 @@ export default class extends Command {
               await guildEntity.mutes.init();
               guildEntity.mutes.add(
                 ...mutes
-                  .filter(mute => !Number.isInteger(mute))
+                  .filter((mute) => !Number.isInteger(mute))
                   .map(
                     ({ endTime, member, muter, reason }) =>
                       new MuteEntity({
                         end: new Date(endTime),
                         reason: reason ?? undefined,
                         member,
-                        muter
+                        muter,
                       })
                   )
               );
@@ -170,10 +170,10 @@ export default class extends Command {
       }
       await this.db
         .flush()
-        .catch(err => this.logger.error(err, { origin: `Migrate(${key})` }));
+        .catch((err) => this.logger.error(err, { origin: `Migrate(${key})` }));
 
       this.logger.info(`${++i} / ${mappedDump.size}`, {
-        origin: `Migrate(${key})`
+        origin: `Migrate(${key})`,
       });
     }
 

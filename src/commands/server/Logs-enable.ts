@@ -13,10 +13,10 @@ export default class extends Command {
       args: {
         type: Target.CHANNEL,
         required: true,
-        prompt: PROMPT_INITIAL[Target.CHANNEL]('to set the logs to')
+        prompt: PROMPT_INITIAL[Target.CHANNEL]('to set the logs to'),
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -27,7 +27,7 @@ export default class extends Command {
     let logs: Logs;
     const existing = await this.db
       .find(GuildEntity, message.guild!.id)
-      .then(guild => guild?.logs);
+      .then((guild) => guild?.logs);
 
     if (existing) {
       if (existing.channel === channel.id)
@@ -35,11 +35,11 @@ export default class extends Command {
 
       logs = {
         ...existing,
-        channel: channel.id
+        channel: channel.id,
       };
     } else {
       const webhook = await channel.createWebhook(',HavocLogs', {
-        avatar: this.user!.displayAvatarURL()
+        avatar: this.user!.displayAvatarURL(),
       });
 
       logs = {
@@ -47,8 +47,8 @@ export default class extends Command {
         channel: channel.id,
         webhook: {
           id: webhook.id,
-          token: webhook.token!
-        }
+          token: webhook.token!,
+        },
       };
     }
 

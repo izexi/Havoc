@@ -22,7 +22,7 @@ export default class Database {
       entitiesDirs: ['./dist/structures/entities'],
       entitiesDirsTs: ['./src/structures/entities'],
       dbName: process.env.POSTGRES_DB!,
-      clientUrl: process.env.DATABASE_URL
+      clientUrl: process.env.DATABASE_URL,
     });
     return this.setup();
   }
@@ -37,7 +37,7 @@ export default class Database {
       await this.orm
         .getSchemaGenerator()
         .getCreateSchemaSQL()
-        .then(query => this.execute(query));
+        .then((query) => this.execute(query));
     }
   }
 
@@ -49,7 +49,7 @@ export default class Database {
     return this.orm
       .getSchemaGenerator()
       .getDropSchemaSQL()
-      .then(sql => this.orm.em.getConnection().execute(sql));
+      .then((sql) => this.orm.em.getConnection().execute(sql));
   }
 
   execute(query: string) {
@@ -60,13 +60,13 @@ export default class Database {
     return this.orm.em.flush().then(
       () => {
         this.client.logger.info('Database flushed', {
-          origin: 'Database#flush()'
+          origin: 'Database#flush()',
         });
         this.client.prometheus.dbFlushCounter.inc();
       },
-      error =>
+      (error) =>
         this.client.logger.error(error.message, {
-          origin: 'Database#flush()'
+          origin: 'Database#flush()',
         })
     );
   }
@@ -87,7 +87,7 @@ export default class Database {
   }
 
   async find<T extends AnyEntity>(Entity: Entity<T>, id: string): Promise<T> {
-    return this.orm.em.findOne(Entity, id).then(res => res || null);
+    return this.orm.em.findOne(Entity, id).then((res) => res || null);
   }
 
   async findOrInsert<T extends AnyEntity>(

@@ -7,7 +7,7 @@ export default class extends Command {
     super(__filename, {
       dm: true,
       description: 'View an invite link to invite me to a server.',
-      aliases: ['inv']
+      aliases: ['inv'],
     });
   }
 

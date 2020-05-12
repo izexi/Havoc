@@ -3,7 +3,7 @@ import {
   StringResolvable,
   MessageOptions,
   MessageAdditions,
-  MessageEmbed
+  MessageEmbed,
 } from 'discord.js';
 import Util from '../../util';
 import HavocUser from './HavocUser';
@@ -21,7 +21,7 @@ export default class HavocTextChannel extends TextChannel {
       this.type === 'text' &&
       !this.permissionsFor(this.guild.me!)!.has([
         'VIEW_CHANNEL',
-        'SEND_MESSAGES'
+        'SEND_MESSAGES',
       ])
     )
       return;
@@ -34,8 +34,8 @@ export default class HavocTextChannel extends TextChannel {
         options.files = [
           {
             attachment: Buffer.from(description, 'utf8'),
-            name: `${options.title || 'content'}.txt`
-          }
+            name: `${options.title || 'content'}.txt`,
+          },
         ];
         options.description = await Util.haste(description);
       }

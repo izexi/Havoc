@@ -14,16 +14,16 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: PROMPT_ENTER('the code that you would like to evaluate')
+        prompt: PROMPT_ENTER('the code that you would like to evaluate'),
       },
-      flags: ['silent', 'detailed', 'async']
+      flags: ['silent', 'detailed', 'async'],
     });
   }
 
   async run({
     message,
     text: code,
-    flags
+    flags,
   }: {
     message: HavocMessage;
     text: string;
@@ -44,7 +44,7 @@ export default class extends Command {
           : typeof evaled;
       const output = inspect(evaled, {
         depth: 0,
-        maxArrayLength: detailed ? Infinity : 100
+        maxArrayLength: detailed ? Infinity : 100,
       }).replace(new RegExp(message.client.token!, 'g'), 'no');
 
       if (!silent) {
@@ -62,15 +62,15 @@ export default class extends Command {
           }**${EMOJIS.TYPE} Type:** \`${type}\``,
           setFooter: [
             `executed in ${Number(end - start) / 1000000} milliseconds`,
-            message.author.pfp
-          ]
+            message.author.pfp,
+          ],
         });
       }
     } catch (error) {
       const end = process.hrtime.bigint();
       const formattedError = inspect(error, {
         depth: 0,
-        maxArrayLength: 0
+        maxArrayLength: 0,
       });
 
       if (!silent) {
@@ -81,8 +81,8 @@ export default class extends Command {
           )}\n**${EMOJIS.ERROR} Error:**\n${Util.codeblock(formattedError)}`,
           setFooter: [
             `executed in ${Number(end - start) / 1000000} milliseconds`,
-            message.author.pfp
-          ]
+            message.author.pfp,
+          ],
         });
       }
     }

@@ -13,9 +13,9 @@ export default class extends Command {
       args: {
         required: true,
         type: Target.ROLE,
-        prompt: PROMPT_INITIAL[Target.ROLE]('list members from')
+        prompt: PROMPT_INITIAL[Target.ROLE]('list members from'),
       },
-      requiredPerms: 'VIEW_AUDIT_LOG'
+      requiredPerms: 'VIEW_AUDIT_LOG',
     });
   }
 
@@ -30,12 +30,12 @@ export default class extends Command {
         members.size
       )} that have the role \`${role.name}\``,
       descriptions: members.map(
-        member =>
+        (member) =>
           `• **${member.displayName}**
              (${member.user.tag} - ${member.user.id})`
       ),
       maxPerPage: 20,
-      page: Number(message.arg)
+      page: Number(message.arg),
     });
   }
 }

@@ -16,18 +16,18 @@ export default class extends Command {
           type: Target.MEMBER,
           prompt: PROMPT_INITIAL[Target.MEMBER](
             ' you would like to remove a role from'
-          )
+          ),
         },
         {
           required: true,
           type: Target.ROLE,
-          prompt: PROMPT_INITIAL[Target.ROLE]('remove from the member')
+          prompt: PROMPT_INITIAL[Target.ROLE]('remove from the member'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -35,7 +35,7 @@ export default class extends Command {
     message,
     member,
     role,
-    text: reason
+    text: reason,
   }: {
     message: HavocMessage;
     member: GuildMember;

@@ -9,13 +9,13 @@ export default class extends Command {
     super(__filename, {
       description: 'View store winston logs.',
       dm: true,
-      flags: ['filter']
+      flags: ['filter'],
     });
   }
 
   async run({
     message,
-    flags
+    flags,
   }: {
     message: HavocMessage;
     flags: { filter?: string };
@@ -28,7 +28,7 @@ export default class extends Command {
       return new Date(`${month}/${day}/${year.split('.')[0]}`).getTime();
     };
     const recentLog = logFiles
-      .filter(logFile => logFile.includes('debug'))
+      .filter((logFile) => logFile.includes('debug'))
       .reduce((recent, file) =>
         parseDate(file) > parseDate(recent) ? file : recent
       );
@@ -38,13 +38,13 @@ export default class extends Command {
       message: string;
     }[] = await fs
       .readFile(join(logPath, recentLog), {
-        encoding: 'utf8'
+        encoding: 'utf8',
       })
-      .then(data => {
+      .then((data) => {
         const parsed = data
           .split('\n')
           .slice(0, -1)
-          .map(d => JSON.parse(d));
+          .map((d) => JSON.parse(d));
         return flags.filter
           ? parsed.filter(({ level }) => level === flags.filter)
           : parsed;
@@ -59,13 +59,13 @@ export default class extends Command {
       .reverse()
       .join('\n\n')
       .match(/[\s\S]{1,2048}/g)!
-      .map(logs => Util.codeblock(logs, 'asciidoc'))
+      .map((logs) => Util.codeblock(logs, 'asciidoc'))
       .slice(-10);
 
     message.paginate({
       title: `Winston logs (\`${recentLog}\`)`,
       descriptions: formattedLogs,
-      maxPerPage: 1
+      maxPerPage: 1,
     });
   }
 }

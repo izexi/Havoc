@@ -16,16 +16,16 @@ export default class extends Command {
             ['start', 'end', 'reroll', 'config'],
             'giveaway for this server'
           ),
-          invalid: PROMPT_INVALD('either `start`, `end`, `reroll` or `config`')
-        }
+          invalid: PROMPT_INVALD('either `start`, `end`, `reroll` or `config`'),
+        },
       },
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
   async run({
     message,
-    option: subCommand
+    option: subCommand,
   }: {
     message: HavocMessage;
     option: string;

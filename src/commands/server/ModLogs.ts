@@ -16,15 +16,15 @@ export default class extends Command {
             ['enable', 'config', 'disable'],
             'mod logs for this server'
           ),
-          invalid: PROMPT_INVALD('either `enable`, `config` or `disable`')
-        }
-      }
+          invalid: PROMPT_INVALD('either `enable`, `config` or `disable`'),
+        },
+      },
     });
   }
 
   async run({
     message,
-    option: subCommand
+    option: subCommand,
   }: {
     message: HavocMessage;
     option: string;

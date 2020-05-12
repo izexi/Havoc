@@ -17,18 +17,18 @@ export default class extends Command {
           type: Target.MEMBER,
           prompt: PROMPT_INITIAL[Target.MEMBER](
             ' you would like to add a role to'
-          )
+          ),
         },
         {
           required: true,
           type: Target.ROLE,
-          prompt: PROMPT_INITIAL[Target.ROLE]('add to the member')
+          prompt: PROMPT_INITIAL[Target.ROLE]('add to the member'),
         },
         {
-          type: Target.TEXT
-        }
+          type: Target.TEXT,
+        },
       ],
-      requiredPerms: 'MANAGE_ROLES'
+      requiredPerms: 'MANAGE_ROLES',
     });
   }
 
@@ -36,7 +36,7 @@ export default class extends Command {
     message,
     member,
     role,
-    text: reason
+    text: reason,
   }: {
     message: HavocMessage;
     member: GuildMember;

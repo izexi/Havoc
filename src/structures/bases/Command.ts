@@ -38,7 +38,7 @@ export type CommandParams = {
 export enum Status {
   SUBCOMMAND,
   RAN,
-  ERROR
+  ERROR,
 }
 
 export default abstract class implements CommandOptions {

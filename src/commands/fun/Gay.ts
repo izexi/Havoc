@@ -12,7 +12,7 @@ export default class extends Command {
     super(__filename, {
       dm: true,
       description: 'A 100% accurate gayness calculator.',
-      args: { type: Target.USER }
+      args: { type: Target.USER },
     });
   }
 
@@ -20,7 +20,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      user
+      user,
     }: {
       message: HavocMessage;
       user: HavocUser | null;

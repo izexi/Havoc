@@ -8,7 +8,7 @@ import WarnPunishmentEntity from '../../structures/entities/WarnPunishmentEntity
 import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
-  PROMPT_ENTER
+  PROMPT_ENTER,
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -25,14 +25,14 @@ export default class extends Command {
               'warnings',
               'set as the amount of warnings that must be reached for this punishment'
             ),
-            invalid: PROMPT_INVALD('the number of warnings, e.g: `3`')
-          }
+            invalid: PROMPT_INVALD('the number of warnings, e.g: `3`'),
+          },
         },
         {
           required: true,
           name: 'punishment',
           example: ['mute'],
-          type: message => {
+          type: (message) => {
             const possiblePunishment = message.arg?.toLowerCase();
             if (!possiblePunishment) return;
             if (['none', 'mute', 'kick', 'ban'].includes(possiblePunishment))
@@ -42,16 +42,16 @@ export default class extends Command {
             initial: PROMPT_ENTER(
               'the punishment, which can be either `none`, `mute`, `kick` or `ban` (enter the according option)'
             ),
-            invalid: PROMPT_INVALD('either `none`, `mute`, `kick` or `ban`')
-          }
+            invalid: PROMPT_INVALD('either `none`, `mute`, `kick` or `ban`'),
+          },
         },
         {
           name: 'mute duration',
           type: Target.TIME,
-          prompt: PROMPT_INITIAL[Target.TIME]('mute')
-        }
+          prompt: PROMPT_INITIAL[Target.TIME]('mute'),
+        },
       ],
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -61,7 +61,7 @@ export default class extends Command {
       message,
       number: amount,
       fn: punishment,
-      time: duration
+      time: duration,
     }: {
       message: HavocMessage;
       number: number;
@@ -72,7 +72,7 @@ export default class extends Command {
     if (punishment.startsWith('mute') && !duration) {
       const target = await message.createPrompt({
         target: Target.TIME,
-        initialMsg: PROMPT_INITIAL[Target.TIME]('mute')
+        initialMsg: PROMPT_INITIAL[Target.TIME]('mute'),
       });
       if (!target.time) return;
       duration = target.time;
@@ -100,7 +100,7 @@ export default class extends Command {
         new WarnPunishmentEntity({
           amount,
           punishment: action,
-          duration: time ? Number(time) : undefined
+          duration: time ? Number(time) : undefined,
         })
       );
     });

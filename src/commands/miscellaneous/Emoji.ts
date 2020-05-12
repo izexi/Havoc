@@ -1,6 +1,6 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage, {
-  EmbedMethods
+  EmbedMethods,
 } from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import { GuildEmoji } from 'discord.js';
@@ -15,14 +15,14 @@ export default class extends Command {
       args: {
         type: Target.EMOJI,
         required: true,
-        prompt: PROMPT_INITIAL[Target.EMOJI]('view info about')
-      }
+        prompt: PROMPT_INITIAL[Target.EMOJI]('view info about'),
+      },
     });
   }
 
   async run({
     message,
-    emoji
+    emoji,
   }: {
     message: HavocMessage;
     emoji: GuildEmoji | Emoji;
@@ -38,15 +38,15 @@ export default class extends Command {
           {
             name: '❯Created by',
             value: (await emoji.fetchAuthor()).tag,
-            inline: false
+            inline: false,
           },
           {
             name: '❯Created at',
             value: moment(emoji.createdAt!).format('LLLL'),
-            inline: true
+            inline: true,
           },
-          { name: '❯URL', value: emoji.url, inline: false }
-        ]
+          { name: '❯URL', value: emoji.url, inline: false },
+        ],
       };
     } else {
       const url = `https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/${emoji.emoji
@@ -58,10 +58,10 @@ export default class extends Command {
           {
             name: '❯Emoji',
             value: `\`${emoji.emoji}\` ${emoji.emoji}`,
-            inline: false
+            inline: false,
           },
-          { name: '❯Name', value: `\`:${emoji.key}:\``, inline: false }
-        ]
+          { name: '❯Name', value: `\`:${emoji.key}:\``, inline: false },
+        ],
       };
     }
 

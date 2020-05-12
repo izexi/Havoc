@@ -8,7 +8,7 @@ export default class extends Command {
   constructor() {
     super(__filename, {
       dm: true,
-      description: EMOJIS.NO_HUG
+      description: EMOJIS.NO_HUG,
     });
   }
 
@@ -18,9 +18,9 @@ export default class extends Command {
         this.emojis.cache.get(Util.randomArrEl(EMOJIS.HUG))!.toString(),
         {
           author: false,
-          contentOnly: true
+          contentOnly: true,
         }
       )
-      .then(msg => this.setTimeout(() => msg.edit(EMOJIS.NO_HUG), 2000));
+      .then((msg) => this.setTimeout(() => msg.edit(EMOJIS.NO_HUG), 2000));
   }
 }

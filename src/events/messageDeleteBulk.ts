@@ -2,7 +2,7 @@ import HavocMessage from '../structures/extensions/HavocMessage';
 import { Collection } from 'discord.js';
 import HavocGuild from '../structures/extensions/HavocGuild';
 
-export default async function(
+export default async function (
   messages: Collection<HavocMessage['id'], HavocMessage>
 ) {
   const guild = messages.first()?.guild as HavocGuild;
@@ -12,24 +12,24 @@ export default async function(
     addFields: [
       {
         name: '** 🗑Amount Deleted :**',
-        value: messages.size.toString()
+        value: messages.size.toString(),
       },
       {
         name: '**📂 Channel :**',
-        value: messages.first()!.channel.toString()
-      }
+        value: messages.first()!.channel.toString(),
+      },
     ],
     setColor: 'RED',
     setAuthor: [
       `Messages were bulk deleted in channel ${messages.first()!.channel}`,
-      guild.iconURL()
+      guild.iconURL(),
     ],
     attachFiles: [
       {
         attachment: Buffer.from(
           messages
             .map(
-              msg =>
+              (msg) =>
                 `[${new Date(msg.createdTimestamp).toLocaleString()} (UTC)] ${
                   msg.author.tag
                 } (${msg.author.id}): ${msg.content}
@@ -43,8 +43,8 @@ export default async function(
             .join('\r\n'),
           'utf8'
         ),
-        name: 'deleted_contents.txt'
-      }
-    ]
+        name: 'deleted_contents.txt',
+      },
+    ],
   });
 }

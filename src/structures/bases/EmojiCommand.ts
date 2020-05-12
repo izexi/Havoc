@@ -5,14 +5,14 @@ import { Util } from 'discord.js';
 export default class extends Command {
   constructor(emojiName: string) {
     super(`/emojis/${emojiName}.js`, {
-      description: emojiName
+      description: emojiName,
     });
   }
 
   async run({ message }: { message: HavocMessage }) {
     const requiredRole = 'HavocEmojis';
     const role =
-      message.guild!.roles.cache.find(r => r.name === requiredRole) ??
+      message.guild!.roles.cache.find((r) => r.name === requiredRole) ??
       (await message.guild!.roles.create({ data: { name: requiredRole } }));
     if (!message.member.roles.cache.has(role.id))
       return message.respond(
@@ -29,7 +29,7 @@ export default class extends Command {
           setAuthor: [message.member.displayName, message.author.pfp],
           setFooter: message.text
             ? Util.cleanContent(message.text, message)
-            : ''
+            : '',
         })
         // @ts-ignore
         .setTimestamp(null)

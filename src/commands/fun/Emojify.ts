@@ -13,7 +13,7 @@ export default class extends Command {
       args: {
         name: 'emoji',
         example: [':POGGIES:', '😩'],
-        type: message => {
+        type: (message) => {
           const { arg: possibleEmoji } = message;
           if (!possibleEmoji) return;
 
@@ -35,9 +35,9 @@ export default class extends Command {
         required: true,
         promptOpts: {
           initial: PROMPT_INITIAL[Target.EMOJI]('enlarge'),
-          invalid: PROMPT_INVALD('a custom or unicode emoji')
-        }
-      }
+          invalid: PROMPT_INVALD('a custom or unicode emoji'),
+        },
+      },
     });
   }
 
@@ -47,7 +47,7 @@ export default class extends Command {
       message
         .constructEmbed({
           setImage: url,
-          setAuthor: [message.member!.displayName, message.author.pfp]
+          setAuthor: [message.member!.displayName, message.author.pfp],
         })
         // @ts-ignore
         .setTimestamp(null)

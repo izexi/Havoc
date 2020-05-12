@@ -9,7 +9,7 @@ import {
   PROMPT_INVALD,
   PROMPT_ENTER,
   NOOP,
-  EMOJIS
+  EMOJIS,
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -24,7 +24,7 @@ export default class extends Command {
           type: Target.USER,
           prompt: PROMPT_INITIAL[Target.USER](
             ' you would like to clear warnings from'
-          )
+          ),
         },
         {
           type: Target.NUMBER,
@@ -34,11 +34,11 @@ export default class extends Command {
             ),
             invalid: PROMPT_INVALD(
               'the number of the warn that you would like to clear (e.g: enter `2` to clear the second warning)'
-            )
-          }
-        }
+            ),
+          },
+        },
       ],
-      requiredPerms: ['MANAGE_ROLES', 'KICK_MEMBERS', 'BAN_MEMBERS']
+      requiredPerms: ['MANAGE_ROLES', 'KICK_MEMBERS', 'BAN_MEMBERS'],
     });
   }
 
@@ -47,7 +47,7 @@ export default class extends Command {
     {
       message,
       user,
-      number: index
+      number: index,
     }: {
       message: HavocMessage;
       user: HavocUser;

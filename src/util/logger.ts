@@ -13,14 +13,14 @@ export default createLogger({
   transports: [
     new transports.Console({
       level: 'info',
-      format: format.colorize({ level: true })
+      format: format.colorize({ level: true }),
     }),
     new transports.File({
       level: 'error',
       filename: 'error.log',
       dirname: 'logs',
       maxFiles: 7,
-      maxsize: 20 * 1024 * 1024
+      maxsize: 20 * 1024 * 1024,
     }),
     new DailyRotateFile({
       level: 'debug',
@@ -29,10 +29,10 @@ export default createLogger({
       datePattern: 'DD-MM-YYYY',
       filename: '%DATE%.debug.log',
       maxFiles: '7d',
-      maxSize: '20m'
+      maxSize: '20m',
     }).on('rotate', (oldFileName, newFilename) =>
       // eslint-disable-next-line no-console
       console.log(`Rotating logs | ${oldFileName} => ${newFilename}`)
-    )
-  ]
+    ),
+  ],
 });

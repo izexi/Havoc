@@ -57,7 +57,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
               message.embeds[0].description?.replace(
                 /\nTime remaining: (.+)$/,
                 `\nTime remaining: **${ms(Math.max(timeLeft, SECONDS(1)), {
-                  long: true
+                  long: true,
                 })}**`
               )
             );
@@ -91,11 +91,11 @@ export default class Mute extends Schedule<GiveawayEntity> {
       const reaction = message.reactions.cache.get(EMOJIS.GIVEAWAY);
       if (!reaction) return;
 
-      const winner = await reaction.users.fetch().then(users =>
+      const winner = await reaction.users.fetch().then((users) =>
         users
-          .filter(user => user.id !== this.client.user!.id)
+          .filter((user) => user.id !== this.client.user!.id)
           .random(giveaway.winners)
-          .filter(user => user)
+          .filter((user) => user)
       );
       if (!winner.length) {
         message.edit(
@@ -118,7 +118,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
         message.embeds[0]
           .setDescription(
             `**${Util.plural('Winner', winner.length)}:** ${winner
-              .map(u => u.tag)
+              .map((u) => u.tag)
               .join(', ')}`
           )
           .setFooter(
@@ -132,16 +132,19 @@ export default class Mute extends Schedule<GiveawayEntity> {
 
       const embed = message.constructEmbed({
         setDescription: `${EMOJIS.GIVEAWAY} Congratulations **${winner
-          .map(user => user.tag)
+          .map((user) => user.tag)
           .join(', ')}**! You won the [giveaway](${message.url}) for ${
           message.embeds[0].title
         } ${EMOJIS.GIVEAWAY}`,
-        setColor: 'GOLD'
+        setColor: 'GOLD',
       });
-      await message.sendEmbed(embed, winner.map(u => u.toString()).join(', '));
+      await message.sendEmbed(
+        embed,
+        winner.map((u) => u.toString()).join(', ')
+      );
 
       Promise.all(
-        winner.map(user => {
+        winner.map((user) => {
           const dmEmbed = new MessageEmbed(message.embeds[0])
             .setColor('GOLD')
             .setDescription(
@@ -167,9 +170,11 @@ export default class Mute extends Schedule<GiveawayEntity> {
   async load() {
     const giveaways = await this.client.db.guildRepo
       .findAll({ populate: ['giveaways'] })
-      .then(guilds => guilds.flatMap(({ giveaways }) => giveaways.getItems()));
+      .then((guilds) =>
+        guilds.flatMap(({ giveaways }) => giveaways.getItems())
+      );
     await Promise.all(
-      giveaways.map(giveaway => {
+      giveaways.map((giveaway) => {
         this.schedule(giveaway);
         this.scheduleEdits(giveaway);
       })

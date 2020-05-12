@@ -14,14 +14,14 @@ export default class extends Command {
       args: {
         type: Target.CHANNEL,
         required: true,
-        prompt: PROMPT_INITIAL[Target.CHANNEL]('to view info about')
-      }
+        prompt: PROMPT_INITIAL[Target.CHANNEL]('to view info about'),
+      },
     });
   }
 
   async run({
     message,
-    channel
+    channel,
   }: {
     message: HavocMessage;
     channel: GuildChannel;
@@ -37,8 +37,8 @@ export default class extends Command {
       {
         name: '❯Type',
         value: channel.type,
-        inline: true
-      }
+        inline: true,
+      },
     ];
 
     if (channel instanceof HavocTextChannel || channel instanceof NewsChannel) {
@@ -46,7 +46,7 @@ export default class extends Command {
         {
           name: '❯Topic',
           value: channel.topic ?? 'No topic set.',
-          inline: true
+          inline: true,
         },
         { name: '❯NSFW', value: channel.nsfw ? 'Yes' : 'No', inline: true }
       );
@@ -54,12 +54,12 @@ export default class extends Command {
       if (channel.permissionsFor(message.member)?.has('READ_MESSAGE_HISTORY')) {
         const firstMessage = await channel.messages
           .fetch({ limit: 1, after: '0' })
-          .then(messages => messages.first()?.url);
+          .then((messages) => messages.first()?.url);
         if (firstMessage)
           fields.push({
             name: '❯First Message',
             value: firstMessage,
-            inline: true
+            inline: true,
           });
       }
     }
@@ -70,9 +70,9 @@ export default class extends Command {
         {
           name: 'Created at',
           value: moment(channel.createdAt).format('LLLL'),
-          inline: true
-        }
-      ]
+          inline: true,
+        },
+      ],
     });
   }
 }

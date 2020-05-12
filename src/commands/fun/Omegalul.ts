@@ -11,15 +11,15 @@ export default class extends Command {
       args: {
         type: Target.TEXT,
         required: true,
-        prompt: PROMPT_INITIAL[Target.TEXT](EMOJIS.OMEGALUL)
-      }
+        prompt: PROMPT_INITIAL[Target.TEXT](EMOJIS.OMEGALUL),
+      },
     });
   }
 
   async run({ message, text }: { message: HavocMessage; text: string }) {
     message.send(text.replace(/o/gi, EMOJIS.OMEGALUL), {
       split: { char: EMOJIS.OMEGALUL },
-      disableMentions: 'everyone'
+      disableMentions: 'everyone',
     });
   }
 }

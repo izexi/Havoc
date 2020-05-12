@@ -8,7 +8,7 @@ export default class extends Command {
     super(__filename, {
       description: 'Disable the logs for this server.',
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 

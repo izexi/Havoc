@@ -9,20 +9,20 @@ export default class extends Handler<
   async load() {
     await fs
       .readdir(join(__dirname, '..', 'events'))
-      .then(files => this.loadFromFiles(files))
-      .catch(error =>
+      .then((files) => this.loadFromFiles(files))
+      .catch((error) =>
         this.client.logger.error(error.message, {
-          origin: 'EventHandler#loadFromFiles()'
+          origin: 'EventHandler#loadFromFiles()',
         })
       );
     this.client.logger.info(`Loaded ${this.holds.size} events`, {
-      origin: 'EventHandler#load()'
+      origin: 'EventHandler#load()',
     });
   }
 
   loadFromFiles(eventFiles: string[]) {
     this.holds = new Map(
-      eventFiles.map(eventFile => {
+      eventFiles.map((eventFile) => {
         const eventPath = join(__dirname, '..', 'events', eventFile);
         const eventName = parse(eventPath).name as keyof ClientEvents;
         const eventFn = require(eventPath).default.bind(this.client);

@@ -14,7 +14,7 @@ export default class extends Command {
       args: {
         name: 'config',
         example: ['config'],
-        type: message => {
+        type: (message) => {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
           if (possibleSubCmd === 'config') {
@@ -26,9 +26,9 @@ export default class extends Command {
             return Status.SUBCOMMAND;
           }
           return null;
-        }
+        },
       },
-      requiredPerms: 'MANAGE_MESSAGES'
+      requiredPerms: 'MANAGE_MESSAGES',
     });
   }
 
@@ -36,7 +36,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      fn
+      fn,
     }: {
       message: HavocMessage;
       fn: number | null;
@@ -56,11 +56,12 @@ export default class extends Command {
     const cleared = await (message.channel as TextChannel)
       .bulkDelete(
         messages.filter(
-          msg =>
+          (msg) =>
             msg.author!.bot ||
-            [message.guild!.prefix, ...message.guild!.bcPrefixes].some(prefix =>
-              msg.content.startsWith(prefix)
-            )
+            [
+              message.guild!.prefix,
+              ...message.guild!.bcPrefixes,
+            ].some((prefix) => msg.content.startsWith(prefix))
         ),
         true
       )
@@ -79,7 +80,7 @@ export default class extends Command {
         )}\` ${Util.randomArrEl(EMOJIS.BOTCLEAR)}`,
         { deleteable: false }
       )
-      .then(message => message.delete({ timeout: 1300 }))
+      .then((message) => message.delete({ timeout: 1300 }))
       .catch(NOOP);
   }
 }

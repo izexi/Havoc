@@ -13,7 +13,7 @@ export default class extends Command {
         required: true,
         example: ['delete this server', 'deny'],
         name: 'suggestion | sub command (approve | deny | config)',
-        type: message => {
+        type: (message) => {
           const possibleSubCmd = message.arg?.toLowerCase();
           if (!possibleSubCmd) return;
           if (['approve', 'deny', 'config'].includes(possibleSubCmd)) {
@@ -26,19 +26,19 @@ export default class extends Command {
           }
           return message.text || null;
         },
-        prompt: message =>
+        prompt: (message) =>
           `enter the suggestion that you would like to create${
             message.member?.permissions.has('MANAGE_GUILD')
               ? 'or enter whether you will like to `approve`, `deny` or `config` the suggestion by entering the according option'
               : ''
-          }.`
-      }
+          }.`,
+      },
     });
   }
 
   async run({
     message,
-    fn: suggestion
+    fn: suggestion,
   }: {
     message: HavocMessage;
     fn: string;
@@ -52,14 +52,14 @@ export default class extends Command {
       message.constructEmbed({
         addFields: [
           { name: 'Suggestion:', value: suggestion },
-          { name: 'Status:', value: 'Open' }
+          { name: 'Status:', value: 'Open' },
         ],
         setAuthor: [
           `${EMOJIS.SUGGESTION}Suggestion from ${message.author.tag} (${message.author.id})${EMOJIS.SUGGESTION}`,
-          message.author.pfp
+          message.author.pfp,
         ],
         setColor: 'YELLOW',
-        setFooter: `Suggestion ID: ${SnowflakeUtil.generate(new Date())}`
+        setFooter: `Suggestion ID: ${SnowflakeUtil.generate(new Date())}`,
       })
     )) as HavocMessage;
     if (!suggestionMessage) return;
@@ -73,7 +73,7 @@ export default class extends Command {
         )
         .catch(NOOP),
       suggestionMessage.safeReact(EMOJIS.TICK),
-      suggestionMessage.safeReact(EMOJIS.CROSS)
+      suggestionMessage.safeReact(EMOJIS.CROSS),
     ]);
 
     const embed = message.constructEmbed({
@@ -82,11 +82,11 @@ export default class extends Command {
       } has been submitted${EMOJIS.SUGGESTION}`,
       addFields: [
         { name: 'Suggestion:', value: suggestion },
-        { name: 'Status:', value: 'Open' }
+        { name: 'Status:', value: 'Open' },
       ],
       setDescription: `\n\nClick [here](${suggestionMessage.url}) to view it.\nYou will be notified about the status of approval/denial.`,
       setFooter: `Suggestion ID: ${suggestionMessage.id}`,
-      setColor: 'YELLOW'
+      setColor: 'YELLOW',
     });
 
     await message.author.send(embed).catch(() => {

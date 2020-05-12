@@ -9,21 +9,21 @@ export default class extends Command {
     super(__filename, {
       description: 'View the currently muted users who are in the server.',
       aliases: ['mutes'],
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
   async run(
     this: Havoc,
     {
-      message
+      message,
     }: {
       message: HavocMessage;
     }
   ) {
     const muted = await this.db.guildRepo
       .findOne({ id: message.guild!.id }, { populate: ['mutes'] })
-      .then(guild =>
+      .then((guild) =>
         guild?.mutes.getItems().sort((prev, curr) => {
           if (!prev.end) return 1;
           if (!curr.end) return -1;
@@ -45,7 +45,7 @@ export default class extends Command {
           ${
             end
               ? `**Time Left:**  ${ms(end.getTime() - Date.now(), {
-                  long: true
+                  long: true,
                 })}`
               : ''
           }
@@ -61,10 +61,10 @@ export default class extends Command {
       maxPerPage: 1,
       thumbnails: await Promise.all(
         muted.map(({ member }) =>
-          this.users.fetch(member).then(user => user.displayAvatarURL())
+          this.users.fetch(member).then((user) => user.displayAvatarURL())
         )
       ),
-      page: Number(message.arg)
+      page: Number(message.arg),
     });
   }
 }

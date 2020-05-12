@@ -14,10 +14,10 @@ export default class extends Command {
       args: {
         type: Target.CHANNEL,
         required: true,
-        prompt: PROMPT_INITIAL[Target.CHANNEL]('set the welcomer to')
+        prompt: PROMPT_INITIAL[Target.CHANNEL]('set the welcomer to'),
       },
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -27,14 +27,14 @@ export default class extends Command {
   ) {
     const existing = await this.db
       .find(GuildEntity, message.guild!.id)
-      .then(guild =>
+      .then((guild) =>
         guild?.welcomer
           ? message.guild!.channels.cache.get(guild.welcomer)
           : null
       );
 
     await this.db.upsert(GuildEntity, message.guild!.id, {
-      welcomer: channel.id
+      welcomer: channel.id,
     });
 
     message.respond(

@@ -12,7 +12,7 @@ export default class extends Command {
       dm: true,
       description: 'A 100% accurate dick size calculator.',
       aliases: ['d', 'penis'],
-      args: { type: Target.USER }
+      args: { type: Target.USER },
     });
   }
 
@@ -20,7 +20,7 @@ export default class extends Command {
     this: Havoc,
     {
       message,
-      user
+      user,
     }: {
       message: HavocMessage;
       user: HavocUser | null;
@@ -43,7 +43,7 @@ export default class extends Command {
           ? 'after taking a measurement I can confirm that: You sir, have'
           : `according to my calculations, **${user.tag}** has`
       } a **${res} incher**.`,
-      setFooter: `8${'='.repeat(res! * 2)}D`
+      setFooter: `8${'='.repeat(res! * 2)}D`,
     });
   }
 }

@@ -11,7 +11,7 @@ export default class extends Command {
     super(__filename, {
       description: 'Configure logs for the server.',
       sub: true,
-      requiredPerms: 'MANAGE_GUILD'
+      requiredPerms: 'MANAGE_GUILD',
     });
   }
 
@@ -41,7 +41,7 @@ export default class extends Command {
       'role creations',
       'role deletions',
       'role updates',
-      'voice channel updates'
+      'voice channel updates',
     ];
 
     const buildEmbed = () =>
@@ -51,8 +51,8 @@ export default class extends Command {
           value: message.guild!.logs!.disabled.includes(i)
             ? `${EMOJIS.DISABLED} Off`
             : `${EMOJIS.ENABLED} On`,
-          inline: true
-        }))
+          inline: true,
+        })),
       });
     const prompt = (await message.channel.send(
       stripIndents`**${message.author}** enter the number according to the action you would like to enable/disable.
@@ -76,7 +76,7 @@ export default class extends Command {
     }, 5000);
 
     const collector = message.channel.createMessageCollector(
-      msg => msg.author.id === message.author.id,
+      (msg) => msg.author.id === message.author.id,
       { time: 60000 }
     );
 
@@ -98,14 +98,14 @@ export default class extends Command {
               `you have entered an invalid type of log type, you need to either enter the type itself or the according number
               E.g: if \`Channel creations\` is \`On\` and you would like to disable it enter \`channel creations\` or \`1\``
             )
-            .then(msg => msg.delete({ timeout: 5000 }));
+            .then((msg) => msg.delete({ timeout: 5000 }));
 
         const currentlyDisabled = message.guild!.logs!.disabled;
         const selectedIndex = currentlyDisabled.indexOf(selected);
         if (selectedIndex !== -1) currentlyDisabled.splice(selectedIndex, 1);
         else currentlyDisabled.push(selected);
         await this.db.upsert(GuildEntity, message.guild!.id, {
-          logs: message.guild!.logs
+          logs: message.guild!.logs,
         });
 
         await prompt.edit(
@@ -117,7 +117,7 @@ export default class extends Command {
               selectedIndex === -1 ? 'disabled' : 'enabled'
             } logs for \`${Util.captialise(logEvents[selected])}\``
           )
-          .then(msg => msg.delete({ timeout: 3000 }));
+          .then((msg) => msg.delete({ timeout: 3000 }));
       })
 
       .on('end', async (_, reason) => {
@@ -132,7 +132,7 @@ export default class extends Command {
           case 'time':
             await message
               .respond(`60 seconds is over.`)
-              .then(msg => msg.delete({ timeout: 3000 }));
+              .then((msg) => msg.delete({ timeout: 3000 }));
             footer = 'timed out.';
             emoji = EMOJIS.TIMED_OUT;
             break;

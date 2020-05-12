@@ -2,7 +2,7 @@ import Havoc from '../client/Havoc';
 import { WebhookClient, MessageEmbed } from 'discord.js';
 import { STATUS_ICONS } from '../util/CONSTANTS';
 
-export default function(this: Havoc, shardID: number, replayedEvents: number) {
+export default function (this: Havoc, shardID: number, replayedEvents: number) {
   const message = `${shardID} is resuming (replaying ${replayedEvents} events)`;
 
   this.logger.info(message, { origin: 'Havoc#on:shardResumed' });
@@ -12,11 +12,8 @@ export default function(this: Havoc, shardID: number, replayedEvents: number) {
     process.env.STATUS_WEBHOOK_TOKEN!
   ).send({
     embeds: [
-      new MessageEmbed()
-        .setTitle(message)
-        .setColor('ORANGE')
-        .setTimestamp()
+      new MessageEmbed().setTitle(message).setColor('ORANGE').setTimestamp(),
     ],
-    avatarURL: STATUS_ICONS.RESUMED
+    avatarURL: STATUS_ICONS.RESUMED,
   });
 }

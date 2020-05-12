@@ -7,7 +7,7 @@ import fetch from 'node-fetch';
 import { stripIndents } from 'common-tags';
 import { NOOP, IDS } from '../util/CONSTANTS';
 
-export default async function(this: Havoc, guild: HavocGuild) {
+export default async function (this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
 
   this.prometheus.guildGauge.dec();
@@ -21,20 +21,20 @@ export default async function(this: Havoc, guild: HavocGuild) {
 
   if (
     !this.guilds.cache.some(
-      g => g.ownerID === guild.ownerID && g.memberCount >= 25
+      (g) => g.ownerID === guild.ownerID && g.memberCount >= 25
     )
   ) {
     await this.guilds.cache
       .get(IDS.SUPPORT_SERVER)!
       .members.fetch(guild.ownerID)
-      .then(member => member.roles.remove(IDS.SERVER_OWNER))
+      .then((member) => member.roles.remove(IDS.SERVER_OWNER))
       .catch(NOOP);
   }
 
   const wasDeleted = await fetch(
     `https://canary.discordapp.com/api/guilds/${guild.id}/widget.json`
   )
-    .then(res => res.json())
+    .then((res) => res.json())
     .then(({ code }) => code === 10004)
     .catch(NOOP);
   if (wasDeleted) return;
@@ -53,6 +53,6 @@ export default async function(this: Havoc, guild: HavocGuild) {
   );
 
   this.logger.info(`Left ${guild.name} (${guild.id})`, {
-    origin: 'Havoc#on:guildDelete'
+    origin: 'Havoc#on:guildDelete',
   });
 }
