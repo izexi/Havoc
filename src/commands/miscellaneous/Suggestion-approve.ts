@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util';
 import Regex from '../../util/regex';
 import { Target } from '../../util/targetter';
-import { PROMPT_ENTER, NOOP } from '../../util/CONSTANTS';
+import { PROMPT_ENTER, NOOP, EMOJIS } from '../../util/CONSTANTS';
 
 export async function review(
   suggestionMsg: HavocMessage,
@@ -39,9 +39,9 @@ export async function review(
 
   const [userID] = embed.author?.name?.match(Regex.id) || [];
   embed.setAuthor(
-    `💡Your suggestion in ${suggestionMsg.guild!.name} has been ${
-      approved ? 'accepted' : 'denied'
-    }💡`
+    `${EMOJIS.SUGGESTION}Your suggestion in ${
+      suggestionMsg.guild!.name
+    } has been ${approved ? 'accepted' : 'denied'}${EMOJIS.SUGGESTION}`
   );
   embed.setDescription(`\n\nClick [here](${suggestionMsg.url}) to view it.`);
 

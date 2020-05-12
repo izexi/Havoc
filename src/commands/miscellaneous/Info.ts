@@ -4,7 +4,14 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import * as prettyMs from 'pretty-ms';
 import os = require('os');
 import { TextChannel, DMChannel, version } from 'discord.js';
-import { SECONDS, MEGABYTES, PERCENTAGE } from '../../util/CONSTANTS';
+import {
+  SECONDS,
+  MEGABYTES,
+  PERCENTAGE,
+  IDS,
+  VOTE_MESSAGE_LINK,
+  VOTE_LINK
+} from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -18,12 +25,11 @@ export default class extends Command {
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const getVoteLink = () =>
       this.guilds.cache
-        .get('406873117215031297')!
+        .get(IDS.SUPPORT_SERVER)!
         .members.fetch(message.author)
         .then(
-          () =>
-            'https://discordapp.com/channels/406873117215031297/406873578458447873/535928285402628106',
-          () => 'http://www.bridgeurl.com/vote-for-havoc/all'
+          () => VOTE_MESSAGE_LINK,
+          () => VOTE_LINK
         );
 
     message.respond({

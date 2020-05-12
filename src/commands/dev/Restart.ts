@@ -2,6 +2,7 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import DevEntity from '../../structures/entities/DevEntity';
+import { EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -13,7 +14,7 @@ export default class extends Command {
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const restart = await message
-      .respond('<a:Restarting:411680219636826112> Restarting..', {
+      .respond(`${EMOJIS.LOADING} Restarting..`, {
         author: false
       })
       .then(msg => ({ channel: msg.channel.id, message: msg.id }));

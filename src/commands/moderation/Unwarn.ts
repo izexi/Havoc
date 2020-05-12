@@ -8,7 +8,8 @@ import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   PROMPT_ENTER,
-  NOOP
+  NOOP,
+  EMOJIS
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -53,19 +54,12 @@ export default class extends Command {
       number: number;
     }
   ) {
-    if (user.id === message.author.id) {
-      await message.safeReact('463993771961483264');
-      return message.channel.send('<:WaitWhat:463993771961483264>');
-    }
-    if (user.id === this.user!.id) {
-      await message.safeReact('😢');
-      return message.channel.send('😢');
-    }
+    if (await message.checkTarget(user.id)) return;
 
     const member = await message.guild!.members.fetch(user).catch(NOOP);
     const response = member ? message.member.can('unwarn', member) : null;
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 

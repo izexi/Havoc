@@ -1,7 +1,7 @@
 import Command, { Arg } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util';
-import { EXAMPLE_ARG, CATEGORY_EMOJIS } from '../../util/CONSTANTS';
+import { EXAMPLE_ARG, EMOJIS } from '../../util/CONSTANTS';
 import { Target, ExcludedOther, isOther } from '../../util/targetter';
 
 const generateExample = ({ example, type }: Arg) => {
@@ -176,7 +176,7 @@ export default class extends Command {
             commands
           ) => {
             const formattedCategory = `${
-              CATEGORY_EMOJIS[category]
+              (EMOJIS.CATEGORIES as { [category: string]: string })[category]
             } ${Util.captialise(category)}`;
             const formattedName = `\`${cmdName}\``;
             const existing = fields.find(

@@ -1,8 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
-import Util from '../../util';
-import { MAX_LIMITS, PROMPT_ENTER } from '../../util/CONSTANTS';
+import { MAX_LIMITS, PROMPT_ENTER, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -40,7 +39,7 @@ export default class extends Command {
     fn: string[];
   }) {
     const formattedOptions = options.map(
-      (opt, i) => `${Util.emojiNumber(i + 1)} ${opt}`
+      (opt, i) => `${EMOJIS.NUMBERS[i]} ${opt}`
     );
     if (formattedOptions.length > MAX_LIMITS.POLL_OPTIONS)
       return message.respond('the maximum amount of options allowed are 10');

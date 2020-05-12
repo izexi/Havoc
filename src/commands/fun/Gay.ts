@@ -5,6 +5,7 @@ import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
 import UserEntity from '../../structures/entities/UserEntity';
 import Util from '../../util';
+import { EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -26,12 +27,7 @@ export default class extends Command {
     }
   ) {
     if (!user) user = message.author;
-    const emoji = (percentage: number) => {
-      if (percentage >= 75) return '<:gay:410129441755496448>';
-      if (percentage >= 50) return '🏳️‍🌈';
-      if (percentage >= 25) return '🌈';
-      return percentage ? '<:kappapride:462323575375003658>' : '📏';
-    };
+
     const res = await this.db
       .findOrInsert(UserEntity, user.id, { gay: Util.randomInt(0, 100) })
       .then(({ gay }) => gay);
@@ -39,7 +35,7 @@ export default class extends Command {
     message.respond(
       `I can tell you for sure that, ${
         user.id === message.author.id ? 'you are' : `**${user.tag}** is`
-      } **${res}% gay** ${emoji(res!)}.`
+      } **${res}% gay** ${EMOJIS.GAY(res!)}.`
     );
   }
 }

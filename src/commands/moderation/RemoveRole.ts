@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import { GuildMember } from 'discord.js';
 import HavocRole from '../../structures/extensions/HavocRole';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -44,7 +44,7 @@ export default class extends Command {
   }) {
     const response = role.canBe('removed', member);
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 

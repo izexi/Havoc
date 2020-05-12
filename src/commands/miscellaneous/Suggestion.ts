@@ -1,7 +1,7 @@
 import Command, { Status } from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { SnowflakeUtil } from 'discord.js';
-import { NOOP } from '../../util/CONSTANTS';
+import { NOOP, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -55,7 +55,7 @@ export default class extends Command {
           { name: 'Status:', value: 'Open' }
         ],
         setAuthor: [
-          `💡Suggestion from ${message.author.tag} (${message.author.id})💡`,
+          `${EMOJIS.SUGGESTION}Suggestion from ${message.author.tag} (${message.author.id})${EMOJIS.SUGGESTION}`,
           message.author.pfp
         ],
         setColor: 'YELLOW',
@@ -72,14 +72,14 @@ export default class extends Command {
           )
         )
         .catch(NOOP),
-      suggestionMessage.safeReact('416985886509498369'),
-      suggestionMessage.safeReact('416985887616925726')
+      suggestionMessage.safeReact(EMOJIS.TICK),
+      suggestionMessage.safeReact(EMOJIS.CROSS)
     ]);
 
     const embed = message.constructEmbed({
-      setAuthor: `💡Your suggestion in ${
+      setAuthor: `${EMOJIS.SUGGESTION}Your suggestion in ${
         message.guild!.name
-      } has been submitted💡`,
+      } has been submitted${EMOJIS.SUGGESTION}`,
       addFields: [
         { name: 'Suggestion:', value: suggestion },
         { name: 'Status:', value: 'Open' }

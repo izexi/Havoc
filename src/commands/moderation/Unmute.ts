@@ -4,7 +4,7 @@ import { Target } from '../../util/targetter';
 import { GuildMember } from 'discord.js';
 import Havoc from '../../client/Havoc';
 import { getMuteRole } from './Mute';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -41,14 +41,11 @@ export default class extends Command {
     const muteRole = await getMuteRole(message.guild!);
     if (!muteRole) return;
 
-    if (member.id === this.user!.id) {
-      await message.safeReact('😢');
-      return message.channel.send('😢');
-    }
+    if (await message.checkTargetClient(member.id)) return;
 
     const response = message.member.can('unmute', member);
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 

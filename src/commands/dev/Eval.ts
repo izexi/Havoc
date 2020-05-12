@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import { inspect } from 'util';
 import Util from '../../util';
-import { PROMPT_ENTER } from '../../util/CONSTANTS';
+import { PROMPT_ENTER, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -49,17 +49,17 @@ export default class extends Command {
 
       if (!silent) {
         message.respond({
-          setDescription: `**📥 Input**\n${Util.codeblock(
+          setDescription: `**${EMOJIS.INPUT} Input**\n${Util.codeblock(
             code,
             'js'
-          )}\n**📤 Output**\n${Util.codeblock(output, 'js')}\n${
+          )}\n**${EMOJIS.INPUT} Output**\n${Util.codeblock(output, 'js')}\n${
             detailed
-              ? `🔎 **Detailed output** ${await Util.haste(
+              ? `${EMOJIS.DETAILED} **Detailed output** ${await Util.haste(
                   inspect(evaled, { depth: Infinity }),
                   'js'
                 )}\n\n`
               : ''
-          }**❔ Type:** \`${type}\``,
+          }**${EMOJIS.TYPE} Type:** \`${type}\``,
           setFooter: [
             `executed in ${Number(end - start) / 1000000} milliseconds`,
             message.author.pfp
@@ -75,10 +75,10 @@ export default class extends Command {
 
       if (!silent) {
         message.respond({
-          setDescription: `**📥 Input**\n${Util.codeblock(
+          setDescription: `**${EMOJIS.INPUT} Input**\n${Util.codeblock(
             code,
             'js'
-          )}\n**❗ Error:**\n${Util.codeblock(formattedError)}`,
+          )}\n**${EMOJIS.ERROR} Error:**\n${Util.codeblock(formattedError)}`,
           setFooter: [
             `executed in ${Number(end - start) / 1000000} milliseconds`,
             message.author.pfp

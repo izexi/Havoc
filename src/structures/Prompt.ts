@@ -10,7 +10,7 @@ import {
 import HavocMessage from './extensions/HavocMessage';
 import { MessageCollector, Collection, Message } from 'discord.js';
 import { Responses } from '../util/responses';
-import { SECONDS } from '../util/CONSTANTS';
+import { SECONDS, EMOJIS } from '../util/CONSTANTS';
 
 interface PromptOptions {
   message: HavocMessage;
@@ -42,7 +42,7 @@ export default class {
   constructor(options: PromptOptions) {
     this.message = options.message;
     this.initialMsgs = Util.arrayify(options.initialMsg);
-    this.invalidMsgs = Util.arrayify(options.invalidMsg);
+    this.invalidMsgs = Util.arrayify(options.invalidMsg) as string[] | [];
     this.targets = [options.target] as TargetType[];
     this.time = options.time ?? SECONDS(30);
   }
@@ -87,7 +87,7 @@ export default class {
       this.promptMsgs.push(message.id);
 
       if (message.content.toLowerCase() === 'cancel') {
-        await this.message.safeReact('❌');
+        await this.message.safeReact(EMOJIS.CANCELLED);
         collector.stop();
       } else {
         const target = this.targets[this.curr];
@@ -127,7 +127,7 @@ export default class {
 
     if (reason === 'time') {
       if (!message.deleted) await message.reactions.removeAll();
-      message.safeReact('⏱');
+      message.safeReact(EMOJIS.TIMED_OUT);
       message.respond(
         `it have been over ${this.time /
           SECONDS(

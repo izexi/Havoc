@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import Util from '../../util';
 import HavocRole from '../../structures/extensions/HavocRole';
-import { MAX_LIMITS, PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { MAX_LIMITS, PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -39,7 +39,7 @@ export default class extends Command {
   }) {
     const response = role.canBe('deleted');
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 
@@ -71,7 +71,7 @@ export default class extends Command {
       message.respond(
         `I have deleted the role \`${role.name}\`${
           reason ? ` for the reason ${reason}` : ''
-        }. 🗑`
+        }. ${EMOJIS.DELETED}`
       );
     }
   }

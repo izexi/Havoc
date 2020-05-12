@@ -1,6 +1,7 @@
 import Command from '../../structures/bases/Command';
 import Havoc from '../../client/Havoc';
 import HavocMessage from '../../structures/extensions/HavocMessage';
+import { EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -11,10 +12,10 @@ export default class extends Command {
   }
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
-    message.respond({ setTitle: '🏸 Pinging...' }).then(msg => {
+    message.respond({ setTitle: `${EMOJIS.PING} Pinging...` }).then(msg => {
       msg.edit(
         message.constructEmbed({
-          setTitle: '🏓 Pong!',
+          setTitle: `${EMOJIS.PONG} Pong!`,
           setDescription: `Latency: ${msg.createdTimestamp -
             message.createdTimestamp}ms\nHeartbeat: ${~~this.ws.ping}ms`
         })

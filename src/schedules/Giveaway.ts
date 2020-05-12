@@ -6,7 +6,7 @@ import Regex from '../util/regex';
 import Util from '../util';
 import { MessageEmbed } from 'discord.js';
 import ms = require('ms');
-import { SECONDS, MINUTES, HOURS, DAYS, NOOP } from '../util/CONSTANTS';
+import { SECONDS, MINUTES, HOURS, DAYS, NOOP, EMOJIS } from '../util/CONSTANTS';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import { EntityProps } from '../structures/Database';
 import HavocMessage from '../structures/extensions/HavocMessage';
@@ -88,7 +88,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
     if (message) {
       if (message.embeds[0].footer!.text!.includes('ended')) return;
 
-      const reaction = message.reactions.cache.get('🎉');
+      const reaction = message.reactions.cache.get(EMOJIS.GIVEAWAY);
       if (!reaction) return;
 
       const winner = await reaction.users.fetch().then(users =>
@@ -99,7 +99,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
       );
       if (!winner.length) {
         message.edit(
-          '🎉 **GIVEAWAY ENDED** 🎉',
+          `${EMOJIS.GIVEAWAY} **GIVEAWAY ENDED** ${EMOJIS.GIVEAWAY}`,
           message.embeds[0]
             .setDescription(`**Winner:** Could not be determined`)
             .setFooter(
@@ -114,7 +114,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
       }
 
       await message.edit(
-        '🎉 **GIVEAWAY ENDED** 🎉',
+        `${EMOJIS.GIVEAWAY} **GIVEAWAY ENDED** ${EMOJIS.GIVEAWAY}`,
         message.embeds[0]
           .setDescription(
             `**${Util.plural('Winner', winner.length)}:** ${winner
@@ -131,11 +131,11 @@ export default class Mute extends Schedule<GiveawayEntity> {
       );
 
       const embed = message.constructEmbed({
-        setDescription: `🎉 Congratulations **${winner
+        setDescription: `${EMOJIS.GIVEAWAY} Congratulations **${winner
           .map(user => user.tag)
           .join(', ')}**! You won the [giveaway](${message.url}) for ${
           message.embeds[0].title
-        } 🎉`,
+        } ${EMOJIS.GIVEAWAY}`,
         setColor: 'GOLD'
       });
       await message.sendEmbed(embed, winner.map(u => u.toString()).join(', '));
@@ -145,7 +145,7 @@ export default class Mute extends Schedule<GiveawayEntity> {
           const dmEmbed = new MessageEmbed(message.embeds[0])
             .setColor('GOLD')
             .setDescription(
-              `🎉 Congratulations **${user.tag}**! You won the [giveaway](${message.url}) for **${message.embeds[0].title}** 🎉`
+              `${EMOJIS.GIVEAWAY} Congratulations **${user.tag}**! You won the [giveaway](${message.url}) for **${message.embeds[0].title}** ${EMOJIS.GIVEAWAY}`
             );
           delete dmEmbed.footer;
           delete dmEmbed.title;

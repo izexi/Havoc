@@ -1,7 +1,7 @@
 import HavocMessage from './extensions/HavocMessage';
 import { Target } from '../util/targetter';
 import Util from '../util';
-import { PROMPT_INVALD, PROMPT_ENTER } from '../util/CONSTANTS';
+import { PROMPT_INVALD, PROMPT_ENTER, EMOJIS } from '../util/CONSTANTS';
 
 export interface EmbedPaginationOptions {
   message: HavocMessage;
@@ -81,35 +81,33 @@ export default class {
   }
 
   async setup() {
-    let emojis = ['⏮', '◀', '⬇', '▶', '⏭', '📜', '✅'];
-
     if (this.totalPages === 1)
       return this.message.channel.send(this.pageEmbed(this.page, false));
 
     this.embed = (await this.message.channel.send(
       this.pageEmbed(this.page)
     )) as HavocMessage;
-    emojis.forEach(emoji => this.embed.safeReact(emoji));
+    EMOJIS.PAGINATION.forEach(emoji => this.embed.safeReact(emoji));
 
     const collector = this.embed.createReactionCollector(
       (reaction, user) =>
-        emojis.includes(reaction.emoji.name) &&
+        EMOJIS.PAGINATION.includes(reaction.emoji.name) &&
         user.id === this.message.author.id,
       { time: 100000 }
     );
 
     for await (const reaction of collector) {
-      switch (reaction.emoji.name) {
-        case '⏮':
+      switch (EMOJIS.PAGINATION.indexOf(reaction.emoji.name)) {
+        case 0:
           if (this.page !== 1)
             await this.embed.edit(this.pageEmbed((this.page = 1)));
           break;
 
-        case '◀':
+        case 1:
           if (this.page > 1) await this.embed.edit(this.pageEmbed(--this.page));
           break;
 
-        case '⬇':
+        case 2:
           await this.message
             .createPrompt({
               initialMsg: PROMPT_ENTER('the page you like to jump to'),
@@ -135,23 +133,23 @@ export default class {
             );
           break;
 
-        case '▶':
+        case 3:
           if (this.page < this.totalPages)
             await this.embed.edit(this.pageEmbed(++this.page));
           break;
 
-        case '⏭':
+        case 4:
           if (this.page !== this.totalPages)
             await this.embed.edit(
               this.pageEmbed((this.page = this.totalPages))
             );
           break;
 
-        case '📜':
+        case 5:
           await this.attach();
           break;
 
-        case '✅':
+        case 6:
           collector.stop();
           break;
       }

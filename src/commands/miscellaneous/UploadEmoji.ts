@@ -16,7 +16,7 @@ export default class extends Command {
         {
           name: 'emoji | url',
           example: [
-            '<:POGGIES:542850548043612190>',
+            ':POGGIES:',
             'https://cdn.discordapp.com/emojis/542850548043612190.png?v=1'
           ],
           type: async message => {

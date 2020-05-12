@@ -2,29 +2,25 @@ import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import Util from '../../util';
 import Havoc from '../../client/Havoc';
+import { EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
     super(__filename, {
       dm: true,
-      description: '🙅'
+      description: EMOJIS.NO_HUG
     });
   }
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
-    const emojis = [
-      '695300729736265770',
-      '695300793779093525',
-      '695300820123648011',
-      '695300861903110164',
-      '695300958271438931',
-      '695301008326131804'
-    ];
     message
-      .respond(this.emojis.cache.get(Util.randomArrEl(emojis))!.toString(), {
-        author: false,
-        contentOnly: true
-      })
-      .then(msg => this.setTimeout(() => msg.edit('🙅'), 2000));
+      .respond(
+        this.emojis.cache.get(Util.randomArrEl(EMOJIS.HUG))!.toString(),
+        {
+          author: false,
+          contentOnly: true
+        }
+      )
+      .then(msg => this.setTimeout(() => msg.edit(EMOJIS.NO_HUG), 2000));
   }
 }

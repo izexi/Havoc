@@ -7,7 +7,8 @@ import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
   PROMPT_ENTER,
-  NOOP
+  NOOP,
+  EMOJIS
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -64,10 +65,10 @@ export default class extends Command {
       number: number;
     }
   ) {
-    const reaction = giveawayMsg.reactions.cache.get('🎉');
+    const reaction = giveawayMsg.reactions.cache.get(EMOJIS.GIVEAWAY);
     if (!reaction)
       return message.respond(
-        `a new winner could not be determined as there aren't any 🎉 reactions on the [giveaway](${giveawayMsg.url}).`
+        `a new winner could not be determined as there aren't any ${EMOJIS.GIVEAWAY} reactions on the [giveaway](${giveawayMsg.url}).`
       );
 
     const newWinners = await reaction.users.fetch().then(users =>
@@ -78,17 +79,19 @@ export default class extends Command {
     );
     if (!newWinners.length)
       return message.respond(
-        `a new winner could not be determined as there aren't enough 🎉 reactions on the [giveaway](${giveawayMsg.url}).`
+        `a new winner could not be determined as there aren't enough ${EMOJIS.GIVEAWAY} reactions on the [giveaway](${giveawayMsg.url}).`
       );
 
     await giveawayMsg
       .sendEmbed(
         {
-          setDescription: `🎉 Congratulations **${newWinners
+          setDescription: `${
+            EMOJIS.GIVEAWAY
+          } Congratulations **${newWinners
             .map(u => u.tag)
             .join(', ')}**! You are the new winner of the [giveaway](${
             giveawayMsg.url
-          }) for ${giveawayMsg.embeds[0].title} 🎉`,
+          }) for ${giveawayMsg.embeds[0].title} ${EMOJIS.GIVEAWAY}`,
           setColor: 'GOLD'
         },
         newWinners.map(u => u.toString()).join(', ')
@@ -100,7 +103,7 @@ export default class extends Command {
               .send(
                 new MessageEmbed()
                   .setDescription(
-                    `🎉 Congratulations **${u.tag}**! You are the new winner of the [giveaway](${giveawayMsg.url}) for ${giveawayMsg.embeds[0].title} 🎉`
+                    `${EMOJIS.GIVEAWAY} Congratulations **${u.tag}**! You are the new winner of the [giveaway](${giveawayMsg.url}) for ${giveawayMsg.embeds[0].title} ${EMOJIS.GIVEAWAY}`
                   )
                   .setColor('GOLD')
               )

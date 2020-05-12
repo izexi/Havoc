@@ -4,7 +4,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { stripIndents } from 'common-tags';
 import Util from '../../util';
 import GuildEntity from '../../structures/entities/GuildEntity';
-import { MIN_LIMITS } from '../../util/CONSTANTS';
+import { MIN_LIMITS, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -49,8 +49,8 @@ export default class extends Command {
         addFields: logEvents.map((event, i) => ({
           name: `\`${i + 1}\`) ${Util.captialise(event)}`,
           value: message.guild!.logs!.disabled.includes(i)
-            ? '<:disabled:468708113453809664> Off'
-            : '<:enabled:468708094323589121> On',
+            ? `${EMOJIS.DISABLED} Off`
+            : `${EMOJIS.ENABLED} On`,
           inline: true
         }))
       });
@@ -60,7 +60,7 @@ export default class extends Command {
                   Enter \`cancel\` to cancel this command and enter \`done\` if you have finished using this command.`,
       buildEmbed()
     )) as HavocMessage;
-    await prompt.safeReact('464034357955395585');
+    await prompt.safeReact(EMOJIS.IN_PROGRESS);
     // @ts-ignore
     message.channel.prompts.add(message.author.id);
 
@@ -134,15 +134,15 @@ export default class extends Command {
               .respond(`60 seconds is over.`)
               .then(msg => msg.delete({ timeout: 3000 }));
             footer = 'timed out.';
-            emoji = '⏲';
+            emoji = EMOJIS.TIMED_OUT;
             break;
           case 'cancel':
             footer = 'was cancelled.';
-            emoji = '464034188652183562';
+            emoji = EMOJIS.CANCELLED;
             break;
           default:
             footer = 'has been executed.';
-            emoji = '464033586748719104';
+            emoji = EMOJIS.TICK;
             break;
         }
 

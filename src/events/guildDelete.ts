@@ -5,7 +5,7 @@ import { MessageEmbed } from 'discord.js';
 import GuildEntity from '../structures/entities/GuildEntity';
 import fetch from 'node-fetch';
 import { stripIndents } from 'common-tags';
-import { NOOP } from '../util/CONSTANTS';
+import { NOOP, IDS } from '../util/CONSTANTS';
 
 export default async function(this: Havoc, guild: HavocGuild) {
   if (!guild.available) return;
@@ -25,9 +25,9 @@ export default async function(this: Havoc, guild: HavocGuild) {
     )
   ) {
     await this.guilds.cache
-      .get('406873117215031297')!
+      .get(IDS.SUPPORT_SERVER)!
       .members.fetch(guild.ownerID)
-      .then(member => member.roles.remove('473618117113806868'))
+      .then(member => member.roles.remove(IDS.SERVER_OWNER))
       .catch(NOOP);
   }
 
@@ -39,7 +39,7 @@ export default async function(this: Havoc, guild: HavocGuild) {
     .catch(NOOP);
   if (wasDeleted) return;
 
-  (this.channels.cache.get('417364417374715924') as HavocTextChannel).send(
+  (this.channels.cache.get(IDS.GUILD_JOIN_LEAVE) as HavocTextChannel).send(
     new MessageEmbed()
       .setDescription(
         stripIndents`**Guild Name :**  ${guild.name}

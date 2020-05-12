@@ -6,6 +6,7 @@ import ms = require('ms');
 import { MessageEmbed } from 'discord.js';
 import Util from '../util';
 import HavocTextChannel from '../structures/extensions/HavocTextChannel';
+import { WELCOMER_EMOJIS } from '../util/CONSTANTS';
 
 export default async function(this: Havoc, member: HavocGuildMember) {
   const guild = member.guild as HavocGuild;
@@ -42,8 +43,6 @@ export default async function(this: Havoc, member: HavocGuildMember) {
   }
 
   if (guild.welcomer) {
-    const emojis = ['✨', '🎉', '⚡', '🔥', '☄', '💨', '🌙', '💥'];
-
     (guild.channels.cache.get(guild.welcomer) as HavocTextChannel)?.send(
       member.toString(),
       new MessageEmbed()
@@ -53,7 +52,7 @@ export default async function(this: Havoc, member: HavocGuildMember) {
 				Welcome to the **${member.guild.name}** server! ⠀ 
 				You're the ${Util.ordinal(
           member.guild.memberCount
-        )} member here ${Util.randomArrEl(emojis)}
+        )} member here ${Util.randomArrEl(WELCOMER_EMOJIS)}
 				⠀⠀⠀⠀⠀⠀⠀
 			`
         )

@@ -26,7 +26,7 @@ export default async function(
         name: '**📅 Timestamp of creation :**',
         value: `${channel.createdAt.toLocaleString()} (UTC)`
       },
-      { name: '** 📂Channel name:**', value: channel.name },
+      { name: '**📂 Channel name:**', value: channel.name },
       { name: '**📣 Channel type :**', value: channel.type }
     ],
     setColor: 'GREEN',

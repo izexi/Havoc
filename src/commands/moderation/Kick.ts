@@ -4,7 +4,8 @@ import { Target } from '../../util/targetter';
 import Havoc from '../../client/Havoc';
 import Util from '../../util';
 import HavocGuildMember from '../../structures/extensions/HavocGuildMember';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
+import { mem } from 'node-os-utils';
 
 export default class extends Command {
   constructor() {
@@ -40,18 +41,11 @@ export default class extends Command {
       flags: { force?: undefined; f?: undefined };
     }
   ) {
-    if (member.id === message.author.id) {
-      await message.safeReact('463993771961483264');
-      return message.channel.send('<:WaitWhat:463993771961483264>');
-    }
-    if (member.id === this.user!.id) {
-      await message.safeReact('😢');
-      return message.channel.send('😢');
-    }
+    if (await message.checkTarget(member.id)) return;
 
     const response = message.member.can('kick', member);
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 
@@ -71,7 +65,7 @@ export default class extends Command {
           member.user.tag
         }\` from \`${message.guild!.name}\`${
           reason ? ` for the reason ${reason}` : '.'
-        } <:boot3:402540975605678081>`
+        } ${EMOJIS.KICKED}`
       });
 
       message.guild!.sendModLog({ message, reason, target: member });

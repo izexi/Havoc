@@ -3,7 +3,12 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Util from '../../util';
-import { PROMPT_INITIAL, PROMPT_INVALD, NOOP } from '../../util/CONSTANTS';
+import {
+  PROMPT_INITIAL,
+  PROMPT_INVALD,
+  NOOP,
+  EMOJIS
+} from '../../util/CONSTANTS';
 import { TextChannel } from 'discord.js';
 
 export default class extends Command {
@@ -43,11 +48,6 @@ export default class extends Command {
     user: HavocUser | null;
     flags: { nopin?: undefined };
   }) {
-    const emojis = [
-      '<:botclear1:486606839015014400>',
-      '<:botclear2:486606870618963968>',
-      '<:botclear3:486606906337525765>'
-    ];
     await message.delete();
 
     let messages = await message.channel.messages
@@ -78,7 +78,7 @@ export default class extends Command {
         `cleared \`${cleared.size} ${Util.plural(
           'message',
           cleared.size
-        )}\` ${Util.randomArrEl(emojis)}`,
+        )}\` ${Util.randomArrEl(EMOJIS.BOTCLEAR)}`,
         { deleteable: false }
       )
       .then(message => message.delete({ timeout: 1300 }))

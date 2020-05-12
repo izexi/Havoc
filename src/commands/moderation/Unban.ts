@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Havoc from '../../client/Havoc';
-import { PROMPT_INITIAL, NOOP } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, NOOP, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -38,8 +38,8 @@ export default class extends Command {
   ) {
     const tag = user.tag;
     if (user.id === message.author.id || user.id === this.user!.id) {
-      await message.safeReact('463993771961483264');
-      return message.channel.send('<:WaitWhat:463993771961483264>');
+      await message.safeReact(EMOJIS.WAITWHAT);
+      return message.channel.send(this.emojis.cache.get(EMOJIS.WAITWHAT));
     }
 
     const existing = await message.guild!.fetchBan(user).catch(NOOP);
@@ -57,7 +57,7 @@ export default class extends Command {
         user.tag
       }\` from \`${message.guild!.name}\`${
         reason ? ` for the reason ${reason}` : '.'
-      } 🩹`
+      } ${EMOJIS.UNBANNED}`
     });
 
     message.guild!.sendModLog({ message, reason, target: user });

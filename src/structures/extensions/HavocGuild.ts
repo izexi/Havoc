@@ -12,7 +12,7 @@ import HavocTextChannel from './HavocTextChannel';
 import GuildEntity from '../entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import ms = require('ms');
-import { MODLOGS_COLOUR, NOOP } from '../../util/CONSTANTS';
+import { MODLOGS_COLOUR, NOOP, HAVOC_LOGS_AVATAR } from '../../util/CONSTANTS';
 
 export default class extends Guild {
   client!: Havoc;
@@ -65,9 +65,7 @@ export default class extends Guild {
     const toSend = {
       embeds: [embed],
       username: ',HavocLogs',
-      avatarURL: Math.round(Math.random())
-        ? 'https://cdn.discordapp.com/emojis/444944971653709825.png?v=1'
-        : 'https://i.imgur.com/l3H2S2d.png'
+      avatarURL: HAVOC_LOGS_AVATAR()
     };
 
     this.logHook?.send(toSend).catch(async (error: DiscordAPIError) => {

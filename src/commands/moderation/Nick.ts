@@ -3,7 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import Havoc from '../../client/Havoc';
 import { GuildMember } from 'discord.js';
-import { PROMPT_INITIAL, PROMPT_ENTER } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, PROMPT_ENTER, EMOJIS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -42,7 +42,7 @@ export default class extends Command {
   ) {
     const response = message.member.can('nick', member);
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 

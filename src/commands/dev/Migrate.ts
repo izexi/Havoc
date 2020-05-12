@@ -10,7 +10,7 @@ import Havoc from '../../client/Havoc';
 import MuteEntity from '../../structures/entities/MuteEntity';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
-import { PROMPT_ENTER, MINUTES } from '../../util/CONSTANTS';
+import { PROMPT_ENTER, MINUTES, EMOJIS } from '../../util/CONSTANTS';
 import WarnPunishmentEntity from '../../structures/entities/WarnPunishmentEntity';
 
 export default class extends Command {
@@ -29,9 +29,7 @@ export default class extends Command {
     this: Havoc,
     { message, text }: { message: HavocMessage; text: string }
   ) {
-    const status = await message.channel.send(
-      'Migrating... <a:loading:424975362229927959>'
-    );
+    const status = await message.channel.send(`Migrating... ${EMOJIS.LOADING}`);
     const dump = await fetch(text).then(r => r.text());
     const mappedDump: Collection<string, any> = dump
       .split('\n')
@@ -179,6 +177,6 @@ export default class extends Command {
       });
     }
 
-    status.edit('Done <:tick:416985886509498369>');
+    status.edit(`Done ${this.emojis.cache.get(EMOJIS.TICK)}`);
   }
 }

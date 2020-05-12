@@ -28,6 +28,14 @@ export enum MIN_LIMITS {
   MESSAGE_UPDATE_CONTENT = 900
 }
 
+export enum IDS {
+  SUPPORT_SERVER = '406873117215031297',
+  SERVER_OWNER = '473618117113806868',
+  GUILD_JOIN_LEAVE = '417364417374715924',
+  BUGS_ISSUES = '406873476591517706',
+  UNHANDLED_REJECTIONS = '612603429591973928'
+}
+
 export const SMALL_CAPS: { [key: string]: string } = {
   a: 'ᴀ',
   b: 'ʙ',
@@ -55,17 +63,6 @@ export const SMALL_CAPS: { [key: string]: string } = {
   x: 'x',
   y: 'ʏ',
   z: 'ᴢ'
-};
-
-export const CATEGORY_EMOJIS: { [key: string]: string } = {
-  emojis: '<:POGGIES:542850548043612190>',
-  fun: '<:fun:407988457772810241>',
-  miscellaneous: '<:miscellaneous:404688801903017984>',
-  moderation: '<:moderation:407990341157912587>',
-  server: '🛠',
-  donators: '💸',
-  music: '🎶',
-  image: '🖼'
 };
 
 export const MODLOGS_COLOUR: { [key: string]: string } = {
@@ -131,10 +128,87 @@ export const MEGABYTES = (bytes: number) => bytes / 1048576;
 
 export const PERCENTAGE = (from: number, base: number) => (from / base) * 100;
 
+export const HAVOC_LOGS_AVATAR = () =>
+  Math.round(Math.random())
+    ? 'https://cdn.discordapp.com/emojis/444944971653709825.png?v=1'
+    : 'https://i.imgur.com/l3H2S2d.png';
+
 export const NOOP = () => null;
+
+export const EMOJIS = {
+  INPUT: '📥',
+  DETAILED: '🔎',
+  TYPE: '❔',
+  ERROR: '❗',
+  CLAP: '👏',
+  CRY: '😢',
+  NO_HUG: '🙅',
+  GIVEAWAY: '🎉',
+  SUGGESTION: '💡',
+  DENIED: '⛔',
+  BANNED: '🔨',
+  UNBANNED: '🩹',
+  SOFTBANNED: '🔨🩹',
+  DELETED: '🗑',
+  MUTED: '🙊',
+  PING: '🏸',
+  PONG: '🏓',
+  CANCELLED: '464034188652183562',
+  TIMED_OUT: '709740607228215317',
+  TICK: '416985886509498369',
+  CROSS: '416985887616925726',
+  IN_PROGRESS: '464034357955395585',
+  LENNY: '( ͡° ͜ʖ ͡°)',
+  SHRUG: '¯\\_(ツ)_/¯',
+  LOADING: '<a:loading:424975362229927959>',
+  OMEGALUL: '<:OMEGALUL:695303479790665758>',
+  WIDEPEEPOHAPPY:
+    '<:widePeepoHappy1:678636233131425805><:widePeepoHappy2:678636283119140864><:widePeepoHappy3:678636320406634516><:widePeepoHappy4:678636358335463445>',
+  WAITWHAT: '463993771961483264',
+  KICKED: '<:boot3:402540975605678081>',
+  DISABLED: '<:disabled:468708113453809664>',
+  ENABLED: '<:enabled:468708094323589121>',
+  PAGINATION: ['⏮', '◀', '⬇', '▶', '⏭', '📜', '✅'],
+  NUMBERS: ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'],
+  BOTCLEAR: [
+    '<:botclear1:709141522364235787>',
+    '<:botclear2:709141562935869530>',
+    '<:botclear3:709141596444295189>'
+  ],
+  HUG: [
+    '695300729736265770',
+    '695300793779093525',
+    '695300820123648011',
+    '695300861903110164',
+    '695300958271438931',
+    '695301008326131804'
+  ],
+  GAY: (percentage: number) => {
+    if (percentage >= 75) return '<:gay:410129441755496448>';
+    if (percentage >= 50) return '🏳️‍🌈';
+    if (percentage >= 25) return '🌈';
+    return percentage ? '<:KappaPride:709143569654349854>' : '📏';
+  },
+  CATEGORIES: {
+    emojis: '<:POGGIES:542850548043612190>',
+    fun: '<:fun:407988457772810241>',
+    miscellaneous: '<:miscellaneous:404688801903017984>',
+    moderation: '<:moderation:407990341157912587>',
+    server: '🛠',
+    donators: '💸',
+    music: '🎶',
+    image: '🖼'
+  }
+};
+
+export const WELCOMER_EMOJIS = ['✨', '🎉', '⚡', '🔥', '☄', '💨', '🌙', '💥'];
 
 export const PROMETHEUS_PORT = 666;
 
 export const HTTP_OK = 200;
+
+export const VOTE_MESSAGE_LINK =
+  'https://discordapp.com/channels/406873117215031297/406873578458447873/535928285402628106';
+export const VOTE_LINK = 'http://www.bridgeurl.com/vote-for-havoc/all';
 
 export const HAVOC = '191615925336670208';

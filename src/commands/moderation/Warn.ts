@@ -8,7 +8,7 @@ import WarnEntity from '../../structures/entities/WarnEntity';
 import Util from '../../util';
 import { getMuteRole } from './Mute';
 import ms = require('ms');
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, EMOJIS } from '../../util/CONSTANTS';
 
 export function getPunishments(client: Havoc, message: HavocMessage) {
   return client.db.guildRepo
@@ -64,18 +64,11 @@ export default class extends Command {
       text: string;
     }
   ) {
-    if (member.id === message.author.id) {
-      await message.safeReact('463993771961483264');
-      return message.channel.send('<:WaitWhat:463993771961483264>');
-    }
-    if (member.id === this.user!.id) {
-      await message.safeReact('😢');
-      return message.channel.send('😢');
-    }
+    if (await message.checkTarget(member.id)) return;
 
     const response = message.member.can('warn', member);
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 

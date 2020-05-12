@@ -7,7 +7,8 @@ import Havoc from '../../client/Havoc';
 import {
   PROMPT_INITIAL,
   PROMPT_INVALD,
-  PROMPT_ENTER
+  PROMPT_ENTER,
+  EMOJIS
 } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -72,7 +73,9 @@ export default class extends Command {
 
     const embed = message.constructEmbed({
       setTitle: prize,
-      setDescription: `React with 🎉 to enter!\nTime remaining: **${ms(time, {
+      setDescription: `React with ${
+        EMOJIS.GIVEAWAY
+      } to enter!\nTime remaining: **${ms(time, {
         long: true
       })}**`,
       setFooter: `${winners || 1} ${Util.plural(
@@ -84,13 +87,13 @@ export default class extends Command {
     if (time > 60000) embed.setTimestamp(Date.now() + time);
 
     const giveawayMsg = (await giveawayChannel.send(
-      '🎉 **GIVEAWAY** 🎉',
+      `${EMOJIS.GIVEAWAY} **GIVEAWAY** ${EMOJIS.GIVEAWAY}`,
       embed
     )) as HavocMessage;
     if (!giveawayMsg) return;
 
     await Promise.all([
-      giveawayMsg.safeReact('🎉'),
+      giveawayMsg.safeReact(EMOJIS.GIVEAWAY),
       giveawayMsg.edit(
         giveawayMsg.embeds[0].setFooter(
           `${winners || 1} ${Util.plural(

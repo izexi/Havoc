@@ -33,7 +33,7 @@ import GuildEntity from '../entities/GuildEntity';
 import HavocTextChannel from './HavocTextChannel';
 import { stripIndents } from 'common-tags';
 import HavocGuildMember from './HavocGuildMember';
-import { NOOP } from '../../util/CONSTANTS';
+import { NOOP, EMOJIS, IDS } from '../../util/CONSTANTS';
 
 export interface EmbedMethods {
   addField: [string, string];
@@ -112,6 +112,21 @@ export default class HavocMessage extends Message {
     return arg;
   }
 
+  async checkTarget(id: HavocUser['id']) {
+    if (id === this.author.id) {
+      await this.safeReact(EMOJIS.WAITWHAT);
+      return this.channel.send(this.client.emojis.cache.get(EMOJIS.WAITWHAT));
+    }
+    return this.checkTargetClient(id);
+  }
+
+  async checkTargetClient(id: HavocUser['id']) {
+    if (id === this.client.user!.id) {
+      await this.safeReact(EMOJIS.CRY);
+      return this.channel.send(EMOJIS.CRY);
+    }
+  }
+
   async createPrompt(options: {
     initialMsg: MaybeArray<string>;
     invalidMsg?: MaybeArray<string>;
@@ -122,7 +137,7 @@ export default class HavocMessage extends Message {
   }
 
   async confirmation(action: string) {
-    await this.safeReact('464034357955395585');
+    await this.safeReact(EMOJIS.IN_PROGRESS);
     const { fn: response } = await this.createPrompt({
       initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
       invalidMsg: 'Enter __y__es or __n__o',
@@ -131,13 +146,13 @@ export default class HavocMessage extends Message {
 
     if (response?.charAt(0).toLowerCase() === 'y') {
       if (!this.deleted) await this.reactions.removeAll();
-      await this.safeReact('464033586748719104');
+      await this.safeReact(EMOJIS.TICK);
       return true;
     }
 
     if (!this.deleted) {
       await this.reactions.removeAll();
-      await this.safeReact('464034188652183562');
+      await this.safeReact(EMOJIS.CANCELLED);
     }
 
     await this.respond(
@@ -232,11 +247,12 @@ export default class HavocMessage extends Message {
     });
 
     if (this.command && embed) {
-      await embed.safeReact('🗑')?.catch(NOOP);
+      await embed.safeReact(EMOJIS.DELETED)?.catch(NOOP);
       embed
         .awaitReactions(
           (reaction, user) =>
-            reaction.emoji.name === '🗑' && user.id === this.author.id,
+            reaction.emoji.name === EMOJIS.DELETED &&
+            user.id === this.author.id,
           {
             time: 3000,
             max: 1,
@@ -250,7 +266,9 @@ export default class HavocMessage extends Message {
         )
         .catch(() => {
           if (!embed.deleted)
-            embed.reactions.cache.get('🗑')?.users.remove(embed.author);
+            embed.reactions.cache
+              .get(EMOJIS.DELETED)
+              ?.users.remove(embed.author);
         });
     }
 
@@ -326,7 +344,7 @@ export default class HavocMessage extends Message {
     if (command.requiredPerms) {
       const flags = Util.arrayify(command.requiredPerms);
       if (!this.member!.hasPermission(flags)) {
-        await this.safeReact('⛔');
+        await this.safeReact(EMOJIS.DENIED);
         return this.respond(
           `you need to have the ${flags
             .map(flag => `\`${Util.normalizePermFlag(flag)}\``)
@@ -433,17 +451,17 @@ export default class HavocMessage extends Message {
             command.name
           }\` to check how to properly use the command
               However, if you have used the command correctly please join **https://discord.gg/3Fewsxq** and report your issue in the ${await this.client.guilds.cache
-                .get('406873117215031297')
+                .get(IDS.SUPPORT_SERVER)
                 ?.members.fetch(this.author.id)
                 .then(
-                  () => '<#406873476591517706>',
+                  () => `<#${IDS.BUGS_ISSUES}>`,
                   () => '#bugs-issues'
                 )} channel.
             `)
         );
 
         (this.client.channels.cache.get(
-          '612603429591973928'
+          IDS.UNHANDLED_REJECTIONS
         ) as HavocTextChannel).send(
           new MessageEmbed()
             .setDescription(

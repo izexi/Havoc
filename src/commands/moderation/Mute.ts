@@ -5,7 +5,7 @@ import Havoc from '../../client/Havoc';
 import { GuildMember, Guild } from 'discord.js';
 import HavocGuild from '../../structures/extensions/HavocGuild';
 import ms = require('ms');
-import { PROMPT_INITIAL, NOOP } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, NOOP, EMOJIS } from '../../util/CONSTANTS';
 
 export async function getMuteRole(guild?: HavocGuild | Guild) {
   if (!guild) return;
@@ -78,14 +78,11 @@ export default class extends Command {
     const muteRole = await getMuteRole(message.guild!);
     if (!muteRole) return;
 
-    if (member.id === this.user!.id) {
-      await message.safeReact('😢');
-      return message.channel.send('😢');
-    }
+    if (await message.checkTargetClient(member.id)) return;
 
     const response = message.member.can('mute', member, false);
     if (response) {
-      await message.safeReact('⛔');
+      await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);
     }
 
@@ -109,7 +106,7 @@ export default class extends Command {
     await message.respond(
       `I have muted \`${member.user.tag}\`${
         time ? ` for ${ms(time, { long: true })}` : ''
-      }${reason ? ` due to the reason: \`${reason}\`` : ''} 🙊`
+      }${reason ? ` due to the reason: \`${reason}\`` : ''} ${EMOJIS.MUTED}`
     );
 
     message.guild!.sendModLog({
