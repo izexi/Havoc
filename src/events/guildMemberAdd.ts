@@ -31,9 +31,13 @@ export default async function (this: Havoc, member: HavocGuildMember) {
     if (muteRole)
       await member.roles.add(
         muteRole,
-        `Continuation for ${ms(
-          new Date(mute.end!).getTime() - new Date(mute.start).getTime()
-        )} mute by ${(await this.users.fetch(mute.muter)).tag}`
+        `Continuation for${
+          mute.end
+            ? ` ${ms(
+                new Date(mute.end).getTime() - new Date(mute.start).getTime()
+              )}`
+            : ''
+        } mute by ${(await this.users.fetch(mute.muter)).tag}`
       );
   }
 
