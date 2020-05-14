@@ -268,7 +268,8 @@ export default class HavocMessage extends Message {
           if (!embed.deleted)
             embed.reactions.cache
               .get(EMOJIS.DELETED)
-              ?.users.remove(embed.author);
+              ?.users.remove(embed.author)
+              .catch(NOOP);
         });
     }
 
