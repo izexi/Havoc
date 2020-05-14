@@ -80,6 +80,12 @@ export default class extends Command {
     const muteRole = await getMuteRole(message.guild!);
     if (!muteRole) return;
 
+    const highestMeRole = message.guild!.me!.roles.highest;
+    if (highestMeRole.comparePositionTo(muteRole) < 1)
+      return message.respond(
+        `the role \`HavocMute\` has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to mute any member.`
+      );
+
     if (await message.checkTargetClient(member.id)) return;
 
     const response = message.member.can('mute', member, false);
