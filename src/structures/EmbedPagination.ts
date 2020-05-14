@@ -1,7 +1,7 @@
 import HavocMessage from './extensions/HavocMessage';
 import { Target } from '../util/targetter';
 import Util from '../util';
-import { PROMPT_INVALD, PROMPT_ENTER, EMOJIS } from '../util/CONSTANTS';
+import { PROMPT_INVALD, PROMPT_ENTER, EMOJIS, NOOP } from '../util/CONSTANTS';
 
 export interface EmbedPaginationOptions {
   message: HavocMessage;
@@ -153,7 +153,8 @@ export default class {
           collector.stop();
           break;
       }
-      await reaction.users.remove(this.message.author);
+      if (!this.embed.deleted)
+        await reaction.users.remove(this.message.author).catch(NOOP);
     }
 
     if (!this.embed.deleted) {
