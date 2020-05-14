@@ -28,6 +28,8 @@ export default async function (
       value: (outdated.channel || updated.channel)?.name ?? '',
     });
 
+  if (!fields.length) return;
+
   guild.sendLog({
     setAuthor: [
       `${user.tag} ${
