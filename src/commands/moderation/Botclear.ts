@@ -28,7 +28,11 @@ export default class extends Command {
           return null;
         },
       },
-      requiredPerms: 'MANAGE_MESSAGES',
+      requiredPerms: [
+        'MANAGE_MESSAGES',
+        'VIEW_CHANNEL',
+        'READ_MESSAGE_HISTORY',
+      ],
     });
   }
 
