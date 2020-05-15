@@ -115,7 +115,9 @@ export default class HavocMessage extends Message {
   async checkTarget(id: HavocUser['id']) {
     if (id === this.author.id) {
       await this.safeReact(EMOJIS.WAITWHAT);
-      return this.channel.send(this.client.emojis.cache.get(EMOJIS.WAITWHAT));
+      return this.channel.send(
+        this.client.emojis.cache.get(EMOJIS.WAITWHAT)!.toString()
+      );
     }
     return this.checkTargetClient(id);
   }
