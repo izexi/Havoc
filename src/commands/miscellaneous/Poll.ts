@@ -44,10 +44,19 @@ export default class extends Command {
     if (formattedOptions.length > MAX_LIMITS.POLL_OPTIONS)
       return message.respond('the maximum amount of options allowed are 10');
 
-    message.sendEmbed({
-      setAuthor: [`Poll started by ${message.author.tag}`, message.author.pfp],
-      setDescription: `${question}\n\n${formattedOptions.join('\n')}`,
-      setFooter: 'Started at:',
-    });
+    const poll = await message.respond(
+      {
+        setAuthor: [
+          `Poll started by ${message.author.tag}`,
+          message.author.pfp,
+        ],
+        setDescription: `${question}\n\n${formattedOptions.join('\n')}`,
+        setFooter: 'Started at:',
+      },
+      { author: false, deleteable: false }
+    );
+
+    for (const i of Array(options.length).keys())
+      await poll.safeReact(EMOJIS.NUMBERS[i]);
   }
 }
