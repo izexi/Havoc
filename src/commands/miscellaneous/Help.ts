@@ -29,7 +29,7 @@ export default class extends Command {
           if (!command) return;
 
           const [, possibleSubCommand] = message.args;
-          return command.args[0].type === Target.OPTION && possibleSubCommand
+          return command.args[0]?.type === Target.OPTION && possibleSubCommand
             ? message.client.commandHandler.find(
                 `${command.name}-${possibleSubCommand}`
               ) || command
