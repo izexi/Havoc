@@ -95,7 +95,7 @@ export default class extends Command {
               return `${s}${
                 Array.isArray(arg.type)
                   ? (arg.type as string[]).join(' | ')
-                  : arg.name
+                  : arg.name ?? arg.type
               }${formattedArg}${e}`;
             })
             .join(' ')}${formattedFlags}\``,
