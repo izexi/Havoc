@@ -122,7 +122,7 @@ export default class extends Guild {
     }
 
     const fields = [
-      { name: '❯Member', value: target.tag },
+      { name: '❯Member', value: `${target.tag} (${target.id})` },
       {
         name: '❯Action',
         value: Util.captialise(
@@ -136,9 +136,13 @@ export default class extends Guild {
 
     channel.send(
       new MessageEmbed()
-        .setAuthor(message.author.tag, message.author.pfp)
+        .setAuthor(
+          `${message.author.tag} (${message.author.id})`,
+          message.author.pfp
+        )
         .addFields(fields)
         .setColor(MODLOGS_COLOUR[message.command.name])
+        .setThumbnail(target.displayAvatarURL())
         .setTimestamp()
     );
   }
