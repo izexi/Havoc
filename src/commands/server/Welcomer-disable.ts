@@ -18,6 +18,7 @@ export default class extends Command {
     if (!guildEntity || !guildEntity.welcomer)
       return message.respond(`welcomer has not been enabled on this server.`);
 
+    delete message.guild!.welcomer;
     delete guildEntity.welcomer;
     await this.db.flush();
 

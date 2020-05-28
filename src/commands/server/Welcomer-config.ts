@@ -33,6 +33,10 @@ export default class extends Command {
           : null
       );
 
+    if (existing?.id === channel.id)
+      return message.respond(`welcomer are already enabled in ${channel}`);
+
+    message.guild!.welcomer = channel.id;
     await this.db.upsert(GuildEntity, message.guild!.id, {
       welcomer: channel.id,
     });
