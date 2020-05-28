@@ -43,7 +43,7 @@ export default class extends Command {
     role: HavocRole;
     text: string;
   }) {
-    const response = role.canBe('added', member);
+    const response = role.canBe('added', message.member);
     if (response) return message.respond(response);
 
     await member.roles.add(
