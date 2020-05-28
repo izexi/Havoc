@@ -48,6 +48,9 @@ export default class extends Command {
         .constructEmbed({
           setImage: url,
           setAuthor: [message.member!.displayName, message.author.pfp],
+          setFooter: message.text
+            ? Util.cleanContent(message.text, message)
+            : '',
         })
         // @ts-ignore
         .setTimestamp(null)
