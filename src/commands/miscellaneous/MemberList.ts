@@ -20,20 +20,25 @@ export default class extends Command {
   }
 
   async run({ message, role }: { message: HavocMessage; role: Role }) {
-    const members = await message
-      .guild!.members.fetch()
-      .then(() => role.members);
-
-    message.paginate({
-      title: `List of ${members.size} ${Util.plural(
-        'member',
-        members.size
-      )} that have the role \`${role.name}\``,
-      descriptions: members.map(
+    const members = await message.guild!.members.fetch().then(() =>
+      role.members.map(
         (member) =>
           `• **${member.displayName}**
              (${member.user.tag} - ${member.user.id})`
-      ),
+      )
+    );
+
+    if (!members.length)
+      return message.respond(
+        `there are no members that have the \`${role.name}\` role.`
+      );
+
+    message.paginate({
+      title: `List of ${members.length} ${Util.plural(
+        'member',
+        members.length
+      )} that have the role \`${role.name}\``,
+      descriptions: members,
       maxPerPage: 20,
       page: Number(message.arg),
     });
