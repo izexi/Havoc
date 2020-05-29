@@ -157,7 +157,7 @@ export default class {
         await reaction.users.remove(this.message.author).catch(NOOP);
     }
 
-    if (!this.embed.deleted) {
+    if (!this.embed.deleted && this.totalPages > 1) {
       await this.embed.reactions.removeAll();
       this.embed.edit(
         this.embed.embeds[0].setDescription(
