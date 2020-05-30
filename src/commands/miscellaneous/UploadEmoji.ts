@@ -65,7 +65,9 @@ export default class extends Command {
     text: string;
   }) {
     let invalidReason;
-    const isAnimated = url.endsWith('gif');
+    const isAnimated = await fetch(url).then(
+      (res) => res.headers.get('content-type') === 'image/gif'
+    );
     const currentEmojis = message.guild!.emojis.cache.filter(
       (emoji) => emoji.animated === isAnimated
     ).size;
