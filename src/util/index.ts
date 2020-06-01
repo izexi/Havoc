@@ -99,7 +99,7 @@ export default {
     return `${n}${suffix}`;
   },
 
-  auditClean(reason: string) {
+  auditClean(reason = '') {
     return reason.replace(/`/g, '');
   },
 
