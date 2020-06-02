@@ -37,7 +37,7 @@ export default class extends Command {
     text: string;
     flags: { force?: undefined; f?: undefined };
   }) {
-    const response = role.canBe('deleted');
+    const response = role.canBe({ action: 'deleted' });
     if (response) {
       await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);

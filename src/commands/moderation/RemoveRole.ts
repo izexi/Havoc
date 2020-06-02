@@ -42,7 +42,11 @@ export default class extends Command {
     role: HavocRole;
     text: string;
   }) {
-    const response = role.canBe('removed', message.member);
+    const response = role.canBe({
+      action: 'removed',
+      target: member,
+      member: message.member,
+    });
     if (response) {
       await message.safeReact(EMOJIS.DENIED);
       return message.respond(response);

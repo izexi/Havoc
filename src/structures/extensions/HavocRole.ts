@@ -5,13 +5,21 @@ export default class extends Role {
     return role.managed ? false : this.comparePositionTo(role) < 1;
   }
 
-  canBe(action: 'added' | 'removed' | 'deleted', member?: GuildMember) {
+  canBe({
+    action,
+    member,
+    target,
+  }: {
+    action: 'added' | 'removed' | 'deleted';
+    member?: GuildMember;
+    target?: GuildMember;
+  }) {
     let response;
     const formattedAction =
       action === 'added'
-        ? `add this role to ${member?.user.tag}`
+        ? `add this role to ${target?.user.tag}`
         : action === 'removed'
-        ? `remove this role from ${member?.user.tag}`
+        ? `remove this role from ${target?.user.tag}`
         : 'delete this role';
 
     if ((this.guild.me!.roles.highest as this).cantManage(this))
@@ -28,9 +36,9 @@ export default class extends Role {
       )
         response = `the role \`${this.name}\` has a higher / equivalent position compared to your highest role \`${member.roles.highest.name}\`, therefore you do not have permission to ${formattedAction}.`;
 
-      const hasRole = member.roles.cache.has(this.id);
+      const hasRole = target!.roles.cache.has(this.id);
       if (action === 'added' ? hasRole : !hasRole)
-        response = `${member.user.tag} ${
+        response = `${target!.user.tag} ${
           hasRole ? 'already has' : "doesn't have"
         } the \`${this.name}\` role.`;
     }
