@@ -57,7 +57,7 @@
     "uuid": "^8.0.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2",
-    "ytdl-core": "^2.1.1"
+    "ytdl-core": "^3.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.12.0",
