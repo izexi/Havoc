@@ -70,6 +70,16 @@ export default class extends Command {
         });
       }
 
+      if (command.requiredPerms) {
+        embed.addFields.push({
+          name: '❯Required permissions',
+          value: Util.arrayify(command.requiredPerms)
+            .map((perm) => `\`${Util.normalizePermFlag(perm)}\``)
+            .join(', '),
+          inline: true,
+        });
+      }
+
       if (command.args.length && !command.promptOnly) {
         const prefixedFlags = command.flags
           .map((flag) => `${message.prefix}${flag}`)
