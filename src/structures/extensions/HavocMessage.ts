@@ -346,14 +346,17 @@ export default class HavocMessage extends Message {
 
     if (command.requiredPerms) {
       const flags = Util.arrayify(command.requiredPerms);
-      if (!this.member!.hasPermission(flags)) {
+      const missingPerms = this.member
+        .permissionsIn(this.channel)
+        .missing(flags);
+      if (missingPerms.length) {
         await this.safeReact(EMOJIS.DENIED);
         return this.respond(
-          `you need to have the ${flags
+          `you are missing the following ${missingPerms
             .map((flag) => `\`${Util.normalizePermFlag(flag)}\``)
             .join(', ')} ${Util.plural(
             'permission',
-            flags.length
+            missingPerms.length
           )} in order to use this command.`
         );
       }
