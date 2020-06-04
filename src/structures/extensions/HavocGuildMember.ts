@@ -25,10 +25,10 @@ export default class extends GuildMember {
 
     if (checkOwner && target.id === this.guild.ownerID)
       response = `${tag} is the owner of this server, therefore I do not have permission to ${formattedAction}.`;
-    else if (highestMeRole.cantManage(highestTargetRole))
+    else if (highestMeRole.isLowerThan(highestTargetRole))
       response = `${tag} has the role \`${highestTargetRole.name}\` which has a higher / equivalent position compared to my highest role \`${highestMeRole.name}\`, therefore I do not have permission to ${formattedAction}.`;
     else if (
-      highestRole.cantManage(highestTargetRole) &&
+      highestRole.isLowerThan(highestTargetRole) &&
       this.id !== this.guild.ownerID
     )
       response = `${tag} has the role \`${highestTargetRole.name}\` which has a higher / equivalent position compared to your highest role \`${highestRole.name}\`, therefore you do not have permission to ${formattedAction}.`;
