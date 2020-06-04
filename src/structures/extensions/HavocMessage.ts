@@ -346,9 +346,9 @@ export default class HavocMessage extends Message {
 
     if (command.requiredPerms) {
       const flags = Util.arrayify(command.requiredPerms);
-      const missingPerms = this.member
-        .permissionsIn(this.channel)
-        .missing(flags);
+      const missingPerms = (this.channel as TextChannel)
+        .permissionsFor(this.author)!
+        .missing(flags, false);
       if (missingPerms.length) {
         await this.safeReact(EMOJIS.DENIED);
         return this.respond(
