@@ -9,8 +9,9 @@ import { PROMPT_INITIAL } from '../../util/CONSTANTS';
 export default class extends Command {
   constructor() {
     super(__filename, {
-      description: "View the your / inputted member's warning(s) in the guild.",
-      aliases: ['warnlog', 'warns', 'wl'],
+      description:
+        "View the your / inputted member's warning(s) in the server.",
+      aliases: ['warnlog', 'wl'],
       args: {
         required: true,
         type: Target.USER,
