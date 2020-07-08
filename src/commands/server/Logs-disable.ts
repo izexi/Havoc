@@ -18,9 +18,10 @@ export default class extends Command {
     if (!guildEntity || !guildEntity.logs)
       return message.respond(`logs have not been enabled on this server.`);
 
+    const { config } = message.guild!;
     const webhooks = await message.guild!.fetchWebhooks();
     const logHook =
-      webhooks.get(message.guild!.logs?.webhook.id!) ||
+      webhooks.get(config?.logs.webhook.id!) ||
       webhooks.find(
         (webhook) =>
           // @ts-ignore
@@ -30,7 +31,7 @@ export default class extends Command {
     await logHook?.delete();
 
     delete guildEntity.logs;
-    delete message.guild!.logs;
+    delete config?.logs;
     await this.db.flush();
 
     message.respond(`I have disabled logs for this server.`);

@@ -4,7 +4,7 @@ import { Target } from '../../util/targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { Role } from 'discord.js';
 import Havoc from '../../client/Havoc';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, GUILD_CONFIGS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -32,7 +32,7 @@ export default class extends Command {
         guild?.autorole ? message.guild!.roles.cache.get(guild.autorole) : null
       );
 
-    message.guild!.autorole = role.id;
+    message.guild!.setConfig(GUILD_CONFIGS.autorole, role.id);
     await this.db.upsert(GuildEntity, message.guild!.id, {
       autorole: role.id,
     });

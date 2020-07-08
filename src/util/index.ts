@@ -112,6 +112,7 @@ export default {
     props
       .filter((prop) => target[prop])
       .forEach((prop) => (source[prop] = target[prop]));
+    return source;
   },
 
   smallCaps(str: string) {

@@ -15,11 +15,12 @@ export default class extends Command {
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
+    const { config } = message.guild!;
 
     if (!guildEntity || !guildEntity.autorole)
       return message.respond(`autorole has not been enabled on this server.`);
 
-    delete message.guild!.autorole;
+    delete config!.autorole;
     delete guildEntity.autorole;
     await this.db.flush();
 

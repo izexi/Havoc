@@ -4,7 +4,7 @@ import { Target } from '../../util/targetter';
 import GuildEntity, { Logs } from '../../structures/entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, GUILD_CONFIGS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -52,7 +52,7 @@ export default class extends Command {
       };
     }
 
-    message.guild!.logs = logs;
+    message.guild!.setConfig(GUILD_CONFIGS.logs, logs);
     await this.db.upsert(GuildEntity, message.guild!.id, { logs });
 
     message.respond(

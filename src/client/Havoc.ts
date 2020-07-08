@@ -8,7 +8,7 @@ import { once } from 'events';
 import Util from '../util';
 import HavocGuild from '../structures/extensions/HavocGuild';
 import EventHandler from '../handlers/EventHandler';
-import { WEEKS } from '../util/CONSTANTS';
+import { WEEKS, GUILD_CONFIGS } from '../util/CONSTANTS';
 import Prometheus from '../structures/Prometheus';
 
 export default class Havoc extends Client {
@@ -34,6 +34,12 @@ export default class Havoc extends Client {
     guilds: new Set(),
     commands: new Set(),
   };
+
+  guildConfigs: Map<
+    HavocGuild['id'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    { [key in GUILD_CONFIGS]?: any }
+  > = new Map();
 
   constructor() {
     super({
@@ -97,22 +103,22 @@ export default class Havoc extends Client {
           return;
         }
 
-        Util.truthyObjMerge(
-          guild,
-          guildEntity,
-          'logs',
-          'prefix',
-          'bcPrefixes',
-          'welcomer',
-          'autorole',
-          'modlogs'
+        this.guildConfigs.set(
+          guild.id,
+          // @ts-ignore
+          Util.truthyObjMerge({}, guildEntity, ...Object.keys(GUILD_CONFIGS))
         );
 
         if (guildEntity.tags && guildEntity.tags.count()) {
           await guildEntity.tags.init();
-          guildEntity.tags
-            .getItems()
-            .forEach(({ name, content }) => guild.tags.set(name, content));
+          guild.setConfig(
+            GUILD_CONFIGS.tags,
+            new Map(
+              guildEntity.tags
+                .getItems()
+                .map(({ name, content }) => [name, content])
+            )
+          );
         }
       })
     );

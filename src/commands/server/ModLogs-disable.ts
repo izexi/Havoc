@@ -14,11 +14,12 @@ export default class extends Command {
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
+    const { config } = message.guild!;
 
     if (!guildEntity || !guildEntity.modlogs)
       return message.respond(`mod logs have not been enabled on this server.`);
 
-    delete message.guild!.modlogs;
+    delete config!.modlogs;
     delete guildEntity.modlogs;
     await this.db.flush();
 

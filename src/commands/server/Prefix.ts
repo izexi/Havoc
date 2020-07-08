@@ -3,6 +3,7 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import Havoc from '../../client/Havoc';
+import { GUILD_CONFIGS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -46,7 +47,7 @@ export default class extends Command {
       await this.db.upsert(GuildEntity, message.guild!.id, { prefix });
     }
 
-    message.guild!.prefix = prefix;
+    message.guild!.setConfig(GUILD_CONFIGS.prefix, prefix);
     message.respond(`I have updated this server's prefix to \`${prefix}\`.`);
   }
 }

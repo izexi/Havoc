@@ -36,6 +36,16 @@ export enum IDS {
   UNHANDLED_REJECTIONS = '612603429591973928',
 }
 
+export enum GUILD_CONFIGS {
+  logs = 'logs',
+  prefix = 'prefix',
+  bcPrefixes = 'bcPrefixes',
+  welcomer = 'welcomer',
+  autorole = 'autorole',
+  modlogs = 'modlogs',
+  tags = 'tags',
+}
+
 export const SMALL_CAPS: { [key: string]: string } = {
   a: 'ᴀ',
   b: 'ʙ',

@@ -3,7 +3,11 @@ import HavocMessage from '../../structures/extensions/HavocMessage';
 import Havoc from '../../client/Havoc';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import { Target } from '../../util/targetter';
-import { PROMPT_INVALD, PROMPT_INITIAL } from '../../util/CONSTANTS';
+import {
+  PROMPT_INVALD,
+  PROMPT_INITIAL,
+  GUILD_CONFIGS,
+} from '../../util/CONSTANTS';
 import util from '../../util';
 
 export default class extends Command {
@@ -77,7 +81,7 @@ export default class extends Command {
       bcPrefixes!.splice(bcPrefixes!.indexOf(prefix), 1);
     }
 
-    message.guild!.bcPrefixes = bcPrefixes;
+    message.guild!.setConfig(GUILD_CONFIGS.bcPrefixes, bcPrefixes);
     await this.db.upsert(GuildEntity, message.guild!.id, { bcPrefixes });
 
     message.respond(

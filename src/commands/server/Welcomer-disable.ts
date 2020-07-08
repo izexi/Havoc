@@ -14,11 +14,12 @@ export default class extends Command {
 
   async run(this: Havoc, { message }: { message: HavocMessage }) {
     const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
+    const { config } = message.guild!;
 
     if (!guildEntity || !guildEntity.welcomer)
       return message.respond(`welcomer has not been enabled on this server.`);
 
-    delete message.guild!.welcomer;
+    delete config!.welcomer;
     delete guildEntity.welcomer;
     await this.db.flush();
 

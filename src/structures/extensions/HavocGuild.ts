@@ -12,16 +12,29 @@ import HavocTextChannel from './HavocTextChannel';
 import GuildEntity from '../entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import ms = require('ms');
-import { MODLOGS_COLOUR, NOOP, HAVOC_LOGS_AVATAR } from '../../util/CONSTANTS';
+import {
+  MODLOGS_COLOUR,
+  NOOP,
+  HAVOC_LOGS_AVATAR,
+  GUILD_CONFIGS,
+} from '../../util/CONSTANTS';
+
+const DEFAULT_CONFIGS: {
+  [key: string]: string | string[] | Map<string, string>;
+} = {
+  prefix: process.env.PREFIX!,
+  bcPrefixes: ['!', '.', '?'],
+  tags: new Map(),
+};
 
 export default class extends Guild {
   client!: Havoc;
 
-  prefix = process.env.PREFIX!;
+  prefix!: string;
 
-  tags = new Map();
+  tags!: Map<string, string>;
 
-  bcPrefixes = ['!', '.', '?'];
+  bcPrefixes!: string[];
 
   logs?: {
     disabled: number[];
@@ -38,6 +51,22 @@ export default class extends Guild {
 
   welcomer?: string;
 
+  constructor(...args: unknown[]) {
+    // @ts-ignore
+    super(...args);
+    Object.keys(GUILD_CONFIGS).forEach((config) => {
+      Object.defineProperty(this, config, {
+        get() {
+          return this.config?.[config] ?? DEFAULT_CONFIGS[config];
+        },
+      });
+    });
+  }
+
+  get config() {
+    return this.client.guildConfigs.get(this.id);
+  }
+
   get logHook() {
     const { logs } = this;
     return logs ? new WebhookClient(logs.webhook.id, logs.webhook.token) : null;
@@ -47,6 +76,13 @@ export default class extends Guild {
     return (
       super.iconURL() ||
       `https://via.placeholder.com/128/2f3136/808080%20?text=${this.nameAcronym}`
+    );
+  }
+
+  setConfig<T>(key: GUILD_CONFIGS, value: T) {
+    this.client.guildConfigs.set(
+      this.id,
+      Object.assign(this.config || {}, { [key]: value })
     );
   }
 
@@ -75,7 +111,7 @@ export default class extends Guild {
             avatar: this.client.user!.displayAvatarURL(),
           })
           .catch(NOOP);
-        if (!webhook) return delete this.logs;
+        if (!webhook) return delete this.config?.logs;
 
         this.logs!.webhook = {
           id: webhook.id,
@@ -87,7 +123,7 @@ export default class extends Guild {
 
         return webhook.send(toSend);
       }
-      delete this.logs;
+      delete this.config?.logs;
     });
   }
 

@@ -4,7 +4,7 @@ import { Target } from '../../util/targetter';
 import GuildEntity from '../../structures/entities/GuildEntity';
 import Havoc from '../../client/Havoc';
 import HavocTextChannel from '../../structures/extensions/HavocTextChannel';
-import { PROMPT_INITIAL } from '../../util/CONSTANTS';
+import { PROMPT_INITIAL, GUILD_CONFIGS } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -36,7 +36,7 @@ export default class extends Command {
     if (existing?.id === channel.id)
       return message.respond(`welcomer are already enabled in ${channel}`);
 
-    message.guild!.welcomer = channel.id;
+    message.guild!.setConfig(GUILD_CONFIGS.welcomer, channel.id);
     await this.db.upsert(GuildEntity, message.guild!.id, {
       welcomer: channel.id,
     });
