@@ -10,6 +10,7 @@ import HavocGuild from '../structures/extensions/HavocGuild';
 import EventHandler from '../handlers/EventHandler';
 import { WEEKS, GUILD_CONFIGS } from '../util/CONSTANTS';
 import Prometheus from '../structures/Prometheus';
+import GuildEntity from '../structures/entities/GuildEntity';
 
 export default class Havoc extends Client {
   initialised = false;
@@ -92,38 +93,45 @@ export default class Havoc extends Client {
 
     const guilds = await this.db.guildRepo.findAll({ populate: ['tags'] });
     await Promise.all(
-      guilds.map(async (guildEntity) => {
-        const guild = this.guilds.cache.get(guildEntity.id) as HavocGuild;
-        if (!guild) {
-          if (
-            guildEntity.deletedAt &&
-            guildEntity.deletedAt > new Date(Date.now() + WEEKS(2))
-          )
-            return this.db.guildRepo.removeAndFlush(guildEntity);
-          return;
-        }
-        const setableConfigs = Object.keys(GUILD_CONFIGS).filter(
-          (config) => config !== GUILD_CONFIGS.tags
-        );
+      guilds.map(
+        async (
+          guildEntity: { [key in keyof GuildEntity]: GuildEntity[key] }
+        ) => {
+          const guild = this.guilds.cache.get(guildEntity.id) as HavocGuild;
+          if (!guild) {
+            if (
+              guildEntity.deletedAt &&
+              guildEntity.deletedAt > new Date(Date.now() + WEEKS(2))
+            )
+              return this.db.guildRepo.removeAndFlush(guildEntity);
+            return;
+          }
+          const setableConfigs = Object.keys(GUILD_CONFIGS).filter(
+            (config) => config !== GUILD_CONFIGS.tags
+          ) as (keyof GuildEntity)[];
 
-        this.guildConfigs.set(
-          guild.id,
-          // @ts-ignore
-          Util.truthyObjMerge({}, guildEntity, setableConfigs)
-        );
-
-        if (guildEntity.tags && guildEntity.tags.count()) {
-          await guildEntity.tags.init();
-          guild.setConfig(
-            GUILD_CONFIGS.tags,
-            new Map(
-              guildEntity.tags
-                .getItems()
-                .map(({ name, content }) => [name, content])
+          this.guildConfigs.set(
+            guild.id,
+            Object.fromEntries(
+              setableConfigs
+                .filter((setableConfig) => guildEntity[setableConfig])
+                .map((config) => [config, guildEntity[config]])
             )
           );
+
+          if (guildEntity.tags && guildEntity.tags.count()) {
+            await guildEntity.tags.init();
+            guild.setConfig(
+              GUILD_CONFIGS.tags,
+              new Map(
+                guildEntity.tags
+                  .getItems()
+                  .map(({ name, content }) => [name, content])
+              )
+            );
+          }
         }
-      })
+      )
     );
 
     this.initialised = true;
