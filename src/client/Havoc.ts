@@ -102,11 +102,14 @@ export default class Havoc extends Client {
             return this.db.guildRepo.removeAndFlush(guildEntity);
           return;
         }
+        const setableConfigs = Object.keys(GUILD_CONFIGS).filter(
+          (config) => config !== GUILD_CONFIGS.tags
+        );
 
         this.guildConfigs.set(
           guild.id,
           // @ts-ignore
-          Util.truthyObjMerge({}, guildEntity, ...Object.keys(GUILD_CONFIGS))
+          Util.truthyObjMerge({}, guildEntity, setableConfigs)
         );
 
         if (guildEntity.tags && guildEntity.tags.count()) {
