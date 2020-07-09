@@ -26,7 +26,8 @@ export default class extends Command {
               if (message.guild!.tags.has(name)) return name;
             }
 
-            if (message.guild!.tags.has(name)) return message.shiftArg(name);
+            if (name && message.guild!.tags.has(name))
+              return message.shiftArg(name);
           },
           required: true,
           promptOpts: {
