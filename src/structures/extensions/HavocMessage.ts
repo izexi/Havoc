@@ -376,14 +376,16 @@ export default class HavocMessage extends Message {
       params.flags = command.flags.reduce(
         (flags: { [flag: string]: string }, possibleFlag) => {
           const flagIndex = this.args.findIndex((arg) =>
-            new RegExp(`${this.prefix}${possibleFlag}(=.+)?$`).test(arg)
+            new RegExp(`${this.prefix}${possibleFlag}(=.+)?$`, 'i').test(arg)
           );
+
           if (flagIndex === -1) return flags;
           const [flag, value] = this.args[flagIndex]
             .substring(this.prefix!.length)
             .split('=');
           this.args.splice(flagIndex, 1);
-          flags[flag] = value;
+          flags[flag.toLowerCase()] = value;
+
           return flags;
         },
         {}
