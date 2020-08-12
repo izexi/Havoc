@@ -38,14 +38,7 @@ export default class extends Command {
         `my current prefix for this server is already \`${message.prefix}\`.`
       );
 
-    const guildEntity = await this.db.find(GuildEntity, message.guild!.id);
-
-    if (guildEntity?.prefix && prefix === process.env.PREFIX) {
-      delete guildEntity.prefix;
-      await this.db.flush();
-    } else {
-      await this.db.upsert(GuildEntity, message.guild!.id, { prefix });
-    }
+    await this.db.upsert(GuildEntity, message.guild!.id, { prefix });
 
     message.guild!.setConfig(GUILD_CONFIGS.prefix, prefix);
     message.respond(`I have updated this server's prefix to \`${prefix}\`.`);
