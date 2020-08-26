@@ -28,7 +28,7 @@
     "@types/pretty-ms": "^5.0.1",
     "@types/uuid": "^8.0.0",
     "@types/ws": "^7.2.4",
-    "@vitalets/google-translate-api": "^3.0.0",
+    "@vitalets/google-translate-api": "^4.0.0",
     "chalk": "^4.0.0",
     "common-tags": "^1.8.0",
     "copyfiles": "^2.2.0",
