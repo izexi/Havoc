@@ -26,14 +26,17 @@ export default class extends Command {
         `you need to be in a voice channel to use this command.`
       );
 
-    await message.channel.send(`
+    await message.channel.send(
+      `
 			${message.author}\nɴᴏᴡ ᴘʟᴀʏɪɴɢ: \`${url.substring(0, 32)}${
-      url.length > MAX_LIMITS.PLAY_URL ? '...' : ''
-      /* eslint-disable no-irregular-whitespace */
-    }\`
+        url.length > MAX_LIMITS.PLAY_URL ? '...' : ''
+        /* eslint-disable no-irregular-whitespace */
+      }\`
 			:white_circle:───────────────────────────────────────────
 			◄◄⠀▐▐ ⠀►►⠀⠀　　⠀ 0:00 / 1:37　　⠀ ───○ :loud_sound:⠀　　　ᴴᴰ :gear: ❐ ⊏⊐
-		`);
+		`,
+      { disableMentions: 'everyone' }
+    );
     const connection = await message.member!.voice.channel.join();
     connection
       .play(
