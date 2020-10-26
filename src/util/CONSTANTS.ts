@@ -103,7 +103,7 @@ export const PROMPT_INITIAL = {
   [Target.CHANNEL]: (action: string) =>
     `mention the channel, or enter the name / ID of the channel that would like ${action}.`,
   [Target.USER]: (action: string) =>
-    `mention the user, or enter the tag / ID of who${action}.`,
+    `mention the user, or enter the tag / ID of who ${action}.`,
   [Target.MEMBER]: (action: string) =>
     `mention the member / enter the member's ID, tag, nickname or username of who ${action}.`,
   [Target.ROLE]: (action: string) =>
