@@ -141,7 +141,7 @@ export default class HavocMessage extends Message {
   async confirmation(action: string) {
     await this.safeReact(EMOJIS.IN_PROGRESS);
     const { fn: response } = await this.createPrompt({
-      initialMsg: `**${this.author.tag}** are you sure you want to ${action}?  Enter __y__es or __n__o`,
+      initialMsg: `are you sure you want to ${action}?  Enter __y__es or __n__o`,
       invalidMsg: 'Enter __y__es or __n__o',
       target: (msg) => msg.arg?.match(/^(yes|y|n|no)$/i)?.[0],
     });
