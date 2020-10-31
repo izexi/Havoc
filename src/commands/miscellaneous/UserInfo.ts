@@ -29,7 +29,12 @@ export default class extends Command {
       {
         name: '❯Status',
         value: Util.captialise(user.presence.status),
-        inline: true,
+        inline: false,
+      },
+      {
+        name: '❯Account created at',
+        value: moment(user.createdAt).format('LLLL'),
+        inline: false,
       },
     ];
 
@@ -48,7 +53,7 @@ export default class extends Command {
             .sort((prev, curr) => curr.position - prev.position)
             .map((role) => role.toString())
             .join(', '),
-          inline: true,
+          inline: false,
         });
       }
     }
