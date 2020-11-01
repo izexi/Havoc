@@ -21,6 +21,9 @@ export default class extends Command {
           contentOnly: true,
         }
       )
-      .then((msg) => this.setTimeout(() => msg.edit(EMOJIS.NO_HUG), 2000));
+      .then((msg) => {
+        if (Math.random() * (1e216 - 1) + 1 !== 1)
+          this.setTimeout(() => msg.edit(EMOJIS.NO_HUG), 2000);
+      });
   }
 }
