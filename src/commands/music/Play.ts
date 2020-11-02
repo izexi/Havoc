@@ -21,9 +21,15 @@ export default class extends Command {
   }
 
   async run({ message, text: url }: { message: HavocMessage; text: string }) {
-    if (!message.member!.voice.channel)
+    const voiceChannel = message.member!.voice.channel;
+    if (!voiceChannel)
       return message.respond(
-        `you need to be in a voice channel to use this command.`
+        'you need to be in a voice channel to use this command.'
+      );
+
+    if (!voiceChannel.joinable || !voiceChannel.speakable)
+      return message.respond(
+        `I do not have permissions to connect or speak in \`${voiceChannel.name}\`.`
       );
 
     await message.channel.send(
@@ -37,7 +43,7 @@ export default class extends Command {
 		`,
       { disableMentions: 'everyone' }
     );
-    const connection = await message.member!.voice.channel.join();
+    const connection = await voiceChannel.join();
     connection
       .play(
         ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ', {
