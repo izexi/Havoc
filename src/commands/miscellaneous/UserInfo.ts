@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { Target } from '../../util/targetter';
 import HavocUser from '../../structures/extensions/HavocUser';
 import Util from '../../util';
+import { NOOP } from '../../util/CONSTANTS';
 
 export default class extends Command {
   constructor() {
@@ -38,8 +39,8 @@ export default class extends Command {
       },
     ];
 
-    if (message.guild) {
-      const member = await message.guild.members.fetch(user);
+    const member = await message.guild?.members.fetch(user).catch(NOOP);
+    if (member) {
       fields.push({
         name: '❯Joined server at',
         value: moment(member.joinedAt!).format('LLLL'),
