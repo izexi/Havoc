@@ -1,7 +1,7 @@
 import Command from '../../structures/bases/Command';
 import HavocMessage from '../../structures/extensions/HavocMessage';
 import { Target } from '../../util/targetter';
-import * as ytdl from 'ytdl-core';
+import * as ytdl from 'discord-ytdl-core';
 import { MAX_LIMITS, PROMPT_INVALD, PROMPT_ENTER } from '../../util/CONSTANTS';
 
 export default class extends Command {
@@ -42,7 +42,9 @@ export default class extends Command {
       .play(
         ytdl('https://www.youtube.com/watch?v=dQw4w9WgXcQ', {
           filter: 'audioonly',
-        })
+          opusEncoded: true,
+        }),
+        { type: 'opus' }
       )
       .on('finish', () => message.guild!.voice?.channel?.leave());
   }
